@@ -167,18 +167,24 @@ select{font:inherit;font-size:.9rem;padding:6px 8px;border:1px solid var(--line)
 .facts dd{margin:0;font:600 .9rem/1.3 var(--mono)}
 .facts dd.txt{font:700 .88rem/1.3 var(--body)}
 .cz-yes{color:var(--good)} .cz-no{color:var(--ink)} .cz-none{color:var(--muted)}
-.o-top,.o-ok{color:var(--good)} .o-warn{color:var(--warn)} .o-bad{color:var(--bad)} .o-na{color:var(--muted)}
-.yrs{list-style:none;margin:0 0 0 24px;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
-.y{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto auto;column-gap:4px;padding:6px 7px;border-radius:3px;background:var(--none-soft);min-width:0}
-.yy{font:600 .72rem var(--mono);color:var(--muted);grid-column:1}
-.ym{grid-column:2;grid-row:1;font-weight:700;font-size:.85rem;line-height:1}
-.yv{grid-column:1 / span 2;font:600 .84rem/1.25 var(--mono)}
-.yn{grid-column:1 / span 2;font-size:.7rem;line-height:1.25;color:var(--muted)}
-.y-in{background:var(--good-soft)} .y-in .ym{color:var(--good)}
-.y-all{background:var(--open-soft)} .y-all .ym{color:var(--open)}
-.y-edge{background:var(--warn-soft)} .y-edge .ym{color:var(--warn)}
-.y-out{background:var(--bad-soft)} .y-out .ym{color:var(--bad)}
-.y-na .yv{font-family:var(--body);font-weight:400;color:var(--muted)}
+.ofsted{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;margin-left:24px;font-size:.88rem}
+.ofsted .o-k{font-weight:700}
+.o-badge{font-weight:700;padding:0 7px;border:1.5px solid currentColor;border-radius:3px;white-space:nowrap;line-height:1.55}
+.o-top{color:var(--good);background:var(--good-soft)} .o-ok{color:var(--good)} .o-warn{color:var(--warn)} .o-bad{color:var(--bad)} .o-na{color:var(--muted)}
+.ofsted .o-sub{color:var(--muted);font-size:.82rem}
+.yt{margin-left:24px;border-collapse:collapse;font-size:.84rem;line-height:1.35}
+.yt caption{text-align:left;font-weight:700;font-size:.82rem;padding-bottom:4px}
+.yt th{font-size:.74rem;font-weight:600;color:var(--muted);text-align:left;padding:0 8px 3px 0;border-bottom:1px solid var(--line)}
+.yt td{padding:5px 8px 5px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.yt tr:last-child td{border-bottom:0}
+.yt .yy{font:600 .8rem var(--mono);color:var(--muted);white-space:nowrap}
+.yt .yd{width:100%}
+.yt .yd b{font-family:var(--mono);font-weight:600}
+.yt .you{white-space:nowrap;font-weight:700;padding-right:0}
+.yt .you span{display:inline-block;padding:0 6px;border-radius:3px}
+.y-in .you span{background:var(--good-soft);color:var(--good)} .y-all .you span{background:var(--open-soft);color:var(--open)}
+.y-edge .you span{background:var(--warn-soft);color:var(--warn)} .y-out .you span{background:var(--bad-soft);color:var(--bad)}
+.y-na .you span{background:var(--none-soft);color:var(--none);font-weight:600}
 .detail{display:none;margin-left:24px;font-size:.88rem;gap:14px}
 .school.sel .detail{display:grid}
 .detail h4{margin:0 0 4px;font:700 .86rem var(--body)}
@@ -271,7 +277,8 @@ select{font:inherit;font-size:.9rem;padding:6px 8px;border:1px solid var(--line)
   .primary,.seg label,.fchip,.example{min-height:44px}
   .seg label{display:inline-flex;align-items:center}
   .facts{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .verdict,.facts,.yrs,.detail{margin-left:0;padding-left:0}
+  .verdict,.facts,.yt,.ofsted,.detail{margin-left:0;padding-left:0}
+  .yt{width:100%}
   .phone-only{display:inline}
   .viewtoggle{display:inline-flex;align-items:center;gap:8px;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--credit-h) + 14px + env(safe-area-inset-bottom,0px));z-index:1100;
     background:var(--btn);color:var(--btn-ink);border:0;border-radius:999px;padding:12px 20px;font-weight:700;box-shadow:0 4px 16px rgba(0,0,0,.35)}
@@ -280,7 +287,6 @@ select{font:inherit;font-size:.9rem;padding:6px 8px;border:1px solid var(--line)
   #toast{bottom:calc(var(--credit-h) + 78px + env(safe-area-inset-bottom,0px))}
   .leaflet-control-attribution{font-size:9px;line-height:1.3}
 }
-@media (max-width:380px){.yrs{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -382,13 +388,14 @@ select{font:inherit;font-size:.9rem;padding:6px 8px;border:1px solid var(--line)
       <h3>What “last place” means</h3>
       <p>It’s how far from the school the furthest child admitted on distance lived, measured the way the school measures it. It changes every year and is not a fixed boundary.</p>
       <h3>How North Yorkshire offers places</h3>
-      <p>After looked-after children and approved medical or social cases, children living in the school’s catchment are offered places first, then children of staff, then children from outside the catchment. Within each group siblings come first, then whoever lives nearest. So the council says which group the last place went to:</p>
+      <p>After looked-after children and approved medical or social cases, children living in the school’s catchment are offered places first, then children of staff, then children from outside the catchment. Within each group brothers and sisters of pupils come first, then whoever lives nearest. Each school’s year-by-year table puts that into words:</p>
       <ul>
-        <li>A plain distance, such as <b>1.22 mi, out of catchment</b>, is the cut-off for children outside the catchment. Everyone in the catchment got a place.</li>
-        <li><b>In catchment</b> means places ran out inside the catchment. Children outside it got none, and children inside it got in up to that distance.</li>
-        <li><b>Siblings only</b> means everyone in the catchment got in, but from outside it only children with a brother or sister at the school did.</li>
-        <li>Academies, voluntary aided and foundation schools set their own rules. A few report the last place under a numbered criterion from their own policy, and faith schools may put church members first.</li>
+        <li><b>Everyone in the catchment, plus others within 1.22 mi</b>: every child in the catchment got a place, and children outside it got one if they lived within 1.22 miles.</li>
+        <li><b>Only children in the catchment, within 0.27 mi</b>: places ran out inside the catchment. Nobody outside it got in, and inside it only children within 0.27 miles did.</li>
+        <li><b>Everyone in the catchment, plus brothers and sisters of pupils</b>: from outside the catchment, only siblings got in.</li>
+        <li><b>By the school’s own rules</b>: academies, voluntary aided and foundation schools set their own rules, and faith schools may put church members first.</li>
       </ul>
+      <p><b>Would you get in?</b> compares that with where you live: whether you’re in the catchment, and how far you are from the school.</p>
       <h3>The results</h3>
       <p>Each school is judged across every year published unless you pick a single year. <b>Safe</b> means you’d have got in every year. <b>Mixed</b> means in some years but not others. <b>Just inside</b> means inside every year but by under 0.1 mile at least once, which is within the margin of error. <b>Unlikely</b> means outside every year; if every miss was under 0.1 mile it’s marked “Just outside” instead. <b>Open</b> means everyone who applied got a place, or the last out-of-catchment place went over 2 miles away. Years marked “Not published” don’t count either way. Sibling priority isn’t included, so if you already have a child at a school your chances there are better than shown.</p>
       <h3>Catchments</h3>
@@ -581,67 +588,68 @@ function needsDist(r, inC) {
   if (r.g === 'in') return inC !== false;
   return true;
 }
-const IN_CATCH = 'You’re in the catchment, and every child in the catchment got a place';
+const IN_CATCH = 'You’re in the catchment, and everyone in the catchment got a place';
 // Verdict for one year's record. inC: true / false, or null when the school has no catchment (or before a search).
 function yearVerdict(c, dist, inC) {
-  if (!c) return {v: 'na', label: 'No figure for this year'};
+  if (!c) return {v: 'na', label: 'No figures for this year'};
   if (c.s === 'all_offered') return {v: 'all', label: c.n || 'Everyone who applied got a place'};
-  if (c.s !== 'distance') return {v: 'na', label: 'Not published: the council told parents to ask the school'};
+  if (c.s !== 'distance') return {v: 'na', label: 'The council didn’t publish this year. Ask the school'};
   if (c.g === 'sib') {
     if (inC == null) return {v: 'na', label: 'Depends on whether you live in the catchment'};
-    return inC ? {v: 'in', label: IN_CATCH} : {v: 'out', label: 'From outside the catchment, only siblings of pupils got places'};
+    return inC ? {v: 'in', label: IN_CATCH} : {v: 'out', label: 'From outside the catchment only brothers and sisters of pupils got places, so you’d have missed out'};
   }
   if (c.g === 'out' && inC) return {v: 'in', label: IN_CATCH};
   if (c.g === 'in' && inC === false) return {v: 'out', label: 'Only children in the catchment got places, and you’re outside it'};
   if (c.g === 'out' && c.m >= UNDERSUB_M && (dist == null || dist < c.m - EDGE_M))
-    return {v: 'all', label: 'The last out-of-catchment place went ' + fmt(c.m) + ' away, so nobody nearby missed out'};
-  if (dist == null) return {v: 'na', label: 'Your distance unavailable'};
-  const what = c.g === 'in' ? 'the in-catchment cut-off' : c.g === 'crit' ? `the last distance (criterion ${c.crit} of the school’s policy)` : 'the last distance';
+    return {v: 'all', label: `Places went to children up to ${fmt(c.m)} away, so you’d have got in`};
+  if (dist == null) return {v: 'na', label: 'Working out your distance'};
+  const rules = c.g === 'crit' ? ' (by the school’s own rules)' : '';
   const diff = c.m - dist;
   if (Math.abs(diff) <= EDGE_M) return {v: 'edge', diff, label: diff >= 0
-    ? `Inside ${what} by ${fmt(diff)}, which is within the 0.1 mile margin of error`
-    : `Outside ${what} by ${fmt(-diff)}, which is within the 0.1 mile margin of error`};
-  return diff > 0 ? {v: 'in', diff, label: fmt(diff) + ' inside ' + what}
-                  : {v: 'out', diff, label: fmt(-diff) + ' beyond ' + what};
+    ? `You’d have only just got in, with ${fmt(diff)} to spare${rules}. That’s within the 0.1 mile margin of error`
+    : `You’d have only just missed out, by ${fmt(-diff)}${rules}. That’s within the 0.1 mile margin of error`};
+  return diff > 0 ? {v: 'in', diff, label: `You’d have got in with ${fmt(diff)} to spare${rules}`}
+                  : {v: 'out', diff, label: `You’d have been ${fmt(-diff)} too far away${rules}`};
 }
 // Verdict across every year we hold for the school.
 function trendVerdict(s, dist) {
   const yrs = s.d.map(r => ({y: r.y, ...yearVerdict(r, dist, s.inC)})).filter(r => r.v !== 'na');
   const c = cutoff(s);
   const pending = dist == null && s.d.some(r => needsDist(r, s.inC));
-  if (pending) return {v: 'na', label: 'Your distance unavailable', c, yrs};
+  if (pending) return {v: 'na', label: 'Working out your distance', c, yrs};
   const n = yrs.length;
-  if (!n) return {v: 'na', label: 'Not published in any year. Ask the school', c, yrs};
+  if (!n) return {v: 'na', label: 'The council hasn’t published figures for this school. Ask the school', c, yrs};
   const ok = yrs.filter(r => r.v === 'in' || r.v === 'all').length;
   const out = yrs.filter(r => r.v === 'out').length;
   const yearsTxt = n === 1 ? 'the only year published' : n === 2 ? 'both years published' : `all ${n} years`;
-  const one = n === 1 ? '. Only one year published, so treat with caution' : '';
-  if (yrs.every(r => r.v === 'all')) return {v: 'all', label: `Everyone offered a place in ${yearsTxt}`, c, yrs};
+  const one = n === 1 ? '. Only one year was published, so treat this with caution' : '';
+  if (yrs.every(r => r.v === 'all')) return {v: 'all', label: `Everyone who applied got a place in ${yearsTxt}`, c, yrs};
   const withDiff = yrs.filter(r => r.diff != null);
+  const nearest = () => withDiff.reduce((a, b) => (a && a.diff > b.diff ? a : b), null);
   if (ok === n) {
     const tight = withDiff.reduce((a, b) => (a && a.diff < b.diff ? a : b), null);
-    const why = s.inC && !withDiff.length ? ', as you’re in the catchment' : '';
-    return {v: 'in', label: `Inside in ${yearsTxt}` + why + (tight ? `; closest was ${fmt(tight.diff)} inside (${tight.y})` : '') + one, c, yrs};
+    const why = s.inC && !withDiff.length ? ', because you’re in the catchment' : '';
+    return {v: 'in', label: `You’d have got a place in ${yearsTxt}` + why + (tight ? `. Closest call: ${tight.y}, with ${fmt(tight.diff)} to spare` : '') + one, c, yrs};
   }
   if (out === n) {
-    const near = withDiff.reduce((a, b) => (a && a.diff > b.diff ? a : b), null);
-    return {v: 'out', label: `Outside in ${yearsTxt}` + (near ? `; nearest miss ${fmt(-near.diff)} (${near.y})` : '') + one, c, yrs};
+    const near = nearest();
+    return {v: 'out', label: `You’d have missed out in ${yearsTxt}` + (near ? `. Nearest miss: ${near.y}, ${fmt(-near.diff)} too far` : '') + one, c, yrs};
   }
-  // Inside every year, but narrowly in some
+  // In every year, but narrowly in some
   const narrowIn = yrs.filter(r => r.v === 'edge' && r.diff >= 0);
   if (ok + narrowIn.length === n)
-    return {v: 'edge', label: `Inside in ${yearsTxt}, but by under 0.1 mile in ${narrowIn.map(r => r.y).join(' and ')}, so only just`, chip: 'Just inside', c, yrs};
+    return {v: 'edge', label: `You’d have got a place in ${yearsTxt}, but only just in ${narrowIn.map(r => r.y).join(' and ')}, with under 0.1 mile to spare`, chip: 'Just inside', c, yrs};
   const inside = ok + narrowIn.length;
-  // Never inside: outside every year, some only narrowly
+  // Never in: out every year, some only narrowly
   if (!inside) {
-    const near = withDiff.reduce((a, b) => (a && a.diff > b.diff ? a : b), null);
-    if (out) return {v: 'out', label: `Outside in ${yearsTxt}` + (near ? `; nearest miss ${fmt(-near.diff)} (${near.y})` : '') + one, c, yrs};
-    return {v: 'edge', label: `Outside in ${yearsTxt}, but by under 0.1 mile each time, so too close to call`, chip: 'Just outside', c, yrs};
+    const near = nearest();
+    if (out) return {v: 'out', label: `You’d have missed out in ${yearsTxt}` + (near ? `. Nearest miss: ${near.y}, ${fmt(-near.diff)} too far` : '') + one, c, yrs};
+    return {v: 'edge', label: `You’d have just missed out in ${yearsTxt}, each time by under 0.1 mile, so it’s too close to call`, chip: 'Just outside', c, yrs};
   }
   const latest = yrs[0];
-  const word = latest.v === 'edge' ? (latest.diff >= 0 ? 'narrowly inside' : 'narrowly outside')
-             : {in: 'inside', all: 'open to all', out: 'outside'}[latest.v];
-  return {v: 'edge', label: `Inside in ${inside} of ${n} years; ${word} in ${latest.y}`, c, yrs};
+  const word = latest.v === 'edge' ? (latest.diff >= 0 ? 'only just got in' : 'only just missed out')
+             : {in: 'got in', all: 'got in, as everyone did', out: 'missed out'}[latest.v];
+  return {v: 'edge', label: `You’d have got a place in ${inside} of ${n} years. In ${latest.y} you’d have ${word}`, c, yrs};
 }
 function verdict(s, dist) {
   if (isTrend()) return trendVerdict(s, dist);
@@ -805,49 +813,57 @@ function ofsted(o) {
   const areas = o.areas || [];
   const worst = areas.length ? Math.max(...areas.map(a => RANK[a[1]] ?? 1)) : null;
   const tally = () => Object.entries(areas.reduce((t, a) => (t[a[1]] = (t[a[1]] || 0) + 1, t), {}))
-    .sort((a, b) => (RANK[a[0]] ?? 1) - (RANK[b[0]] ?? 1)).map(([g, n]) => n + ' ' + g.replace(' standard', '')).join(', ');
+    .sort((a, b) => (RANK[a[0]] ?? 1) - (RANK[b[0]] ?? 1)).map(([g, n]) => n + ' ' + g).join(', ');
   if (o.kind === 'card') {
-    head = 'Report card'; sub = tally() + ' · ' + mon(o.date);
+    // Report cards (from November 2025) have no overall grade, only a rating for each area
+    head = 'Report card'; sub = `No overall grade. Rated in ${areas.length} areas: ${tally()} · ${mon(o.date)}`;
     tone = areas.every(a => a[1] === 'Exceptional') ? 'top' : toneOf(worst);
     if (o.safeguarding === 'Not met') { tone = 'bad'; sub += ' · safeguarding not met'; }
   } else if (o.kind === 'grade') {
-    head = o.grade; sub = 'Graded inspection · ' + mon(o.date); tone = toneOf(RANK[o.grade]);
+    head = o.grade; sub = 'Graded ' + mon(o.date); tone = toneOf(RANK[o.grade]);
   } else if (o.kind === 'areas') {
     const counts = areas.reduce((t, a) => (t[a[1]] = (t[a[1]] || 0) + 1, t), {});
     const [top, n] = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
     head = (n === areas.length ? 'All ' : 'Mostly ') + top;
-    sub = tally() + ' · no overall grade · ' + mon(o.date); tone = toneOf(worst);
+    sub = `No overall grade. Area grades: ${tally()} · ${mon(o.date)}`; tone = toneOf(worst);
   } else if (o.kind === 'ungraded') {
+    // a short inspection confirmed the earlier grade (which, before 2019, comes from the older Ofsted file)
     const m = /remains (Outstanding|Good)(?: \((\w+)\))?/.exec(o.ungraded.outcome);
-    head = m ? m[1] + (m[2] ? ' (' + m[2].toLowerCase() + ')' : '') : o.ungraded.outcome;
-    tone = m ? (m[2] === 'Concerns' ? 'warn' : toneOf(RANK[m[1]])) : 'ok';
-    sub = 'Confirmed at an ungraded inspection · ' + mon(o.date);
+    const grade = m ? m[1] : o.graded?.grade;
+    head = grade ? grade + (m?.[2] ? ' (' + m[2].toLowerCase() + ')' : '') : o.ungraded.outcome;
+    tone = m?.[2] === 'Concerns' ? 'warn' : grade ? toneOf(RANK[grade]) : 'ok';
+    sub = (o.graded ? `Graded ${mon(o.graded.date)}, ` : '') + `confirmed at a short inspection ${mon(o.date)}`;
   } else return {tone: 'na', head: 'Not yet inspected', sub: ''};
-  if (o.ungraded && o.kind !== 'ungraded') sub += ` · checked again ${mon(o.ungraded.date)}: ${o.ungraded.outcome.toLowerCase()}`;
+  if (o.ungraded && o.kind !== 'ungraded') sub += ` · short inspection ${mon(o.ungraded.date)}: ${o.ungraded.outcome.toLowerCase()}`;
   const latest = o.ungraded?.date && o.ungraded.date > (o.date || '') ? o.ungraded.date : o.date;
   if (yearsAgo(latest) > 5) sub += ' · over 5 years ago';
   if (o.concern) { tone = 'bad'; sub += ' · ' + o.concern.toLowerCase(); }
   return {tone, head, sub};
 }
-function ofstedDetail(o, of) {
+function ofstedDetail(o) {
   if (!o) return '';
   const rows = (o.areas || []).map(a => `${esc(a[0])}: ${esc(a[1])}`);
   if (o.safeguarding) rows.push('Safeguarding: ' + esc(o.safeguarding));
-  if (o.kind === 'ungraded') rows.push('The last full graded inspection was earlier. See the report for its grade.');
   if (o.predecessor) rows.push('Includes inspections of the school before it changed type, for example becoming an academy.');
-  return `<div><h4>Ofsted</h4><p>${esc(of.sub)}${rows.length ? '<br>' + rows.join('<br>') : ''}</p></div>`;
+  return rows.length ? `<div><h4>Ofsted by area</h4><p>${rows.join('<br>')}</p></div>` : '';
 }
 
 const STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.6l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>';
-function yearCell(x, s) {
+// One year in plain English: who got a place that year, and whether you would have.
+function yearRow(x, s) {
   const yv = yearVerdict(x, s.used, s.inC);
-  let val, note = '';
+  let who;
   if (x.s === 'distance') {
-    if (x.g === 'sib') { val = 'Siblings'; note = 'only, from outside'; }
-    else { val = fmt(x.m); note = {in: 'in catchment', out: 'out of catchment', crit: 'criterion ' + x.crit}[x.g]; }
-  } else val = x.s === 'all_offered' ? 'All offered' : 'Not published';
-  return `<li class="y y-${yv.v}" title="${esc(yv.label)}"><span class="yy">${x.y}</span><span class="ym" aria-hidden="true">${yv.v === 'na' ? '' : GLYPH[yv.v]}</span>`
-       + `<span class="yv">${val}</span>${note ? `<span class="yn">${note}</span>` : ''}<span class="sr">: ${esc(yv.label)}</span></li>`;
+    const d = `<b>${fmt(x.m)}</b>`;
+    who = x.g === 'out' ? `Everyone in the catchment, plus others within ${d}`
+        : x.g === 'in' ? `Only children in the catchment, within ${d}`
+        : x.g === 'sib' ? 'Everyone in the catchment, plus brothers and sisters of pupils'
+        : `Children within ${d}, by the school’s own rules`;
+  } else who = x.s === 'all_offered' ? (x.n ? 'Everyone nearby who applied' : 'Everyone who applied') : 'Not published by the council';
+  const you = yv.v === 'edge' ? (yv.diff >= 0 ? '≈ Only just in' : '≈ Only just missed')
+            : yv.v === 'na' ? (yv.label.startsWith('Working') ? 'Working…' : '? Not known')
+            : {in: '✓ Would get in', all: '✓ Would get in', out: '✕ Would miss out'}[yv.v];
+  return `<tr class="y-${yv.v}" title="${esc(yv.label)}"><td class="yy">${x.y}</td><td class="yd">${who}</td><td class="you"><span>${you}</span></td></tr>`;
 }
 function card(s) {
   const r = s.result;
@@ -876,19 +892,23 @@ function card(s) {
     <div class="s-head">
       <span class="s-dot" style="background:${colour(r.v)}" aria-hidden="true"></span>
       <div><button type="button" class="s-name" aria-expanded="false">${esc(s.name)}</button>
-        <div class="s-meta">${esc(s.place)} · ${esc(s.type)} · ${how}${s.pan ? ' · ' + s.pan + ' places in 2027' : ''}</div></div>
+        <div class="s-meta">${esc(s.place)} · ${esc(s.type)} · ${how}</div></div>
       <button type="button" class="star" data-dfe="${s.dfe}" aria-pressed="${on}" aria-label="Shortlist ${esc(s.name)}" title="${on ? 'On your shortlist' : 'Add to shortlist'}">${STAR}</button>
     </div>
     <div class="verdict">${tagHtml(r)}<span class="why">${esc(r.label)}.</span></div>
     <dl class="facts">
       <div><dt>${s.method === 'walking' ? 'Your walk' : 'Your distance'}</dt><dd>${yours}</dd></div>
       <div><dt>Catchment</dt>${cz}</div>
-      <div><dt>Ofsted</dt><dd class="txt o-${of.tone}">${esc(of.head)}</dd></div>
+      <div><dt>Places in 2027</dt><dd>${s.pan ?? 'n/a'}</dd></div>
     </dl>
-    <ol class="yrs" aria-label="Last place offered each year">${[...s.d].reverse().map(x => yearCell(x, s)).join('')}</ol>
+    <div class="ofsted"><span class="o-k">Ofsted</span><span class="o-badge o-${of.tone}">${esc(of.head)}</span><span class="o-sub">${esc(of.sub)}</span></div>
+    <table class="yt">
+      <thead><tr><th scope="col">Year</th><th scope="col">Who got a place</th><th scope="col">Would you get in?</th></tr></thead>
+      <tbody>${s.d.map(x => yearRow(x, s)).join('')}</tbody>
+    </table>
     <div class="detail">
       <div><h4>Applications</h4>${apps}${first ? `<p style="margin-top:6px">In ${first.y}, ${plural(first.f, 'family', 'families')} put it as their first choice.</p>` : ''}</div>
-      ${ofstedDetail(s.of, of)}
+      ${ofstedDetail(s.of)}
       <div><h4>Admissions</h4><p>${policy}${notes ? '<br>' + notes : ''}</p></div>
       ${s.addr ? `<div><h4>Address</h4><p>${esc(s.addr)}</p></div>` : ''}
       <div class="links">${links}</div>

@@ -31,3 +31,5 @@ curl -fsS -H "$REF" -G "$ARC/8d0777ada12b49a4b3591d03ebd03ffd/rest/services/CYPS
 
 # Ofsted management information: state-funded schools, latest inspections (monthly)
 get ofsted.csv "https://assets.publishing.service.gov.uk/media/6ad095a72de3184ccf8b818d/Management_information_-_state-funded_schools_-_latest_inspections_as_at_30_Sep_2026.csv"
+# Grades from before September 2019, for schools only short-inspected since
+get ofsted2019.csv "https://assets.publishing.service.gov.uk/media/5d777799ed915d52428dc06d/Management_information_-_schools_Table1_-_31_August_2019.csv"

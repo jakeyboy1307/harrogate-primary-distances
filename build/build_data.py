@@ -7,6 +7,7 @@ Usage:  python3 -I build/build_data.py <raw-dir> <out.json>
   catch.geojson               council primary catchment areas (ArcGIS, Sept 2025)
   pschools.geojson            council primary school points (ArcGIS, Sept 2025)
   ofsted.csv                  Ofsted MI, state-funded schools, latest inspections
+  ofsted2019.csv              Ofsted MI, latest inspections at 31 August 2019 (grades from before the 2019 framework)
 Needs openpyxl and shapely.
 """
 import csv, io, json, re, sys
@@ -252,6 +253,11 @@ raw = open(f'{RAW}/ofsted.csv', 'rb').read().decode('utf-8-sig', errors='replace
 mi = list(csv.reader(io.StringIO(raw)))
 mi = {r[2]: dict(zip(mi[0], r)) for r in mi[1:]}
 val = lambda v: None if v in ('', 'NULL', None) else v
+# A school whose last graded inspection came before September 2019 has no grade in the current file, only
+# short-inspection outcomes such as "Standards maintained". The August 2019 file still has that grade.
+raw19 = list(csv.reader(io.StringIO(open(f'{RAW}/ofsted2019.csv', 'rb').read().decode('utf-8-sig', errors='replace'))))
+h19 = next(i for i, r in enumerate(raw19[:10]) if 'URN' in r)
+mi19 = {r[2]: dict(zip(raw19[h19], r)) for r in raw19[h19 + 1:] if len(r) > 2}
 iso = lambda d: None if not val(d) else f'{d[6:10]}-{d[3:5]}-{d[0:2]}'
 
 
@@ -285,6 +291,9 @@ def ofsted(x):
         o['kind'] = 'ungraded'
         rel = x['Does the ungraded inspection relate to the URN of the current school?']
         concern = None
+        old = mi19.get(x['LAESTAB'])
+        if old and old.get('Overall effectiveness') in ROW:
+            o['graded'] = {'grade': ROW[old['Overall effectiveness']], 'date': iso(old['Inspection start date'])}
     else:
         o['kind'] = 'none'
         return o
