@@ -16,6 +16,10 @@ python3 -I build/assemble.py build/data.json                         # writes in
 
 The build prints any school it can't match to a map point, Ofsted record or catchment. Five faith schools have no council catchment, which is expected.
 
+## Feedback form (parked)
+
+The page has a name, email and comments form that sends to the site owner's inbox through [FormSubmit](https://formsubmit.co). It stays hidden until `FEEDBACK_ID` in `build/template.html` is set to the FormSubmit form ID (the random string FormSubmit sends after activation). Set it, then run `assemble.py` again.
+
 ## Sources
 
 - North Yorkshire Council admissions statistics, 2022 to 2026 entry ([Data North Yorkshire](https://hub.datanorthyorkshire.org/dataset/school-admissions-2026-2027-yearly-statistics-primary-and-secondary-school)). The 2022 sheet is only used for the 2023 admission numbers.

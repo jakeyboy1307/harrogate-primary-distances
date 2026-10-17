@@ -35,9 +35,9 @@ body{background:var(--paper);color:var(--ink);font:15px/1.5 var(--body);display:
 header{padding:18px max(18px,env(safe-area-inset-left,0px)) 14px;border-bottom:1px solid var(--line);display:grid;gap:10px}
 h1{font:700 1.45rem/1.15 var(--display);margin:0;letter-spacing:-.01em;text-wrap:balance}
 .sub{color:var(--muted);font-size:.86rem;margin:0}
-form{display:flex;gap:8px}
-input[type=text]{flex:1;min-width:0;font:inherit;font-size:1rem;padding:9px 11px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);text-transform:uppercase}
-input[type=text]::placeholder{text-transform:none}
+#pcForm{display:flex;gap:8px}
+#pc{flex:1;min-width:0;font:inherit;font-size:1rem;padding:9px 11px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);text-transform:uppercase}
+#pc::placeholder{text-transform:none}
 button{font:700 .9rem var(--body);border-radius:6px;padding:9px 12px;cursor:pointer;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink)}
 button.ghost{background:transparent;color:var(--accent)}
 button.link{background:none;border:0;padding:0;color:var(--accent);font:inherit;font-weight:700;text-decoration:underline;text-underline-offset:2px}
@@ -88,6 +88,20 @@ footer li{margin:.25em 0}
 footer a{color:var(--accent)}
 #list,.school,header{min-width:0;overflow-wrap:anywhere}
 footer details summary{cursor:pointer;font-weight:700;color:var(--ink)}
+footer details + details{margin-top:8px}
+.fb{display:grid;gap:10px;margin:.7em 0 .3em;max-width:44ch;font-size:.85rem}
+.fb .field{display:grid;gap:3px}
+.fb label{font-weight:700;color:var(--ink)}
+.fb input,.fb textarea{width:100%;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink)}
+.fb textarea{resize:vertical;min-height:6.5em}
+.fb input:focus-visible,.fb textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.fb button{justify-self:start}
+.fb button:disabled{opacity:.6;cursor:progress}
+.fb .hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+#fbStatus{margin:0;min-height:1.3em;color:var(--muted)}
+#fbStatus.err{color:var(--bad)} #fbStatus.ok{color:var(--good);font-weight:700}
+.credit{margin:10px 0 0;padding-top:8px;border-top:1px solid var(--line)}
+.credit a{font-weight:700}
 #map{min-height:0;height:100%}
 .leaflet-container{font:13px/1.4 var(--body)}
 .leaflet-catch-pane{pointer-events:none}
@@ -110,7 +124,7 @@ footer details summary{cursor:pointer;font-weight:700;color:var(--ink)}
   /* the panel form already has these; keep only Recentre on the small map */
   .mapsearch input,.mapsearch button[type=submit],#mapLoc{display:none}
   select,button:not(.link),footer summary{min-height:44px}
-  select,input[type=text]{font-size:16px}   /* under 16px, iOS zooms in on focus */
+  select,input,textarea{font-size:16px!important}   /* under 16px, iOS zooms in on focus */
   .leaflet-control-attribution{font-size:9px;line-height:1.3}
 }
 @media (max-width:760px) and (orientation:landscape){
@@ -166,6 +180,18 @@ footer details summary{cursor:pointer;font-weight:700;color:var(--ink)}
       <p>Junior schools (Oatlands Junior, Saltergate Junior) take children into Year 3, so they aren’t included.</p>
       <p>Data: North Yorkshire Council school admissions statistics for 2023 to 2026 entry (<a href="https://hub.datanorthyorkshire.org/dataset/school-admissions-2026-2027-yearly-statistics-primary-and-secondary-school" target="_blank" rel="noopener">Data North Yorkshire</a>), the council’s catchment and school maps (September 2025), and Ofsted management information. Gathered October 2026. Always check the school’s current admissions policy and the council’s own figures before applying.</p>
     </details>
+    <details id="fbBox" hidden>
+      <summary>Send feedback</summary>
+      <form id="fbForm" class="fb" novalidate>
+        <div class="field"><label for="fbName">Name</label><input id="fbName" type="text" autocomplete="name" required></div>
+        <div class="field"><label for="fbEmail">Email</label><input id="fbEmail" type="email" autocomplete="email" required></div>
+        <div class="field"><label for="fbMsg">Comments</label><textarea id="fbMsg" rows="4" required placeholder="A wrong figure, a missing school, an idea…"></textarea></div>
+        <div class="hp" aria-hidden="true"><label for="fbHp">Leave this empty</label><input id="fbHp" type="text" tabindex="-1" autocomplete="off"></div>
+        <button type="submit" id="fbSend">Send feedback</button>
+        <p id="fbStatus" role="status" aria-live="polite"></p>
+      </form>
+    </details>
+    <p class="credit">Made by <a href="https://www.mammothwebsites.co.uk" target="_blank" rel="noopener">Mammoth Websites</a></p>
   </footer>
 </main>
 <div id="map" role="region" aria-label="Map of schools"></div>
@@ -576,6 +602,37 @@ function selectSchool(id, fromMap) {
 }
 
 function setStatus(t, err) { const e = $('#status'); e.textContent = t; e.className = err ? 'err' : ''; }
+
+// ---------- feedback ----------
+// FormSubmit relays the form to the site owner's inbox. The form id stands in for the email address,
+// so the address never appears in the page. The form stays hidden until the id is filled in.
+const FEEDBACK_ID = '';
+const FEEDBACK_URL = 'https://formsubmit.co/ajax/' + FEEDBACK_ID;
+$('#fbBox').hidden = !FEEDBACK_ID;
+$('#fbForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const st = $('#fbStatus'), btn = $('#fbSend');
+  const say = (t, cls) => { st.textContent = t; st.className = cls || ''; };
+  const name = $('#fbName').value.trim(), email = $('#fbEmail').value.trim(), message = $('#fbMsg').value.trim();
+  const missing = [!name && 'your name', !email && 'your email', !message && 'your comments'].filter(Boolean);
+  if (missing.length) return say('Add ' + missing.join(', ').replace(/, ([^,]*)$/, ' and $1') + ' before sending.', 'err');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return say('Check your email address. It should look like name@example.com.', 'err');
+  if ($('#fbHp').value) { e.target.reset(); return say('Thanks, your feedback has been sent.', 'ok'); }   // a bot filled the hidden field
+  btn.disabled = true; say('Sending…');
+  try {
+    const r = await fetch(FEEDBACK_URL, {
+      method: 'POST', headers: {'Content-Type': 'application/json', Accept: 'application/json'},
+      body: JSON.stringify({name, email, message, _replyto: email, _subject: 'Feedback: Harrogate primary distances', _template: 'table'}),
+      signal: AbortSignal.timeout(15000)
+    });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || String(j.success) !== 'true') throw new Error(j.message || 'status ' + r.status);
+    e.target.reset();
+    say('Thanks, your feedback has been sent.', 'ok');
+  } catch (err) {
+    say('Your feedback couldn’t be sent. Check your connection and try again.', 'err');
+  } finally { btn.disabled = false; }
+});
 
 // ---------- inputs ----------
 let homeLabel = '', homeDistrict = null;
