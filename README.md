@@ -1,6 +1,6 @@
 # Yorkshire school checker
 
-A one-page map tool for parents choosing a Reception place in the Harrogate district. Enter a postcode (or drop a pin) and every primary school nearby is shown with your walking or straight-line distance, whether you're in its catchment, and how far the last place went on national offer day in 2023, 2024, 2025 and 2026. Modelled on [SW London primary school distances](https://peterstuart3-arch.github.io/sw-primary-distances/), reworked for North Yorkshire's catchment-first admissions.
+A one-page map tool for parents choosing a Reception place in the Harrogate district. Enter a postcode and every primary school nearby is shown with your walking or straight-line distance, whether you're in its catchment, and how far the last place went on national offer day in 2023, 2024, 2025 and 2026. Modelled on [SW London primary school distances](https://peterstuart3-arch.github.io/sw-primary-distances/), reworked for North Yorkshire's catchment-first admissions.
 
 `index.html` is the whole site. Open it in a browser, or host it anywhere static (GitHub Pages works). It needs a connection for the map tiles, postcode lookups (postcodes.io) and walking routes (FOSSGIS OSRM).
 

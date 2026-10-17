@@ -14,7 +14,7 @@
 <style>
 /* Layout: slate header bar over a working panel (search, shortlist, results, guide) beside the live map.
    On phones the panel scrolls as the page and the map opens full screen from a floating toggle.
-   Palette: Dales slate and limestone. Highlighter yellow marks the user's own things: their pin, shortlist and focus.
+   Palette: Dales slate and limestone. Highlighter yellow marks the user's own things: their postcode pin, shortlist and focus.
    Verdict colours (good / warn / bad / open / none) are semantic and separate from the brand. */
 :root{
   --stone:#eef0ec; --card:#ffffff; --sunk:#f5f6f3; --ink:#15212b; --muted:#56636c; --line:#d8dcd6;
@@ -85,7 +85,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 .textbtn:hover{text-decoration-thickness:2px}
 .locrow{display:flex;align-items:center;gap:8px;margin-top:4px;font-size:.92rem}
 .locrow svg{width:16px;height:16px;flex:none}
-#status{margin:12px 0 0;font-size:.9rem;color:var(--muted);min-height:1.4em}
+#status{margin:12px 0 0;font-size:.9rem;color:var(--muted)}
+#status:empty{display:none}
 #status.err{color:var(--bad);font-weight:600}
 .opts{display:flex;flex-wrap:wrap;gap:14px 22px;margin-top:16px;align-items:flex-end}
 .seg{border:0;margin:0;padding:0;display:grid;gap:6px;min-width:0}
@@ -327,7 +328,7 @@ select{font:inherit;font-size:.9rem;padding:6px 8px;border:1px solid var(--line)
         <button type="button" id="locBtn" class="textbtn">Use my current location</button>
       </div>
     </form>
-    <p id="status" role="status" aria-live="polite">Or click anywhere on the map to drop a pin.</p>
+    <p id="status" role="status" aria-live="polite"></p>
     <div class="opts">
       <fieldset class="seg">
         <legend>Show schools within</legend>
@@ -404,7 +405,7 @@ select{font:inherit;font-size:.9rem;padding:6px 8px;border:1px solid var(--line)
       <h3>The results</h3>
       <p>Each school is judged across every year published unless you pick a single year. <b>Safe</b> means you’d have got in every year. <b>Mixed</b> means in some years but not others. <b>Just inside</b> means inside every year but by under 0.1 mile at least once, which is within the margin of error. <b>Unlikely</b> means outside every year; if every miss was under 0.1 mile it’s marked “Just outside” instead. <b>Open</b> means everyone who applied got a place, or the last out-of-catchment place went over 2 miles away. Years marked “Not published” don’t count either way. Sibling priority isn’t included, so if you already have a child at a school your chances there are better than shown.</p>
       <h3>Catchments</h3>
-      <p>Your postcode’s centre point (or the exact point, if you use your location or drop a pin) is checked against the council’s catchment map, which the council publishes for reference only. If you live near a boundary, <a href="https://experience.arcgis.com/experience/4dd5b97eae514b31a067137ebf7cdd6a" target="_blank" rel="noopener">check your exact address on the council’s map</a>. Open a school to see its catchment outlined on the map.</p>
+      <p>Your postcode’s centre point (or your exact position, if you use your current location) is checked against the council’s catchment map, which the council publishes for reference only. If you live near a boundary, <a href="https://experience.arcgis.com/experience/4dd5b97eae514b31a067137ebf7cdd6a" target="_blank" rel="noopener">check your exact address on the council’s map</a>. Open a school to see its catchment outlined on the map.</p>
       <h3>Distances</h3>
       <p>Most schools measure the shortest walking route along roads and footpaths, from your home to the nearest school entrance, using the council’s own mapping. Walking distances here use OpenStreetMap paths from your postcode centre to the school, so expect differences of 0.1 mile or more. Where a school doesn’t say how it measures, straight line is assumed. If the walking-route service can’t be reached, those schools are marked “Check”. On the map, walking-route schools show a dashed circle: the true walking area always sits inside it.</p>
       <h3>Ofsted</h3>
@@ -547,7 +548,7 @@ legend.onAdd = () => {
   const d = L.DomUtil.create('details', 'legend');
   d.open = !isPhone();
   d.innerHTML = `<summary>Key</summary>
-  <div><i class="you"></i>Your postcode or pin</div>
+  <div><i class="you"></i>Your postcode</div>
   <div><i style="background:${mcss('--good')}"></i>Safe</div>
   <div><i style="background:${mcss('--open')}"></i>Open: everyone offered</div>
   <div><i style="background:${mcss('--warn')}"></i>Mixed or close to the line</div>
@@ -688,7 +689,7 @@ function drawAllSchools() {
     const vv = home ? (s.result?.v || 'na') : verdict(s, null).v;
     const z = map.getZoom(), base = z <= 11 ? 4.5 : z <= 13 ? 5 : 6.5;
     const m = L.circleMarker(s.ll, {radius: home && s.result ? base + 1.5 : base, weight: 1.5, color: '#fff', fillColor: mapColour(vv),
-                                    fillOpacity: home && !s.result ? .55 : .95, bubblingMouseEvents: false});   // a click opens the school, not a new pin
+                                    fillOpacity: home && !s.result ? .55 : .95, bubblingMouseEvents: false});
     m.bindTooltip(esc(s.name) + (home && s.result ? ': ' + chipText(s.result) : ''));
     m.on('click', () => selectSchool(s.id, true));
     schoolLayer.addLayer(m);
@@ -744,7 +745,7 @@ async function setHome(ll, label, district, isPostcode) {
   near = schools.filter(s => s.ll).map(s => ({s, sl: haversine(ll, s.ll)})).filter(x => x.sl <= R).map(x => (x.s.straight = x.sl, x.s));
   near.forEach(s => { s.walk = null; s.walkErr = false; });
   const walkers = near.filter(s => s.method === 'walking');
-  const shown = label === 'your location' || label === 'the dropped pin' ? 'This point' : label;
+  const shown = label === 'your location' ? 'Your location' : label;
   const outside = district && district !== 'North Yorkshire'
     ? `${label} is in ${district}, which this checker doesn’t cover yet, so schools there aren’t shown.`
     : !areas.size ? `${shown} is outside the Harrogate district, so schools in other areas aren’t shown.` : '';
@@ -927,7 +928,7 @@ function drawRings(list) {
   for (const s of list) {
     const c = s.result.c;
     if (!s.ll || !c || c.s !== 'distance' || c.g === 'sib' || (c.g === 'out' && (s.inC || c.m >= UNDERSUB_M)) || (c.g === 'in' && s.inC === false)) continue;
-    // not clickable: a click inside a ring drops a pin on the map below
+    // not clickable, so the school dots inside stay easy to tap
     L.circle(s.ll, {radius: c.m, color: mapColour(s.result.v), weight: s.method === 'walking' ? 2 : 1.5, interactive: false,
       dashArray: s.method === 'walking' ? '6 6' : null, fillOpacity: s.method === 'walking' ? .03 : .07}).addTo(ringLayer);
   }
@@ -1113,7 +1114,6 @@ $('#locBtn').addEventListener('click', () => {
     {enableHighAccuracy: true, timeout: 15000});
 });
 map.on('zoomend', drawAllSchools);
-map.on('click', e => { $('#pc').value = ''; setHome([e.latlng.lat, e.latlng.lng], 'the dropped pin'); });
 $$('input[name=radius]').forEach(i => i.addEventListener('change', () => home && setHome(home, homeLabel, homeDistrict, homeIsPostcode)));
 $('#yr').addEventListener('change', () => { if (home) render(); else drawAllSchools(); });
 $$('.sitenav [data-open]').forEach(b => b.addEventListener('click', () => {
