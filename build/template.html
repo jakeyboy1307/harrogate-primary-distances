@@ -33,14 +33,12 @@
   --header:#081016; --header-ink:#f2f5f6; --btn:#e6ecef; --btn-ink:#0f1a21; --btn-hover:#ffffff;
   --good:#63c47c; --good-soft:#15301d; --warn:#eaa651; --warn-soft:#37260f;
   --bad:#f0807c; --bad-soft:#3a1b1b; --open:#82b2f0; --open-soft:#16263d; --none:#9aa6b0; --none-soft:#202b33;
-  --tiles:invert(.92) hue-rotate(180deg) saturate(.35) brightness(.95) contrast(.9);
   color-scheme:dark}}
 :root[data-theme="dark"]{
   --stone:#0c1419; --card:#121c23; --sunk:#0f181e; --ink:#e6ecef; --muted:#9daab3; --line:#26333c;
   --header:#081016; --header-ink:#f2f5f6; --btn:#e6ecef; --btn-ink:#0f1a21; --btn-hover:#ffffff;
   --good:#63c47c; --good-soft:#15301d; --warn:#eaa651; --warn-soft:#37260f;
   --bad:#f0807c; --bad-soft:#3a1b1b; --open:#82b2f0; --open-soft:#16263d; --none:#9aa6b0; --none-soft:#202b33;
-  --tiles:invert(.92) hue-rotate(180deg) saturate(.35) brightness(.95) contrast(.9);
   color-scheme:dark}
 
 *{box-sizing:border-box}
@@ -215,10 +213,14 @@ select{font:inherit;font-size:.9rem;padding:6px 8px;border:1px solid var(--line)
 .fb .hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
 #fbStatus{margin:0;min-height:1.3em;color:var(--muted)}
 #fbStatus.err{color:var(--bad)} #fbStatus.ok{color:var(--good);font-weight:700}
-.credit{border-bottom:0;font-size:.84rem;color:var(--muted);display:grid;gap:4px}
-.credit a{color:var(--ink);font-weight:700}
+.credit{position:sticky;bottom:0;z-index:5;border-bottom:0;padding-block:10px;background:var(--header);color:var(--header-ink);font-size:.84rem;display:flex;align-items:center}
+.credit a{color:inherit;font-weight:700}
 
 /* ---------- map ---------- */
+/* The map stays light in dark mode too: a darkened street map was too heavy to read. */
+#map{--card:#ffffff; --ink:#15212b; --muted:#56636c; --line:#d8dcd6; --stone:#eef0ec;
+  --good:#1f6d38; --warn:#9c5200; --bad:#ad2f2c; --open:#22599e; --none:#626d77;
+  --tiles:saturate(.45) contrast(.96) brightness(1.02); color-scheme:light}
 .leaflet-container{font:13px/1.4 var(--body);background:var(--stone)}
 .leaflet-tile-pane{filter:var(--tiles)}
 .leaflet-catch-pane{pointer-events:none}
@@ -250,7 +252,7 @@ select{font:inherit;font-size:.9rem;padding:6px 8px;border:1px solid var(--line)
 .viewtoggle{display:none}
 
 @media (max-width:760px){
-  :root{--hdr:54px;--gl:max(18px,env(safe-area-inset-left,0px));--gr:max(18px,env(safe-area-inset-right,0px))}
+  :root{--hdr:54px;--credit-h:40px;--gl:max(18px,env(safe-area-inset-left,0px));--gr:max(18px,env(safe-area-inset-right,0px))}
   html,body{height:auto}
   body{display:block;overflow:visible}
   body.mapview{overflow:hidden}
@@ -259,8 +261,9 @@ select{font:inherit;font-size:.9rem;padding:6px 8px;border:1px solid var(--line)
   .brand{font-size:1.08rem}
   .rose{width:26px;height:26px}
   .app{display:block}
-  #panel{overflow:visible;border-right:0;padding-bottom:84px}
-  #map{position:fixed;inset:0;z-index:1000;height:auto;visibility:hidden}
+  #panel{overflow:visible;border-right:0;padding-bottom:calc(var(--credit-h) + 84px)}
+  .credit{position:fixed;left:0;right:0;bottom:0;z-index:1150;height:calc(var(--credit-h) + env(safe-area-inset-bottom,0px));padding-block:0 env(safe-area-inset-bottom,0px)}
+  #map{position:fixed;inset:0 0 calc(var(--credit-h) + env(safe-area-inset-bottom,0px)) 0;z-index:1000;height:auto;visibility:hidden}
   body.mapview #map{visibility:visible}
   .leaflet-top{top:env(safe-area-inset-top,0px)}
   .search h1{font-size:1.38rem}
@@ -270,10 +273,11 @@ select{font:inherit;font-size:.9rem;padding:6px 8px;border:1px solid var(--line)
   .facts{grid-template-columns:repeat(3,minmax(0,1fr))}
   .verdict,.facts,.yrs,.detail{margin-left:0;padding-left:0}
   .phone-only{display:inline}
-  .viewtoggle{display:inline-flex;align-items:center;gap:8px;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:1100;
+  .viewtoggle{display:inline-flex;align-items:center;gap:8px;position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--credit-h) + 14px + env(safe-area-inset-bottom,0px));z-index:1100;
     background:var(--btn);color:var(--btn-ink);border:0;border-radius:999px;padding:12px 20px;font-weight:700;box-shadow:0 4px 16px rgba(0,0,0,.35)}
   .viewtoggle svg{width:18px;height:18px}
-  #toast{bottom:calc(80px + env(safe-area-inset-bottom,0px))}
+  body.mapview .viewtoggle{bottom:calc(var(--credit-h) + 40px + env(safe-area-inset-bottom,0px))}   /* clear of the map credits */
+  #toast{bottom:calc(var(--credit-h) + 78px + env(safe-area-inset-bottom,0px))}
   .leaflet-control-attribution{font-size:9px;line-height:1.3}
 }
 @media (max-width:380px){.yrs{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -509,6 +513,9 @@ function inRing(pt, ring) {
 const inArea = (pt, area) => area.p.some(poly => inRing(pt, poly[0]) && !poly.slice(1).some(h => inRing(pt, h)));
 
 // ---------- map ----------
+const mapEl = document.getElementById('map');
+const mcss = n => getComputedStyle(mapEl).getPropertyValue(n).trim();   // the map's own (always light) colours
+const mapColour = v => mcss({in: '--good', edge: '--warn', out: '--bad', all: '--open', na: '--none'}[v]);
 const map = L.map('map', {zoomControl: false, zoomAnimation: !reduceMotion, fadeAnimation: !reduceMotion});
 L.control.zoom({position: 'topright'}).addTo(map);
 L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
@@ -529,11 +536,11 @@ legend.onAdd = () => {
   d.open = !isPhone();
   d.innerHTML = `<summary>Key</summary>
   <div><i class="you"></i>Your postcode or pin</div>
-  <div><i style="background:${css('--good')}"></i>Safe</div>
-  <div><i style="background:${css('--open')}"></i>Open: everyone offered</div>
-  <div><i style="background:${css('--warn')}"></i>Mixed or close to the line</div>
-  <div><i style="background:${css('--bad')}"></i>Unlikely</div>
-  <div><i style="background:${css('--none')}"></i>No data, or check needed</div>
+  <div><i style="background:${mcss('--good')}"></i>Safe</div>
+  <div><i style="background:${mcss('--open')}"></i>Open: everyone offered</div>
+  <div><i style="background:${mcss('--warn')}"></i>Mixed or close to the line</div>
+  <div><i style="background:${mcss('--bad')}"></i>Unlikely</div>
+  <div><i style="background:${mcss('--none')}"></i>No data, or check needed</div>
   <div><i class="dash"></i>Last place, walking-route school</div>
   <div><i class="area"></i>Catchment of the open school</div>`;
   L.DomEvent.disableClickPropagation(d);
@@ -667,7 +674,7 @@ function drawAllSchools() {
     if (!s.ll) continue;
     const vv = home ? (s.result?.v || 'na') : verdict(s, null).v;
     const z = map.getZoom(), base = z <= 11 ? 4.5 : z <= 13 ? 5 : 6.5;
-    const m = L.circleMarker(s.ll, {radius: home && s.result ? base + 1.5 : base, weight: 1.5, color: '#fff', fillColor: colour(vv),
+    const m = L.circleMarker(s.ll, {radius: home && s.result ? base + 1.5 : base, weight: 1.5, color: '#fff', fillColor: mapColour(vv),
                                     fillOpacity: home && !s.result ? .55 : .95, bubblingMouseEvents: false});   // a click opens the school, not a new pin
     m.bindTooltip(esc(s.name) + (home && s.result ? ': ' + chipText(s.result) : ''));
     m.on('click', () => selectSchool(s.id, true));
@@ -706,7 +713,7 @@ async function setHome(ll, label, district, isPostcode) {
   homeMarker = L.marker(ll, {icon: homeIcon, title: 'Your location', keyboard: false}).addTo(map).bindPopup(esc(label));
   const R = radius() * MI;
   if (searchCircle) searchCircle.remove();
-  searchCircle = L.circle(ll, {radius: R, color: css('--ink'), weight: 1, fill: false, dashArray: '2 6', interactive: false}).addTo(map);
+  searchCircle = L.circle(ll, {radius: R, color: mcss('--ink'), weight: 1, fill: false, dashArray: '2 6', interactive: false}).addTo(map);
   map.fitBounds(searchCircle.getBounds(), {padding: [20, 20]});
 
   // which catchments the point falls in
@@ -896,7 +903,7 @@ function drawRings(list) {
     const c = s.result.c;
     if (!s.ll || !c || c.s !== 'distance' || c.g === 'sib' || (c.g === 'out' && (s.inC || c.m >= UNDERSUB_M)) || (c.g === 'in' && s.inC === false)) continue;
     // not clickable: a click inside a ring drops a pin on the map below
-    L.circle(s.ll, {radius: c.m, color: colour(s.result.v), weight: s.method === 'walking' ? 2 : 1.5, interactive: false,
+    L.circle(s.ll, {radius: c.m, color: mapColour(s.result.v), weight: s.method === 'walking' ? 2 : 1.5, interactive: false,
       dashArray: s.method === 'walking' ? '6 6' : null, fillOpacity: s.method === 'walking' ? .03 : .07}).addTo(ringLayer);
   }
 }
@@ -915,7 +922,7 @@ function markSelected(id, scroll) {
 function showCatchment(s) {
   catchLayer.clearLayers();
   for (const i of s.cz || [])
-    L.polygon(DATA.catch[i].p, {pane: 'catch', color: css('--ink'), weight: 2, fillColor: css('--ink'), fillOpacity: .06, interactive: false}).addTo(catchLayer);
+    L.polygon(DATA.catch[i].p, {pane: 'catch', color: mcss('--ink'), weight: 2, fillColor: mcss('--ink'), fillOpacity: .06, interactive: false}).addTo(catchLayer);
 }
 function expand(id, scroll) {
   selected = id;
@@ -1125,8 +1132,13 @@ $('#fbForm').addEventListener('submit', async e => {
 // ---------- start ----------
 drawAllSchools();
 drawShortlist();
-const fromLink = /^#pc=([A-Za-z0-9]{5,8})$/.exec(location.hash);
-if (fromLink) { $('#pc').value = fromLink[1].toUpperCase(); lookupPostcode(fromLink[1]); }
+// A shared link (#pc=HG20NA) runs its search, on load or when the address changes in an open tab.
+function searchFromLink() {
+  const m = /^#pc=([A-Za-z0-9]{5,8})$/.exec(location.hash);
+  if (m && m[1].toUpperCase() !== (homeIsPostcode ? homeLabel.replace(/\s+/g, '') : '')) { $('#pc').value = m[1].toUpperCase(); lookupPostcode(m[1]); }
+}
+addEventListener('hashchange', searchFromLink);
+searchFromLink();
 </script>
 </body>
 </html>
