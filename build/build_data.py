@@ -228,8 +228,20 @@ for s in schools:
     if len(hit) == 1:
         lng, lat = hit[0]['geometry']['coordinates']
         s['ll'] = [round(lat, 6), round(lng, 6)]
-        s['postcode'] = hit[0]['properties']['Postcode']
-        s['faith'] = hit[0]['properties']['Religious_character']
+        p = hit[0]['properties']
+        s['postcode'] = p['Postcode']
+        s['faith'] = p['Religious_character']
+        lines = []
+        for k in ('Address_1', 'Address_2', 'Address_3', 'Address_4'):
+            for part in str(p.get(k) or '').split(','):
+                part = part.strip()
+                if part and part.lower().replace("'", '') not in [x.lower().replace("'", '') for x in lines] and part.lower() != 'north yorkshire' \
+                        and not part.lower().endswith('school'):
+                    lines.append(part.title() if part.isupper() else part)
+        s['addr'] = ', '.join(lines + [p['Postcode']])
+        web = str(p.get('School_website') or '').strip()
+        if web:
+            s['web'] = web if web.startswith('http') else 'https://' + web
     else:
         print(f'  point matches for {s["name"]}: {len(hit)}')
 
