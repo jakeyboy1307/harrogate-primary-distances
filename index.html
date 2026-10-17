@@ -6,6 +6,7 @@
 <title>Yorkshire school checker</title>
 <meta name="description" content="Check your postcode against catchments and four years of Reception offers at every primary school in the Harrogate district.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-12 -12 24 24'%3E%3Ccircle r='12' fill='%231b2e3c'/%3E%3Cg fill='%23fff'%3E%3Ccircle cy='-5' r='4'/%3E%3Ccircle cy='-5' r='4' transform='rotate(72)'/%3E%3Ccircle cy='-5' r='4' transform='rotate(144)'/%3E%3Ccircle cy='-5' r='4' transform='rotate(216)'/%3E%3Ccircle cy='-5' r='4' transform='rotate(288)'/%3E%3C/g%3E%3Ccircle r='2.4' fill='%23ffd23f'/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem('ysc-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Mono:wght@400;600&family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,600;0,700;1,400&family=Bitter:wght@700;800&display=swap">
@@ -56,8 +57,11 @@ button{font:inherit;color:inherit;cursor:pointer}
   padding-block:8px;padding-left:var(--gl);padding-right:var(--gr);background:var(--header);color:var(--header-ink)}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font:800 1.22rem/1.1 var(--display);letter-spacing:-.01em}
 .rose{width:30px;height:30px;flex:none}
-.sitenav{display:flex;gap:20px;font-size:.92rem}
-.sitenav button{background:none;border:0;padding:6px 0;color:inherit;text-decoration:underline;text-decoration-color:transparent;text-underline-offset:5px}
+.sitenav{display:flex;align-items:center;gap:20px;font-size:.92rem}
+.themebtn{display:inline-grid;place-items:center;width:36px;height:36px;padding:0!important;border:1px solid color-mix(in srgb,var(--header-ink) 35%,transparent)!important;border-radius:3px;background:transparent;color:inherit;text-decoration:none!important}
+.themebtn:hover{background:color-mix(in srgb,var(--header-ink) 12%,transparent)}
+.themebtn svg{width:18px;height:18px}
+.sitenav button{white-space:nowrap;background:none;border:0;padding:6px 0;color:inherit;text-decoration:underline;text-decoration-color:transparent;text-underline-offset:5px}
 .sitenav button:hover{text-decoration-color:currentColor}
 
 /* ---------- app frame ---------- */
@@ -303,6 +307,7 @@ select{font:inherit;font-size:.9rem;padding:6px 8px;border:1px solid var(--line)
   <nav class="sitenav" aria-label="Help">
     <button type="button" data-open="guide">How it works</button>
     <button type="button" data-open="sources" class="wide">About the data</button>
+    <button type="button" class="themebtn" id="themeBtn" aria-label="Switch to dark mode"></button>
   </nav>
 </header>
 
@@ -1148,6 +1153,28 @@ $('#fbForm').addEventListener('submit', async e => {
     say('Your feedback couldn’t be sent. Check your connection and try again.', 'err');
   } finally { btn.disabled = false; }
 });
+
+// ---------- light and dark ----------
+// No saved choice follows the device; the button saves an explicit one.
+const ICON_SUN = '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="3.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M10 1.5v2.4M10 16.1v2.4M1.5 10h2.4M16.1 10h2.4M4 4l1.7 1.7M14.3 14.3 16 16M4 16l1.7-1.7M14.3 5.7 16 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>';
+const ICON_MOON = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M16.5 12.6A7 7 0 0 1 7.4 3.5a7 7 0 1 0 9.1 9.1z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>';
+const darkQuery = matchMedia('(prefers-color-scheme: dark)');
+const isDark = () => { const t = document.documentElement.dataset.theme; return t ? t === 'dark' : darkQuery.matches; };
+function syncTheme() {
+  const d = isDark(), b = $('#themeBtn');
+  b.innerHTML = d ? ICON_SUN : ICON_MOON;
+  b.setAttribute('aria-label', d ? 'Switch to light mode' : 'Switch to dark mode');
+  b.title = b.getAttribute('aria-label');
+  if (home) render(); else drawShortlist();   // list dots take their colours from the theme
+}
+$('#themeBtn').addEventListener('click', () => {
+  const next = isDark() ? 'light' : 'dark';
+  document.documentElement.dataset.theme = next;
+  try { localStorage.setItem('ysc-theme', next); } catch {}
+  syncTheme();
+});
+darkQuery.addEventListener('change', syncTheme);
+syncTheme();
 
 // ---------- start ----------
 drawAllSchools();
