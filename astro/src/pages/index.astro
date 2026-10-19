@@ -150,15 +150,16 @@ const keys = [
 
 <script>
   import { addWalking, esc, lookupPostcode, loadData, ORDER, plural, prepareSearch, scoreAll, MAX_SHORT,
-    type Mode, type Place, type School, type V, CATCH_MAP } from '../lib/engine';
+    type Area, type Mode, type Place, type School, type V, CATCH_MAP } from '../lib/engine';
   import { addToList, getList, getSearch, onListChange, ordinal, rankOf, setSearch } from '../lib/store';
   import { $, $$, chip, distTxt, ICON, toast, vOf } from '../lib/ui';
   import { initPanel, openPanel } from '../lib/panel';
   import { initPList, renderPList } from '../lib/plist';
   import type { SchoolMap } from '../lib/map';
 
-  const { schools, catch: catches } = await loadData();
-  const byDfe = new Map(schools.map((s) => [s.dfe, s]));
+  // The form works straight away; a search waits for the school data, so an early click can't reload the page
+  let schools: School[] = [], catches: Area[] = [], byDfe = new Map<number, School>();
+  const ready = loadData().then((d) => { schools = d.schools; catches = d.catch; byDfe = new Map(schools.map((s) => [s.dfe, s])); });
   const byId = (id: number) => schools[id];
 
   let place: Place | null = null, near: School[] = [], outside = '';
@@ -198,6 +199,7 @@ const keys = [
 
   // ---------- search ----------
   async function run(p: Place, save = true) {
+    await ready;
     const my = ++seq;
     place = p;
     if (save) setSearch({ place: p, radius: radius(), mode: mode() });
@@ -403,8 +405,12 @@ const keys = [
       setRadius(saved.radius);
       setMode(saved.mode);
     }
-    if (m) {
-      try { const p = await lookupPostcode(m[1]); $<HTMLInputElement>('#pc').value = p.label; return run(p); }
+    // a form sent before the page's script had loaded arrives as ?pc=
+    const early = new URLSearchParams(location.search).get('pc');
+    if (early) history.replaceState(null, '', location.pathname);
+    const pc = m?.[1] ?? early;
+    if (pc) {
+      try { const p = await lookupPostcode(pc); $<HTMLInputElement>('#pc').value = p.label; return run(p); }
       catch (err) { setStatus('#status', (err as Error).message, true); return; }
     }
     if (saved) { $<HTMLInputElement>('#pc').value = saved.place.isPostcode ? saved.place.label : ''; run(saved.place, false); }
