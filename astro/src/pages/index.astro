@@ -153,7 +153,7 @@ const keys = [
     type Area, type Mode, type Place, type School, type V, CATCH_MAP } from '../lib/engine';
   import { addToList, getList, getSearch, onListChange, ordinal, rankOf, setSearch } from '../lib/store';
   import { $, $$, chip, distTxt, ICON, toast, vOf } from '../lib/ui';
-  import { initPanel, openPanel } from '../lib/panel';
+  import { initPanel, openPanel, refreshPanel } from '../lib/panel';
   import { initPList, renderPList } from '../lib/plist';
   import type { SchoolMap } from '../lib/map';
 
@@ -258,6 +258,7 @@ const keys = [
       : `<div class="check">${safe ? ICON.tick : ICON.warn}<span>${safe ? 'You have a safe bet in your list. Good move.' : 'No safe bet yet. Adding one means you’re not relying on a close call.'}</span></div>
          <p class="plist-note">Saved on this device. On a keyboard, select a school’s handle and use the up and down keys to move it.</p>`;
     if (mapShown()) drawMap();
+    refreshPanel();
   }
 
   function row(s: School, m: Mode) {

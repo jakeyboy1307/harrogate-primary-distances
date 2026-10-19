@@ -1,7 +1,7 @@
 // Fills and drives the school slide-out panel shared by Find schools and My plan.
 import {
   esc, fmt, headlineAnswer, mon, ofsted, plural, whoGotIn, yearVerdict, youText,
-  MAX_SHORT, type LatLng, type Mode, type School,
+  MAX_SHORT, MI, type LatLng, type Mode, type School,
 } from './engine';
 import { addToList, getList, onListChange, ordinal, rankOf, removeFromList } from './store';
 import { $, chip, toast } from './ui';
@@ -63,6 +63,16 @@ export function openPanel(id: number) {
   document.dispatchEvent(new CustomEvent('panel:open', { detail: id }));
 }
 
+// Redraw the open panel in place, e.g. once walking distances arrive
+export function refreshPanel() {
+  if (current == null) return;
+  const s = ctx.byId(current), el = $('#pBody'), top = el.scrollTop;
+  if (!s) return;
+  el.innerHTML = body(s, ctx.mode(), ctx.home());
+  el.scrollTop = top;
+  renderFoot(s);
+}
+
 export function closePanel() {
   if (current == null) return;
   current = null;
@@ -83,6 +93,47 @@ function renderFoot(s: School) {
     : n >= MAX_SHORT
       ? `<div class="rank"><span>Your list already has ${MAX_SHORT} schools</span></div><div class="acts"><button type="button" class="btn btn-sm btn-dark" data-act="order">Change my list</button></div>`
       : `<div class="rank"><span>Not on your list yet</span></div><div class="acts"><button type="button" class="btn btn-sm btn-primary" data-act="add">Add as ${ordinal(n + 1)} choice</button></div>`;
+}
+
+// Year by year as bars: how far the last place went each year, coloured by whether you'd have got in,
+// with your own distance marked. Years with no distance cut-off get a plain label instead of a bar.
+function yearChart(s: School) {
+  const you = s.used ?? null;
+  const dists = s.d.filter((x) => x.s === 'distance' && x.g !== 'sib').map((x) => x.m!);
+  const max = Math.max(...dists, you ?? 0, 0.25 * MI) * 1.12;
+  const pct = (m: number) => `${Math.min(100, (m / max) * 100).toFixed(1)}%`;
+  const tone = (v: string) => (v === 'in' || v === 'all' ? '' : v === 'edge' ? ' close' : v === 'out' ? ' miss' : ' none');
+  const rows = s.d.map((x) => {
+    const yv = yearVerdict(x, s.used, s.inC), t = tone(yv.v);
+    const tip = `${x.y}: ${whoGotIn(x)}. ${yv.label}.`;
+    let track: string, val: string;
+    if (x.s === 'distance' && x.g !== 'sib') {
+      track = `<div class="bar${t}" style="width:${pct(x.m!)}"></div>`;
+      val = fmt(x.m);
+    } else {
+      const txt = x.s === 'all_offered' ? 'Everyone got in' : x.s === 'distance' ? 'Siblings only' : 'Not published';
+      track = `<div class="bar-note${t}">${txt}</div>`;
+      val = '';
+    }
+    return `<div class="bar-row" title="${esc(tip)}"><span>${x.y}</span><div class="bar-track">${track}</div><span class="val${t}">${val}</span></div>`;
+  }).join('');
+  const line = you != null
+    ? `<div class="you-line" style="left:calc(var(--lab) + var(--gap) + (100% - var(--lab) - var(--val) - 2 * var(--gap)) * ${(you / max).toFixed(4)})"></div>
+       <span class="you-tag" style="left:calc(var(--lab) + var(--gap) + (100% - var(--lab) - var(--val) - 2 * var(--gap)) * ${(you / max).toFixed(4)})">you, ${(you / MI).toFixed(2)} mi</span>`
+    : '';
+  const sr = s.d.map((x) => `${x.y}: ${whoGotIn(x)}. ${youText(yearVerdict(x, s.used, s.inC))}.`).join(' ');
+  // only list the colours this chart uses
+  const used = new Set(s.d.map((x) => tone(yearVerdict(x, s.used, s.inC).v)));
+  const key = [['', '', 'You’d have got in'], [' close', 'close', 'Too close to call'], [' miss', 'miss', 'You’d have missed out']]
+    .filter(([t]) => used.has(t)).map(([, c, l]) => `<span><i class="${c}"></i>${l}</span>`).join('');
+  const sibs = s.d.some((x) => x.s === 'distance' && x.g === 'sib');
+  const catchNote = s.inC ? 'You’re in the catchment, so the bars only matter for children outside it. ' : '';
+  return `<section class="p-sec"><figure class="chart in-panel">
+    <div class="chart-head"><h3>Year by year</h3><span>How far the last place went</span></div>
+    <div class="bars" role="img" aria-label="${esc(sr)}">${rows}${line}</div>
+    <figcaption class="chart-foot">${key}</figcaption>
+    <p class="p-note" style="padding:0">${catchNote}${you == null ? 'Check your postcode to see where you’d fall.' : 'The dotted line is your distance from the school.'}${sibs ? ' “Siblings only” means that from outside the catchment, only children with a brother or sister there got in.' : ''}</p>
+  </figure></section>`;
 }
 
 // Phone and email for the school office, for questions about admissions or a visit
@@ -131,11 +182,7 @@ function body(s: School, mode: Mode, home: LatLng | null) {
     ${sg ? `<div><dt>Safeguarding</dt><dd class="${sg === 'Met' ? 'good' : 'bad'}">${esc(sg)}</dd></div>`
          : `<div><dt>Ofsted</dt><dd class="${of.tone === 'bad' ? 'bad' : of.tone === 'na' ? '' : 'good'}">${esc(of.short)}</dd></div>`}
   </dl>
-  <section class="p-sec"><h3>Year by year</h3>
-    <table class="tbl"><thead><tr><th>Year</th><th>Who got a place</th><th class="you">${r ? 'Would you get in?' : ''}</th></tr></thead><tbody>
-    ${s.d.map((x) => { const yv = yearVerdict(x, s.used, s.inC); const v = yv.v === 'all' ? 'in' : yv.v;
-      return `<tr><td class="yr">${x.y}</td><td>${esc(whoGotIn(x))}</td><td class="you">${r ? `<span class="chip chip-sm v-${v}">${esc(youText(yv))}</span>` : ''}</td></tr>`; }).join('')}
-    </tbody></table></section>
+  ${yearChart(s)}
   <section class="p-sec"><h3>How popular is it?</h3>
     <table class="tbl num"><thead><tr><th>Year</th><th>Applied</th><th>Places</th><th>Offered</th></tr></thead><tbody>
     ${s.d.map((x) => `<tr><td class="yr">${x.y}</td><td>${x.a ?? 'n/a'}</td><td>${x.p ?? 'n/a'}</td><td>${x.o ?? 'n/a'}</td></tr>`).join('')}

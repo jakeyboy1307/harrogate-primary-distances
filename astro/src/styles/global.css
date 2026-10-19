@@ -447,7 +447,21 @@ body.panel-open { overflow: hidden; }
 .chart-foot { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; padding-top: 16px; border-top: 1px solid var(--line); font-size: 14px; }
 .chart-foot i { display: inline-block; width: 14px; height: 14px; border-radius: 4px; margin-right: 6px; vertical-align: -2px; background: var(--cobalt); }
 .chart-foot i.miss { background: #F2ABA4; }
-.chart-foot span:last-child { margin-left: auto; color: var(--muted); }
+.how-sec .chart-foot span:last-child { margin-left: auto; color: var(--muted); }
+.bar.close, .chart-foot i.close { background: #F5D36A; }
+.bar.none { background: var(--none-bg); }
+.bar-row .val.close { color: var(--close); }
+.bar-row .val.none { color: var(--muted-2); font-weight: 600; }
+.bar-note { height: 30px; display: flex; align-items: center; padding: 0 12px; border-radius: 8px; background: var(--open-bg); color: var(--open); font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-note.miss { background: var(--bad-bg); color: var(--bad); }
+.bar-note.none { background: repeating-linear-gradient(45deg, #fff, #fff 6px, var(--none-bg) 6px, var(--none-bg) 12px); color: var(--muted-2); border: 1.5px dashed var(--line-2); }
+.chart.in-panel { padding: 22px; box-shadow: 4px 4px 0 var(--cobalt); gap: 14px; }
+.chart.in-panel .bars { --lab: 44px; --gap: 12px; --val: 64px; padding-top: 30px; }
+.chart.in-panel .bar-row { font-size: 14px; }
+.chart.in-panel .bar, .chart.in-panel .bar-note, .chart.in-panel .bar-track { height: 26px; }
+.chart.in-panel .you-tag { font-size: 18px; }
+.chart.in-panel .chart-foot { gap: 8px 14px; }
+@media (max-width: 420px) { .chart.in-panel { padding: 16px; } .chart.in-panel .bars { --lab: 38px; --gap: 8px; --val: 56px; } .bar-note { font-size: 12px; padding: 0 8px; } }
 .phrases { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px; }
 .phrase { padding: 28px; background: #fff; border: 2px solid var(--ink); border-radius: 16px; display: grid; gap: 12px; align-content: start; }
 .phrase h3 { font-size: 21px; line-height: 1.3; color: var(--ink); }

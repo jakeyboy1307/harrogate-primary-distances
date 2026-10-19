@@ -38,7 +38,7 @@ import { url } from '../lib/url';
   import { addWalking, APPLY_URL, dateState, esc, fmt, loadData, MAX_SHORT, ORDER, prepareSearch, scoreAll, type Mode, type School } from '../lib/engine';
   import { addToList, getList, getSearch, onListChange, ordinal, rankOf } from '../lib/store';
   import { $, chip, ICON, shortName, toast, vOf } from '../lib/ui';
-  import { initPanel, openPanel } from '../lib/panel';
+  import { initPanel, openPanel, refreshPanel } from '../lib/panel';
   import { initPList, renderPList } from '../lib/plist';
   import { url } from '../lib/url';
 
@@ -76,6 +76,7 @@ import { url } from '../lib/url';
 
   function render() {
     renderPList(plOpts);
+    refreshPanel();
     const listed = getList().map((d) => byDfe.get(d)!).filter(Boolean);
     $('#plCount').textContent = `${listed.length} of ${MAX_SHORT}`;
     // plan check
