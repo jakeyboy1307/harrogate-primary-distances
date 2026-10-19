@@ -1,0 +1,22 @@
+---
+import Rose from './Rose.astro';
+import Mammoth from './Mammoth.astro';
+import Feedback from './Feedback.astro';
+import { url } from '../lib/url';
+---
+<footer class="site-foot">
+  <div class="foot-brand"><Rose size={26} /><span>Yorkshire School Checker</span></div>
+  <nav class="foot-links" aria-label="Footer">
+    <a href={url('')}>Find schools</a>
+    <a href={url('plan/')}>My plan</a>
+    <a href={url('how-places-work/')}>How places work</a>
+    <a href={url('how-places-work/#sources')}>Where our numbers come from</a>
+  </nav>
+  <div class="foot-fb"><Feedback /></div>
+  <hr class="foot-rule" />
+  <p class="foot-legal">An independent tool, not run by North Yorkshire Council or any school.</p>
+  <p class="credit">
+    <span>Made by</span>
+    <a class="credit-link" href="https://www.mammothwebsites.co.uk" target="_blank" rel="noopener"><Mammoth /><span>Mammoth Websites</span></a>
+  </p>
+</footer>

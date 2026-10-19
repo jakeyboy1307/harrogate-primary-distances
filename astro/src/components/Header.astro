@@ -1,0 +1,43 @@
+---
+import Rose from './Rose.astro';
+import { url } from '../lib/url';
+interface Props { active: 'plan' | 'find' | 'how' }
+const { active } = Astro.props;
+const links = [
+  { key: 'find', href: url(''), label: 'Find schools' },
+  { key: 'plan', href: url('plan/'), label: 'My plan' },
+  { key: 'how', href: url('how-places-work/'), label: 'How places work' },
+];
+---
+<header class="site-head">
+  <a class="brand" href={url('')} aria-label="Yorkshire School Checker, home">
+    <Rose size={40} />
+    <span>Yorkshire School Checker</span>
+  </a>
+  <nav class="site-nav" id="siteNav" aria-label="Main">
+    {links.map((l) => (
+      <a href={l.href} aria-current={active === l.key ? 'page' : undefined}>
+        {l.label}{l.key === 'plan' && <span class="nav-count" data-list-count hidden></span>}
+      </a>
+    ))}
+  </nav>
+  <button class="menu-btn" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Menu">
+    <svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><path d="M1 1h16M1 7h16M1 13h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+  </button>
+</header>
+
+<script>
+  import { getList, onListChange } from '../lib/store';
+  const btn = document.querySelector<HTMLButtonElement>('.menu-btn')!;
+  const nav = document.getElementById('siteNav')!;
+  btn.addEventListener('click', () => {
+    const open = btn.getAttribute('aria-expanded') !== 'true';
+    btn.setAttribute('aria-expanded', String(open));
+    nav.classList.toggle('open', open);
+  });
+  const count = () => document.querySelectorAll<HTMLElement>('[data-list-count]').forEach((el) => {
+    const n = getList().length;
+    el.hidden = !n; el.textContent = String(n);
+  });
+  count(); onListChange(count);
+</script>

@@ -1,0 +1,413 @@
+---
+import Base from '../layouts/Base.astro';
+import SchoolPanel from '../components/SchoolPanel.astro';
+const keys = [
+  ['in', 'Safe bet', 'You’d have got in every year published.'],
+  ['all', 'Open to all', 'Everyone who applied got a place.'],
+  ['edge', 'It’s close', 'Some years yes, some no, or right on the cut-off.'],
+  ['out', 'Unlikely', 'You’d have missed out every year.'],
+  ['na', 'No data', 'The council didn’t publish figures. Ask the school.'],
+];
+---
+<Base title="Find schools · Yorkshire School Checker" description="Check your postcode against catchments and four years of Reception offers at every primary school in the Harrogate district." active="find">
+
+  <!-- ONBOARDING -->
+  <section class="onboard wrap" id="onboard">
+    <div>
+      <h1>First things first, where do you live?</h1>
+      <p class="lede">Pop in your postcode and we’ll show every primary school you could apply for, and how likely you’d be to get a place.</p>
+      <form class="pc-form" id="pcForm" novalidate>
+        <label class="label" for="pc">Your postcode</label>
+        <div class="pc-row">
+          <input class="pc-input" id="pc" name="pc" autocomplete="postal-code" inputmode="text" placeholder="For example HG2 0NA" spellcheck="false" />
+          <button class="btn btn-primary" id="pcBtn" type="submit">Find my schools</button>
+        </div>
+        <button class="textlink locate" type="button" id="locate">
+          <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="3" fill="currentColor" /><circle cx="9" cy="9" r="7" fill="none" stroke="currentColor" stroke-width="1.8" /></svg>
+          Use my current location
+        </button>
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+        <div class="options">
+          <fieldset class="opt">
+            <legend>How far would you travel?</legend>
+            <div class="pills">
+              {[1, 2, 3, 5].map((r) => <label class="pill"><input type="radio" name="radius" value={r} checked={r === 2} />{r} mile{r > 1 ? 's' : ''}</label>)}
+            </div>
+          </fieldset>
+          <fieldset class="opt">
+            <legend>Judge my chances on</legend>
+            <div class="pills">
+              <label class="pill"><input type="radio" name="mode" value="trend" checked />All four years</label>
+              <label class="pill"><input type="radio" name="mode" value="latest" />Latest year</label>
+              <label class="pill"><input type="radio" name="mode" value="pick" />One year:
+                <select id="oneYear" aria-label="Which year" style="border:0;background:transparent;font:inherit;font-weight:700;color:inherit">
+                  {[2026, 2025, 2024, 2023].map((y) => <option value={y}>{y}</option>)}
+                </select></label>
+            </div>
+          </fieldset>
+        </div>
+      </form>
+      <div class="examples">
+        <span>Just having a look? Try</span>
+        <button class="example" type="button" data-pc="HG2 0NA">Harrogate · HG2 0NA</button>
+        <button class="example" type="button" data-pc="HG5 0SL">Knaresborough · HG5 0SL</button>
+        <button class="example" type="button" data-pc="HG4 1LT">Ripon · HG4 1LT</button>
+      </div>
+      <p class="coverage">Covers the Harrogate district: Harrogate, Knaresborough, Ripon, Boroughbridge, Pateley Bridge, Masham and the villages. Nothing to sign up for.</p>
+    </div>
+    <aside class="key-card" aria-label="What the labels mean">
+      <span class="hand" style="font-size:26px">what you’ll see next</span>
+      <h2>Every school gets a simple label</h2>
+      {keys.map(([v, t, d]) => <div class="key-row"><span><span class={`chip v-${v}`}>{t}</span></span><span>{d}</span></div>)}
+      <p class="key-note">Got an older child at a school already? Brothers and sisters get priority, so your chances there are better than we show.</p>
+    </aside>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" hidden>
+    <div class="res-head wrap">
+      <div>
+        <div class="search-edit">
+          <p class="res-meta"><span id="resWhere"></span><button class="textlink" type="button" id="change" aria-expanded="false" aria-controls="editSearch">Change</button></p>
+          <div class="edit-pop" id="editSearch" hidden>
+            <div class="edit-head"><h2>Change your search</h2>
+              <button type="button" class="close" id="editClose" aria-label="Close"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg></button></div>
+            <form class="edit-pc" id="editForm" novalidate>
+              <label class="label" for="pc2">Postcode</label>
+              <div class="edit-row"><input class="edit-input" id="pc2" autocomplete="postal-code" spellcheck="false" /><button class="btn btn-sm btn-primary" type="submit" id="pc2Btn">Update</button></div>
+              <button class="textlink locate" type="button" id="locate2"><svg width="16" height="16" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="3" fill="currentColor" /><circle cx="9" cy="9" r="7" fill="none" stroke="currentColor" stroke-width="1.8" /></svg>Use my current location</button>
+              <p class="status" id="editStatus" role="status" aria-live="polite"></p>
+            </form>
+            <div class="edit-selects">
+              <label class="edit-sel"><span>How far</span>
+                <select id="r2">{[1, 2, 3, 5].map((r) => <option value={r}>Within {r} mile{r > 1 ? 's' : ''}</option>)}</select></label>
+              <label class="edit-sel"><span>Judge my chances on</span>
+                <select id="m2"><option value="trend">All four years</option><option value="latest">Latest year</option>{[2026, 2025, 2024, 2023].map((y) => <option value={y}>{y} only</option>)}</select></label>
+            </div>
+          </div>
+        </div>
+        <h1 id="resTitle"></h1>
+        <p class="catchline" id="catchline"></p>
+        <p class="status" id="resStatus" role="status" aria-live="polite"></p>
+      </div>
+      <div class="toggle" role="group" aria-label="View">
+        <button type="button" data-view="list" aria-pressed="true"><span set:html={'<svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 4.5h12M3 9h12M3 13.5h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'} />List</button>
+        <button type="button" data-view="map" aria-pressed="false"><span set:html={'<svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 4l4.5-2 5 2L16 2v12l-4.5 2-5-2L2 16z M6.5 2v12 M11.5 4v12" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg>'} />Map</button>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <div class="phone-tabs" role="group" aria-label="Show">
+        <button type="button" data-tab="list" aria-pressed="true">My list · <span data-list-count-plain>0</span></button>
+        <button type="button" data-tab="all" aria-pressed="false">All <span id="allCount"></span></button>
+      </div>
+    </div>
+
+    <div class="res-body wrap" id="listView" data-tab="list">
+      <section class="plist" aria-labelledby="plTitle">
+        <div class="plist-head">
+          <div class="plist-title"><h2 id="plTitle">Your list, in order</h2><span class="plist-count" id="plCount"></span></div>
+          <p class="muted">Number 1 is the school you want most. <span class="desk-only">Grab the handle and drag to change the order.</span></p>
+        </div>
+        <ol class="slots" id="slots"></ol>
+        <div class="plist-foot" id="plFoot"></div>
+      </section>
+      <section class="all-col" aria-label="All schools">
+        <div class="all-tools">
+          <div class="pills" id="filters"></div>
+          <label class="sortby">Sort by
+            <select id="sort"><option value="best">Best chance first</option><option value="near">Nearest first</option><option value="az">A to Z</option></select>
+          </label>
+        </div>
+        <div class="rows" id="rows"></div>
+        <button class="textlink" type="button" id="more" hidden style="margin-top:20px;color:var(--ink)"></button>
+      </section>
+    </div>
+
+    <div class="map-wrap wrap" id="mapView" hidden>
+      <div class="map-frame">
+        <div class="map" id="map"></div>
+        <div class="map-drawer" id="drawer"></div>
+        <div class="map-ctl">
+          <div class="zoom"><button type="button" id="zIn" aria-label="Zoom in">+</button><button type="button" id="zOut" aria-label="Zoom out">−</button></div>
+          <button class="btn btn-sm" type="button" id="backToMe">Back to me</button>
+        </div>
+        <div class="map-legend">
+          <span><i style="background:var(--good-pin)"></i>Safe bet</span><span><i style="background:var(--open)"></i>Open to all</span>
+          <span><i style="background:var(--close-pin)"></i>It’s close</span><span><i style="background:var(--bad-pin)"></i>Unlikely</span>
+          <span><i style="background:var(--none-pin)"></i>No data</span><b>Numbers are your list order</b>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <SchoolPanel />
+</Base>
+
+<style>
+  @media (max-width: 760px) { .desk-only { display: none; } .plist-head p::after { content: 'Press and hold the handle, then drag.'; } }
+</style>
+
+<script>
+  import { addWalking, esc, lookupPostcode, loadData, ORDER, plural, prepareSearch, scoreAll, MAX_SHORT,
+    type Mode, type Place, type School, type V, CATCH_MAP } from '../lib/engine';
+  import { addToList, getList, getSearch, onListChange, ordinal, rankOf, setSearch } from '../lib/store';
+  import { $, $$, chip, distTxt, ICON, toast, vOf } from '../lib/ui';
+  import { initPanel, openPanel } from '../lib/panel';
+  import { initPList, renderPList } from '../lib/plist';
+  import type { SchoolMap } from '../lib/map';
+
+  const { schools, catch: catches } = await loadData();
+  const byDfe = new Map(schools.map((s) => [s.dfe, s]));
+  const byId = (id: number) => schools[id];
+
+  let place: Place | null = null, near: School[] = [], outside = '';
+  let filter: V | null = null, showAll = false, seq = 0;
+  let view: 'list' | 'map' = 'list', tab: 'list' | 'all' = 'list';
+  let map: SchoolMap | null = null;
+
+  const radius = () => +$<HTMLInputElement>('input[name=radius]:checked').value;
+  const mode = (): Mode => {
+    const m = $<HTMLInputElement>('input[name=mode]:checked').value;
+    return (m === 'pick' ? $<HTMLSelectElement>('#oneYear').value : m) as Mode;
+  };
+  const setStatus = (id: string, t: string, err = false) => { const e = $(id); e.textContent = t; e.classList.toggle('err', err); };
+  const isPhone = () => matchMedia('(max-width:760px)').matches;
+
+  // the schools we score: everything in range, plus listed schools from further away
+  const scored = () => [...new Set([...near, ...getList().map((d) => byDfe.get(d)!).filter(Boolean)])];
+  const order = (): School[] => {
+    const by = $<HTMLSelectElement>('#sort').value;
+    const d = (s: School) => s.used ?? s.straight ?? 0;
+    return [...near].sort(by === 'near' ? (a, b) => d(a) - d(b)
+      : by === 'az' ? (a, b) => a.name.localeCompare(b.name)
+      : (a, b) => ORDER[vOf(a)] - ORDER[vOf(b)] || (a.straight ?? 0) - (b.straight ?? 0));
+  };
+  const visible = () => { const o = order(); return filter ? o.filter((s) => vOf(s) === filter) : o; };
+
+  initPanel({
+    order: () => visible().map((s) => s.id),
+    byId, mode, home: () => place?.ll ?? null,
+    onChangeOrder: () => { setTab('list'); setView('list'); $('#slots').scrollIntoView({ block: 'center' }); },
+  });
+  const plOpts = {
+    el: $<HTMLOListElement>('#slots'), byDfe: (d: number) => byDfe.get(d), mode,
+    onOpen: (s: School) => openPanel(s.id), emptyText: 'Add a school from the list, or leave it. Four is fine.',
+  };
+  initPList(plOpts);
+
+  // ---------- search ----------
+  async function run(p: Place, save = true) {
+    const my = ++seq;
+    place = p;
+    if (save) setSearch({ place: p, radius: radius(), mode: mode() });
+    if (p.isPostcode) history.replaceState(null, '', '#pc=' + p.label.replace(/\s+/g, ''));
+    const res = prepareSearch(schools, catches, p, radius());
+    near = res.near; outside = res.outside; filter = null; showAll = false;
+    scoreAll(scored(), mode());
+    $('#onboard').hidden = true; $('#results').hidden = false;
+    const m = mode();
+    $('#resWhere').textContent = `${p.label === 'your location' ? 'Your location' : p.label} · within ${plural(radius(), 'mile')} · ${m === 'trend' ? 'all four years' : m === 'latest' ? 'latest year' : m + ' only'} ·`;
+    syncEdit();
+    const mine = res.mine;
+    $('#catchline').innerHTML = (mine.length
+      ? `You’re in the catchment for <b>${mine.map((s) => esc(s.name)).join('</b> and <b>')}</b>.`
+      : 'You’re not in any Harrogate district school’s catchment.')
+      + ` Near a boundary? <a href="${CATCH_MAP}" target="_blank" rel="noopener">Check your exact address</a>.`;
+    setStatus('#resStatus', outside || (near.some((s) => s.method === 'walking') ? 'Working out walking routes…' : ''), !!outside);
+    render();
+    window.scrollTo({ top: 0 });
+    const msg = await addWalking(p, scored());
+    if (my !== seq) return;
+    scoreAll(scored(), mode());
+    setStatus('#resStatus', outside || msg, !!(outside || msg));
+    render();
+  }
+
+  // ---------- rendering ----------
+  const NAMES: Record<V, string> = { in: 'Safe bet', all: 'Open to all', edge: 'It’s close', out: 'Unlikely', na: 'No data' };
+  function render() {
+    const m = mode();
+    $('#resTitle').textContent = near.length ? `${plural(near.length, 'school')} you could apply for` : 'No schools in range';
+    $('#allCount').textContent = String(near.length);
+    // filters
+    const counts = near.reduce<Partial<Record<V, number>>>((o, s) => ((o[vOf(s)] = (o[vOf(s)] || 0) + 1), o), {});
+    if (filter && !counts[filter]) filter = null;
+    const names = m === 'trend' ? NAMES : { ...NAMES, in: 'You’d get in', out: 'Missed out' };
+    $('#filters').innerHTML = near.length > 1
+      ? `<button type="button" class="pill" data-f="" aria-pressed="${!filter}">All ${near.length}</button>`
+        + (Object.keys(ORDER) as V[]).filter((k) => counts[k]).map((k) => `<button type="button" class="pill" data-f="${k}" aria-pressed="${filter === k}">${names[k]} ${counts[k]}</button>`).join('')
+      : '';
+    // rows
+    const list = visible(), cap = showAll || isPhone() ? list.length : 8;
+    $('#rows').innerHTML = list.length ? list.slice(0, cap).map((s) => row(s, m)).join('')
+      : `<div class="no-results"><strong>No schools in range.</strong><br>Try a larger distance. This checker covers the Harrogate district: Harrogate, Knaresborough, Ripon, Boroughbridge, Pateley Bridge, Masham and the villages around them.</div>`;
+    const more = $('#more');
+    more.hidden = list.length <= cap;
+    more.textContent = `Show ${plural(list.length - cap, 'more school')}`;
+    // the list
+    renderPList(plOpts);
+    const n = getList().length;
+    $('#plCount').textContent = `${n} of ${MAX_SHORT}`;
+    $$('[data-list-count-plain]').forEach((e) => (e.textContent = String(n)));
+    const listed = getList().map((d) => byDfe.get(d)!).filter(Boolean);
+    const safe = listed.some((s) => s.result && (s.result.v === 'in' || s.result.v === 'all'));
+    $('#plFoot').innerHTML = !n ? `<p class="plist-note">Add schools from the list to rank them. You can name up to five on the council’s form.</p>`
+      : `<div class="check">${safe ? ICON.tick : ICON.warn}<span>${safe ? 'You have a safe bet in your list. Good move.' : 'No safe bet yet. Adding one means you’re not relying on a close call.'}</span></div>
+         <p class="plist-note">Saved on this device. On a keyboard, select a school’s handle and use the up and down keys to move it.</p>`;
+    if (mapShown()) drawMap();
+  }
+
+  function row(s: School, m: Mode) {
+    const rank = rankOf(s.dfe), n = getList().length;
+    const act = rank ? `<span class="rank-pill">${ordinal(rank)} on your list</span>`
+      : n < MAX_SHORT ? `<button type="button" class="btn btn-sm btn-dark" data-add="${s.dfe}">Add as ${ordinal(n + 1)}</button>`
+      : `<span class="muted" style="font-size:14px">List full</span>`;
+    return `<article class="row" data-id="${s.id}">
+      <div class="row-main">
+        <div class="row-top">${chip(s, m, true)}<span>${esc(distTxt(s))}</span></div>
+        <button type="button" class="row-name" data-open="${s.id}">${esc(s.name.replace(/,.*$/, ''))}</button>
+        <p class="row-why">${esc(s.result?.label ?? '')}.</p>
+      </div>
+      <div class="row-act">${act}<button type="button" class="textlink" data-open="${s.id}">See everything</button></div>
+    </article>`;
+  }
+
+  function drawMap() {
+    if (!place) return;
+    import('../lib/map').then(({ SchoolMap }) => {
+      if (!map) {
+        map = new SchoolMap($('#map'), catches, { mode, onOpen: (s) => openPanel(s.id) });
+        $('#zIn').addEventListener('click', () => map!.zoomIn());
+        $('#zOut').addEventListener('click', () => map!.zoomOut());
+        $('#backToMe').addEventListener('click', () => map!.recentre());
+      }
+      map.refresh();
+      map.setScene(place!.ll, radius(), scored());
+      drawDrawer();
+    });
+  }
+  function drawDrawer() {
+    const listed = getList().map((d) => byDfe.get(d)!).filter(Boolean);
+    $('#drawer').innerHTML = `<div class="drawer-head"><h2>Your list</h2><span class="muted" style="font-size:14px">${listed.length} of ${MAX_SHORT}</span></div>`
+      + (listed.length ? listed.map((s, i) => `<button type="button" class="drawer-row" data-pin="${s.id}"><span class="pin p-${vOf(s)}" style="width:26px;height:26px;font-size:14px;border-width:2px;box-shadow:none">${i + 1}</span>${esc(s.name.replace(/,.*$/, '').replace(/ School$/, ''))}<span class="mi">${esc(distTxt(s).replace(/ (walk|straight line)$/, ''))}</span></button>`).join('')
+        : '<p class="muted" style="font-size:15px">Nothing yet. Tap a pin to add a school.</p>')
+      + '<span class="hand" style="font-size:22px;padding-top:6px">tap any pin to see it</span>';
+  }
+
+  // ---------- views ----------
+  // Desktop has a List / Map toggle; phones have My list / All tabs and no map.
+  const mapShown = () => !isPhone() && view === 'map';
+  function layout() {
+    $('#listView').dataset.tab = tab;
+    $('#listView').hidden = !isPhone() && view === 'map';
+    $('#mapView').hidden = !mapShown();
+    if (mapShown()) drawMap();
+  }
+  function setView(v: 'list' | 'map') {
+    view = v;
+    $$('[data-view]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.view === v)));
+    layout();
+  }
+  function setTab(t: 'list' | 'all') {
+    tab = t;
+    $$('.phone-tabs [data-tab]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tab === t)));
+    layout();
+  }
+  $$('[data-view]').forEach((b) => b.addEventListener('click', () => setView(b.dataset.view as 'list' | 'map')));
+  $$('.phone-tabs [data-tab]').forEach((b) => b.addEventListener('click', () => setTab(b.dataset.tab as 'list' | 'all')));
+  matchMedia('(max-width:760px)').addEventListener('change', () => { layout(); map?.refresh(); });
+
+  // ---------- events ----------
+  $('#rows').addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    const open = t.closest<HTMLElement>('[data-open]'), add = t.closest<HTMLElement>('[data-add]');
+    if (open) openPanel(+open.dataset.open!);
+    if (add) { const r = addToList(+add.dataset.add!); if (r === 'full') toast('Your list is full. Remove a school to add another.'); else toast(`Added as your ${ordinal(rankOf(+add.dataset.add!)!)} choice`); }
+  });
+  $('#drawer').addEventListener('click', (e) => { const b = (e.target as HTMLElement).closest<HTMLElement>('[data-pin]'); if (b) map?.select(+b.dataset.pin!); });
+  $('#filters').addEventListener('click', (e) => { const b = (e.target as HTMLElement).closest<HTMLElement>('[data-f]'); if (b) { filter = (b.dataset.f || null) as V | null; render(); } });
+  $('#sort').addEventListener('change', render);
+  $('#more').addEventListener('click', () => { showAll = true; render(); });
+  // ---------- change the search without leaving the results ----------
+  const pop = $('#editSearch'), changeBtn = $('#change');
+  const setRadius = (r: number) => { const i = document.querySelector<HTMLInputElement>(`input[name=radius][value="${r}"]`); if (i) i.checked = true; };
+  const setMode = (m: Mode) => {
+    if (m === 'trend' || m === 'latest') $<HTMLInputElement>(`input[name=mode][value=${m}]`).checked = true;
+    else { $<HTMLInputElement>('input[name=mode][value=pick]').checked = true; $<HTMLSelectElement>('#oneYear').value = m; }
+  };
+  function syncEdit() {
+    $<HTMLInputElement>('#pc2').value = place?.isPostcode ? place.label : '';
+    $<HTMLSelectElement>('#r2').value = String(radius());
+    $<HTMLSelectElement>('#m2').value = mode();
+  }
+  function openEdit(open: boolean) {
+    pop.hidden = !open; changeBtn.setAttribute('aria-expanded', String(open));
+    if (open) { syncEdit(); setStatus('#editStatus', ''); $('#pc2').focus(); } else changeBtn.focus();
+  }
+  changeBtn.addEventListener('click', () => openEdit(pop.hidden));
+  $('#editClose').addEventListener('click', () => openEdit(false));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !pop.hidden) openEdit(false); });
+  document.addEventListener('click', (e) => { if (!pop.hidden && !(e.target as HTMLElement).closest('.search-edit')) { pop.hidden = true; changeBtn.setAttribute('aria-expanded', 'false'); } });
+  $('#editForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = $<HTMLButtonElement>('#pc2Btn');
+    btn.disabled = true; btn.textContent = 'Checking…'; setStatus('#editStatus', '');
+    try { const p = await lookupPostcode($<HTMLInputElement>('#pc2').value); $<HTMLInputElement>('#pc').value = p.label; openEdit(false); await run(p); }
+    catch (err) { setStatus('#editStatus', (err as Error).message, true); }
+    finally { btn.disabled = false; btn.textContent = 'Update'; }
+  });
+  $('#locate2').addEventListener('click', () => {
+    if (!navigator.geolocation) return setStatus('#editStatus', 'Your browser doesn’t share location. Enter a postcode instead.', true);
+    setStatus('#editStatus', 'Finding your location…');
+    navigator.geolocation.getCurrentPosition(
+      (p) => { openEdit(false); run({ ll: [p.coords.latitude, p.coords.longitude], label: 'your location', district: null, isPostcode: false }); },
+      () => setStatus('#editStatus', 'Location was blocked or unavailable. Enter a postcode instead.', true),
+      { enableHighAccuracy: true, timeout: 15000 });
+  });
+  // distance and years apply straight away, and the dropdown stays open in case you change both
+  $('#r2').addEventListener('change', () => { setRadius(+$<HTMLSelectElement>('#r2').value); if (place) run(place); });
+  $('#m2').addEventListener('change', () => { setMode($<HTMLSelectElement>('#m2').value as Mode); if (place) run(place); });
+  onListChange(() => {
+    // a newly listed school from outside the range still needs a verdict
+    if (place) scoreAll(scored(), mode());
+    render();
+  });
+
+  $('#pcForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = $<HTMLButtonElement>('#pcBtn'), pc = $<HTMLInputElement>('#pc').value;
+    btn.disabled = true; btn.textContent = 'Checking…'; setStatus('#status', '');
+    try { const p = await lookupPostcode(pc); $<HTMLInputElement>('#pc').value = p.label; await run(p); }
+    catch (err) { setStatus('#status', (err as Error).message, true); }
+    finally { btn.disabled = false; btn.textContent = 'Find my schools'; }
+  });
+  $$('.example').forEach((b) => b.addEventListener('click', () => { $<HTMLInputElement>('#pc').value = b.dataset.pc!; $<HTMLFormElement>('#pcForm').requestSubmit(); }));
+  $('#locate').addEventListener('click', () => {
+    if (!navigator.geolocation) return setStatus('#status', 'Your browser doesn’t share location. Enter a postcode instead.', true);
+    setStatus('#status', 'Finding your location…');
+    navigator.geolocation.getCurrentPosition(
+      (p) => run({ ll: [p.coords.latitude, p.coords.longitude], label: 'your location', district: null, isPostcode: false }),
+      () => setStatus('#status', 'Location was blocked or unavailable. Enter a postcode instead.', true),
+      { enableHighAccuracy: true, timeout: 15000 });
+  });
+  // changing distance or the years re-runs the search you're looking at
+  $$('input[name=radius], input[name=mode]').forEach((i) => i.addEventListener('change', () => place && run(place)));
+  $('#oneYear').addEventListener('change', () => { $<HTMLInputElement>('input[name=mode][value=pick]').checked = true; if (place) run(place); });
+
+  // ---------- start: a shared link, then the last search on this device ----------
+  async function start() {
+    const m = /^#pc=([A-Za-z0-9]{5,8})$/.exec(location.hash);
+    const saved = getSearch();
+    if (saved) {
+      setRadius(saved.radius);
+      setMode(saved.mode);
+    }
+    if (m) {
+      try { const p = await lookupPostcode(m[1]); $<HTMLInputElement>('#pc').value = p.label; return run(p); }
+      catch (err) { setStatus('#status', (err as Error).message, true); return; }
+    }
+    if (saved) { $<HTMLInputElement>('#pc').value = saved.place.isPostcode ? saved.place.label : ''; run(saved.place, false); }
+  }
+  start();
+</script>

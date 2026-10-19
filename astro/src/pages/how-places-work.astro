@@ -1,0 +1,102 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
+// Coppice Valley's real last-place distances (miles) from the council's figures, against a home 0.75 miles away
+const MAXMI = 1.5, YOU = 0.75;
+const bars = [[2026, 1.22], [2025, 0.68], [2024, 0.81], [2023, 0.64]] as const;
+const pct = (mi: number) => `${(mi / MAXMI) * 100}%`;
+const tickets = [
+  ['1', 'Looked-after children', 'Children in care, or who used to be, always come first.'],
+  ['2', 'Medical or social need', 'Only cases the council has approved, with evidence.'],
+  ['3', 'Living in the catchment', 'We check your postcode against the council’s catchment map. Near a boundary? Check your exact address on their map.'],
+  ['4', 'Children of staff', 'Children of people who work at the school.'],
+  ['5', 'Everyone else', 'Children from outside the catchment, if places are left.'],
+];
+const phrases = [
+  ['“Everyone in the catchment, plus others within 1.22 mi”', 'Every child in the catchment got a place, and children outside it got one if they lived within 1.22 miles.'],
+  ['“Only children in the catchment, within 0.27 mi”', 'Places ran out inside the catchment. Nobody outside it got in, and inside it only children within 0.27 miles did.'],
+  ['“Everyone in the catchment, plus brothers and sisters of pupils”', 'From outside the catchment, only children with a brother or sister already there got in.'],
+  ['“By the school’s own rules”', 'Academies, voluntary aided and foundation schools decide their own order. Faith schools may put church members first.'],
+];
+---
+<Base title="How places work · Yorkshire School Checker" description="How North Yorkshire Council hands out Reception places, what “last place” means, and where our numbers come from." active="how">
+  <section class="how-hero wrap">
+    <div>
+      <h1>How school places actually get handed out</h1>
+      <p class="lede">The rules sound complicated, but they boil down to a queue. Here’s who goes first, what “last place” means, and how to read the numbers we show you.</p>
+    </div>
+    <nav class="toc" aria-label="On this page">
+      <span class="hand">on this page</span>
+      <a href="#queue">1. Who gets a place first</a>
+      <a href="#last-place">2. What “last place” means</a>
+      <a href="#reading">3. Reading the year by year</a>
+      <a href="#five">4. Picking your five</a>
+      <a href="#sources">5. Where our numbers come from</a>
+    </nav>
+  </section>
+
+  <section class="how-sec sec-pale wrap" id="queue">
+    <h2>1. Who gets a place first</h2>
+    <p class="intro">For community and voluntary controlled schools, North Yorkshire Council works down this list until the places run out.</p>
+    <ol class="tickets">
+      {tickets.map(([n, h, p]) => <li class={`ticket${n === '3' ? ' hot' : ''}`}><b>{n}</b><h3>{h}</h3><p>{p}</p></li>)}
+    </ol>
+    <div class="tiebreak">
+      <div><h3>Inside each group, who wins?</h3><p>Brothers and sisters of pupils already at the school go first. After that, whoever lives nearest. That’s why distance matters so much.</p></div>
+      <div class="dashed"><h3>Academies, voluntary aided, foundation and faith schools</h3><p>These set their own rules, and faith schools may put church members first. We mark them “own rules” so you know to read their policy.</p></div>
+    </div>
+  </section>
+
+  <section class="how-sec wrap split" id="last-place">
+    <div>
+      <h2>2. What “last place” means</h2>
+      <p class="intro">It’s how far from the school the last child offered a place on distance lived. It’s measured the way the school measures it, usually the walking route.</p>
+      <p class="intro">It is not a fixed boundary. It moves every year depending on how many families apply and where they live.</p>
+    </div>
+    <figure class="chart" style="margin:0">
+      <div class="chart-head"><h3>Coppice Valley, last place each year</h3><span>Outside-catchment places</span></div>
+      <div class="bars" role="img" aria-label="Last place: 1.22 miles in 2026, 0.68 in 2025, 0.81 in 2024 and 0.64 in 2023. A home 0.75 miles away would have got in in 2026 and 2024 only.">
+        {bars.map(([y, mi]) => (
+          <div class="bar-row"><span>{y}</span><div class="bar-track"><div class={`bar${mi < YOU ? ' miss' : ''}`} style={`width:${pct(mi)}`}></div></div><span class={`val${mi < YOU ? ' miss' : ''}`}>{mi.toFixed(2)} mi</span></div>
+        ))}
+        <div class="you-line" style={`left:calc(var(--lab) + var(--gap) + (100% - var(--lab) - var(--val) - 2 * var(--gap)) * ${YOU / MAXMI})`}></div>
+        <span class="you-tag" style={`left:calc(var(--lab) + var(--gap) + (100% - var(--lab) - var(--val) - 2 * var(--gap)) * ${YOU / MAXMI})`}>you, {YOU} mi</span>
+      </div>
+      <figcaption class="chart-foot"><span><i></i>You’d have got in</span><span><i class="miss"></i>You’d have missed out</span><span>Same house, same school, different answer each year.</span></figcaption>
+    </figure>
+  </section>
+
+  <section class="how-sec sec-pale wrap" id="reading">
+    <h2>3. Reading the year by year</h2>
+    <p class="intro">Every school shows a line like these for each year. Here’s what each one means in plain English.</p>
+    <div class="phrases">{phrases.map(([h, p]) => <div class="phrase"><h3>{h}</h3><p>{p}</p></div>)}</div>
+    <p class="worth"><span class="tag">worth knowing</span><span>Our labels don’t count brothers and sisters. If you already have a child at a school, your chances there are better than we show.</span></p>
+  </section>
+
+  <section class="how-sec wrap split" id="five">
+    <div>
+      <h2>4. Picking your five</h2>
+      <p class="intro">The council’s form takes up to five schools. Each one is considered equally, without knowing where you ranked it.</p>
+      <p class="intro">If more than one could take you, you’re offered the one highest on your list. So put your real favourite first, and include at least one safe bet.</p>
+      <p style="margin-top:24px"><a class="btn btn-primary" href={url('plan/')}>Start my plan</a></p>
+    </div>
+    <div class="example-list">
+      <span class="hand">say your list looks like this…</span>
+      <div class="ex-row full"><b>1</b><span>Your favourite school</span><span class="r">Full before it got to you</span></div>
+      <div class="ex-row won"><b>2</b><span>Your second choice</span><span class="r">Has room, so you’re offered this one</span></div>
+      <div class="ex-row"><b>3</b><span>Your safe bet</span><span class="r">Could also take you, but it’s lower down</span></div>
+      <p class="muted" style="font-size:15px;padding-top:10px">Putting your favourite first never costs you a place at the others. The council just goes for the highest school on your list that has room.</p>
+    </div>
+  </section>
+
+  <section class="how-sec wrap" id="sources" style="border-top:1px solid var(--line)">
+    <h2>5. Where our numbers come from</h2>
+    <div class="sources">
+      <div><h3>Offers and last places</h3><p>North Yorkshire Council admissions statistics for 2023 to 2026 entry, from <a href="https://hub.datanorthyorkshire.org/dataset/school-admissions-2026-2027-yearly-statistics-primary-and-secondary-school" target="_blank" rel="noopener">Data North Yorkshire</a>.</p></div>
+      <div><h3>Catchments</h3><p>The council’s school maps, updated September 2025. The council publishes them for reference only, so <a href="https://experience.arcgis.com/experience/4dd5b97eae514b31a067137ebf7cdd6a" target="_blank" rel="noopener">check your exact address</a> if you’re near a boundary.</p></div>
+      <div><h3>Distances</h3><p>Walking routes from OpenStreetMap, from your postcode’s centre to the school. Expect differences of 0.1 mile or more. Where a school doesn’t say how it measures, we use a straight line.</p></div>
+      <div><h3>Ofsted</h3><p>Ofsted management information as at 30 September 2026, including the new report cards, which rate each area rather than giving one grade.</p></div>
+    </div>
+    <p class="caveat">Junior schools like Oatlands Junior and Saltergate Junior take children into Year 3, so they aren’t included. Always check the school’s current admissions policy and the council’s own figures before you apply. Key dates are from the council’s primary admissions timetable for 2027 to 2028.</p>
+  </section>
+</Base>

@@ -1,0 +1,77 @@
+---
+// The footer's feedback button and its small popup. Messages go to the feedback worker (feedback-worker/), which sends them with Resend.
+---
+<button type="button" class="feedback-btn" id="fbOpen" aria-haspopup="dialog">Feedback</button>
+
+<dialog class="fb" id="fbDialog" aria-labelledby="fbTitle">
+  <form class="fb-form" id="fbForm" novalidate>
+    <div class="fb-head">
+      <h2 id="fbTitle">Send us feedback</h2>
+      <button type="button" class="close" id="fbClose" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
+      </button>
+    </div>
+    <p class="fb-intro">Spotted something wrong, or wish it did something else? We read every message.</p>
+    <label class="fb-field">
+      <span>Your message</span>
+      <textarea name="message" id="fbMessage" rows="5" required maxlength="5000"></textarea>
+    </label>
+    <label class="fb-field">
+      <span>Your email <em>(optional, if you’d like a reply)</em></span>
+      <input type="email" name="email" autocomplete="email" maxlength="200" />
+    </label>
+    <!-- left empty by people; bots tend to fill it in -->
+    <label class="fb-hp" aria-hidden="true">Website<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+    <p class="fb-status" id="fbStatus" role="status" aria-live="polite"></p>
+    <div class="fb-acts"><button type="submit" class="btn btn-primary" id="fbSend">Send feedback</button></div>
+  </form>
+  <div class="fb-done" id="fbDone" hidden>
+    <span class="hand">thank you!</span>
+    <h2>Got it.</h2>
+    <p>Thanks for helping make the checker better for every family.</p>
+    <button type="button" class="btn" id="fbDoneClose">Close</button>
+  </div>
+</dialog>
+
+<script>
+  const ENDPOINT = import.meta.env.PUBLIC_FEEDBACK_URL as string | undefined;
+  const dlg = document.getElementById('fbDialog') as HTMLDialogElement;
+  const form = document.getElementById('fbForm') as HTMLFormElement;
+  const done = document.getElementById('fbDone')!;
+  const status = document.getElementById('fbStatus')!;
+  const send = document.getElementById('fbSend') as HTMLButtonElement;
+  const say = (t: string, err = false) => { status.textContent = t; status.classList.toggle('err', err); };
+  // until the feedback worker is deployed and its URL set, don't show a button that can't send
+  if (!ENDPOINT) document.querySelector<HTMLElement>('.foot-fb')!.hidden = true;
+
+  document.getElementById('fbOpen')!.addEventListener('click', () => {
+    form.hidden = false; done.hidden = true; say('');
+    dlg.showModal();
+    (document.getElementById('fbMessage') as HTMLTextAreaElement).focus();
+  });
+  for (const id of ['fbClose', 'fbDoneClose']) document.getElementById(id)!.addEventListener('click', () => dlg.close());
+  // a click on the dimmed backdrop closes it
+  dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+
+  form.addEventListener('input', () => say(''));
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
+    if (!data.message?.trim()) return say('Write a message first.', true);
+    if (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) return say('That email doesn’t look right. Leave it blank if you don’t want a reply.', true);
+    if (!ENDPOINT) return say('Feedback isn’t switched on yet. Please try again later.', true);
+    send.disabled = true; send.textContent = 'Sending…'; say('');
+    try {
+      const r = await fetch(ENDPOINT, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...data, page: location.pathname + location.hash }),
+      });
+      if (!r.ok) throw new Error(String(r.status));
+      form.reset(); form.hidden = true; done.hidden = false;
+    } catch {
+      say('Sorry, that didn’t send. Check your connection and try again.', true);
+    } finally {
+      send.disabled = false; send.textContent = 'Send feedback';
+    }
+  });
+</script>

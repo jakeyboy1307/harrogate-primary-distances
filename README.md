@@ -14,6 +14,14 @@ python3 -I build/build_data.py /tmp/harrogate-raw build/data.json   # needs open
 python3 -I build/assemble.py build/data.json                         # writes index.html
 ```
 
+The Astro redesign (`astro/`) also shows each school's office phone and email. Refresh them after the data:
+
+```sh
+python3 -I build/fetch_contacts.py build/data.json build/contacts.json   # phones from GIAS, emails from school websites
+```
+
+Phone numbers come from Get Information about Schools. GIAS doesn't publish emails, so they're read from each school's own website, and the page each was found on is saved in `contacts.json`. Some school sites block automated visits, so expect a few gaps; those schools show their phone number and a pointer to their website.
+
 The build prints any school it can't match to a map point, Ofsted record or catchment. Five faith schools have no council catchment, which is expected.
 
 ## Feedback form (parked)

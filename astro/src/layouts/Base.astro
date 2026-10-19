@@ -1,0 +1,27 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+interface Props { title: string; description: string; active: 'plan' | 'find' | 'how' }
+const { title, description, active } = Astro.props;
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-12 -12 24 24'%3E%3Cg fill='%234F8F5A'%3E%3Cpath d='M0-11.6 2-6.2H-2Z' transform='rotate(36)'/%3E%3Cpath d='M0-11.6 2-6.2H-2Z' transform='rotate(108)'/%3E%3Cpath d='M0-11.6 2-6.2H-2Z' transform='rotate(180)'/%3E%3Cpath d='M0-11.6 2-6.2H-2Z' transform='rotate(252)'/%3E%3Cpath d='M0-11.6 2-6.2H-2Z' transform='rotate(324)'/%3E%3C/g%3E%3Cg fill='%23fff' stroke='%2314182B' stroke-width='.7'%3E%3Ccircle cy='-5.2' r='4.5'/%3E%3Ccircle cy='-5.2' r='4.5' transform='rotate(72)'/%3E%3Ccircle cy='-5.2' r='4.5' transform='rotate(144)'/%3E%3Ccircle cy='-5.2' r='4.5' transform='rotate(216)'/%3E%3Ccircle cy='-5.2' r='4.5' transform='rotate(288)'/%3E%3C/g%3E%3Ccircle r='2.7' fill='%23FFD23F'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Instrument+Sans:wght@400;500;600;700&display=swap" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Header active={active} />
+    <main id="main"><slot /></main>
+    <Footer />
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  </body>
+</html>

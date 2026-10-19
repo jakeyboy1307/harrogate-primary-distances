@@ -1,0 +1,18 @@
+---
+// The school slide-out (a bottom sheet on phones). Filled in by src/lib/panel.ts.
+---
+<div class="scrim" id="scrim" hidden></div>
+<aside class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="pTitle" aria-hidden="true" inert>
+  <div class="panel-bar">
+    <div class="panel-nav">
+      <button type="button" id="pPrev">Previous<span class="long"> school</span></button>
+      <button type="button" id="pNext">Next<span class="long"> school</span></button>
+      <span id="pPos"></span>
+    </div>
+    <button type="button" class="close" id="pClose" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
+    </button>
+  </div>
+  <div class="panel-body" id="pBody"></div>
+  <div class="panel-foot" id="pFoot"></div>
+</aside>

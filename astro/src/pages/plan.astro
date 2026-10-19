@@ -1,0 +1,121 @@
+---
+import Base from '../layouts/Base.astro';
+import SchoolPanel from '../components/SchoolPanel.astro';
+import { url } from '../lib/url';
+---
+<Base title="My plan · Yorkshire School Checker" description="Your plan for a Reception place in the Harrogate district: the key dates and your schools in order." active="plan">
+  <section class="plan-hero wrap">
+    <div>
+      <h1>Finding a school, one step at a time.</h1>
+      <p class="lede" id="planLede">Here’s your plan for a Reception place in September 2027, with your schools and the dates that matter.</p>
+    </div>
+    <div class="sticky-note" id="countdown"><b id="cdNum"></b><span id="cdText"></span></div>
+  </section>
+
+  <section class="timeline wrap" aria-label="Key dates">
+    <div class="tl-track"><div class="tl-progress" id="tlProgress"></div></div>
+    <ol class="tl-steps" id="tlSteps"></ol>
+  </section>
+
+  <section class="board wrap">
+    <section class="plist" aria-labelledby="plTitle">
+      <div class="plist-head">
+        <div class="plist-title"><h2 id="plTitle">Your five, in order</h2><span class="plist-count" id="plCount"></span></div>
+        <p class="muted" style="font-size:17px;line-height:1.55;max-width:620px">Drag to reorder. Every choice is looked at equally, and you’re offered the highest one that has room, so your favourite goes at the top.</p>
+      </div>
+      <ol class="slots" id="slots"></ol>
+    </section>
+    <div>
+      <div class="plan-check" id="planCheck"></div>
+      <div class="pool" id="pool"></div>
+    </div>
+  </section>
+
+  <SchoolPanel />
+</Base>
+
+<script>
+  import { addWalking, APPLY_URL, dateState, esc, fmt, loadData, MAX_SHORT, ORDER, prepareSearch, scoreAll, type Mode, type School } from '../lib/engine';
+  import { addToList, getList, getSearch, onListChange, ordinal, rankOf } from '../lib/store';
+  import { $, chip, ICON, shortName, toast, vOf } from '../lib/ui';
+  import { initPanel, openPanel } from '../lib/panel';
+  import { initPList, renderPList } from '../lib/plist';
+  import { url } from '../lib/url';
+
+  const { schools, catch: catches } = await loadData();
+  const byDfe = new Map(schools.map((s) => [s.dfe, s]));
+  const saved = getSearch();
+  const mode = (): Mode => saved?.mode ?? 'trend';
+  let near: School[] = [];
+
+  // ---------- countdown and timeline ----------
+  const ds = dateState();
+  $('#cdNum').textContent = String(ds.days);
+  $('#cdText').textContent = ds.phase === 'open' ? (ds.days === 1 ? 'day until forms close, on Fri 15 January' : 'days until forms close, on Fri 15 January')
+    : ds.phase === 'closed' ? 'days until offer day, Fri 16 April' : 'Offers are out. Check your email from the council';
+  if (ds.phase === 'offered') $('#cdNum').hidden = true;
+  const step = !saved ? 0 : ds.phase === 'open' ? 1 : ds.phase === 'closed' ? 2 : 3;
+  const steps = [
+    ['Check your postcode', saved ? `We found schools near ${saved.place.label === 'your location' ? 'you' : saved.place.label}.` : 'See every school you could apply for.', saved ? 'Done' : 'Start here'],
+    ['Visit and pick five', 'Book a look round, then rank what you liked below.', 'You’re here'],
+    ['Send the council form', `Apply online with <a href="${APPLY_URL}" target="_blank" rel="noopener">North Yorkshire Council</a>, putting your schools in your order.`, 'Fri 15 January'],
+    ['Offer day', 'You’ll hear which school has a place for your child.', 'Fri 16 April'],
+  ];
+  $('#tlSteps').innerHTML = steps.map(([h, p, flag], i) => {
+    const state = i < step ? 'done' : i === step ? 'now' : '';
+    const label = i < step ? 'Done' : i === step ? (i === 0 ? 'Start here' : 'You’re here') : flag;
+    return `<li class="tl-step ${state}"><div class="tl-flag"><span class="tl-dot">${i < step ? '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.5l2.5 2.5L10 3" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg>' : ''}</span>${label}</div><h3>${i === 0 && !saved ? `<a href="${url('')}">${h}</a>` : h}</h3><p>${p}</p></li>`;
+  }).join('');
+  $('#tlProgress').style.width = `${Math.min(100, (step + 0.5) * 25)}%`;
+
+  // ---------- list ----------
+  initPanel({ order: () => getList().map((d) => byDfe.get(d)!.id), byId: (id) => schools[id], mode, home: () => saved?.place.ll ?? null });
+  const plOpts = { el: $<HTMLOListElement>('#slots'), byDfe: (d: number) => byDfe.get(d), mode, onOpen: (s: School) => openPanel(s.id),
+    emptyText: getList().length ? 'Add another from “Also near you”, or leave it blank. Four is fine.' : 'Your list is empty. Add schools from Find schools or from the list here.', big: true };
+  initPList(plOpts);
+
+  function render() {
+    renderPList(plOpts);
+    const listed = getList().map((d) => byDfe.get(d)!).filter(Boolean);
+    $('#plCount').textContent = `${listed.length} of ${MAX_SHORT}`;
+    // plan check
+    const m = mode();
+    const safe = listed.filter((s) => s.result && (s.result.v === 'in' || s.result.v === 'all'));
+    const own = listed.filter((s) => s.own);
+    const unlikely = listed.filter((s) => s.result?.v === 'out');
+    const checks: string[] = [];
+    if (!saved) checks.push(`${ICON.warnY}<span>Check your postcode first so we can tell you your chances at each school.</span>`);
+    else if (!listed.length) checks.push(`${ICON.warnY}<span>Your list is empty. Add the schools you like, up to five.</span>`);
+    else {
+      checks.push(safe.length ? `${ICON.tickY}<span>You have a safe bet in your list, so you’re not relying on a close call.</span>`
+        : `${ICON.warnY}<span>There’s no safe bet in your list yet. Adding one means you’re not relying on a close call.</span>`);
+      own.forEach((s) => checks.push(`${ICON.warnY}<span>${esc(shortName(s.name))} sets its own rules. Read its admissions policy before you keep it at number ${rankOf(s.dfe)}.</span>`));
+      if (unlikely.length && listed.length < MAX_SHORT) checks.push(`${ICON.warnY}<span>${esc(shortName(unlikely[0].name))} looks unlikely. It’s fine to keep it, but add another school you’d be happy with too.</span>`);
+    }
+    const good = saved && listed.length && safe.length;
+    $('#planCheck').innerHTML = `<h2>${good ? 'Your plan looks good' : !saved ? 'Let’s get started' : 'A few things to check'}</h2>`
+      + checks.map((c) => `<div class="check">${c}</div>`).join('')
+      + (!saved ? `<a class="btn" href="${url('')}" style="justify-self:start">Find my schools</a>` : '');
+    // also near you
+    const pool = near.filter((s) => !rankOf(s.dfe)).sort((a, b) => ORDER[vOf(a)] - ORDER[vOf(b)] || (a.straight ?? 0) - (b.straight ?? 0)).slice(0, 5);
+    $('#pool').innerHTML = !saved || !pool.length ? '' : `<div class="pool-head"><h2>Also near you</h2><span class="hand">tap one to look closer</span></div>`
+      + pool.map((s) => `<div class="pool-row"><button type="button" class="name" data-open="${s.id}">${esc(shortName(s.name))}</button><span class="mi">${esc(fmt(s.used ?? s.straight))}</span>
+          ${listed.length < MAX_SHORT ? `<button type="button" class="btn btn-sm pool-add" data-add="${s.dfe}">Add as ${ordinal(listed.length + 1)}</button>` : chip(s, m, true)}</div>`).join('');
+  }
+  $('#pool').addEventListener('click', (e) => {
+    const t = e.target as HTMLElement, o = t.closest<HTMLElement>('[data-open]'), a = t.closest<HTMLElement>('[data-add]');
+    if (o) openPanel(+o.dataset.open!);
+    if (a) { const r = addToList(+a.dataset.add!); toast(r === 'full' ? 'Your list is full.' : `Added as your ${ordinal(rankOf(+a.dataset.add!)!)} choice`); }
+  });
+  onListChange(() => { if (saved) scoreAll(scored(), mode()); render(); });
+
+  const scored = () => [...new Set([...near, ...getList().map((d) => byDfe.get(d)!).filter(Boolean)])];
+  render();
+  if (saved) {
+    $('#planLede').textContent = `Here’s your plan for a Reception place in September 2027, with your schools for ${saved.place.label === 'your location' ? 'your location' : saved.place.label} and the dates that matter.`;
+    near = prepareSearch(schools, catches, saved.place, saved.radius).near;
+    scoreAll(scored(), mode()); render();
+    await addWalking(saved.place, scored());
+    scoreAll(scored(), mode()); render();
+  }
+</script>
