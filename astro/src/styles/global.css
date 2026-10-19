@@ -194,8 +194,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .plist-note { font-size: 14px; color: var(--muted-2); }
 
 /* all schools */
-.all-tools { display: grid; gap: 14px; margin-bottom: 4px; }
-.sortby { display: inline-flex; gap: 8px; align-items: center; font-size: 15px; color: var(--muted); }
+.all-tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 16px; margin-bottom: 16px; }
+.all-tools #filters { flex: 1 1 auto; min-width: 0; }
+.sortby { display: inline-flex; gap: 8px; align-items: center; font-size: 15px; color: var(--muted); margin-left: auto; white-space: nowrap; }
 .sortby select { font: inherit; font-weight: 700; color: var(--ink); border: 1.5px solid var(--line-2); border-radius: 10px; padding: 6px 10px; background: #fff; }
 .rows { border-top: 2px solid var(--ink); }
 .row { display: grid; grid-template-columns: minmax(0, 1fr) 160px; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--line); align-items: center; }
