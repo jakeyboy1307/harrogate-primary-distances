@@ -69,10 +69,12 @@ export function haversine(a: LatLng, b: LatLng) {
 
 // ---------- data ----------
 let dataPromise: Promise<{ schools: School[]; catch: Area[] }> | null = null;
+// A failed load isn't kept, so the next search tries again instead of failing until the page is reloaded
 export function loadData() {
   dataPromise ??= fetch(import.meta.env.BASE_URL.replace(/\/?$/, '/') + 'data.json')
-    .then((r) => r.json() as Promise<Data>)
-    .then((d) => ({ catch: d.catch, schools: d.schools.map((s, i) => ({ ...s, id: i, inC: null })) }));
+    .then((r) => { if (!r.ok) throw new Error(String(r.status)); return r.json() as Promise<Data>; })
+    .then((d) => ({ catch: d.catch, schools: d.schools.map((s, i) => ({ ...s, id: i, inC: null })) }))
+    .catch(() => { dataPromise = null; throw new Error('We couldn’t load the school details. Check your connection and try again.'); });
   return dataPromise;
 }
 
@@ -299,7 +301,9 @@ export async function lookupPostcode(pc: string): Promise<Place> {
     throw new Error('We couldn’t reach the postcode service. Check your connection.');
   }
   if (r.status !== 404 && !r.ok) throw new Error('The postcode service is busy. Try again in a moment.');
-  const j = await r.json();
+  // an error page from the service (or anything in between) isn't JSON
+  let j: { result?: { latitude: number; longitude: number; postcode: string; admin_district?: string } };
+  try { j = await r.json(); } catch { throw new Error('The postcode service is busy. Try again in a moment.'); }
   if (!j.result) throw new Error('We couldn’t find that postcode. Check it and try again.');
   return { ll: [j.result.latitude, j.result.longitude], label: j.result.postcode, district: j.result.admin_district ?? null, isPostcode: true };
 }

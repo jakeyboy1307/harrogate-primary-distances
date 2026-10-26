@@ -42,8 +42,6 @@ import { url } from '../lib/url';
   import { initPList, renderPList } from '../lib/plist';
   import { url } from '../lib/url';
 
-  const { schools, catch: catches } = await loadData();
-  const byDfe = new Map(schools.map((s) => [s.dfe, s]));
   const saved = getSearch();
   const mode = (): Mode => saved?.mode ?? 'trend';
   let near: School[] = [];
@@ -67,6 +65,16 @@ import { url } from '../lib/url';
     return `<li class="tl-step ${state}"><div class="tl-flag"><span class="tl-dot">${i < step ? '<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.5l2.5 2.5L10 3" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg>' : ''}</span>${label}</div><h3>${i === 0 && !saved ? `<a href="${url('')}">${h}</a>` : h}</h3><p>${p}</p></li>`;
   }).join('');
   $('#tlProgress').style.width = `${Math.min(100, (step + 0.5) * 25)}%`;
+
+  // ---------- school data (the dates above don't need it) ----------
+  let data: Awaited<ReturnType<typeof loadData>>;
+  try { data = await loadData(); }
+  catch {
+    $('#planCheck').innerHTML = '<h2>We couldn’t load the school details</h2><div class="check"><span>Check your connection, then refresh the page.</span></div>';
+    throw new Error('school data unavailable');
+  }
+  const { schools, catch: catches } = data;
+  const byDfe = new Map(schools.map((s) => [s.dfe, s]));
 
   // ---------- list ----------
   initPanel({ order: () => getList().map((d) => byDfe.get(d)!.id), byId: (id) => schools[id], mode, home: () => saved?.place.ll ?? null });
