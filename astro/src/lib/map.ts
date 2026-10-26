@@ -24,6 +24,12 @@ export class SchoolMap {
       maxZoom: 19,
       attribution: 'Tiles © Esri, HERE, Garmin, © OpenStreetMap contributors · walking routes: FOSSGIS OSRM · postcodes: postcodes.io · catchments: North Yorkshire Council',
     }).addTo(this.map);
+    // the map credits wrap onto more lines on narrow maps; tell the CSS how tall they are so the key sits above them
+    const credits = el.querySelector<HTMLElement>('.leaflet-control-attribution');
+    if (credits && el.parentElement) {
+      const fit = () => el.parentElement!.style.setProperty('--attr-h', `${credits.offsetHeight}px`);
+      fit(); new ResizeObserver(fit).observe(credits);
+    }
     this.map.createPane('catch').style.zIndex = '350';
     this.catchLayer.addTo(this.map); this.scene.addTo(this.map); this.pins.addTo(this.map);
     this.map.on('popupopen', (e) => {

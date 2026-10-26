@@ -209,7 +209,7 @@ const keys = [
     scoreAll(scored(), mode());
     $('#onboard').hidden = true; $('#results').hidden = false;
     const m = mode();
-    $('#resWhere').textContent = `${p.label === 'your location' ? 'Your location' : p.label} · within ${plural(radius(), 'mile')} · ${m === 'trend' ? 'all four years' : m === 'latest' ? 'latest year' : m + ' only'} ·`;
+    $('#resWhere').textContent = `${p.label === 'your location' ? 'Your location' : p.label} · within ${plural(radius(), 'mile')} · ${m === 'trend' ? 'all four years' : m === 'latest' ? 'latest year' : m + ' only'}`;
     syncEdit();
     const mine = res.mine;
     $('#catchline').innerHTML = (mine.length
@@ -317,7 +317,15 @@ const keys = [
     $$('.phone-tabs [data-tab]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tab === t)));
     layout();
   }
-  $$('[data-view]').forEach((b) => b.addEventListener('click', () => setView(b.dataset.view as 'list' | 'map')));
+  $$('[data-view]').forEach((b) => b.addEventListener('click', () => {
+    setView(b.dataset.view as 'list' | 'map');
+    // on a short screen, scroll so the whole map is in view
+    if (view === 'map') requestAnimationFrame(() => {
+      const f = document.querySelector('.map-frame');
+      if (f && f.getBoundingClientRect().bottom > innerHeight)
+        f.scrollIntoView({ block: 'nearest', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    });
+  }));
   $$('.phone-tabs [data-tab]').forEach((b) => b.addEventListener('click', () => setTab(b.dataset.tab as 'list' | 'all')));
   matchMedia('(max-width:760px)').addEventListener('change', () => { layout(); map?.refresh(); });
 
