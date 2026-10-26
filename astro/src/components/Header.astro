@@ -1,7 +1,7 @@
 ---
 import Rose from './Rose.astro';
 import { url } from '../lib/url';
-interface Props { active: 'plan' | 'find' | 'how' }
+interface Props { active?: 'plan' | 'find' | 'how' }
 const { active } = Astro.props;
 const links = [
   { key: 'find', href: url(''), label: 'Find schools' },

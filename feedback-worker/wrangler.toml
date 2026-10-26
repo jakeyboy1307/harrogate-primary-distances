@@ -5,6 +5,6 @@ compatibility_date = "2026-10-01"
 [vars]
 FEEDBACK_TO = "jake.adams1307@gmail.com"
 FEEDBACK_FROM = "Yorkshire School Checker <onboarding@resend.dev>"
-ALLOWED_ORIGINS = "https://jakeyboy1307.github.io,http://localhost:4321"
+ALLOWED_ORIGINS = "https://yorkshireschoolchecker.co.uk,https://www.yorkshireschoolchecker.co.uk,https://jakeyboy1307.github.io,http://localhost:4321"
 
 # RESEND_API_KEY is a secret: set it with `npx wrangler secret put RESEND_API_KEY`

@@ -1,0 +1,18 @@
+---
+// Shown for any address that doesn't exist. Without it Cloudflare Pages would serve the home page instead.
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
+---
+<Base title="Page not found · Yorkshire School Checker" description="That page doesn’t exist on the Yorkshire School Checker.">
+  <section class="notfound wrap">
+    <h1>We couldn’t find that page</h1>
+    <p class="lede">The link may be old or mistyped. You can start again from the school finder.</p>
+    <p class="acts"><a class="btn btn-primary" href={url('')}>Find schools</a><a class="btn" href={url('how-places-work/')}>How places work</a></p>
+  </section>
+</Base>
+
+<style>
+  .notfound { padding-top: 48px; padding-bottom: 96px; }
+  .notfound h1 { font-size: clamp(40px, 6vw, 72px); line-height: 1.05; letter-spacing: -0.035em; max-width: 14ch; }
+  .acts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+</style>

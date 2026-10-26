@@ -2,7 +2,7 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
-interface Props { title: string; description: string; active: 'plan' | 'find' | 'how' }
+interface Props { title: string; description: string; active?: 'plan' | 'find' | 'how' }
 const { title, description, active } = Astro.props;
 ---
 <!doctype html>
