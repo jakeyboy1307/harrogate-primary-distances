@@ -101,20 +101,12 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
 
     <div class="wrap">
       <div class="phone-tabs" role="group" aria-label="Show">
-        <button type="button" data-tab="list" aria-pressed="true">My list · <span data-list-count-plain>0</span></button>
-        <button type="button" data-tab="all" aria-pressed="false">All <span id="allCount"></span></button>
+        <button type="button" data-tab="all" aria-pressed="true">All <span id="allCount"></span></button>
+        <button type="button" data-tab="list" aria-pressed="false">My list · <span data-list-count-plain>0</span></button>
       </div>
     </div>
 
-    <div class="res-body wrap" id="listView" data-tab="list">
-      <section class="plist" aria-labelledby="plTitle">
-        <div class="plist-head">
-          <div class="plist-title"><h2 id="plTitle">Your list, in order</h2><span class="plist-count" id="plCount"></span></div>
-          <p class="muted">Number 1 is the school you want most. <span class="desk-only">Grab the handle and drag to change the order.</span></p>
-        </div>
-        <ol class="slots" id="slots"></ol>
-        <div class="plist-foot" id="plFoot"></div>
-      </section>
+    <div class="res-body wrap" id="listView" data-tab="all">
       <section class="all-col" aria-label="All schools">
         <div class="all-tools">
           <div class="pills" id="filters"></div>
@@ -124,6 +116,14 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
         </div>
         <div class="rows" id="rows"></div>
         <button class="textlink" type="button" id="more" hidden style="margin-top:20px;color:var(--ink)"></button>
+      </section>
+      <section class="plist" aria-labelledby="plTitle">
+        <div class="plist-head">
+          <div class="plist-title"><h2 id="plTitle">Your list, in order</h2><span class="plist-count" id="plCount"></span></div>
+          <p class="muted">Number 1 is the school you want most. <span class="desk-only">Grab the handle and drag to change the order.</span></p>
+        </div>
+        <ol class="slots" id="slots"></ol>
+        <div class="plist-foot" id="plFoot"></div>
       </section>
     </div>
 
@@ -172,7 +172,7 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
 
   let place: Place | null = null, near: School[] = [], outside = '';
   let filter: V | null = null, showAll = false, seq = 0;
-  let view: 'list' | 'map' = 'list', tab: 'list' | 'all' = 'list';
+  let view: 'list' | 'map' = 'list', tab: 'list' | 'all' = 'all';
   let map: SchoolMap | null = null;
 
   const radius = () => +$<HTMLInputElement>('input[name=radius]:checked').value;
@@ -307,7 +307,7 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
   }
 
   // ---------- views ----------
-  // Desktop has a List / Map toggle; phones have My list / All tabs and no map.
+  // Desktop has a List / Map toggle; phones have All / My list tabs and no map.
   const mapShown = () => !isPhone() && view === 'map';
   function layout() {
     $('#listView').dataset.tab = tab;

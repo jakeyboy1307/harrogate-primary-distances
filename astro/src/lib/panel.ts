@@ -55,9 +55,11 @@ export function openPanel(id: number) {
   $<HTMLButtonElement>('#pNext').disabled = i < 0 || i >= ids.length - 1;
   $('#pPos').textContent = i >= 0 ? `${i + 1} of ${ids.length}` : '';
   const p = panel();
-  scrim().hidden = false;
+  scrim().hidden = false; p.hidden = false;
   p.removeAttribute('inert'); p.setAttribute('aria-hidden', 'false');
-  requestAnimationFrame(() => { scrim().classList.add('open'); p.classList.add('open'); });
+  // lay it out in its closed spot first so it slides in, then open it before focusing (hidden things can't take focus)
+  void p.offsetWidth;
+  scrim().classList.add('open'); p.classList.add('open');
   document.body.classList.add('panel-open');
   $('#pClose').focus({ preventScroll: true });
   document.dispatchEvent(new CustomEvent('panel:open', { detail: id }));
@@ -80,7 +82,8 @@ export function closePanel() {
   p.classList.remove('open'); scrim().classList.remove('open');
   p.setAttribute('aria-hidden', 'true'); p.setAttribute('inert', '');
   document.body.classList.remove('panel-open');
-  setTimeout(() => { if (current == null) scrim().hidden = true; }, 250);
+  // once it has slid away, take it off the page: iPhone browsers count an off-screen panel as page length
+  setTimeout(() => { if (current == null) { scrim().hidden = true; p.hidden = true; } }, 250);
   lastFocus?.focus?.({ preventScroll: true });
   document.dispatchEvent(new CustomEvent('panel:close'));
 }
