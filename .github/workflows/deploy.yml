@@ -1,9 +1,12 @@
-name: Deploy site
+name: Redirect the old GitHub Pages address
 
-# Builds the Astro site in astro/ and publishes it to GitHub Pages on every push to main.
+# The site now lives at https://yorkshireschoolchecker.co.uk, built and served by Cloudflare
+# (see astro/wrangler.jsonc). This keeps jakeyboy1307.github.io/harrogate-primary-distances
+# sending people to the same page there, shared search links included.
 on:
   push:
     branches: [main]
+    paths: ['pages-redirect/**', '.github/workflows/deploy.yml']
   workflow_dispatch:
 
 permissions:
@@ -20,22 +23,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: astro/package-lock.json
-      - run: npm ci
-        working-directory: astro
-      - run: npm run build
-        working-directory: astro
-        env:
-          SITE_BASE: /harrogate-primary-distances
-          # set this repository variable once the feedback worker is deployed (see feedback-worker/README.md)
-          PUBLIC_FEEDBACK_URL: ${{ vars.PUBLIC_FEEDBACK_URL }}
+      # the same redirect page answers for every old address, including ones that don't exist
+      - run: |
+          mkdir -p _site/plan _site/how-places-work
+          for f in index.html 404.html plan/index.html how-places-work/index.html; do cp pages-redirect/index.html "_site/$f"; done
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: astro/dist
+          path: _site
 
   deploy:
     needs: build

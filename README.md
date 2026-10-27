@@ -2,7 +2,13 @@
 
 A one-page map tool for parents choosing a Reception place in the Harrogate district. Enter a postcode and every primary school nearby is shown with your walking or straight-line distance, whether you're in its catchment, and how far the last place went on national offer day in 2023, 2024, 2025 and 2026. Modelled on [SW London primary school distances](https://peterstuart3-arch.github.io/sw-primary-distances/), reworked for North Yorkshire's catchment-first admissions.
 
-`index.html` is the whole site. Open it in a browser, or host it anywhere static (GitHub Pages works). It needs a connection for the map tiles, postcode lookups (postcodes.io) and walking routes (FOSSGIS OSRM).
+Live at **https://yorkshireschoolchecker.co.uk**. The site is built from `astro/` (see `astro/README.md`) and needs a connection for the map tiles, postcode lookups (postcodes.io) and walking routes (FOSSGIS OSRM). The `index.html` at the top of this folder is the earlier single-page version.
+
+## Hosting
+
+- **Cloudflare Worker `yorkshire-school-checker`** serves the built site as static files. Cloudflare builds it from this repo on every push to `main`, with root directory `astro`, build command `npm run build` and deploy command `npx wrangler deploy` (settings in `astro/wrangler.jsonc`). It's also at `yorkshire-school-checker.jake-adams1307.workers.dev`.
+- **Domain:** `yorkshireschoolchecker.co.uk` is registered at GoDaddy with its nameservers pointed at Cloudflare. Both it and `www` are custom domains on the Worker.
+- **Old address:** `jakeyboy1307.github.io/harrogate-primary-distances` is a GitHub Pages redirect (`pages-redirect/`, published by `.github/workflows/deploy.yml`) that sends people to the same page on the new domain.
 
 ## Refreshing the data
 
