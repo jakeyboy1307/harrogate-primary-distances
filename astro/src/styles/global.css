@@ -25,6 +25,8 @@
 
 * { box-sizing: border-box; }
 html, body { margin: 0; }
+/* no rubber-band bounce past the top or bottom of the page (phones showed it as white space under the footer) */
+html, body { overscroll-behavior-y: none; }
 body { background: var(--bg); color: var(--ink); font: 16px/1.5 var(--body); -webkit-font-smoothing: antialiased; }
 main { display: block; min-height: 60vh; }
 h1, h2, h3 { font-family: var(--display); font-weight: 600; margin: 0; letter-spacing: -0.025em; text-wrap: balance; }
@@ -353,8 +355,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .panel-foot .rank { display: flex; gap: 12px; align-items: center; font-weight: 700; }
 .rank-badge { width: 36px; height: 36px; border-radius: 50%; background: var(--cobalt); color: #fff; font: 700 18px var(--display); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .panel-foot .acts { display: flex; gap: 10px; }
-/* while a school is open the page behind stays still: iPhones otherwise carry the panel's scroll on into the page and bounce it, panel and all */
-html:has(body.panel-open) { overflow: hidden; overscroll-behavior: none; }
+/* while a school is open the page behind stays still: iPhones otherwise carry the panel's scroll on into the page */
+html:has(body.panel-open) { overflow: hidden; }
 body.panel-open { overflow: hidden; }
 .scrim, .panel-bar, .panel-foot { touch-action: none; }
 @media (max-width: 760px) {
