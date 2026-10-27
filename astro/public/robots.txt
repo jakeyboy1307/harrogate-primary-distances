@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://yorkshireschoolchecker.co.uk/sitemap.xml

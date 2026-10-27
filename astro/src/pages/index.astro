@@ -8,8 +8,11 @@ const keys = [
   ['out', 'Unlikely', 'You’d have missed out every year.'],
   ['na', 'No data', 'The council didn’t publish figures. Ask the school.'],
 ];
+// tells search engines the site's name, shown above the link in results
+const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Yorkshire School Checker', url: new URL(import.meta.env.BASE_URL, Astro.site).href };
 ---
-<Base title="Find schools · Yorkshire School Checker" description="Check your postcode against catchments and four years of Reception offers at every primary school in the Harrogate district." active="find">
+<Base title="Harrogate primary school catchment checker · Yorkshire School Checker" description="Check your postcode against catchments and four years of Reception offers at every primary school in the Harrogate district." active="find">
+  <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(siteSchema)} />
 
   <!-- ONBOARDING -->
   <section class="onboard wrap" id="onboard">
