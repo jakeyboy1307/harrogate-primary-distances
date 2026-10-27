@@ -1,0 +1,12 @@
+// Cloudflare Worker that serves the built site (dist/) as static files at yorkshireschoolchecker.co.uk.
+// Cloudflare builds it from GitHub with root directory "astro", build command "npm run build"
+// and deploy command "npx wrangler deploy". The name must match the Worker's name in Cloudflare.
+{
+  "name": "yorkshire-school-checker",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    // unknown addresses get the site's own "page not found" page with a 404 status
+    "not_found_handling": "404-page"
+  }
+}
