@@ -1,0 +1,35 @@
+---
+// What happens to a parent's postcode and list. Keep in step with the code: storage keys in lib/store.ts, outside services in lib/engine.ts and lib/map.ts.
+import Base from '../layouts/Base.astro';
+---
+<Base title="Privacy · Yorkshire School Checker" description="What the Yorkshire School Checker does with your postcode and your list of schools. No account, no cookies and no tracking.">
+  <section class="how-hero wrap">
+    <div>
+      <h1>Your privacy</h1>
+      <p class="lede">There’s no account, we never ask for your name or email, and there are no cookies or tracking. Here’s exactly where your postcode goes and what stays on your phone.</p>
+    </div>
+  </section>
+
+  <section class="how-sec sec-pale wrap">
+    <h2>What stays on your device</h2>
+    <p class="intro">Your last search and your list of schools are saved in your browser, so they’re still there when you come back. They’re never sent to us. To remove them, clear this site’s data in your browser settings.</p>
+  </section>
+
+  <section class="how-sec wrap">
+    <h2>Where your postcode goes</h2>
+    <p class="intro">To answer your search, your browser asks three outside services for help. Each one sees your IP address, as any website does, and has its own privacy policy.</p>
+    <div class="sources">
+      <div><h3>Postcode lookup</h3><p>Your postcode goes to <a href="https://postcodes.io/about" target="_blank" rel="noopener">postcodes.io</a>, which turns it into a point on the map. Nothing else is sent.</p></div>
+      <div><h3>Walking distances</h3><p>That map point goes to the <a href="https://routing.openstreetmap.de/about.html" target="_blank" rel="noopener">FOSSGIS routing service</a>, which works out walking routes to nearby schools using OpenStreetMap.</p></div>
+      <div><h3>The map</h3><p>Map pictures come from <a href="https://www.esri.com/en-us/privacy/overview" target="_blank" rel="noopener">Esri</a>. Your browser asks for the part of the map you’re looking at.</p></div>
+      <div><h3>Your current location</h3><p>Only used if you tap “Use my current location” and your browser asks you first. It’s then used in place of a postcode, so it goes to the walking distance service but not the postcode lookup.</p></div>
+    </div>
+  </section>
+
+  <section class="how-sec wrap" style="border-top:1px solid var(--line)">
+    <h2>Hosting and who runs this</h2>
+    <p class="intro">The site is delivered by Cloudflare, which handles visitors’ IP addresses to serve pages and block attacks, as every web host does. We don’t run visitor stats or adverts.</p>
+    <p class="intro">The Yorkshire School Checker is an independent tool made by <a href="https://www.mammothwebsites.co.uk" target="_blank" rel="noopener">Mammoth Websites</a>. For questions about this page, get in touch through their website.</p>
+    <p class="caveat">Last updated 6 November 2026.</p>
+  </section>
+</Base>
