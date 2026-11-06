@@ -54,6 +54,7 @@ export interface RawSchool {
   of?: Ofsted; type: string; own: boolean; src: string; web?: string; cz?: number[]; note?: string;
   tel?: string; email?: string;   // the school office, from GIAS and the school's website
   council: string;                // which council's file it came from: a key of COUNCILS
+  district?: string;              // North Yorkshire's old district, for the area pages
 }
 export interface Area { name: string; p: LatLng[][][] }
 export interface Data { schools: RawSchool[]; catch: Area[] }

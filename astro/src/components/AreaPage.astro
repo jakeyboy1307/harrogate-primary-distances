@@ -1,0 +1,99 @@
+---
+// An area page for search engines and parents: the area's hardest schools, open-to-all and Outstanding schools,
+// every school by town or village, and answers to what people search for. Facts come from lib/areas.ts.
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
+import { byPlace, hardest, openToAll, outstanding, type AreaSchool } from '../lib/areas';
+interface Props {
+  title: string; description: string; h1: string; lede: string; area: string;
+  schools: AreaSchool[];
+  groups: { label: string; note: string; schools: AreaSchool[] }[];
+  faqs: [string, string][];   // question, answer (HTML)
+}
+const { title, description, h1, lede, area, schools, groups, faqs } = Astro.props;
+const hard = hardest(schools);
+const open = openToAll(schools);
+const top = outstanding(schools);
+const short = (n: string) => n.replace(/,.*$/, '').replace(/ (Church of England|CE|C of E)? ?(Voluntary (Controlled|Aided) )?(Community )?Primary (School|Academy)$/i, '');
+---
+<Base title={title} description={description}>
+  <section class="how-hero wrap">
+    <div>
+      <h1>{h1}</h1>
+      <p class="lede">{lede}</p>
+      <p class="area-acts"><a class="btn btn-primary" href={url('')}>Check your postcode</a><a class="btn" href={url('how-places-work/')}>How places work</a></p>
+    </div>
+    <dl class="area-stats">
+      <div><dt>Primary schools</dt><dd>{schools.length}</dd></div>
+      <div><dt>Took everyone who applied</dt><dd>{open.length}</dd></div>
+      <div><dt>Rated Outstanding</dt><dd>{top.length}</dd></div>
+    </dl>
+  </section>
+
+  <section class="how-sec sec-pale wrap">
+    <h2>The hardest {area} primary schools to get into</h2>
+    <p class="intro">Based on the latest year each council published: who got a place when there were more applicants than places. Use the checker to see whether you’d have got in from your address.</p>
+    <div class="tbl-wrap"><table class="tbl area-tbl">
+      <thead><tr><th>School</th><th>Area</th><th>Who got a place</th></tr></thead>
+      <tbody>{hard.map((h) => <tr><td><b>{h.name.replace(/,.*$/, "")}</b></td><td>{h.place}</td><td>{h.who} <span class="muted">({h.year}{h.applied && h.places ? `, ${h.applied} applied for ${h.places} places` : ''})</span></td></tr>)}</tbody>
+    </table></div>
+  </section>
+
+  <section class="how-sec wrap split-2">
+    <div>
+      <h2>Took everyone who applied</h2>
+      <p class="intro">{open.length} of {schools.length} {area} primary schools offered a place to every child who applied, in every year published.</p>
+      <p class="name-list">{open.map((s) => short(s.name)).join(' · ')}</p>
+    </div>
+    <div>
+      <h2>Rated Outstanding by Ofsted</h2>
+      <p class="intro">There’s no official ranking of the best primary schools in {area}. Ofsted is the fairest guide, alongside a visit. These were rated Outstanding at their latest graded inspection.</p>
+      <p class="name-list">{top.length ? top.map((s) => short(s.name)).join(' · ') : 'None at their latest graded inspection.'}</p>
+    </div>
+  </section>
+
+  <section class="how-sec wrap" style="border-top:1px solid var(--line)">
+    <h2>{area} primary schools by town and village</h2>
+    {groups.map((g) => (
+      <div class="place-group">
+        {groups.length > 1 && <h3>{g.label}</h3>}
+        <p class="intro">{g.note}</p>
+        <div class="places">
+          {byPlace(g.schools).map(([place, list]) => (
+            <div class="place"><h4>{place}</h4><ul>{list.map((s) => <li>{s.name}{s.pan ? <span class="muted"> · {s.pan} places a year</span> : ''}</li>)}</ul></div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </section>
+
+  <section class="how-sec sec-pale wrap">
+    <h2>Questions parents ask</h2>
+    <div class="faqs">{faqs.map(([q, a]) => <div class="faq"><h3>{q}</h3><p set:html={a} /></div>)}</div>
+    <p class="area-acts"><a class="btn btn-primary" href={url('')}>Check your postcode</a></p>
+  </section>
+</Base>
+
+<style>
+  .area-acts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .area-stats { display: grid; gap: 12px; margin: 0; flex-shrink: 0; width: 280px; }
+  .area-stats div { padding: 16px 20px; background: var(--pale); border-radius: 14px; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .area-stats dt { font-weight: 600; color: var(--muted); }
+  .area-stats dd { margin: 0; font: 700 32px/1 var(--display); color: var(--ink); }
+  .tbl-wrap { margin-top: 28px; background: #fff; border: 2px solid var(--ink); border-radius: 16px; padding: 8px 20px; overflow-x: auto; }
+  .area-tbl td { font-size: 15px; }
+  .muted { color: var(--muted-2); }
+  .split-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+  .split-2 h2 { font-size: 36px; }
+  .name-list { margin-top: 16px; font-weight: 600; line-height: 1.7; }
+  .place-group + .place-group { margin-top: 40px; }
+  .place-group h3 { margin-top: 24px; font-size: 26px; }
+  .places { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px 32px; margin-top: 24px; }
+  .place h4 { font: 700 17px var(--body); margin-bottom: 6px; }
+  .place ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; font-size: 15px; line-height: 1.45; }
+  .faqs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 40px; margin-top: 32px; }
+  .faq h3 { font: 700 18px/1.35 var(--body); margin-bottom: 6px; }
+  .faq p { color: var(--muted); line-height: 1.55; }
+  @media (max-width: 960px) { .split-2, .faqs { grid-template-columns: 1fr; } .area-stats { width: 100%; } }
+  @media (max-width: 760px) { .split-2 h2 { font-size: 30px; } .area-stats dd { font-size: 26px; } }
+</style>

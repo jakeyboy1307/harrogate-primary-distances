@@ -277,7 +277,7 @@ def find_row(y, dfe, name_keys, name=None):
 schools = []
 for r in base:
     dfe, name = r[0], r[c26['name']]
-    s = {'dfe': dfe, 'name': name, 'place': PLACE.get(dfe) or place_of(POINT[dfe]['properties']), 'kind': r[c26['type']],
+    s = {'dfe': dfe, 'name': name, 'district': r[c26['district']], 'place': PLACE.get(dfe) or place_of(POINT[dfe]['properties']), 'kind': r[c26['type']],
          'method': METHOD.get(str(r[c26['method']]).strip().lower(), 'unknown'),
          'pan': num(r[c26['pan']]), 'd': []}
     for y in (2026, 2025, 2024, 2023):

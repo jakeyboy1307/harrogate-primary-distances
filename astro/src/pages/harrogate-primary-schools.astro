@@ -1,0 +1,37 @@
+---
+// Area page: the Harrogate district. Questions follow what people search for (Google suggestions, November 2026).
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea } from '../lib/areas';
+import { COUNCILS } from '../lib/engine';
+import { url } from '../lib/url';
+const schools = loadArea('north-yorkshire.json').filter((s) => s.district === 'Harrogate');
+const ny = COUNCILS['North Yorkshire'];
+const faqs: [string, string][] = [
+  ['How do I find out which Harrogate primary school catchment area I’m in?',
+    `Put your postcode into the <a href="${url('')}">school checker</a>. It tells you which catchment you’re in and your chances at every primary school nearby. Near a boundary? Check your exact address on <a href="${ny.catchMap}" target="_blank" rel="noopener">North Yorkshire Council’s school catchment areas map</a>.`],
+  ['When do I apply for a Reception place for September 2027?',
+    `Apply online to <a href="${ny.apply}" target="_blank" rel="noopener">North Yorkshire Council</a> by Friday 15 January 2027. You can name up to five primary schools, in the order you want them.`],
+  ['When are primary school places announced?',
+    'Offers go out on national offer day, Friday 16 April 2027, by email from the council.'],
+  ['Can my child get into a Harrogate school outside our catchment?',
+    `Often, if places are left once children in the catchment have theirs. Each year the council publishes how far the last place went, and the checker compares that with your distance. <a href="${url('how-places-work/')}">How places work</a> explains the queue.`],
+  ['Which are the best primary schools in Harrogate?',
+    'There’s no official ranking, so be wary of league tables. Ofsted is the fairest guide, alongside a visit. The checker shows each school’s latest Ofsted outcome, and the Outstanding schools are listed above.'],
+  ['Where can I see North Yorkshire school admissions data?',
+    'The council publishes its admissions figures each year on <a href="https://hub.datanorthyorkshire.org/" target="_blank" rel="noopener">Data North Yorkshire</a>. The checker turns the last four years into plain answers for every Harrogate, Knaresborough and Ripon primary school.'],
+  ['How do I find open days and term dates?',
+    'Ask the school. Open the school in the checker for its phone number, email and website.'],
+  ['Does this cover Harrogate Grammar and other secondary schools?',
+    `Not yet. The Yorkshire School Checker covers primary schools and Reception places only.`],
+];
+---
+<AreaPage
+  title="Harrogate primary schools and catchment areas · Yorkshire School Checker"
+  description="Harrogate, Knaresborough and Ripon primary schools: catchment areas, which schools are hardest to get into, Ofsted ratings and the 2027 Reception dates."
+  h1="Harrogate primary schools and catchment areas"
+  lede="Every primary school in the Harrogate district, from Harrogate and Knaresborough to Ripon, Boroughbridge, Pateley Bridge and Masham: which are hardest to get into, which took everyone, and how to check your catchment."
+  area="Harrogate"
+  schools={schools}
+  groups={[{ label: 'Harrogate district', note: `All ${schools.length} are North Yorkshire Council schools. Junior schools, which start at Year 3, aren’t included.`, schools }]}
+  faqs={faqs}
+/>

@@ -1,0 +1,43 @@
+---
+// Area page: City of York and the North Yorkshire villages round it. Questions follow what people search for
+// (Google suggestions, November 2026).
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea } from '../lib/areas';
+import { COUNCILS } from '../lib/engine';
+import { url } from '../lib/url';
+const york = loadArea('york.json');
+const near = loadArea('north-yorkshire.json').filter((s) => s.district !== 'Harrogate');
+const schools = [...york, ...near];
+const cyc = COUNCILS.York, ny = COUNCILS['North Yorkshire'];
+const faqs: [string, string][] = [
+  ['How do I check which York primary school catchment area I’m in?',
+    `Put your postcode into the <a href="${url('')}">school checker</a>. It tells you which catchment you’re in and how many children got a place at each school nearby. Near a boundary? Check your exact address on <a href="${cyc.catchMap}" target="_blank" rel="noopener">City of York Council’s primary schools map</a>.`],
+  ['When do I apply for a Reception place in York for September 2027?',
+    `Apply online to <a href="${cyc.apply}" target="_blank" rel="noopener">City of York Council</a> by Friday 15 January 2027. You can name up to five schools, in the order you want them.`],
+  ['When are primary school places announced?',
+    'Offers go out on national offer day, Friday 16 April 2027, by email from the council.'],
+  ['Can my child get into a York school outside our catchment?',
+    `Often. Each York school first takes children in its catchment, then brothers and sisters from outside it, then whoever has the shortest safe walk. York doesn’t publish how far the last place went, so the checker shows how many children from outside the catchment got in each year. <a href="${url('how-places-work/#york')}">How places work</a> has York’s full order.`],
+  ['Which are the best primary schools in York?',
+    'There’s no official ranking, so be wary of league tables. Ofsted is the fairest guide, alongside a visit. The checker shows each school’s latest Ofsted outcome, and the Outstanding schools are listed above.'],
+  ['I live in Haxby, Copmanthorpe or Easingwold. Which council do I apply to?',
+    `Apply to the council for where you live, and name schools from either council. Haxby, Wigginton, Strensall, Copmanthorpe, Poppleton and the other villages inside the city boundary are <a href="${cyc.apply}" target="_blank" rel="noopener">City of York</a>. Easingwold, Escrick, Tadcaster, Sherburn and Selby are <a href="${ny.apply}" target="_blank" rel="noopener">North Yorkshire</a>.`],
+  ['Where can I see York school admissions data?',
+    'City of York Council publishes an anonymised list of every Reception applicant on <a href="https://data.yorkopendata.org/" target="_blank" rel="noopener">York Open Data</a>. The checker turns the last four complete years into plain answers for every York primary school.'],
+  ['How do I find open days and term dates?',
+    'Ask the school. Open the school in the checker for its phone number, email and website.'],
+];
+---
+<AreaPage
+  title="York primary schools and catchment areas · Yorkshire School Checker"
+  description="Primary schools in York, Haxby, Selby, Tadcaster and Easingwold: catchment areas, which schools are hardest to get into, Ofsted ratings and the 2027 Reception dates."
+  h1="York primary schools and catchment areas"
+  lede="Every primary school in York, from Acomb and Haxby to Fulford and Heslington, plus the North Yorkshire villages round York such as Easingwold, Escrick, Selby and Tadcaster."
+  area="York"
+  schools={schools}
+  groups={[
+    { label: 'In the City of York', note: `${york.length} schools in City of York Council’s admissions scheme. Junior schools, which start at Year 3, aren’t included.`, schools: york },
+    { label: 'Just outside York', note: `${near.length} North Yorkshire Council schools within 15 miles of York.`, schools: near },
+  ]}
+  faqs={faqs}
+/>
