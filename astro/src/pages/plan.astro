@@ -74,18 +74,18 @@ import { url } from '../lib/url';
     throw new Error('school data unavailable');
   }
   const { schools, catch: catches } = data;
-  const byDfe = new Map(schools.map((s) => [s.dfe, s]));
+  const byUrn = new Map(schools.map((s) => [s.urn, s]));
 
   // ---------- list ----------
-  initPanel({ order: () => getList().map((d) => byDfe.get(d)!.id), byId: (id) => schools[id], mode, home: () => saved?.place.ll ?? null });
-  const plOpts = { el: $<HTMLOListElement>('#slots'), byDfe: (d: number) => byDfe.get(d), mode, onOpen: (s: School) => openPanel(s.id),
+  initPanel({ order: () => getList().map((d) => byUrn.get(d)!.id), byId: (id) => schools[id], mode, home: () => saved?.place.ll ?? null });
+  const plOpts = { el: $<HTMLOListElement>('#slots'), byUrn: (d: number) => byUrn.get(d), mode, onOpen: (s: School) => openPanel(s.id),
     emptyText: getList().length ? 'Add another from “Also near you”, or leave it blank. Four is fine.' : 'Your list is empty. Add schools from Find schools or from the list here.', big: true };
   initPList(plOpts);
 
   function render() {
     renderPList(plOpts);
     refreshPanel();
-    const listed = getList().map((d) => byDfe.get(d)!).filter(Boolean);
+    const listed = getList().map((d) => byUrn.get(d)!).filter(Boolean);
     $('#plCount').textContent = `${listed.length} of ${MAX_SHORT}`;
     // plan check
     const m = mode();
@@ -98,7 +98,7 @@ import { url } from '../lib/url';
     else {
       checks.push(safe.length ? `${ICON.tickY}<span>You have a safe bet in your list, so you’re not relying on a close call.</span>`
         : `${ICON.warnY}<span>There’s no safe bet in your list yet. Adding one means you’re not relying on a close call.</span>`);
-      own.forEach((s) => checks.push(`${ICON.warnY}<span>${esc(shortName(s.name))} sets its own rules. Read its admissions policy before you keep it at number ${rankOf(s.dfe)}.</span>`));
+      own.forEach((s) => checks.push(`${ICON.warnY}<span>${esc(shortName(s.name))} sets its own rules. Read its admissions policy before you keep it at number ${rankOf(s.urn)}.</span>`));
       if (unlikely.length && listed.length < MAX_SHORT) checks.push(`${ICON.warnY}<span>${esc(shortName(unlikely[0].name))} looks unlikely. It’s fine to keep it, but add another school you’d be happy with too.</span>`);
     }
     const good = saved && listed.length && safe.length;
@@ -106,10 +106,10 @@ import { url } from '../lib/url';
       + checks.map((c) => `<div class="check">${c}</div>`).join('')
       + (!saved ? `<a class="btn" href="${url('')}" style="justify-self:start">Find my schools</a>` : '');
     // also near you
-    const pool = near.filter((s) => !rankOf(s.dfe)).sort((a, b) => ORDER[vOf(a)] - ORDER[vOf(b)] || (a.straight ?? 0) - (b.straight ?? 0)).slice(0, 5);
+    const pool = near.filter((s) => !rankOf(s.urn)).sort((a, b) => ORDER[vOf(a)] - ORDER[vOf(b)] || (a.straight ?? 0) - (b.straight ?? 0)).slice(0, 5);
     $('#pool').innerHTML = !saved || !pool.length ? '' : `<div class="pool-head"><h2>Also near you</h2><span class="hand">tap one to look closer</span></div>`
       + pool.map((s) => `<div class="pool-row"><button type="button" class="name" data-open="${s.id}">${esc(shortName(s.name))}</button><span class="mi">${esc(fmt(s.used ?? s.straight))}</span>
-          ${listed.length < MAX_SHORT ? `<button type="button" class="btn btn-sm pool-add" data-add="${s.dfe}">Add as ${ordinal(listed.length + 1)}</button>` : chip(s, m, true)}</div>`).join('');
+          ${listed.length < MAX_SHORT ? `<button type="button" class="btn btn-sm pool-add" data-add="${s.urn}">Add as ${ordinal(listed.length + 1)}</button>` : chip(s, m, true)}</div>`).join('');
   }
   $('#pool').addEventListener('click', (e) => {
     const t = e.target as HTMLElement, o = t.closest<HTMLElement>('[data-open]'), a = t.closest<HTMLElement>('[data-add]');
@@ -118,7 +118,7 @@ import { url } from '../lib/url';
   });
   onListChange(() => { if (saved) scoreAll(scored(), mode()); render(); });
 
-  const scored = () => [...new Set([...near, ...getList().map((d) => byDfe.get(d)!).filter(Boolean)])];
+  const scored = () => [...new Set([...near, ...getList().map((d) => byUrn.get(d)!).filter(Boolean)])];
   render();
   if (saved) {
     $('#planLede').textContent = `Here’s your plan for a Reception place in September 2027, with your schools for ${saved.place.label === 'your location' ? 'your location' : saved.place.label} and the dates that matter.`;

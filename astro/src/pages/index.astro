@@ -161,11 +161,11 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
   import type { SchoolMap } from '../lib/map';
 
   // The form works straight away; a search waits for the school data, so an early click can't reload the page
-  let schools: School[] = [], catches: Area[] = [], byDfe = new Map<number, School>();
+  let schools: School[] = [], catches: Area[] = [], byUrn = new Map<number, School>();
   // if the data doesn't arrive, the next search asks for it again rather than leaving the page stuck
   let loaded: Promise<void> | null = null;
   const ready = () => (loaded ??= loadData()
-    .then((d) => { schools = d.schools; catches = d.catch; byDfe = new Map(schools.map((s) => [s.dfe, s])); })
+    .then((d) => { schools = d.schools; catches = d.catch; byUrn = new Map(schools.map((s) => [s.urn, s])); })
     .catch((err) => { loaded = null; throw err; }));
   ready().catch(() => {});   // start loading now; a search reports any failure
   const byId = (id: number) => schools[id];
@@ -184,7 +184,7 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
   const isPhone = () => matchMedia('(max-width:760px)').matches;
 
   // the schools we score: everything in range, plus listed schools from further away
-  const scored = () => [...new Set([...near, ...getList().map((d) => byDfe.get(d)!).filter(Boolean)])];
+  const scored = () => [...new Set([...near, ...getList().map((d) => byUrn.get(d)!).filter(Boolean)])];
   const order = (): School[] => {
     const by = $<HTMLSelectElement>('#sort').value;
     const d = (s: School) => s.used ?? s.straight ?? 0;
@@ -200,7 +200,7 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
     onChangeOrder: () => { setTab('list'); setView('list'); $('#slots').scrollIntoView({ block: 'center' }); },
   });
   const plOpts = {
-    el: $<HTMLOListElement>('#slots'), byDfe: (d: number) => byDfe.get(d), mode,
+    el: $<HTMLOListElement>('#slots'), byUrn: (d: number) => byUrn.get(d), mode,
     onOpen: (s: School) => openPanel(s.id), emptyText: 'Add a school from the list, or leave it. Four is fine.',
   };
   initPList(plOpts);
@@ -260,7 +260,7 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
     const n = getList().length;
     $('#plCount').textContent = `${n} of ${MAX_SHORT}`;
     $$('[data-list-count-plain]').forEach((e) => (e.textContent = String(n)));
-    const listed = getList().map((d) => byDfe.get(d)!).filter(Boolean);
+    const listed = getList().map((d) => byUrn.get(d)!).filter(Boolean);
     const safe = listed.some((s) => s.result && (s.result.v === 'in' || s.result.v === 'all'));
     $('#plFoot').innerHTML = !n ? `<p class="plist-note">Add schools from the list to rank them. You can name up to five on the council’s form.</p>`
       : `<div class="check">${safe ? ICON.tick : ICON.warn}<span>${safe ? 'You have a safe bet in your list. Good move.' : 'No safe bet yet. Adding one means you’re not relying on a close call.'}</span></div>
@@ -270,9 +270,9 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
   }
 
   function row(s: School, m: Mode) {
-    const rank = rankOf(s.dfe), n = getList().length;
+    const rank = rankOf(s.urn), n = getList().length;
     const act = rank ? `<span class="rank-pill">${ordinal(rank)} on your list</span>`
-      : n < MAX_SHORT ? `<button type="button" class="btn btn-sm btn-dark" data-add="${s.dfe}">Add as ${ordinal(n + 1)}</button>`
+      : n < MAX_SHORT ? `<button type="button" class="btn btn-sm btn-dark" data-add="${s.urn}">Add as ${ordinal(n + 1)}</button>`
       : `<span class="muted" style="font-size:14px">List full</span>`;
     return `<article class="row" data-id="${s.id}">
       <div class="row-main">
@@ -299,7 +299,7 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
     });
   }
   function drawDrawer() {
-    const listed = getList().map((d) => byDfe.get(d)!).filter(Boolean);
+    const listed = getList().map((d) => byUrn.get(d)!).filter(Boolean);
     $('#drawer').innerHTML = `<div class="drawer-head"><h2>Your list</h2><span class="muted" style="font-size:14px">${listed.length} of ${MAX_SHORT}</span></div>`
       + (listed.length ? listed.map((s, i) => `<button type="button" class="drawer-row" data-pin="${s.id}"><span class="pin p-${vOf(s)}" style="width:26px;height:26px;font-size:14px;border-width:2px;box-shadow:none">${i + 1}</span>${esc(s.name.replace(/,.*$/, '').replace(/ School$/, ''))}<span class="mi">${esc(distTxt(s).replace(/ (walk|straight line)$/, ''))}</span></button>`).join('')
         : '<p class="muted" style="font-size:15px">Nothing yet. Tap a pin to add a school.</p>')

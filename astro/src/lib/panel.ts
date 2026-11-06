@@ -25,10 +25,10 @@ export function initPanel(c: Ctx) {
     if (!b || current == null) return;
     const s = ctx.byId(current)!;
     if (b.dataset.act === 'add') {
-      const r = addToList(s.dfe);
-      toast(r === 'full' ? 'Your list is full. Remove a school to add another.' : `Added as your ${ordinal(rankOf(s.dfe)!)} choice`);
+      const r = addToList(s.urn);
+      toast(r === 'full' ? 'Your list is full. Remove a school to add another.' : `Added as your ${ordinal(rankOf(s.urn)!)} choice`);
     } else if (b.dataset.act === 'remove') {
-      removeFromList(s.dfe); toast('Removed from your list');
+      removeFromList(s.urn); toast('Removed from your list');
     } else if (b.dataset.act === 'order') {
       closePanel(); ctx.onChangeOrder?.();
     }
@@ -89,7 +89,7 @@ export function closePanel() {
 }
 
 function renderFoot(s: School) {
-  const rank = rankOf(s.dfe), n = getList().length;
+  const rank = rankOf(s.urn), n = getList().length;
   $('#pFoot').innerHTML = rank
     ? `<div class="rank"><span class="rank-badge">${rank}</span><span>In your list as ${ordinal(rank)} choice</span></div>
        <div class="acts"><button type="button" class="btn btn-sm" data-act="remove">Remove</button><button type="button" class="btn btn-sm btn-dark" data-act="order">Change order</button></div>`

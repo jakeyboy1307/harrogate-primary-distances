@@ -41,8 +41,8 @@ export class SchoolMap {
       el?.querySelector<HTMLButtonElement>('[data-add]')?.addEventListener('click', (ev) => {
         const s = this.shown.find((x) => x.id === +(ev.currentTarget as HTMLElement).dataset.add!);
         if (!s) return;
-        const r = addToList(s.dfe);
-        toast(r === 'full' ? 'Your list is full. Remove a school to add another.' : `Added as your ${ordinal(rankOf(s.dfe)!)} choice`);
+        const r = addToList(s.urn);
+        toast(r === 'full' ? 'Your list is full. Remove a school to add another.' : `Added as your ${ordinal(rankOf(s.urn)!)} choice`);
         this.map.closePopup();
       });
     });
@@ -76,7 +76,7 @@ export class SchoolMap {
     this.pins.clearLayers();
     const mode = this.ctx.mode();
     for (const s of this.shown) {
-      const rank = rankOf(s.dfe), v = vOf(s), sel = this.selected === s.id;
+      const rank = rankOf(s.urn), v = vOf(s), sel = this.selected === s.id;
       const html = rank
         ? `<div class="pin p-${v}${sel ? ' big' : ''}">${rank}</div>`
         : `<div class="dot p-${v}${sel ? ' big' : ''}"></div>`;
@@ -95,7 +95,7 @@ export class SchoolMap {
     for (const i of s.cz || [])
       L.polygon(this.catches[i].p as unknown as L.LatLngExpression[][][], { pane: 'catch', color: '#2747D8', weight: 3, fillColor: '#2747D8', fillOpacity: .09, interactive: false }).addTo(this.catchLayer);
     this.draw();
-    const rank = rankOf(s.dfe), mode = this.ctx.mode();
+    const rank = rankOf(s.urn), mode = this.ctx.mode();
     const why = s.result ? s.result.label + '.' : '';
     const html = `<div class="pop">
       <div class="pop-top"><span class="chip chip-sm v-${vOf(s)}">${esc(chipText(s.result, mode))}</span><span>${esc(distTxt(s))}</span></div>

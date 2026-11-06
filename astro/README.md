@@ -12,7 +12,7 @@ The "exercise book" redesign from the Paper file *Yorkshire school check*, built
 
 ```sh
 npm install
-npm run dev        # copies ../build/data.json into public/, then starts Astro on http://localhost:4321
+npm run dev        # copies the school data into public/data/, then starts Astro on http://localhost:4321
 npm run build      # writes the static site to dist/
 ```
 
@@ -24,7 +24,7 @@ SITE_BASE=/harrogate-primary-distances npm run build
 
 ## Data and services
 
-- School data comes from `../build/data.json`, produced by the yearly refresh described in the main README. `npm run data` copies it in and adds each school's office phone and email from `../build/contacts.json`.
+- School data comes from `../build/data.json`, produced by the yearly refresh described in the main README. `npm run data` writes one file per council into `public/data/` (listed in `public/data/areas.json`), keys each school by its national URN, and adds its office phone and email from `../build/contacts.json`.
 - Postcodes: postcodes.io. Walking routes: the FOSSGIS OSRM table service, cached for the browser session because it's rate-limited. Map tiles: Esri World Street Map. Catchments: North Yorkshire Council.
 - Your list is stored in `localStorage` under `ysc-shortlist`, the same key as the live site, so existing shortlists carry over. The last search is stored under `ysc-search`.
 

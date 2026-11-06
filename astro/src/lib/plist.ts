@@ -6,7 +6,7 @@ import { chip, distTxt, ICON, shortName } from './ui';
 
 export interface PListOpts {
   el: HTMLOListElement;
-  byDfe: (dfe: number) => School | undefined;
+  byUrn: (urn: number) => School | undefined;
   mode: () => Mode;
   onOpen: (s: School) => void;
   emptyText: string;
@@ -27,15 +27,15 @@ const subLine = (s: School) => {
 export function renderPList(o: PListOpts) {
   const list = getList();
   const mode = o.mode();
-  const rows = list.map((dfe, i) => {
-    const s = o.byDfe(dfe);
+  const rows = list.map((urn, i) => {
+    const s = o.byUrn(urn);
     if (!s) return '';
     const name = o.big ? s.name.replace(/,.*$/, '') : shortName(s.name);
-    return `<li class="slot" data-dfe="${dfe}">
+    return `<li class="slot" data-urn="${urn}">
       <span class="slot-n" aria-hidden="true"></span>
       <div class="slot-card">
-        <button type="button" class="handle" data-dfe="${dfe}" aria-label="${esc(ordinal(i + 1))} choice, ${esc(s.name)}. Drag, or use the up and down arrow keys, to move it">${ICON.grip}</button>
-        <button type="button" class="slot-main" data-open="${dfe}"><span class="slot-name">${esc(name)}</span><span class="slot-sub">${esc(subLine(s))}</span></button>
+        <button type="button" class="handle" data-urn="${urn}" aria-label="${esc(ordinal(i + 1))} choice, ${esc(s.name)}. Drag, or use the up and down arrow keys, to move it">${ICON.grip}</button>
+        <button type="button" class="slot-main" data-open="${urn}"><span class="slot-name">${esc(name)}</span><span class="slot-sub">${esc(subLine(s))}</span></button>
         <span class="slot-chip">${s.result ? chip(s, mode, true) : ''}</span>
       </div></li>`;
   });
@@ -66,21 +66,21 @@ export function initPList(o: PListOpts) {
     forceFallback: true, fallbackOnBody: true,
     onChange: () => renumber(o.el),
     onEnd: () => {
-      const order = [...o.el.querySelectorAll<HTMLElement>('.slot:not(.empty)')].map((li) => +li.dataset.dfe!);
+      const order = [...o.el.querySelectorAll<HTMLElement>('.slot:not(.empty)')].map((li) => +li.dataset.urn!);
       setList(order);
     },
   });
   o.el.addEventListener('click', (e) => {
     const b = (e.target as HTMLElement).closest<HTMLElement>('[data-open]');
-    const s = b && o.byDfe(+b.dataset.open!);
+    const s = b && o.byUrn(+b.dataset.open!);
     if (s) o.onOpen(s);
   });
   o.el.addEventListener('keydown', (e) => {
     const h = (e.target as HTMLElement).closest<HTMLElement>('.handle');
     if (!h || (e.key !== 'ArrowUp' && e.key !== 'ArrowDown')) return;
     e.preventDefault();
-    const dfe = +h.dataset.dfe!, i = getList().indexOf(dfe);
-    moveInList(dfe, i + (e.key === 'ArrowUp' ? -1 : 1));
-    requestAnimationFrame(() => o.el.querySelector<HTMLElement>(`.handle[data-dfe="${dfe}"]`)?.focus());
+    const urn = +h.dataset.urn!, i = getList().indexOf(urn);
+    moveInList(urn, i + (e.key === 'ArrowUp' ? -1 : 1));
+    requestAnimationFrame(() => o.el.querySelector<HTMLElement>(`.handle[data-urn="${urn}"]`)?.focus());
   });
 }

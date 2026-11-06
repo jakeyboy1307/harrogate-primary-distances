@@ -30,7 +30,7 @@ export interface Ofsted {
   concern?: string; predecessor?: boolean;
 }
 export interface RawSchool {
-  dfe: number; name: string; place: string;
+  urn: number; name: string; place: string;   // national school ID (council codes clash between councils)
   method: 'walking' | 'straight_line' | 'unknown';
   pan?: number; d: YearRec[]; ll: LatLng; postcode: string; addr?: string;
   of?: Ofsted; type: string; own: boolean; src: string; web?: string; cz?: number[]; note?: string;
@@ -69,11 +69,23 @@ export function haversine(a: LatLng, b: LatLng) {
 
 // ---------- data ----------
 let dataPromise: Promise<{ schools: School[]; catch: Area[] }> | null = null;
+const getJSON = <T>(file: string) => fetch(import.meta.env.BASE_URL.replace(/\/?$/, '/') + 'data/' + file)
+  .then((r) => { if (!r.ok) throw new Error(String(r.status)); return r.json() as Promise<T>; });
+// One file per council, listed in areas.json. Each file's catchment numbers are shifted so they
+// still point at the right catchment once the files are joined.
 // A failed load isn't kept, so the next search tries again instead of failing until the page is reloaded
 export function loadData() {
-  dataPromise ??= fetch(import.meta.env.BASE_URL.replace(/\/?$/, '/') + 'data.json')
-    .then((r) => { if (!r.ok) throw new Error(String(r.status)); return r.json() as Promise<Data>; })
-    .then((d) => ({ catch: d.catch, schools: d.schools.map((s, i) => ({ ...s, id: i, inC: null })) }))
+  dataPromise ??= getJSON<{ file: string }[]>('areas.json')
+    .then((areas) => Promise.all(areas.map((a) => getJSON<Data>(a.file))))
+    .then((files) => {
+      const out: { schools: School[]; catch: Area[] } = { schools: [], catch: [] };
+      for (const d of files) {
+        const shift = out.catch.length;
+        out.catch.push(...d.catch);
+        for (const s of d.schools) out.schools.push({ ...s, cz: s.cz?.map((i) => i + shift), id: out.schools.length, inC: null } as School);
+      }
+      return out;
+    })
     .catch(() => { dataPromise = null; throw new Error('We couldn’t load the school details. Check your connection and try again.'); });
   return dataPromise;
 }
