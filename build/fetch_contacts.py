@@ -18,11 +18,12 @@ import urllib.request
 from datetime import date
 
 GIAS = 'https://get-information-schools.service.gov.uk/Establishments/Establishment/Details/{}'
-UA = {'User-Agent': 'Mozilla/5.0 (compatible; YorkshireSchoolChecker/2.0; +https://jakeyboy1307.github.io/harrogate-primary-distances/)'}
+UA = {'User-Agent': 'Mozilla/5.0 (compatible; YorkshireSchoolChecker/2.0; +https://yorkshireschoolchecker.co.uk/)'}
 MAILTO = re.compile(r'mailto:([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})', re.I)
 # words that mark the school office rather than a named member of staff
 OFFICE = ('admin', 'office', 'enquir', 'admission', 'head', 'info', 'school', 'reception')
-SKIP = ('example.', 'sentry', 'wixpress', 'webmaster', 'safeguard', 'dpo', 'governor', 'gdpr', 'data', 'pta', 'friends')
+# helpdesk and webanywhere are web hosts; carltonprimary@setschools is a sister school, listed on Selby Community Primary's site
+SKIP = ('example.', 'helpdesk', 'webanywhere', 'carltonprimary@setschools', 'sentry', 'wixpress', 'webmaster', 'safeguard', 'dpo', 'governor', 'gdpr', 'data', 'pta', 'friends')
 
 
 def get(url, timeout=20):

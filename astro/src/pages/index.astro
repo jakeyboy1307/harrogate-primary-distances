@@ -11,7 +11,7 @@ const keys = [
 // tells search engines the site's name, shown above the link in results
 const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Yorkshire School Checker', url: new URL(import.meta.env.BASE_URL, Astro.site).href };
 ---
-<Base title="Harrogate primary school catchment checker · Yorkshire School Checker" description="Check your postcode against catchments and four years of Reception offers at every primary school in the Harrogate district." active="find">
+<Base title="Harrogate primary school catchment checker · Yorkshire School Checker" description="Check your postcode against catchments and four years of Reception offers at primary schools in the Harrogate district and round York." active="find">
   <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(siteSchema)} />
 
   <!-- ONBOARDING -->
@@ -55,8 +55,9 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
         <button class="example" type="button" data-pc="HG2 0NA">Harrogate · HG2 0NA</button>
         <button class="example" type="button" data-pc="HG5 0SL">Knaresborough · HG5 0SL</button>
         <button class="example" type="button" data-pc="HG4 1LT">Ripon · HG4 1LT</button>
+        <button class="example" type="button" data-pc="YO61 3HJ">Easingwold · YO61 3HJ</button>
       </div>
-      <p class="coverage">Covers the Harrogate district: Harrogate, Knaresborough, Ripon, Boroughbridge, Pateley Bridge, Masham and the villages. Nothing to sign up for.</p>
+      <p class="coverage">Covers the Harrogate district, and North Yorkshire schools round York from Easingwold to Selby and Tadcaster. York’s own city schools aren’t included yet. Nothing to sign up for.</p>
     </div>
     <aside class="key-card" aria-label="What the labels mean">
       <span class="hand" style="font-size:26px">what you’ll see next</span>
@@ -222,7 +223,7 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
     const mine = res.mine;
     $('#catchline').innerHTML = (mine.length
       ? `You’re in the catchment for <b>${mine.map((s) => esc(s.name)).join('</b> and <b>')}</b>.`
-      : 'You’re not in any Harrogate district school’s catchment.')
+      : 'You’re not in the catchment of any school this checker covers.')
       + ` Near a boundary? <a href="${CATCH_MAP}" target="_blank" rel="noopener">Check your exact address</a>.`;
     setStatus('#resStatus', outside || (near.some((s) => s.method === 'walking') ? 'Working out walking routes…' : ''), !!outside);
     render();
@@ -251,7 +252,7 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
     // rows
     const list = visible(), cap = showAll || isPhone() ? list.length : 8;
     $('#rows').innerHTML = list.length ? list.slice(0, cap).map((s) => row(s, m)).join('')
-      : `<div class="no-results"><strong>No schools in range.</strong><br>Try a larger distance. This checker covers the Harrogate district: Harrogate, Knaresborough, Ripon, Boroughbridge, Pateley Bridge, Masham and the villages around them.</div>`;
+      : `<div class="no-results"><strong>No schools in range.</strong><br>Try a larger distance. This checker covers the Harrogate district, and North Yorkshire schools round York from Easingwold to Selby and Tadcaster.</div>`;
     const more = $('#more');
     more.hidden = list.length <= cap;
     more.textContent = `Show ${plural(list.length - cap, 'more school')}`;

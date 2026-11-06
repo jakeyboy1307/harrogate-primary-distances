@@ -336,7 +336,7 @@ export function prepareSearch(all: School[], catches: Area[], place: Place, radi
   const shown = place.label === 'your location' ? 'Your location' : place.label;
   const outside = place.district && place.district !== 'North Yorkshire'
     ? `${place.label} is in ${place.district}, which this checker doesn’t cover yet, so schools there aren’t shown.`
-    : !areas.size ? `${shown} is outside the Harrogate district, so schools in other areas aren’t shown.` : '';
+    : !areas.size ? `${shown} is outside the areas this checker covers, so schools there aren’t shown.` : '';
   return { near, mine: all.filter((s) => s.inC), areas, outside };
 }
 export function scoreAll(list: School[], mode: Mode) {

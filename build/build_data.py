@@ -1,4 +1,4 @@
-"""Build the data for the Harrogate primary distances page.
+"""Build the North Yorkshire school data: the Harrogate district, plus schools near York.
 
 Usage:  python3 -I build/build_data.py <raw-dir> <out.json>
 
@@ -12,10 +12,16 @@ Needs openpyxl and shapely.
 """
 import csv, io, json, re, sys
 import openpyxl
-from shapely.geometry import shape, mapping
+from shapely.geometry import Point, shape, mapping
 
 RAW, OUT = sys.argv[1], sys.argv[2]
 MI = 1609.344
+
+# Harrogate district schools are matched with the hand-written keys below. Schools in these districts within
+# NEAR_YORK_MI of York Minster are matched automatically, by council code, postcode and name.
+NEAR_YORK = ('Selby', 'Hambleton', 'Ryedale')
+YORK = (53.9622, -1.0819)
+NEAR_YORK_MI = 15
 
 DATASETS = {
     2026: 'https://hub.datanorthyorkshire.org/dataset/school-admissions-2026-2027-yearly-statistics-primary-and-secondary-school',
@@ -58,7 +64,7 @@ CATCH_KEYS = {2425: [['saltergate']], 2331: [['oatlands inf']], 3378: [], 3371: 
               3363: [['marton-cum-grafton']]}
 # 2023 names that the keys alone can't place
 KEYS_2023 = {3263: ['holy trinity', 'infant'], 3378: ["st joseph's", 'harrogate'], 3371: ["st mary's", 'knaresborough'],
-             3372: ["st wilfrid's"], 2031: ['masham']}
+             3372: ["st wilfrid's"], 2031: ['masham'], 2427: ['riverside', '(n)']}
 
 PLACE = {
     3228: 'Burnt Yates', 3361: 'Kirkby Overblow', 2302: 'Askwith', 2377: 'Knaresborough', 2348: 'Beckwithshaw',
@@ -82,6 +88,53 @@ METHOD = {'shortest walking distance': 'walking', 'straight line': 'straight_lin
 def has_keys(name, keys):
     n = norm(name)
     return bool(keys) and all(k in n for k in keys)
+
+
+# ---------- automatic matching, for schools without hand-written keys ----------
+STOP = {'school', 'primary', 'the', 'and', 'a', 'of', 'ce', 'church', 'england', 'voluntary', 'controlled', 'aided', 'vc',
+        'va', 'community', 'academy', 'catholic', 'rc', 'cp', 'cofe', 'c', 'e', 'nursery', 'methodist', 'anglican', 'in',
+        'trust', 'foundation', 'federation', 'endowed', 'parochial', 'cevc', 'ceva', 'comm', 'sch', 'scho', 'schoo'}
+
+
+def tokens(name):
+    # (N), (P) and the like are the 2023 sheet's own codes; 'comm.' and cut-off endings like 'Scho' are stop words
+    return {t for t in re.findall(r"[a-z0-9]+", re.sub(r'\(.*?\)', '', norm(name)).replace("'", '')) if t not in STOP}
+
+
+def sim(a, b):
+    """How alike two school names are, 0 to 1, ignoring words every school name has."""
+    A, B = tokens(a), tokens(b)
+    return len(A & B) / len(A | B) if A | B else 0
+
+
+def overlap(a, b):
+    """Share of the shorter name's words found in the other: 'Riverside' against 'Riverside, Tadcaster' scores 1."""
+    A, B = tokens(a), tokens(b)
+    return len(A & B) / min(len(A), len(B)) if A and B else 0
+
+
+def same_pc(a, b):
+    return str(a or '').replace(' ', '').upper() == str(b or '').replace(' ', '').upper()
+
+
+def miles(a, b):
+    import math
+    la1, lo1, la2, lo2 = map(math.radians, (*a, *b))
+    h = math.sin((la2 - la1) / 2) ** 2 + math.cos(la1) * math.cos(la2) * math.sin((lo2 - lo1) / 2) ** 2
+    return 2 * 3958.8 * math.asin(math.sqrt(h))
+
+
+STREET = re.compile(r'\b(road|lane|street|avenue|grove|close|crescent|way|terrace|green|parade|hill|bank|square|link|drive|walk|'
+                    r'gardens|place|barracks|end|row|gate|ings|leas|broadmanor|hilltop)$|\d|school', re.I)
+
+
+def place_of(p):
+    """The village or town a council school point is in: the first address line that isn't a street, else the post town."""
+    for k in ('Address_2', 'Address_3', 'Address_1'):
+        v = str(p.get(k) or '').strip().rstrip(',')
+        if v and not STREET.search(v):
+            return v.title() if v.isupper() else v
+    return str(p.get('Address_4') or '').strip().title()
 
 
 def rows_of(path):
@@ -167,8 +220,34 @@ base = [r for r in rows26 if r[c26['district']] == 'Harrogate' and 'junior' not 
 unknown = [r[0] for r in base if r[0] not in KEYS]
 assert not unknown, f'add keys for {unknown}'
 
+# Council school points and Ofsted rows are read here because they place the schools near York
+pts = json.load(open(f'{RAW}/pschools.geojson'))['features']
+raw = open(f'{RAW}/ofsted.csv', 'rb').read().decode('utf-8-sig', errors='replace')
+mi = list(csv.reader(io.StringIO(raw)))
+mi = {r[2]: dict(zip(mi[0], r)) for r in mi[1:]}
 
-def find_row(y, dfe, name_keys):
+# Schools near York: Ofsted's LAESTAB is 815 plus the council's code, which gives the postcode to find the council's point
+POINT = {}
+for r in rows26:
+    name = r[c26['name']]
+    if r[c26['district']] not in NEAR_YORK or 'junior' in name.lower():
+        continue
+    x = mi.get(f'815{r[0]}')
+    hit = [f for f in pts if x and same_pc(f['properties']['Postcode'], x['Postcode'])]
+    if not hit:   # the school has moved or the postcodes differ: fall back to a clear name match
+        hit = [f for f in pts if sim(f['properties']['School'], name) >= 0.75]
+    if len(hit) > 1:
+        hit = [max(hit, key=lambda f: sim(f['properties']['School'], name))]
+    if not hit:
+        print(f'  no council point for {name}, left out')
+        continue
+    lng, lat = hit[0]['geometry']['coordinates']
+    if miles((lat, lng), YORK) <= NEAR_YORK_MI:
+        base.append(r)
+        POINT[r[0]] = hit[0]
+
+
+def find_row(y, dfe, name_keys, name=None):
     head, rows, c = sheets[y]
     if 'dfe' in c:
         if dfe == 3263:   # Holy Trinity: before 2026 the reception intake was the infant school
@@ -178,8 +257,16 @@ def find_row(y, dfe, name_keys):
             hit = [r for r in rows if has_keys(r[c['name']], ['masham']) and r[c['district']] == 'Harrogate']
         else:
             hit = [r for r in rows if r[c['dfe']] == dfe and 'junior' not in r[c['name']].lower()]
-    else:
+    elif name_keys:
         hit = [r for r in rows if has_keys(r[c['name']], name_keys) and 'junior' not in r[c['name']].lower()]
+    else:   # no keys: take the one row whose name is clearly this school's, or none if two are equally close
+        hit = []
+        for score, floor in ((sim, 0.6), (overlap, 1)):   # a close match first, else one whose name contains this one's
+            scored = sorted(((score(r[c['name']], name), i) for i, r in enumerate(rows) if 'junior' not in str(r[c['name']]).lower()),
+                            reverse=True)
+            if scored and scored[0][0] >= floor and (len(scored) < 2 or scored[1][0] < scored[0][0]):
+                hit = [rows[scored[0][1]]]
+                break
     if len(hit) > 1:
         raise ValueError(f'{y} {dfe}: ambiguous {[h[c["name"]] for h in hit]}')
     return hit[0] if hit else None
@@ -188,12 +275,12 @@ def find_row(y, dfe, name_keys):
 schools = []
 for r in base:
     dfe, name = r[0], r[c26['name']]
-    s = {'dfe': dfe, 'name': name, 'place': PLACE[dfe], 'kind': r[c26['type']],
+    s = {'dfe': dfe, 'name': name, 'place': PLACE.get(dfe) or place_of(POINT[dfe]['properties']), 'kind': r[c26['type']],
          'method': METHOD.get(str(r[c26['method']]).strip().lower(), 'unknown'),
          'pan': num(r[c26['pan']]), 'd': []}
     for y in (2026, 2025, 2024, 2023):
-        keys = KEYS_2023.get(dfe, KEYS[dfe]) if y == 2023 else KEYS[dfe]
-        row = find_row(y, dfe, keys)
+        keys = KEYS_2023.get(dfe, KEYS.get(dfe)) if y == 2023 else KEYS.get(dfe)
+        row = find_row(y, dfe, keys, name)
         if row is None:
             print(f'  no {y} row for {name}')
             continue
@@ -203,7 +290,7 @@ for r in base:
         rec['o'] = num(row[c['off']])
         if 'first' in c:
             rec['f'] = num(row[c['first']])
-        prev = find_row(y - 1, dfe, KEYS_2023.get(dfe, KEYS[dfe]) if y - 1 <= 2023 else KEYS[dfe])
+        prev = find_row(y - 1, dfe, KEYS_2023.get(dfe, KEYS.get(dfe)) if y - 1 <= 2023 else KEYS.get(dfe), name)
         if prev is not None:   # each sheet gives next year's admission number
             rec['p'] = num(prev[sheets[y - 1][2]['pan']])
         if dfe == 3263 and rec.get('p') is None:   # the 2025 sheet puts the new primary's number on its own row
@@ -220,10 +307,9 @@ for r in base:
     schools.append(s)
 
 # ---------- council school points ----------
-pts = json.load(open(f'{RAW}/pschools.geojson'))['features']
 for s in schools:
-    hit = [f for f in pts if has_keys(f['properties']['School'], KEYS[s['dfe']])
-           and 'junior' not in f['properties']['School'].lower()]
+    hit = [POINT[s['dfe']]] if s['dfe'] in POINT else \
+          [f for f in pts if has_keys(f['properties']['School'], KEYS[s['dfe']]) and 'junior' not in f['properties']['School'].lower()]
     if s['dfe'] == 3372:
         hit = [f for f in hit if f['properties']['Postcode'].startswith('HG4')]
     if len(hit) == 1:
@@ -249,10 +335,7 @@ for s in schools:
 # ---------- Ofsted ----------
 ROW = {'1': 'Outstanding', '2': 'Good', '3': 'Requires improvement', '4': 'Inadequate'}
 CONCERN = {'SM': 'Special measures', 'SWK': 'Serious weaknesses'}
-raw = open(f'{RAW}/ofsted.csv', 'rb').read().decode('utf-8-sig', errors='replace')
-mi = list(csv.reader(io.StringIO(raw)))
-mi = {r[2]: dict(zip(mi[0], r)) for r in mi[1:]}
-val = lambda v: None if v in ('', 'NULL', None) else v
+val =lambda v: None if v in ('', 'NULL', None) else v
 # A school whose last graded inspection came before September 2019 has no grade in the current file, only
 # short-inspection outcomes such as "Standards maintained". The August 2019 file still has that grade.
 raw19 = list(csv.reader(io.StringIO(open(f'{RAW}/ofsted2019.csv', 'rb').read().decode('utf-8-sig', errors='replace'))))
@@ -317,7 +400,7 @@ for s in schools:
         x = mi.get('8153319')
     if not x:
         x = next((v for v in mi.values() if v['Local authority'] == 'North Yorkshire' and v['Ofsted phase'] == 'Primary'
-                  and has_keys(v['School name'], KEYS[s['dfe']])), None)
+                  and has_keys(v['School name'], KEYS.get(s['dfe']))), None)
     if not x:
         print(f'  no Ofsted row for {s["name"]}')
     s['of'] = ofsted(x)
@@ -327,16 +410,40 @@ for s in schools:
 
 # ---------- catchments ----------
 feats = json.load(open(f'{RAW}/catch.geojson'))['features']
+geoms = [shape(f['geometry']).buffer(0) for f in feats]
+NEAR = 0.15   # degrees, about 10 miles: a school's catchment is never further away than that
+
+
+def near(i, s):
+    return 'll' in s and geoms[i].distance(Point(s['ll'][1], s['ll'][0])) < NEAR
+
+
+# Schools without keys take the nearby catchment whose name is clearly theirs, or the one they sit in that shares
+# a word of their name (names are cut off at 60 characters, and some catchments are shared by two schools)
+AUTO_CATCH = {}
+for s in schools:
+    if s['dfe'] not in KEYS and 'll' in s:
+        pt = Point(s['ll'][1], s['ll'][0])
+        good = [(sim(f['properties']['School'], s['name']), i) for i, f in enumerate(feats) if near(i, s)]
+        # a shared town name or 'St' doesn't make it theirs, unless the town is the only distinctive word in the name
+        own = (tokens(s['name']) - {'st'} - tokens(s['place'])) or (tokens(s['name']) - {'st'})
+        good = [t for t in good if t[0] >= 0.6 or (own & tokens(feats[t[1]]['properties']['School']) and geoms[t[1]].contains(pt))]
+        if good:
+            AUTO_CATCH[s['dfe']] = max(good)[1]
+
 catch, used = [], {}
-for f in feats:
+for i, f in enumerate(feats):
     owners = []
     for s in schools:
-        keysets = CATCH_KEYS.get(s['dfe'], [KEYS[s['dfe']]])
-        if any(has_keys(f['properties']['School'], ks) for ks in keysets):
+        if s['dfe'] in KEYS:
+            keysets = CATCH_KEYS.get(s['dfe'], [KEYS[s['dfe']]])
+            if any(has_keys(f['properties']['School'], ks) for ks in keysets) and near(i, s):
+                owners.append(s)
+        elif AUTO_CATCH.get(s['dfe']) == i:
             owners.append(s)
     if not owners:
         continue
-    g = shape(f['geometry']).buffer(0).simplify(0.00006, preserve_topology=True)
+    g = geoms[i].simplify(0.00006, preserve_topology=True)
     polys = [g] if g.geom_type == 'Polygon' else list(g.geoms)
     rings = []
     for p in polys:

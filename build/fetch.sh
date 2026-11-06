@@ -20,7 +20,7 @@ get p2022.xlsx "$HUB/3f9f20ee-4246-4fd5-8d98-7876a492ec46/resource/d64aa6f1-40e6
 # Council catchment areas and school points, from the layers behind its "Finding a school" map
 ARC=https://utility.arcgis.com/usrsvcs/servers
 REF="Referer: https://experience.arcgis.com/"
-ENV='{"xmin":-2.2,"ymin":53.8,"xmax":-1.05,"ymax":54.35,"spatialReference":{"wkid":4326}}'
+ENV='{"xmin":-2.2,"ymin":53.65,"xmax":-0.7,"ymax":54.35,"spatialReference":{"wkid":4326}}'   # Harrogate district and 15 miles round York
 curl -fsS -H "$REF" -G "$ARC/9e566a3f72394ae383d424b80f254861/rest/services/CYPS/Primary_School_Catchment_Areas/FeatureServer/4/query" \
   --data-urlencode "where=1=1" --data-urlencode "outFields=*" --data-urlencode "geometry=$ENV" \
   --data-urlencode "geometryType=esriGeometryEnvelope" --data-urlencode "inSR=4326" --data-urlencode "outSR=4326" \
