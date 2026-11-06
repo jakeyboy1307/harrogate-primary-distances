@@ -10,9 +10,11 @@ Usage:  python3 -I build/build_data.py <raw-dir> <out.json>
   ofsted2019.csv              Ofsted MI, latest inspections at 31 August 2019 (grades from before the 2019 framework)
 Needs openpyxl and shapely.
 """
-import csv, io, json, re, sys
+import csv, io, json, os, re, sys
 import openpyxl
 from shapely.geometry import Point, shape, mapping
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))   # common.py, which isolated mode (-I) won't find on its own
+from common import OWN_RULES, kind, ofsted, read_mi
 
 RAW, OUT = sys.argv[1], sys.argv[2]
 MI = 1609.344
@@ -333,65 +335,7 @@ for s in schools:
         print(f'  point matches for {s["name"]}: {len(hit)}')
 
 # ---------- Ofsted ----------
-ROW = {'1': 'Outstanding', '2': 'Good', '3': 'Requires improvement', '4': 'Inadequate'}
-CONCERN = {'SM': 'Special measures', 'SWK': 'Serious weaknesses'}
-val =lambda v: None if v in ('', 'NULL', None) else v
-# A school whose last graded inspection came before September 2019 has no grade in the current file, only
-# short-inspection outcomes such as "Standards maintained". The August 2019 file still has that grade.
-raw19 = list(csv.reader(io.StringIO(open(f'{RAW}/ofsted2019.csv', 'rb').read().decode('utf-8-sig', errors='replace'))))
-h19 = next(i for i, r in enumerate(raw19[:10]) if 'URN' in r)
-mi19 = {r[2]: dict(zip(raw19[h19], r)) for r in raw19[h19 + 1:] if len(r) > 2}
-iso = lambda d: None if not val(d) else f'{d[6:10]}-{d[3:5]}-{d[0:2]}'
-
-
-def ofsted(x):
-    if not x:
-        return None
-    o = {'urn': x['URN'], 'link': f"https://reports.ofsted.gov.uk/provider/21/{x['URN']}"}
-    if val(x['Inspection type']):   # report card (from November 2025)
-        names = ['Inclusion', 'Curriculum and teaching', 'Achievement', 'Attendance and behaviour',
-                 'Personal development and wellbeing', 'Early years (where applicable)', 'Leadership and governance']
-        o.update(kind='card', date=iso(x['Inspection start date']),
-                 areas=[[n.replace(' (where applicable)', ''), x[n]] for n in names if val(x[n]) and x[n] != 'Not applicable'],
-                 safeguarding=val(x['Safeguarding standards']))
-        rel = x['Does the latest full inspection relate to the URN of the current school?']
-        concern = val(x['Category of concern'])
-    elif val(x['Latest OEIF overall effectiveness']):
-        oe = x['Latest OEIF overall effectiveness']
-        o['date'] = iso(x['Inspection start date of latest OEIF graded inspection'])
-        if oe in ROW:
-            o.update(kind='grade', grade=ROW[oe])
-        else:   # September 2024 to November 2025: sub-grades only
-            names = [('Quality of education', 'Latest OEIF quality of education'),
-                     ('Behaviour and attitudes', 'Latest OEIF behaviour and attitudes'),
-                     ('Personal development', 'Latest OEIF personal development'),
-                     ('Leadership and management', 'Latest OEIF effectiveness of leadership and management'),
-                     ('Early years', 'Latest OEIF early years provision (where applicable)')]
-            o.update(kind='areas', areas=[[n, ROW[x[k]]] for n, k in names if x[k] in ROW])
-        rel = x['Does the latest OEIF graded inspection relate to the URN of the current school?']
-        concern = val(x['Latest OEIF category of concern'])
-    elif val(x['Ungraded inspection overall outcome']):
-        o['kind'] = 'ungraded'
-        rel = x['Does the ungraded inspection relate to the URN of the current school?']
-        concern = None
-        old = mi19.get(x['LAESTAB'])
-        if old and old.get('Overall effectiveness') in ROW:
-            o['graded'] = {'grade': ROW[old['Overall effectiveness']], 'date': iso(old['Inspection start date'])}
-    else:
-        o['kind'] = 'none'
-        return o
-    if val(x['Ungraded inspection overall outcome']):
-        ud = iso(x['Date of latest ungraded inspection'])
-        if o['kind'] == 'ungraded' or ud > (o.get('date') or ''):
-            outcome = re.sub(r'\s*-\s*S5 Next$', '', x['Ungraded inspection overall outcome'])
-            o['ungraded'] = {'date': ud, 'outcome': outcome}
-            if o['kind'] == 'ungraded':
-                o['date'] = ud
-    if rel == 'No':
-        o['predecessor'] = True
-    if concern in CONCERN:
-        o['concern'] = CONCERN[concern]
-    return o
+mi19 = read_mi(f'{RAW}/ofsted2019.csv')
 
 
 for s in schools:
@@ -403,7 +347,7 @@ for s in schools:
                   and has_keys(v['School name'], KEYS.get(s['dfe']))), None)
     if not x:
         print(f'  no Ofsted row for {s["name"]}')
-    s['of'] = ofsted(x)
+    s['of'] = ofsted(x, mi19)
     if x:
         s.setdefault('postcode', x['Postcode'])
         s.setdefault('faith', x['Designated religious character'])
@@ -460,17 +404,10 @@ for s in schools:
         print(f'  !! catchment cut-off but no polygon: {s["name"]}')
 
 # ---------- tidy ----------
-def kind(s):
-    k, f = s['kind'], (s.get('faith') or '')
-    faith = {'Church of England': 'C of E', 'Roman Catholic': 'Catholic'}.get(f)
-    base = {'Community School': 'community', 'Voluntary Controlled': 'voluntary controlled',
-            'Voluntary Aided': 'voluntary aided', 'Academy': 'academy', 'Foundation': 'foundation'}[k]
-    return f'{faith} {base}' if faith else base
-
 
 for s in schools:
-    s['type'] = kind(s)
-    s['own'] = s['kind'] not in ('Community School', 'Voluntary Controlled')
+    s['type'] = kind(s['kind'], s.get('faith'))
+    s['own'] = OWN_RULES(s['kind'])
     s['src'] = DATASETS[2026]
     for k in ('kind', 'faith'):
         s.pop(k, None)

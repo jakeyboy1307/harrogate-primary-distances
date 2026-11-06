@@ -5,19 +5,37 @@ export const EDGE_M = 0.1 * MI;     // borderline band: a tenth of a mile
 export const UNDERSUB_M = 2 * MI;   // an out-of-catchment cut-off this long means nobody local missed out
 export const MAX_SHORT = 5;         // North Yorkshire's application form takes five preferences
 export const ROUTER = 'https://routing.openstreetmap.de/routed-foot/table/v1/foot/';
-export const CATCH_MAP = 'https://experience.arcgis.com/experience/4dd5b97eae514b31a067137ebf7cdd6a';
-export const APPLY_URL = 'https://www.northyorks.gov.uk/education-and-learning/education-and-learning/school-admissions/starting-primary-school-and-junior-school';
+// Each council's own catchment map and Reception application page, by the district postcodes.io gives a postcode
+export interface Council { name: string; catchMap: string; apply: string; policy: string }
+export const COUNCILS: Record<string, Council> = {
+  'North Yorkshire': {
+    name: 'North Yorkshire Council',
+    catchMap: 'https://experience.arcgis.com/experience/4dd5b97eae514b31a067137ebf7cdd6a',
+    apply: 'https://www.northyorks.gov.uk/education-and-learning/education-and-learning/school-admissions/starting-primary-school-and-junior-school',
+    policy: 'catchment first, then brothers and sisters, then distance',
+  },
+  York: {
+    name: 'City of York Council',
+    catchMap: 'https://www.york.gov.uk/schools/PrimaryMap',
+    apply: 'https://www.york.gov.uk/PrimaryAdmissions',
+    policy: 'catchment first, brothers and sisters ahead of others, then brothers and sisters from outside it, then the shortest walk',
+  },
+};
+export const council = (district?: string | null) => COUNCILS[district ?? ''] ?? COUNCILS['North Yorkshire'];
 
 export type LatLng = [number, number];
 export type V = 'in' | 'all' | 'edge' | 'out' | 'na';
 
 export interface YearRec {
   y: number;
-  s: 'distance' | 'all_offered' | 'not_published';
+  // distance: how far the last place went (North Yorkshire). catchment: how many applicants from inside (ia) and
+  // outside (xa) the catchment were turned away (ir, xr), where a council publishes no distances (York).
+  s: 'distance' | 'catchment' | 'all_offered' | 'not_published';
   m?: number;
   g?: 'in' | 'out' | 'sib' | 'crit';
   crit?: string;
   a?: number; o?: number; p?: number; f?: number;
+  ia?: number; ir?: number; xa?: number; xr?: number;
   n?: string;
 }
 export interface Ofsted {
@@ -35,6 +53,7 @@ export interface RawSchool {
   pan?: number; d: YearRec[]; ll: LatLng; postcode: string; addr?: string;
   of?: Ofsted; type: string; own: boolean; src: string; web?: string; cz?: number[]; note?: string;
   tel?: string; email?: string;   // the school office, from GIAS and the school's website
+  council: string;                // which council's file it came from: a key of COUNCILS
 }
 export interface Area { name: string; p: LatLng[][][] }
 export interface Data { schools: RawSchool[]; catch: Area[] }
@@ -122,6 +141,15 @@ const IN_CATCH = 'You’re in the catchment, and everyone in the catchment got a
 export function yearVerdict(c: YearRec | null, dist: number | null | undefined, inC: boolean | null): YearVerdict {
   if (!c) return { v: 'na', label: 'No figures for this year' };
   if (c.s === 'all_offered') return { v: 'all', label: 'Everyone who applied got a place' };
+  if (c.s === 'catchment') {
+    if (inC) return c.ir ? { v: 'edge', label: `Not everyone in the catchment got a place: ${c.ia! - c.ir} of ${c.ia} did` } : { v: 'in', label: IN_CATCH };
+    // outside the catchment, or a school without one: no distances, so only "nobody", "everyone" or "some" got in
+    const who = inC === false ? 'children from outside the catchment' : 'applicants';
+    const got = c.xa! - c.xr!;
+    if (!got) return { v: 'out', label: `None of the ${c.xa} ${who} got a place` };
+    if (!c.xr) return { v: 'in', label: `All ${c.xa} ${who} got a place` };
+    return { v: 'edge', label: `${got} of ${c.xa} ${who} got a place, depending on brothers and sisters and distance` };
+  }
   if (c.s !== 'distance') return { v: 'na', label: 'The council didn’t publish this year. Ask the school' };
   if (c.g === 'sib') {
     if (inC == null) return { v: 'na', label: 'Depends on whether you live in the catchment' };
@@ -175,6 +203,23 @@ function trendVerdict(s: School, dist: number | null | undefined): Verdict {
     const near = nearest();
     return { v: 'out', label: `You’d have missed out in ${yearsTxt}` + (near ? `. Nearest miss: ${near.y}, ${fmt(-near.diff!)} too far` : '') + one, c, yrs };
   }
+  // Close years with no distance to measure by (York): some from outside the catchment got in and some didn't
+  const open = yrs.filter((r) => r.v === 'edge' && r.diff == null);
+  if (open.length) {
+    const yrsOf = (l: YearVerdict[]) => l.map((r) => r.y).join(', ').replace(/, (?=\d+$)/, ' and ');
+    const who = s.inC === false ? 'children from outside the catchment' : s.inC ? 'children in the catchment' : 'applicants';
+    const x = s.d.find((r) => r.s === 'catchment' && r.y === open[0].y)!;
+    const [got, of] = s.inC ? [x.ia! - x.ir!, x.ia!] : [x.xa! - x.xr!, x.xa!];
+    const latest = `In ${x.y}, ${got} of ${of} ${who} got a place`;
+    if (open.length === n)
+      return { v: 'edge', c, yrs, label: `${latest}. Only some got in ${n === 1 ? 'that year' : 'every year'}, so it depends on brothers and sisters and how near you live` };
+    const okYrs = yrs.filter((r) => r.v === 'in' || r.v === 'all'), outYrs = yrs.filter((r) => r.v === 'out');
+    return {
+      v: 'edge', c, yrs,
+      label: `${latest}, so it’s too close to call` + (okYrs.length ? `. You’d have got a place in ${yrsOf(okYrs)}` : '')
+        + (outYrs.length ? `${okYrs.length ? ', and' : '. You’d have'} missed out in ${yrsOf(outYrs)}` : ''),
+    };
+  }
   const narrowIn = yrs.filter((r) => r.v === 'edge' && r.diff! >= 0);
   if (ok + narrowIn.length === n)
     return {
@@ -219,6 +264,8 @@ export function headlineAnswer(s: School, mode: Mode) {
     const ok = r.yrs.filter((y) => y.v === 'in' || y.v === 'all' || (y.v === 'edge' && y.diff! >= 0)).length;
     if (r.v === 'all') return n === 1 ? 'Everyone who applied got a place.' : `Everyone who applied got a place, ${n === 2 ? 'both' : 'all ' + n} years.`;
     if (ok === n) return n === 1 ? 'You’d have got in, the only year published.' : `You’d have got in every year, ${n === 2 ? 'both' : 'all ' + n} of them.`;
+    const open = r.yrs.filter((y) => y.v === 'edge' && y.diff == null).length;   // York: some got in, some didn't
+    if (ok === 0 && open) return open === n ? 'It’s too close to call.' : `Too close to call in ${open} of the last ${n} years.`;
     if (ok === 0) return n === 1 ? 'You’d have missed out, the only year published.' : `You’d have missed out in all ${n} years.`;
     return `You’d have got in ${ok} of the last ${n} years.`;
   }
@@ -234,9 +281,16 @@ export function whoGotIn(x: YearRec) {
       : x.g === 'sib' ? 'Everyone in the catchment, plus brothers and sisters of pupils'
       : `Children within ${d}, by the school’s own rules`;
   }
+  if (x.s === 'catchment') {
+    const got = x.xa! - x.xr!;
+    if (x.ir) return `Not everyone in the catchment: ${x.ia! - x.ir} of ${x.ia} got in`;
+    if (!x.ia) return `${got} of ${x.xa} applicants`;   // a school without a catchment
+    return got ? `Everyone in the catchment, plus ${got} of ${x.xa} from outside it` : 'Only children in the catchment';
+  }
   return x.s === 'all_offered' ? 'Everyone who applied' : 'Not published by the council';
 }
 export function youText(yv: YearVerdict) {
+  if (yv.v === 'edge' && yv.diff == null) return 'Too close to call';
   if (yv.v === 'edge') return yv.diff! >= 0 ? 'Only just in' : 'Only just missed';
   if (yv.v === 'na') return yv.label.startsWith('Working') ? 'Working…' : 'Not known';
   return { in: 'Yes', all: 'Yes', out: 'Missed out' }[yv.v];
@@ -334,7 +388,7 @@ export function prepareSearch(all: School[], catches: Area[], place: Place, radi
   const R = radiusMi * MI;
   const near = all.filter((s) => s.ll && s.straight! <= R);
   const shown = place.label === 'your location' ? 'Your location' : place.label;
-  const outside = place.district && place.district !== 'North Yorkshire'
+  const outside = place.district && !COUNCILS[place.district]
     ? `${place.label} is in ${place.district}, which this checker doesn’t cover yet, so schools there aren’t shown.`
     : !areas.size ? `${shown} is outside the areas this checker covers, so schools there aren’t shown.` : '';
   return { near, mine: all.filter((s) => s.inC), areas, outside };

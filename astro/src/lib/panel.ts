@@ -1,7 +1,7 @@
 // Fills and drives the school slide-out panel shared by Find schools and My plan.
 import {
-  esc, fmt, headlineAnswer, mon, ofsted, plural, whoGotIn, yearVerdict, youText,
-  MAX_SHORT, MI, type LatLng, type Mode, type School,
+  council, esc, fmt, headlineAnswer, mon, ofsted, plural, whoGotIn, yearVerdict, youText,
+  MAX_SHORT, MI, type LatLng, type Mode, type School, type YearRec,
 } from './engine';
 import { addToList, getList, onListChange, ordinal, rankOf, removeFromList } from './store';
 import { $, chip, toast } from './ui';
@@ -98,11 +98,17 @@ function renderFoot(s: School) {
       : `<div class="rank"><span>Not on your list yet</span></div><div class="acts"><button type="button" class="btn btn-sm btn-primary" data-act="add">Add as ${ordinal(n + 1)} choice</button></div>`;
 }
 
+// A catchment year in a few words, for a bar label: who got in
+const catchNote = (x: YearRec) => {
+  const got = x.xa! - x.xr!;
+  return x.ir ? `${x.ia! - x.ir} of ${x.ia} in catchment` : !x.ia ? `${got} of ${x.xa} got in` : got ? `Catchment + ${got} of ${x.xa}` : 'Catchment only';
+};
+
 // Year by year as bars: how far the last place went each year, coloured by whether you'd have got in,
 // with your own distance marked. Years with no distance cut-off get a plain label instead of a bar.
 function yearChart(s: School) {
-  const you = s.used ?? null;
   const dists = s.d.filter((x) => x.s === 'distance' && x.g !== 'sib').map((x) => x.m!);
+  const you = dists.length ? s.used ?? null : null;   // nothing to measure your distance against without cut-offs
   const max = Math.max(...dists, you ?? 0, 0.25 * MI) * 1.12;
   const pct = (m: number) => `${Math.min(100, (m / max) * 100).toFixed(1)}%`;
   const tone = (v: string) => (v === 'in' || v === 'all' ? '' : v === 'edge' ? ' close' : v === 'out' ? ' miss' : ' none');
@@ -114,7 +120,7 @@ function yearChart(s: School) {
       track = `<div class="bar${t}" style="width:${pct(x.m!)}"></div>`;
       val = fmt(x.m);
     } else {
-      const txt = x.s === 'all_offered' ? 'Everyone got in' : x.s === 'distance' ? 'Siblings only' : 'Not published';
+      const txt = x.s === 'all_offered' ? 'Everyone got in' : x.s === 'distance' ? 'Siblings only' : x.s === 'catchment' ? catchNote(x) : 'Not published';
       track = `<div class="bar-note${t}">${txt}</div>`;
       val = '';
     }
@@ -130,12 +136,15 @@ function yearChart(s: School) {
   const key = [['', '', 'You’d have got in'], [' close', 'close', 'Too close to call'], [' miss', 'miss', 'You’d have missed out']]
     .filter(([t]) => used.has(t)).map(([, c, l]) => `<span><i class="${c}"></i>${l}</span>`).join('');
   const sibs = s.d.some((x) => x.s === 'distance' && x.g === 'sib');
-  const catchNote = s.inC ? 'You’re in the catchment, so the bars only matter for children outside it. ' : '';
+  const inNote = s.inC && dists.length ? 'You’re in the catchment, so the bars only matter for children outside it. ' : '';
+  const note = !dists.length
+    ? `${council(s.council).name} doesn’t publish how far places went, so this shows who got in from inside and outside the catchment.`
+    : you == null ? 'Check your postcode to see where you’d fall.' : 'The dotted line is your distance from the school.';
   return `<section class="p-sec"><figure class="chart in-panel">
-    <div class="chart-head"><h3>Year by year</h3><span>How far the last place went</span></div>
+    <div class="chart-head"><h3>Year by year</h3><span>${dists.length ? 'How far the last place went' : 'Who got a place'}</span></div>
     <div class="bars" role="img" aria-label="${esc(sr)}">${rows}${line}</div>
     <figcaption class="chart-foot">${key}</figcaption>
-    <p class="p-note" style="padding:0">${catchNote}${you == null ? 'Check your postcode to see where you’d fall.' : 'The dotted line is your distance from the school.'}${sibs ? ' “Siblings only” means that from outside the catchment, only children with a brother or sister there got in.' : ''}</p>
+    <p class="p-note" style="padding:0">${inNote}${note}${sibs ? ' “Siblings only” means that from outside the catchment, only children with a brother or sister there got in.' : ''}</p>
   </figure></section>`;
 }
 
@@ -154,13 +163,14 @@ function body(s: School, mode: Mode, home: LatLng | null) {
   const r = s.result;
   const of = ofsted(s.of);
   const last = s.d.find((x) => x.s === 'distance');
+  const outsiders = s.d.find((x) => x.s === 'catchment' || x.s === 'all_offered');   // the latest year, where there are no distances
   const yours = s.used ?? s.straight;
   const cz = !s.cz ? `None${/Catholic/.test(s.type) ? ', faith school' : ''}` : s.inC == null ? 'Not checked' : s.inC ? 'You’re in it' : 'Outside it';
   const first = s.d.find((x) => x.f != null);
   const sg = s.of?.safeguarding;
   const policy = s.own
     ? `${/academy/i.test(s.type) ? 'As an academy it sets' : 'It sets'} its own admissions policy. Check it for any faith, feeder or other priorities before applying.`
-    : 'Uses the council’s admissions policy: catchment first, then brothers and sisters, then distance.';
+    : `Uses the council’s admissions policy: ${council(s.council).policy}.`;
   const notes = [s.note, ...s.d.filter((x) => x.n).map((x) => `${x.y}: ${x.n}`)].filter(Boolean).map(esc).join('<br>');
   const links = [
     home ? `<a href="https://www.google.com/maps/dir/?api=1&origin=${home[0].toFixed(5)},${home[1].toFixed(5)}&destination=${s.ll[0]},${s.ll[1]}&travelmode=walking" target="_blank" rel="noopener">Walking directions</a>` : '',
@@ -181,7 +191,9 @@ function body(s: School, mode: Mode, home: LatLng | null) {
   <dl class="facts">
     <div><dt>${s.method === 'walking' && s.walk != null ? 'Your walk' : 'Your distance'}</dt><dd>${yours != null ? fmt(yours) : 'n/a'}</dd></div>
     <div><dt>Catchment</dt><dd>${cz}</dd></div>
-    <div><dt>${last ? 'Last place, ' + last.y : 'Last place'}</dt><dd>${last ? (last.g === 'sib' ? 'Siblings only' : fmt(last.m)) : 'Not published'}</dd></div>
+    ${last || !outsiders
+      ? `<div><dt>${last ? 'Last place, ' + last.y : 'Last place'}</dt><dd>${last ? (last.g === 'sib' ? 'Siblings only' : fmt(last.m)) : 'Not published'}</dd></div>`
+      : `<div><dt>${outsiders.s === 'catchment' && outsiders.ia ? 'From outside' : 'Got in'}, ${outsiders.y}</dt><dd>${outsiders.s === 'all_offered' ? 'Everyone' : `${outsiders.xa! - outsiders.xr!} of ${outsiders.xa}`}</dd></div>`}
     ${sg ? `<div><dt>Safeguarding</dt><dd class="${sg === 'Met' ? 'good' : 'bad'}">${esc(sg)}</dd></div>`
          : `<div><dt>Ofsted</dt><dd class="${of.tone === 'bad' ? 'bad' : of.tone === 'na' ? '' : 'good'}">${esc(of.short)}</dd></div>`}
   </dl>

@@ -19,7 +19,7 @@ const phrases = [
   ['“By the school’s own rules”', 'Academies, voluntary aided and foundation schools decide their own order. Faith schools may put church members first.'],
 ];
 ---
-<Base title="How places work · Yorkshire School Checker" description="How North Yorkshire Council hands out Reception places, what “last place” means, and where our numbers come from." active="how">
+<Base title="How places work · Yorkshire School Checker" description="How North Yorkshire and York councils hand out Reception places, what “last place” means, and where our numbers come from." active="how">
   <section class="how-hero wrap">
     <div>
       <h1>How school places actually get handed out</h1>
@@ -44,6 +44,10 @@ const phrases = [
     <div class="tiebreak">
       <div><h3>Inside each group, who wins?</h3><p>Brothers and sisters of pupils already at the school go first. After that, whoever lives nearest. That’s why distance matters so much.</p></div>
       <div class="dashed"><h3>Academies, voluntary aided, foundation and faith schools</h3><p>These set their own rules, and faith schools may put church members first. We mark them “own rules” so you know to read their policy.</p></div>
+    </div>
+    <div class="tiebreak" id="york">
+      <div><h3>In York</h3><p>City of York Council’s order is a little different: looked-after children, then children in the catchment with a brother or sister at the school, then the rest of the catchment, then medical or social need, then brothers and sisters from outside it, then whoever has the shortest safe walk.</p></div>
+      <div class="dashed"><h3>No “last place” for York schools</h3><p>York doesn’t publish how far the last place went. So for York schools we show how many children from inside and outside the catchment got a place each year, worked out from the council’s anonymised list of every applicant.</p></div>
     </div>
   </section>
 
@@ -92,11 +96,13 @@ const phrases = [
   <section class="how-sec wrap" id="sources" style="border-top:1px solid var(--line)">
     <h2>5. Where our numbers come from</h2>
     <div class="sources">
-      <div><h3>Offers and last places</h3><p>North Yorkshire Council admissions statistics for 2023 to 2026 entry, from <a href="https://hub.datanorthyorkshire.org/dataset/school-admissions-2026-2027-yearly-statistics-primary-and-secondary-school" target="_blank" rel="noopener">Data North Yorkshire</a>.</p></div>
-      <div><h3>Catchments</h3><p>The council’s school maps, updated September 2025. The council publishes them for reference only, so <a href="https://experience.arcgis.com/experience/4dd5b97eae514b31a067137ebf7cdd6a" target="_blank" rel="noopener">check your exact address</a> if you’re near a boundary.</p></div>
+      <div><h3>Offers and last places</h3><p>For Harrogate and the villages round York, North Yorkshire Council admissions statistics for 2023 to 2026 entry, from <a href="https://hub.datanorthyorkshire.org/dataset/school-admissions-2026-2027-yearly-statistics-primary-and-secondary-school" target="_blank" rel="noopener">Data North Yorkshire</a>.</p></div>
+      <div><h3>York offers</h3><p>City of York Council’s anonymised list of every Reception applicant for 2022, 2023, 2025 and 2026 entry, from <a href="https://data.yorkopendata.org/dataset/pupil-level-outcome-summary-primary" target="_blank" rel="noopener">York Open Data</a>. Its 2024 list is incomplete, so we leave that year out.</p></div>
+      <div><h3>York catchments</h3><p>The council’s <a href="https://www.york.gov.uk/schools/PrimaryMap" target="_blank" rel="noopener">primary schools map</a>, which shows each school’s catchment. Check your exact address there if you’re near a boundary.</p></div>
+      <div><h3>Catchments</h3><p>North Yorkshire Council’s school maps, updated September 2025. The council publishes them for reference only, so <a href="https://experience.arcgis.com/experience/4dd5b97eae514b31a067137ebf7cdd6a" target="_blank" rel="noopener">check your exact address</a> if you’re near a boundary.</p></div>
       <div><h3>Distances</h3><p>Walking routes from OpenStreetMap, from your postcode’s centre to the school. Expect differences of 0.1 mile or more. Where a school doesn’t say how it measures, we use a straight line.</p></div>
       <div><h3>Ofsted</h3><p>Ofsted management information as at 30 September 2026, including the new report cards, which rate each area rather than giving one grade.</p></div>
     </div>
-    <p class="caveat">Junior schools like Oatlands Junior and Saltergate Junior take children into Year 3, so they aren’t included. Always check the school’s current admissions policy and the council’s own figures before you apply. Key dates are from the council’s primary admissions timetable for 2027 to 2028.</p>
+    <p class="caveat">Junior schools like Oatlands Junior and Saltergate Junior take children into Year 3, so they aren’t included. Always check the school’s current admissions policy and the council’s own figures before you apply. Key dates are from both councils’ primary admissions timetables for 2027 to 2028, which share the same national dates.</p>
   </section>
 </Base>

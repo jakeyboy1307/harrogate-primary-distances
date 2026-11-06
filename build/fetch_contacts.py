@@ -22,8 +22,9 @@ UA = {'User-Agent': 'Mozilla/5.0 (compatible; YorkshireSchoolChecker/2.0; +https
 MAILTO = re.compile(r'mailto:([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})', re.I)
 # words that mark the school office rather than a named member of staff
 OFFICE = ('admin', 'office', 'enquir', 'admission', 'head', 'info', 'school', 'reception')
-# helpdesk and webanywhere are web hosts; carltonprimary@setschools is a sister school, listed on Selby Community Primary's site
-SKIP = ('example.', 'helpdesk', 'webanywhere', 'carltonprimary@setschools', 'sentry', 'wixpress', 'webmaster', 'safeguard', 'dpo', 'governor', 'gdpr', 'data', 'pta', 'friends')
+# helpdesk and webanywhere are web hosts; carltonprimary@setschools is a sister school, listed on Selby Community Primary's site;
+# jcollins@stocktonprimary is a named member of staff, not the office
+SKIP = ('example.', 'helpdesk', 'webanywhere', 'carltonprimary@setschools', 'jcollins@stocktonprimary', 'sentry', 'wixpress', 'webmaster', 'safeguard', 'dpo', 'governor', 'gdpr', 'data', 'pta', 'friends')
 
 
 def get(url, timeout=20):

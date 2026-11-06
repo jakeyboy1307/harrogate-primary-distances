@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import SchoolPanel from '../components/SchoolPanel.astro';
 import { url } from '../lib/url';
 ---
-<Base title="Reception key dates and your school list · Yorkshire School Checker" description="Your plan for a Reception place in North Yorkshire: the key dates and your schools in order." active="plan">
+<Base title="Reception key dates and your school list · Yorkshire School Checker" description="Your plan for a Reception place in Harrogate, York and North Yorkshire: the key dates and your schools in order." active="plan">
   <section class="plan-hero wrap">
     <div>
       <h1>Finding a school, one step at a time.</h1>
@@ -35,7 +35,7 @@ import { url } from '../lib/url';
 </Base>
 
 <script>
-  import { addWalking, APPLY_URL, dateState, esc, fmt, loadData, MAX_SHORT, ORDER, prepareSearch, scoreAll, type Mode, type School } from '../lib/engine';
+  import { addWalking, council, dateState, esc, fmt, loadData, MAX_SHORT, ORDER, prepareSearch, scoreAll, type Mode, type School } from '../lib/engine';
   import { addToList, getList, getSearch, onListChange, ordinal, rankOf } from '../lib/store';
   import { $, chip, ICON, shortName, toast, vOf } from '../lib/ui';
   import { initPanel, openPanel, refreshPanel } from '../lib/panel';
@@ -43,6 +43,7 @@ import { url } from '../lib/url';
   import { url } from '../lib/url';
 
   const saved = getSearch();
+  const cn = council(saved?.place.district);   // the council you apply to, from your postcode
   const mode = (): Mode => saved?.mode ?? 'trend';
   let near: School[] = [];
 
@@ -56,7 +57,7 @@ import { url } from '../lib/url';
   const steps = [
     ['Check your postcode', saved ? `We found schools near ${saved.place.label === 'your location' ? 'you' : saved.place.label}.` : 'See every school you could apply for.', saved ? 'Done' : 'Start here'],
     ['Visit and pick five', 'Book a look round, then rank what you liked below.', 'You’re here'],
-    ['Send the council form', `Apply online with <a href="${APPLY_URL}" target="_blank" rel="noopener">North Yorkshire Council</a>, putting your schools in your order.`, 'Fri 15 January'],
+    ['Send the council form', `Apply online with <a href="${cn.apply}" target="_blank" rel="noopener">${cn.name}</a>, putting your schools in your order.`, 'Fri 15 January'],
     ['Offer day', 'You’ll hear which school has a place for your child.', 'Fri 16 April'],
   ];
   $('#tlSteps').innerHTML = steps.map(([h, p, flag], i) => {

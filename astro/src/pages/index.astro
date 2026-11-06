@@ -11,7 +11,7 @@ const keys = [
 // tells search engines the site's name, shown above the link in results
 const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Yorkshire School Checker', url: new URL(import.meta.env.BASE_URL, Astro.site).href };
 ---
-<Base title="Harrogate primary school catchment checker · Yorkshire School Checker" description="Check your postcode against catchments and four years of Reception offers at primary schools in the Harrogate district and round York." active="find">
+<Base title="Harrogate and York primary school catchment checker · Yorkshire School Checker" description="Check your postcode against catchments and four years of Reception offers at primary schools in Harrogate, York and the villages between." active="find">
   <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(siteSchema)} />
 
   <!-- ONBOARDING -->
@@ -54,10 +54,10 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
         <span>Just having a look? Try</span>
         <button class="example" type="button" data-pc="HG2 0NA">Harrogate · HG2 0NA</button>
         <button class="example" type="button" data-pc="HG5 0SL">Knaresborough · HG5 0SL</button>
-        <button class="example" type="button" data-pc="HG4 1LT">Ripon · HG4 1LT</button>
+        <button class="example" type="button" data-pc="YO24 1HW">York · YO24 1HW</button>
         <button class="example" type="button" data-pc="YO61 3HJ">Easingwold · YO61 3HJ</button>
       </div>
-      <p class="coverage">Covers the Harrogate district, and North Yorkshire schools round York from Easingwold to Selby and Tadcaster. York’s own city schools aren’t included yet. Nothing to sign up for.</p>
+      <p class="coverage">Covers the Harrogate district, York, and the North Yorkshire villages round York from Easingwold to Selby and Tadcaster. Nothing to sign up for.</p>
     </div>
     <aside class="key-card" aria-label="What the labels mean">
       <span class="hand" style="font-size:26px">what you’ll see next</span>
@@ -154,7 +154,7 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
 
 <script>
   import { addWalking, esc, lookupPostcode, loadData, ORDER, plural, prepareSearch, scoreAll, MAX_SHORT,
-    type Area, type Mode, type Place, type School, type V, CATCH_MAP } from '../lib/engine';
+    type Area, type Mode, type Place, type School, type V, council } from '../lib/engine';
   import { addToList, getList, getSearch, onListChange, ordinal, rankOf, setSearch } from '../lib/store';
   import { $, $$, chip, distTxt, ICON, toast, vOf } from '../lib/ui';
   import { initPanel, openPanel, refreshPanel } from '../lib/panel';
@@ -224,7 +224,8 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
     $('#catchline').innerHTML = (mine.length
       ? `You’re in the catchment for <b>${mine.map((s) => esc(s.name)).join('</b> and <b>')}</b>.`
       : 'You’re not in the catchment of any school this checker covers.')
-      + ` Near a boundary? <a href="${CATCH_MAP}" target="_blank" rel="noopener">Check your exact address</a>.`;
+      // the catchment map of the council the postcode is in (or, for "your location", the nearest school's council)
+      + ` Near a boundary? <a href="${council(p.district ?? [...near].sort((a, b) => a.straight! - b.straight!)[0]?.council).catchMap}" target="_blank" rel="noopener">Check your exact address</a>.`;
     setStatus('#resStatus', outside || (near.some((s) => s.method === 'walking') ? 'Working out walking routes…' : ''), !!outside);
     render();
     window.scrollTo({ top: 0 });
@@ -252,7 +253,7 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
     // rows
     const list = visible(), cap = showAll || isPhone() ? list.length : 8;
     $('#rows').innerHTML = list.length ? list.slice(0, cap).map((s) => row(s, m)).join('')
-      : `<div class="no-results"><strong>No schools in range.</strong><br>Try a larger distance. This checker covers the Harrogate district, and North Yorkshire schools round York from Easingwold to Selby and Tadcaster.</div>`;
+      : `<div class="no-results"><strong>No schools in range.</strong><br>Try a larger distance. This checker covers the Harrogate district, York, and the North Yorkshire villages round York from Easingwold to Selby and Tadcaster.</div>`;
     const more = $('#more');
     more.hidden = list.length <= cap;
     more.textContent = `Show ${plural(list.length - cap, 'more school')}`;

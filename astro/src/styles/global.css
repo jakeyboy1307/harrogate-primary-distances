@@ -306,7 +306,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .panel-nav button:hover:not(:disabled) { color: var(--ink); text-decoration: underline; }
 .panel-nav button:disabled { opacity: .4; cursor: default; }
 .panel-nav span { color: var(--ink); }
-.close { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--ink); background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+button.close { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--ink); background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .panel-body { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 32px 40px; display: grid; gap: 28px; align-content: start; }
 .p-head { display: grid; gap: 10px; justify-items: start; }
 .p-head h2 { font-size: 40px; line-height: 1.1; letter-spacing: -0.03em; }
@@ -487,7 +487,7 @@ body.panel-open { overflow: hidden; }
 .bar-note { height: 30px; display: flex; align-items: center; padding: 0 12px; border-radius: 8px; background: var(--open-bg); color: var(--open); font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .bar-note.miss { background: var(--bad-bg); color: var(--bad); }
 .bar-note.none { background: repeating-linear-gradient(45deg, #fff, #fff 6px, var(--none-bg) 6px, var(--none-bg) 12px); color: var(--muted-2); border: 1.5px dashed var(--line-2); }
-.chart.in-panel { padding: 22px; box-shadow: 4px 4px 0 var(--cobalt); gap: 14px; }
+.chart.in-panel { margin: 0; padding: 22px; box-shadow: 4px 4px 0 var(--cobalt); gap: 14px; }
 .chart.in-panel .bars { --lab: 44px; --gap: 12px; --val: 64px; padding-top: 30px; }
 .chart.in-panel .bar-row { font-size: 14px; }
 .chart.in-panel .bar, .chart.in-panel .bar-note, .chart.in-panel .bar-track { height: 26px; }
