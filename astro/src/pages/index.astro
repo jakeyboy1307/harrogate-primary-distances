@@ -124,6 +124,10 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
           <p class="muted">Number 1 is the school you want most. <span class="desk-only">Grab the handle and drag to change the order.</span></p>
         </div>
         <ol class="slots" id="slots"></ol>
+        <div class="backups" id="backupsBox" hidden>
+          <div class="backups-head"><h3>Backups</h3><span>Not on the council form. Drag one into your list, or tap Move in, to swap it in.</span></div>
+          <ol class="slots backup-slots" id="backups"></ol>
+        </div>
         <div class="plist-foot" id="plFoot"></div>
       </section>
     </div>
@@ -155,7 +159,7 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
 <script>
   import { addWalking, esc, lookupPostcode, loadData, ORDER, plural, prepareSearch, scoreAll, MAX_SHORT,
     type Area, type Mode, type Place, type School, type V, council } from '../lib/engine';
-  import { addToList, getList, getSearch, onListChange, ordinal, rankOf, setSearch } from '../lib/store';
+  import { addedText, addLabel, addSchool, backupOf, getList, getSearch, onListChange, ordinal, rankOf, setSearch } from '../lib/store';
   import { $, $$, chip, distTxt, ICON, toast, vOf } from '../lib/ui';
   import { initPanel, openPanel, refreshPanel } from '../lib/panel';
   import { initPList, renderPList } from '../lib/plist';
@@ -201,7 +205,7 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
     onChangeOrder: () => { setTab('list'); setView('list'); $('#slots').scrollIntoView({ block: 'center' }); },
   });
   const plOpts = {
-    el: $<HTMLOListElement>('#slots'), byUrn: (d: number) => byUrn.get(d), mode,
+    el: $<HTMLOListElement>('#slots'), backups: $<HTMLOListElement>('#backups'), byUrn: (d: number) => byUrn.get(d), mode,
     onOpen: (s: School) => openPanel(s.id), emptyText: 'Add a school from the list, or leave it. Four is fine.',
   };
   initPList(plOpts);
@@ -272,10 +276,10 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
   }
 
   function row(s: School, m: Mode) {
-    const rank = rankOf(s.urn), n = getList().length;
+    const rank = rankOf(s.urn);
     const act = rank ? `<span class="rank-pill">${ordinal(rank)} on your list</span>`
-      : n < MAX_SHORT ? `<button type="button" class="btn btn-sm btn-dark" data-add="${s.urn}">Add as ${ordinal(n + 1)}</button>`
-      : `<span class="muted" style="font-size:14px">List full</span>`;
+      : backupOf(s.urn) ? `<span class="rank-pill">Backup</span>`
+      : `<button type="button" class="btn btn-sm btn-dark" data-add="${s.urn}">${addLabel()}</button>`;
     return `<article class="row" data-id="${s.id}">
       <div class="row-main">
         <div class="row-top">${chip(s, m, true)}<span>${esc(distTxt(s))}</span></div>
@@ -344,7 +348,7 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
     const t = e.target as HTMLElement;
     const open = t.closest<HTMLElement>('[data-open]'), add = t.closest<HTMLElement>('[data-add]');
     if (open) openPanel(+open.dataset.open!);
-    if (add) { const r = addToList(+add.dataset.add!); if (r === 'full') toast('Your list is full. Remove a school to add another.'); else toast(`Added as your ${ordinal(rankOf(+add.dataset.add!)!)} choice`); }
+    if (add) toast(addedText(+add.dataset.add!, addSchool(+add.dataset.add!)));
   });
   $('#drawer').addEventListener('click', (e) => { const b = (e.target as HTMLElement).closest<HTMLElement>('[data-pin]'); if (b) map?.select(+b.dataset.pin!); });
   $('#filters').addEventListener('click', (e) => { const b = (e.target as HTMLElement).closest<HTMLElement>('[data-f]'); if (b) { filter = (b.dataset.f || null) as V | null; render(); } });

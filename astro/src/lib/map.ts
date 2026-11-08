@@ -2,7 +2,7 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { chipText, esc, MI, type Area, type LatLng, type Mode, type School } from './engine';
-import { addToList, ordinal, rankOf } from './store';
+import { addedText, addLabel, addSchool, backupOf, ordinal, rankOf } from './store';
 import { distTxt, toast, vOf } from './ui';
 
 export interface MapCtx { mode: () => Mode; onOpen: (s: School) => void }
@@ -41,8 +41,7 @@ export class SchoolMap {
       el?.querySelector<HTMLButtonElement>('[data-add]')?.addEventListener('click', (ev) => {
         const s = this.shown.find((x) => x.id === +(ev.currentTarget as HTMLElement).dataset.add!);
         if (!s) return;
-        const r = addToList(s.urn);
-        toast(r === 'full' ? 'Your list is full. Remove a school to add another.' : `Added as your ${ordinal(rankOf(s.urn)!)} choice`);
+        toast(addedText(s.urn, addSchool(s.urn)));
         this.map.closePopup();
       });
     });
@@ -102,7 +101,7 @@ export class SchoolMap {
       <h3>${esc(s.name.replace(/,.*$/, ''))}</h3>
       <p>${esc(why)}${s.cz?.length ? ' The blue outline is its catchment.' : ''}</p>
       <div class="pop-acts"><button type="button" class="btn btn-sm btn-dark" data-see="${s.id}">See everything</button>
-      ${rank ? `<span class="rank-pill">${ordinal(rank)} on your list</span>` : `<button type="button" class="btn btn-sm" data-add="${s.id}">Add to list</button>`}</div></div>`;
+      ${rank ? `<span class="rank-pill">${ordinal(rank)} on your list</span>` : backupOf(s.urn) ? `<span class="rank-pill">Backup</span>` : `<button type="button" class="btn btn-sm" data-add="${s.id}">${addLabel()}</button>`}</div></div>`;
     const p = L.popup({ className: 'map-pop', maxWidth: 340, minWidth: 260, autoPanPadding: [40, 40], offset: [0, -10] }).setLatLng(s.ll).setContent(html);
     this.popup = p;
     p.openOn(this.map);

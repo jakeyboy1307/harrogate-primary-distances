@@ -207,6 +207,14 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .slot.sortable-ghost .slot-card > * { visibility: hidden; }
 .slot.sortable-drag .slot-card, .slot.dragging .slot-card { background: var(--sticky); border-width: 2.5px; box-shadow: 8px 10px 0 rgba(20, 24, 43, .9); transform: rotate(-2deg); }
 .slot.sortable-drag .handle, .slot.dragging .handle { background: var(--ink); color: var(--sticky); }
+/* backups: schools kept in reserve below the list, never on the council form */
+.backups { display: grid; gap: 10px; padding-top: 16px; border-top: 1.5px dashed var(--line-2); }
+.backups-head { display: grid; gap: 2px; }
+.backups-head h3 { font: 700 17px var(--body); letter-spacing: 0; }
+.backups-head span { font-size: 14px; line-height: 1.45; color: var(--muted); }
+.backup-slots .slot-n { visibility: hidden; }
+.backup-slots .slot-card { border-style: dashed; background: var(--pale); min-height: 60px; }
+.board .backup-slots .slot:first-child .slot-card { box-shadow: none; }
 .plist-foot { display: grid; gap: 10px; padding-top: 16px; border-top: 1.5px solid var(--line-2); font-size: 15px; }
 .check { display: flex; gap: 10px; align-items: flex-start; line-height: 1.4; }
 .check svg { flex-shrink: 0; margin-top: 1px; }
@@ -253,7 +261,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 /* ---------- map ---------- */
 .map-wrap { padding-bottom: 56px; }
-.map-frame { position: relative; height: min(760px, calc(100vh - 40px)); height: min(760px, calc(100dvh - 40px)); min-height: 320px; border: 2.5px solid var(--ink); border-radius: 24px; overflow: hidden; background: #F6F7FB; }
+/* isolation keeps Leaflet's own layers (credits, controls, pop-ups, up to z-index 1000) inside the map, below the school panel */
+.map-frame { position: relative; isolation: isolate; height: min(760px, calc(100vh - 40px)); height: min(760px, calc(100dvh - 40px)); min-height: 320px; border: 2.5px solid var(--ink); border-radius: 24px; overflow: hidden; background: #F6F7FB; }
 .map { position: absolute; inset: 0; }
 .map .leaflet-tile-pane { filter: saturate(.25) brightness(1.04) contrast(.95); }
 .map-drawer { position: absolute; left: 24px; top: 24px; z-index: 500; width: 330px; padding: 20px; background: #fff; border: 2px solid var(--ink); border-radius: 16px; display: grid; gap: 4px; max-height: calc(100% - 132px - var(--attr-h, 0px)); overflow: auto; }

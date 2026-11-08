@@ -3,7 +3,7 @@ import {
   council, esc, fmt, headlineAnswer, mon, ofsted, plural, whoGotIn, yearVerdict, youText,
   MAX_SHORT, MI, type LatLng, type Mode, type School, type YearRec,
 } from './engine';
-import { addToList, getList, onListChange, ordinal, rankOf, removeFromList } from './store';
+import { addedText, addSchool, backupOf, getList, onListChange, ordinal, promoteBackup, rankOf, removeBackup, removeFromList } from './store';
 import { $, chip, toast } from './ui';
 
 interface Ctx { order: () => number[]; byId: (id: number) => School | undefined; mode: () => Mode; home: () => LatLng | null; onChangeOrder?: () => void }
@@ -25,10 +25,14 @@ export function initPanel(c: Ctx) {
     if (!b || current == null) return;
     const s = ctx.byId(current)!;
     if (b.dataset.act === 'add') {
-      const r = addToList(s.urn);
-      toast(r === 'full' ? 'Your list is full. Remove a school to add another.' : `Added as your ${ordinal(rankOf(s.urn)!)} choice`);
+      toast(addedText(s.urn, addSchool(s.urn)));
     } else if (b.dataset.act === 'remove') {
       removeFromList(s.urn); toast('Removed from your list');
+    } else if (b.dataset.act === 'unbackup') {
+      removeBackup(s.urn); toast('Removed from your backups');
+    } else if (b.dataset.act === 'promote') {
+      const down = promoteBackup(s.urn);
+      toast(`Moved into your list as ${ordinal(rankOf(s.urn)!)} choice` + (down ? '. Your old 5th choice is now a backup' : ''));
     } else if (b.dataset.act === 'order') {
       closePanel(); ctx.onChangeOrder?.();
     }
@@ -93,8 +97,11 @@ function renderFoot(s: School) {
   $('#pFoot').innerHTML = rank
     ? `<div class="rank"><span class="rank-badge">${rank}</span><span>In your list as ${ordinal(rank)} choice</span></div>
        <div class="acts"><button type="button" class="btn btn-sm" data-act="remove">Remove</button><button type="button" class="btn btn-sm btn-dark" data-act="order">Change order</button></div>`
+    : backupOf(s.urn)
+      ? `<div class="rank"><span>One of your backups</span></div>
+         <div class="acts"><button type="button" class="btn btn-sm" data-act="unbackup">Remove</button><button type="button" class="btn btn-sm btn-dark" data-act="promote">${n >= MAX_SHORT ? `Swap in as ${ordinal(MAX_SHORT)}` : `Move in as ${ordinal(n + 1)}`}</button></div>`
     : n >= MAX_SHORT
-      ? `<div class="rank"><span>Your list already has ${MAX_SHORT} schools</span></div><div class="acts"><button type="button" class="btn btn-sm btn-dark" data-act="order">Change my list</button></div>`
+      ? `<div class="rank"><span>Your list has ${MAX_SHORT} schools</span></div><div class="acts"><button type="button" class="btn btn-sm btn-primary" data-act="add">Add as a backup</button></div>`
       : `<div class="rank"><span>Not on your list yet</span></div><div class="acts"><button type="button" class="btn btn-sm btn-primary" data-act="add">Add as ${ordinal(n + 1)} choice</button></div>`;
 }
 

@@ -1,11 +1,13 @@
 // The ranked list of up to five schools: drag by the handle (mouse or touch), or focus a handle and use the arrow keys.
+// Below it sit the backups, which can be dragged into the list (the 5th school swaps down) or moved in with a button.
 import Sortable from 'sortablejs';
 import { esc, MAX_SHORT, type Mode, type School } from './engine';
-import { getList, moveInList, ordinal, setList } from './store';
-import { chip, distTxt, ICON, shortName } from './ui';
+import { getBackups, getList, moveInList, ordinal, promoteBackup, setListAndBackups } from './store';
+import { chip, distTxt, ICON, shortName, toast } from './ui';
 
 export interface PListOpts {
   el: HTMLOListElement;
+  backups?: HTMLOListElement;   // inside a box that's hidden while there are no backups
   byUrn: (urn: number) => School | undefined;
   mode: () => Mode;
   onOpen: (s: School) => void;
@@ -24,25 +26,32 @@ const subLine = (s: School) => {
   return bits.filter(Boolean).join(' · ');
 };
 
+const card = (o: PListOpts, s: School, label: string, end: string) => `
+      <span class="slot-n" aria-hidden="true"></span>
+      <div class="slot-card">
+        <button type="button" class="handle" data-urn="${s.urn}" aria-label="${esc(label)}">${ICON.grip}</button>
+        <button type="button" class="slot-main" data-open="${s.urn}"><span class="slot-name">${esc(o.big ? s.name.replace(/,.*$/, '') : shortName(s.name))}</span><span class="slot-sub">${esc(subLine(s))}</span></button>
+        <span class="slot-chip">${end}</span>
+      </div>`;
+
 export function renderPList(o: PListOpts) {
   const list = getList();
   const mode = o.mode();
   const rows = list.map((urn, i) => {
     const s = o.byUrn(urn);
     if (!s) return '';
-    const name = o.big ? s.name.replace(/,.*$/, '') : shortName(s.name);
-    return `<li class="slot" data-urn="${urn}">
-      <span class="slot-n" aria-hidden="true"></span>
-      <div class="slot-card">
-        <button type="button" class="handle" data-urn="${urn}" aria-label="${esc(ordinal(i + 1))} choice, ${esc(s.name)}. Drag, or use the up and down arrow keys, to move it">${ICON.grip}</button>
-        <button type="button" class="slot-main" data-open="${urn}"><span class="slot-name">${esc(name)}</span><span class="slot-sub">${esc(subLine(s))}</span></button>
-        <span class="slot-chip">${s.result ? chip(s, mode, true) : ''}</span>
-      </div></li>`;
+    return `<li class="slot" data-urn="${urn}">${card(o, s, `${ordinal(i + 1)} choice, ${s.name}. Drag, or use the up and down arrow keys, to move it`, s.result ? chip(s, mode, true) : '')}</li>`;
   });
   const empties = Array.from({ length: list.length < MAX_SHORT ? 1 : 0 }, () =>
     `<li class="slot empty" aria-hidden="true"><span class="slot-n"></span><div class="slot-empty">${esc(o.emptyText)}</div></li>`);
   o.el.innerHTML = rows.join('') + empties.join('');
   renumber(o.el);
+  if (o.backups) {
+    const backups = getBackups().map((u) => o.byUrn(u)).filter((s): s is School => !!s);
+    o.backups.innerHTML = backups.map((s) => `<li class="slot" data-urn="${s.urn}">${card(o, s, `Backup, ${s.name}. Drag it into your list to swap it in`,
+      `<button type="button" class="btn btn-sm" data-promote="${s.urn}">Move in</button>`)}</li>`).join('');
+    o.backups.parentElement!.hidden = !backups.length;
+  }
 }
 
 // Number the slots by where they sit, so the numbers stay in place while a card is dragged past them
@@ -55,8 +64,12 @@ function renumber(el: HTMLElement) {
   }
 }
 
+const swapped = (down: number | null) => { if (down != null) toast(`Swapped in. Your old ${ordinal(MAX_SHORT)} choice is now a backup.`); };
+
 export function initPList(o: PListOpts) {
-  Sortable.create(o.el, {
+  const urns = (el: HTMLElement) => [...el.querySelectorAll<HTMLElement>('.slot:not(.empty)')].map((li) => +li.dataset.urn!);
+  const options: Sortable.Options = {
+    group: 'school-list',   // the list and the backups share one group, so schools drag between them
     handle: '.handle',
     draggable: '.slot:not(.empty)',
     animation: 160,
@@ -65,13 +78,21 @@ export function initPList(o: PListOpts) {
     dragClass: 'sortable-drag',
     forceFallback: true, fallbackOnBody: true,
     onChange: () => renumber(o.el),
-    onEnd: () => {
-      const order = [...o.el.querySelectorAll<HTMLElement>('.slot:not(.empty)')].map((li) => +li.dataset.urn!);
-      setList(order);
-    },
-  });
-  o.el.addEventListener('click', (e) => {
-    const b = (e.target as HTMLElement).closest<HTMLElement>('[data-open]');
+    // a school dragged from one list to the other is the one to keep where it landed
+    onEnd: (e) => swapped(setListAndBackups(urns(o.el), o.backups ? urns(o.backups) : getBackups(), e.from !== e.to ? +e.item.dataset.urn! : undefined)),
+  };
+  Sortable.create(o.el, options);
+  if (o.backups) Sortable.create(o.backups, options);
+
+  for (const el of [o.el, o.backups]) el?.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    const promote = t.closest<HTMLElement>('[data-promote]');
+    if (promote) {
+      const urn = +promote.dataset.promote!, down = promoteBackup(urn);
+      toast(`Moved into your list as ${ordinal(getList().indexOf(urn) + 1)} choice` + (down != null ? `. Your old ${ordinal(MAX_SHORT)} choice is now a backup` : ''));
+      return;
+    }
+    const b = t.closest<HTMLElement>('[data-open]');
     const s = b && o.byUrn(+b.dataset.open!);
     if (s) o.onOpen(s);
   });
