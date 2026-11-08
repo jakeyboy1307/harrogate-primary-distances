@@ -4,7 +4,7 @@
 import Base from '../layouts/Base.astro';
 import { url } from '../lib/url';
 import { byPlace, hardest, openToAll, outstanding, type AreaSchool } from '../lib/areas';
-import { adCard, adLabel, link, sponsorsFor, type Area } from '../lib/sponsors';
+import { adCard, adLabel, link, sponsorsFor, today, type Area } from '../lib/sponsors';
 interface Props {
   title: string; description: string; h1: string; lede: string; area: string; areaKey: Area;
   schools: AreaSchool[];
@@ -12,7 +12,8 @@ interface Props {
   faqs: [string, string][];   // question, answer (HTML)
 }
 const { title, description, h1, lede, area, areaKey, schools, groups, faqs } = Astro.props;
-const local = sponsorsFor('area', areaKey);
+// built ahead of time, so leave out only ads that have already ended; the script below hides the rest by date
+const local = sponsorsFor('area', areaKey, undefined, null).filter((s) => !s.end || s.end >= today());
 // the page sponsor: one business named under the heading (the estate agent in the demo)
 const pageSponsor = local.find((s) => s.category === 'Moving house');
 const hard = hardest(schools);
@@ -27,7 +28,7 @@ const short = (n: string) => n.replace(/,.*$/, '').replace(/ (Church of England|
       <p class="lede">{lede}</p>
       <p class="area-acts"><a class="btn btn-primary" href={url('')}>Check your postcode</a><a class="btn" href={url('how-places-work/')}>How places work</a></p>
       {pageSponsor && (
-        <p class="ad-strip"><Fragment set:html={adLabel('Page sponsor')} /><span>{area} school guide supported by <a href={link(pageSponsor, 'area')} target="_blank" rel="sponsored noopener"><b>{pageSponsor.name}</b></a>, {pageSponsor.blurb.charAt(0).toLowerCase() + pageSponsor.blurb.slice(1)}</span></p>
+        <p class="ad-strip" {...(pageSponsor.start ? { 'data-ad-start': pageSponsor.start } : {})} {...(pageSponsor.end ? { 'data-ad-end': pageSponsor.end } : {})}><Fragment set:html={adLabel('Page sponsor', pageSponsor.demo)} /><span>{area} school guide supported by <a href={link(pageSponsor, 'area')} target="_blank" rel="sponsored noopener"><b>{pageSponsor.name}</b></a>, {pageSponsor.blurb.charAt(0).toLowerCase() + pageSponsor.blurb.slice(1)}</span></p>
       )}
     </div>
     <dl class="area-stats">
@@ -75,7 +76,7 @@ const short = (n: string) => n.replace(/,.*$/, '').replace(/ (Church of England|
   </section>
 
   {local.length > 0 && (
-    <section class="how-sec wrap" style="border-top:1px solid var(--line)" aria-labelledby="localTitle">
+    <section class="how-sec wrap" style="border-top:1px solid var(--line)" aria-labelledby="localTitle" data-ad-section>
       <div class="ready-head">
         <div><h2 id="localTitle">Local help for {area} families</h2>
           <p class="intro">Uniform, wraparound care, shoes and more, from businesses near you.</p></div>
@@ -91,6 +92,16 @@ const short = (n: string) => n.replace(/,.*$/, '').replace(/ (Church of England|
     <p class="area-acts"><a class="btn btn-primary" href={url('')}>Check your postcode</a></p>
   </section>
 </Base>
+
+<script>
+  // Hide any ad that hasn't started or has ended since this page was built, and the section if none are left
+  const day = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/London' }).format(new Date());
+  document.querySelectorAll<HTMLElement>('[data-ad-start], [data-ad-end]').forEach((el) => {
+    const { adStart, adEnd } = el.dataset;
+    if ((adStart && adStart > day) || (adEnd && adEnd < day)) el.remove();
+  });
+  document.querySelectorAll<HTMLElement>('[data-ad-section]').forEach((sec) => { if (!sec.querySelector('.ad-card')) sec.hidden = true; });
+</script>
 
 <style>
   .area-acts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }

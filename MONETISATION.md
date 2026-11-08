@@ -63,6 +63,14 @@ Sell by **season**, not just by month: September to January is when parents choo
 
 ## Before this goes live
 
-- Replace the demo sponsors with real ones and set `DEMO = false` in `sponsors.ts`.
+Done on the branch:
+- Demo businesses only show on preview builds (any branch except `main`) and local builds. A build of `main` leaves them out completely.
+- Every sponsor has optional `start` and `end` dates. Ads switch themselves off outside those dates, with no code change. The area pages check the dates in the browser, so they don't need a rebuild.
+- School profiles are labelled "Sponsored · From the school".
+- "Near this school" picks a sponsor at random on each visit, so sponsors share the views evenly.
+- A uniform shop that holds a school's contract (listed with that school's `urns`) always comes before a general uniform shop.
+
+Still to do:
+- Add real sponsors to `REAL` in `astro/src/lib/sponsors.ts`, each with start and end dates.
 - Decide whether to launch with all six slots or start with uniform, featured results and area sponsor.
-- Check the "Near this school" rotation once there are real sponsors per area.
+- Set up email for the enquiry form (Cloudflare Email Service > Email Routing).

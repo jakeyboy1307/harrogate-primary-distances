@@ -2,11 +2,10 @@
 // The rule that keeps the checker trustworthy: a sponsor never changes a school's label, its place in the
 // results, the sort order or the numbers. Sponsors sit in their own clearly labelled boxes.
 //
-// Everything below is DEMO data for designing the slots: made-up businesses with no real links.
-// Swap in real sponsors (or load them from a JSON file) before this goes live, and set DEMO to false.
+// Real sponsors are listed in REAL below. The demo businesses (sponsors-demo.ts) only appear on preview
+// and local builds.
 import { esc } from './engine';
-
-export const DEMO = true;
+import { DEMO_SPONSORS } from './sponsors-demo';
 
 export type Area = 'harrogate' | 'york';
 export type Placement =
@@ -31,72 +30,30 @@ export interface Sponsor {
   colour: string;
   offer?: string;             // a short line such as "10% off with code YSC10"
   openDays?: string[];        // school profiles
+  start?: string;             // first day the ad shows, YYYY-MM-DD
+  end?: string;               // last day the ad shows, YYYY-MM-DD
+  demo?: boolean;             // a made-up business, tagged "Demo"
 }
 
-export const SPONSORS: Sponsor[] = [
-  // School uniform: the obvious fit. Suppliers hold contracts for named schools, so show them only on those schools.
-  { id: 'uni-hg', name: 'Spa Town Schoolwear', category: 'School uniform', logo: 'ST', colour: '#2747D8',
-    blurb: 'Stocks the logo jumpers, book bags and PE kit for this school. Order online or try on in store.',
-    cta: 'Shop uniform', url: '#demo', offer: '10% off your first order with code YSC10',
-    placements: ['uniform', 'plan', 'area'], areas: ['harrogate'] },
-  { id: 'uni-yk', name: 'Minster Uniforms', category: 'School uniform', logo: 'MU', colour: '#7A3FB8',
-    blurb: 'Badged uniform for this school, with a fitting service on Saturdays.',
-    cta: 'Shop uniform', url: '#demo', offer: 'Free name labels with every order',
-    placements: ['uniform', 'plan', 'area'], areas: ['york'] },
+// Today as YYYY-MM-DD in UK time, to compare with start and end dates
+export const today = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/London' }).format(new Date());
+export const isLive = (s: Pick<Sponsor, 'start' | 'end'>, day = today()) => (!s.start || s.start <= day) && (!s.end || s.end >= day);
 
-  // Independent schools buy attention while parents are comparing: one featured card in the results.
-  { id: 'ind-hg', name: 'Harlow Hill Prep', category: 'Independent school', logo: 'HP', colour: '#1D6B36',
-    blurb: 'Co-ed prep for ages 3 to 13. Small classes, wraparound care until 6pm, and a minibus from Knaresborough.',
-    cta: 'Book an open morning', url: '#demo', offer: 'Open mornings every Friday this term',
-    placements: ['results', 'area'], areas: ['harrogate'] },
-  { id: 'ind-yk', name: 'Ouse Bank School', category: 'Independent school', logo: 'OB', colour: '#1D6B36',
-    blurb: 'Independent primary in York for ages 4 to 11, with forest school and specialist music from Reception.',
-    cta: 'Book a visit', url: '#demo',
-    placements: ['results', 'area'], areas: ['york'] },
+// Real sponsors go here. Each needs start and end dates (YYYY-MM-DD, both days included): the ad switches
+// itself off after the end date, and before the start date, with no code change needed.
+const REAL: Sponsor[] = [];
 
-  // Family services: wraparound care, clubs, tutors, shoes, and the house move into a catchment.
-  { id: 'care-hg', name: 'Busy Bees Breakfast Club', category: 'Wraparound care', logo: 'BB', colour: '#C8382C',
-    blurb: 'Breakfast and after-school club with a walking pick-up from six Harrogate primaries.',
-    cta: 'Check for a space', url: '#demo',
-    placements: ['nearby', 'plan', 'area'], areas: ['harrogate'] },
-  { id: 'care-yk', name: 'Riverside Kids Club', category: 'Wraparound care', logo: 'RK', colour: '#C8382C',
-    blurb: 'Before and after school care and holiday clubs across York, with pick-ups from local primaries.',
-    cta: 'Check for a space', url: '#demo',
-    placements: ['nearby', 'plan', 'area'], areas: ['york'] },
-  { id: 'shoe', name: 'Little Steps Shoes', category: 'School shoes', logo: 'LS', colour: '#8A5300',
-    blurb: 'Fitted school shoes for small feet, in Harrogate and York. Book a fitting before the September rush.',
-    cta: 'Book a fitting', url: '#demo',
-    placements: ['plan', 'area'], areas: ['harrogate', 'york'] },
-  { id: 'move-hg', name: 'Nidd Valley Homes', category: 'Moving house', logo: 'NV', colour: '#14182B',
-    blurb: 'Thinking of moving into a catchment? See homes for sale near the schools you like.',
-    cta: 'See homes for sale', url: '#demo',
-    placements: ['nearby', 'plan', 'area'], areas: ['harrogate'] },
-  { id: 'move-yk', name: 'Walls & Bar Estates', category: 'Moving house', logo: 'WB', colour: '#14182B',
-    blurb: 'Local estate agent covering York and the villages. Free valuation if you’re moving for a school.',
-    cta: 'See homes for sale', url: '#demo',
-    placements: ['nearby', 'plan', 'area'], areas: ['york'] },
-  { id: 'tutor', name: 'First Words Tutoring', category: 'Tutoring', logo: 'FW', colour: '#2747D8',
-    blurb: 'Phonics and reading support for Reception and Year 1, at home or online.',
-    cta: 'Find a tutor', url: '#demo',
-    placements: ['plan', 'area'], areas: ['harrogate', 'york'] },
-
-  // School profiles: a school (often an academy trust) pays to add open days and a welcome note to its own panel.
-  { id: 'prof-western', name: 'Western Primary School', category: 'From the school', logo: 'WP', colour: '#2747D8',
-    blurb: 'We’d love to show you round. Tours are led by our Year 6 pupils and last about 45 minutes.',
-    cta: 'Book a tour', url: '#demo', openDays: ['Tue 18 November, 9:30am', 'Thu 4 December, 1:30pm', 'Wed 7 January, 9:30am'],
-    placements: ['profile'], areas: ['harrogate'], urns: [142220] },
-  { id: 'prof-scarcroft', name: 'Scarcroft Primary School', category: 'From the school', logo: 'SP', colour: '#2747D8',
-    blurb: 'Come and see us in action. Bring your child, and meet our Reception team.',
-    cta: 'Book a tour', url: '#demo', openDays: ['Wed 19 November, 10am', 'Sat 29 November, 10am'],
-    placements: ['profile'], areas: ['york'], urns: [142637] },
-];
+export const SPONSORS: Sponsor[] = [...REAL, ...(__DEMO_SPONSORS__ ? DEMO_SPONSORS : [])];
 
 // Harrogate district schools are "harrogate"; York and the North Yorkshire villages round it are "york"
 export const areaOf = (s: { council: string; district?: string }): Area =>
   s.council === 'North Yorkshire' && s.district === 'Harrogate' ? 'harrogate' : 'york';
 
-export function sponsorsFor(p: Placement, area: Area, urn?: number) {
-  return SPONSORS.filter((s) => s.placements.includes(p) && s.areas.includes(area) && (!s.urns || (urn != null && s.urns.includes(urn))));
+// The sponsors for a slot that are running today. Pass day = null to skip the date check (the area pages,
+// which are built ahead of time and check the dates in the browser instead).
+export function sponsorsFor(p: Placement, area: Area, urn?: number, day: string | null = today()) {
+  return SPONSORS.filter((s) => s.placements.includes(p) && s.areas.includes(area)
+    && (!s.urns || (urn != null && s.urns.includes(urn))) && (day == null || isLive(s, day)));
 }
 
 // Add tags so the sponsor's own analytics show visits from here. No cookies or tracking on our side.
@@ -110,8 +67,11 @@ export function link(s: Sponsor, slot: Placement) {
 }
 
 // The label every paid box carries. Advertising rules (the CAP Code) say ads must be obviously ads.
-export const adLabel = (text = 'Sponsored') =>
-  `<span class="ad-label">${esc(text)}</span>${DEMO ? '<span class="ad-label ad-demo">Demo</span>' : ''}`;
+export const adLabel = (text = 'Sponsored', demo = false) =>
+  `<span class="ad-label">${esc(text)}</span>${demo ? '<span class="ad-label ad-demo">Demo</span>' : ''}`;
+
+// Dates on the element, so pages built ahead of time can hide an ad in the browser once it has ended
+export const dateAttrs = (s: Sponsor) => `${s.start ? ` data-ad-start="${esc(s.start)}"` : ''}${s.end ? ` data-ad-end="${esc(s.end)}"` : ''}`;
 
 const logo = (s: Sponsor) => `<span class="ad-logo" style="background:${s.colour}" aria-hidden="true">${esc(s.logo)}</span>`;
 const go = (s: Sponsor, slot: Placement, cls = 'btn btn-sm') =>
@@ -119,8 +79,8 @@ const go = (s: Sponsor, slot: Placement, cls = 'btn btn-sm') =>
 
 // A sponsor card in the HTML the browser builds (results, panel, plan page)
 export function adCard(s: Sponsor, slot: Placement, label = 'Sponsored') {
-  return `<aside class="ad-card" aria-label="${esc(label)}: ${esc(s.name)}">
-    <div class="ad-top">${adLabel(label)}</div>
+  return `<aside class="ad-card" aria-label="${esc(label)}: ${esc(s.name)}"${dateAttrs(s)}>
+    <div class="ad-top">${adLabel(label, s.demo)}</div>
     <div class="ad-body">${logo(s)}<div><span class="ad-cat">${esc(s.category)}</span><h3 class="ad-name">${esc(s.name)}</h3>
       <p class="ad-blurb">${esc(s.blurb)}</p>${s.offer ? `<p class="ad-offer">${esc(s.offer)}</p>` : ''}</div></div>
     <div class="ad-foot">${go(s, slot)}</div>
@@ -130,19 +90,25 @@ export function adCard(s: Sponsor, slot: Placement, label = 'Sponsored') {
 // The school's own box in its panel: open days and a note. Paid for, so labelled.
 export function profileBlock(s: Sponsor) {
   return `<section class="p-sec ad-profile" aria-label="Open days, from the school">
-    <div class="p-sec-head"><h3>Open days</h3><span>${adLabel('From the school')}</span></div>
+    <div class="p-sec-head"><h3>Open days</h3><span>${adLabel('Sponsored · From the school', s.demo)}</span></div>
     <p class="p-note" style="padding:0 0 12px">${esc(s.blurb)}</p>
     <ul class="ad-dates">${(s.openDays ?? []).map((d) => `<li>${esc(d)}</li>`).join('')}</ul>
     <div style="margin-top:14px">${go(s, 'profile', 'btn btn-sm btn-dark')}</div>
   </section>`;
 }
 
+const turn = new Map<number, number>();
+
 // The uniform supplier and one nearby service, under a school's details in its panel
 export function panelSponsors(school: { urn: number; council: string; district?: string; name: string }) {
   const a = areaOf(school);
-  const uni = sponsorsFor('uniform', a, school.urn)[0] ?? sponsorsFor('uniform', a)[0];
+  // a supplier that holds this school's uniform contract comes before a general uniform shop
+  const uni = sponsorsFor('uniform', a, school.urn).sort((x, y) => Number(!!y.urns) - Number(!!x.urns))[0];
   const near = sponsorsFor('nearby', a);
-  const pick = near[school.urn % (near.length || 1)];   // the same one each time for a given school
+  // a random sponsor each time a page is opened, so they share the views evenly; it stays the same while
+  // the page is open, so redrawing the panel doesn't swap it
+  if (!turn.has(school.urn)) turn.set(school.urn, Math.floor(Math.random() * 1e6));
+  const pick = near[turn.get(school.urn)! % (near.length || 1)];
   const cards = [uni && adCard(uni, 'uniform', 'Sponsored'), pick && adCard(pick, 'nearby', 'Sponsored')].filter(Boolean);
   return cards.length ? `<section class="p-sec ad-sec"><div class="p-sec-head"><h3>Getting ready</h3><span>Local businesses</span></div><div class="ad-stack">${cards.join('')}</div></section>` : '';
 }
