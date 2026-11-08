@@ -60,7 +60,7 @@ const short = (n: string) => n.replace(/,.*$/, '').replace(/ (Church of England|
         <p class="intro">{g.note}</p>
         <div class="places">
           {byPlace(g.schools).map(([place, list]) => (
-            <div class="place"><h4>{place}</h4><ul>{list.map((s) => <li>{s.name}{s.pan ? <span class="muted"> · {s.pan} places a year</span> : ''}</li>)}</ul></div>
+            <div class="place"><h4>{place}</h4><ul>{list.map((s) => <li>{s.name}{s.pan ? <span class="muted"> · <strong class="pan">{s.pan} places</strong> a year</span> : ''}</li>)}</ul></div>
           ))}
         </div>
       </div>
@@ -83,6 +83,7 @@ const short = (n: string) => n.replace(/,.*$/, '').replace(/ (Church of England|
   .tbl-wrap { margin-top: 28px; background: #fff; border: 2px solid var(--ink); border-radius: 16px; padding: 8px 20px; overflow-x: auto; }
   .area-tbl td { font-size: 15px; }
   .muted { color: var(--muted-2); }
+  .pan { font-weight: 700; color: var(--ink); }
   .split-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
   .split-2 h2 { font-size: 36px; }
   .name-list { margin-top: 16px; font-weight: 600; line-height: 1.7; }
