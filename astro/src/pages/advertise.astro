@@ -1,37 +1,41 @@
 ---
-// The page a business reads before buying a placement: who visits, where the slots are, when, and the rules.
-// Prices are a DRAFT starting point (see the money plan). Not linked from search until it's agreed.
+// The page a business reads before buying a placement: who visits, where the slots are, when, the rules,
+// and an enquiry form that posts to /api/enquiry (astro/worker/index.js), which emails it on.
+// Prices are a DRAFT starting point (see MONETISATION.md). Kept out of search until they're agreed.
 import Base from '../layouts/Base.astro';
-import { url } from '../lib/url';
 const slots = [
-  ['School uniform', 'In the panel for each school you supply, seen by parents choosing that school.', 'From £40 a month per area', 'Uniform shops, PE kit, book bags'],
-  ['Featured in results', 'One card among the schools after a postcode search, never above the first four.', 'From £150 a month per area', 'Independent schools, nurseries, after-school care'],
-  ['School profile', 'A school’s own open days and welcome note, in its panel.', 'From £150 a year', 'Primary schools and academy trusts'],
-  ['Near this school', 'One local service in each school’s panel, shared in turn with other sponsors.', 'From £60 a month per area', 'Wraparound care, clubs, estate agents, tutors'],
-  ['Get ready for September', 'On every parent’s plan page, alongside their list of schools.', 'From £50 a month per area', 'Uniform, shoes, care, tutoring'],
-  ['Area page sponsor', 'Your name under the heading of the Harrogate or York area page, one business per page.', 'From £100 a month', 'Estate agents, mortgage brokers'],
+  { id: 'uniform', h: 'School uniform', p: 'Your shop in the panel for each school you supply, seen by parents choosing that school.', price: 'From £40 a month per area', who: 'Uniform shops, PE kit, book bags' },
+  { id: 'results', h: 'Featured in results', p: 'One card among the schools after a postcode search, never above the first four.', price: 'From £150 a month per area', who: 'Independent schools, nurseries, after-school care' },
+  { id: 'profile', h: 'School profile', p: 'Your open days, a welcome note and a “Book a tour” button, in your school’s own panel.', price: 'From £150 a year', who: 'Primary schools and academy trusts' },
+  { id: 'nearby', h: 'Near this school', p: 'One local service in each school’s panel, shared in turn with other sponsors.', price: 'From £60 a month per area', who: 'Wraparound care, clubs, estate agents, tutors' },
+  { id: 'plan', h: 'Get ready for September', p: 'On every parent’s plan page, alongside their list of schools.', price: 'From £50 a month per area', who: 'Uniform, shoes, care, tutoring' },
+  { id: 'area', h: 'Area page sponsor', p: 'Your name under the heading of the Harrogate or York area page, one business per page.', price: 'From £100 a month', who: 'Estate agents, mortgage brokers' },
 ];
 const season = [
   ['September to January', 'Peak', 'Parents compare schools and apply. Forms close on 15 January.'],
   ['February to April', 'Steady', 'Waiting for offer day on 16 April. Parents look at backups and moves.'],
   ['April to August', 'Getting ready', 'Uniform, shoes, wraparound care and summer clubs.'],
 ];
+const types = ['School uniform shop', 'Independent school or nursery', 'State school or academy trust', 'Estate agent or mortgage broker', 'Childcare, clubs or tutoring', 'Something else'];
 ---
 <Base title="Advertise with us · Yorkshire School Checker" description="Reach Harrogate and York parents while they choose a primary school. Clearly labelled placements for local businesses and schools." index={false}>
   <section class="how-hero wrap">
     <div>
       <h1>Reach parents choosing a primary school</h1>
       <p class="lede">Parents in Harrogate, York and the villages between use the checker to choose a Reception place. Be there when they’re planning for September.</p>
-      <p class="area-acts"><a class="btn btn-primary" href="mailto:advertise@yorkshireschoolchecker.co.uk?subject=Advertising">Get in touch</a></p>
+      <p class="area-acts"><a class="btn btn-primary" href="#enquire">Get in touch</a><a class="btn" href="#options">See the options</a></p>
     </div>
   </section>
 
-  <section class="how-sec sec-pale wrap">
+  <section class="how-sec sec-pale wrap" id="options">
     <h2>Where you can appear</h2>
     <p class="intro">Every placement is local, labelled “Sponsored”, and shown only to parents searching in your area.</p>
     <div class="adv-grid">
-      {slots.map(([h, p, price, who]) => (
-        <div class="adv-slot"><h3>{h}</h3><p>{p}</p><p class="adv-who">Good for: {who}</p><p class="adv-price">{price}</p></div>
+      {slots.map((s) => (
+        <div class="adv-slot">
+          <h3>{s.h}</h3><p>{s.p}</p><p class="adv-who">Good for: {s.who}</p><p class="adv-price">{s.price}</p>
+          <a class="btn btn-sm adv-ask" href="#enquire" data-slot={s.h}>Ask about this</a>
+        </div>
       ))}
     </div>
   </section>
@@ -52,20 +56,106 @@ const season = [
       <li><b>Local and relevant only.</b> Businesses that help families starting school. No gambling, payday loans or alcohol.</li>
     </ul>
   </section>
+
+  <section class="how-sec sec-pale wrap" id="enquire" aria-labelledby="enqTitle">
+    <div class="enq">
+      <div>
+        <h2 id="enqTitle">Get in touch</h2>
+        <p class="intro">Tell us a little about your business and we’ll reply within two working days with prices and availability for your area.</p>
+      </div>
+      <form class="enq-form" id="enqForm" novalidate>
+        <div class="enq-row">
+          <label class="fb-field"><span>Your name</span><input name="name" autocomplete="name" required maxlength="120" /></label>
+          <label class="fb-field"><span>Business or school</span><input name="business" autocomplete="organization" required maxlength="160" /></label>
+        </div>
+        <div class="enq-row">
+          <label class="fb-field"><span>Email</span><input type="email" name="email" autocomplete="email" required maxlength="200" /></label>
+          <label class="fb-field"><span>Phone <em>(optional)</em></span><input type="tel" name="phone" autocomplete="tel" maxlength="40" /></label>
+        </div>
+        <div class="enq-row">
+          <label class="fb-field"><span>What kind of business?</span>
+            <select name="type"><option value="">Choose one</option>{types.map((t) => <option>{t}</option>)}</select></label>
+          <label class="fb-field"><span>Which area?</span>
+            <select name="area"><option value="">Choose one</option><option>Harrogate and Knaresborough</option><option>York and villages</option><option>Both</option></select></label>
+        </div>
+        <fieldset class="enq-slots">
+          <legend>Which options interest you? <em>(tick any)</em></legend>
+          {slots.map((s) => <label class="pill"><input type="checkbox" name="slots" value={s.h} />{s.h}</label>)}
+        </fieldset>
+        <label class="fb-field"><span>Anything else? <em>(optional)</em></span><textarea name="message" rows="4" maxlength="4000"></textarea></label>
+        <!-- left empty by people; bots tend to fill it in -->
+        <label class="fb-hp" aria-hidden="true">Website<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+        <p class="fb-status" id="enqStatus" role="status" aria-live="polite"></p>
+        <div><button type="submit" class="btn btn-primary" id="enqSend">Send enquiry</button></div>
+        <p class="enq-note">We only use your details to reply about advertising. See our <a href="/privacy/">privacy page</a>.</p>
+      </form>
+      <div class="enq-done" id="enqDone" hidden tabindex="-1">
+        <span class="hand">thank you!</span>
+        <h3>Enquiry sent.</h3>
+        <p>We’ll be in touch within two working days.</p>
+      </div>
+    </div>
+  </section>
 </Base>
+
+<script>
+  const form = document.getElementById('enqForm') as HTMLFormElement;
+  const status = document.getElementById('enqStatus')!;
+  const send = document.getElementById('enqSend') as HTMLButtonElement;
+  const done = document.getElementById('enqDone')!;
+  const say = (t: string, err = false) => { status.textContent = t; status.classList.toggle('err', err); };
+
+  // "Ask about this" ticks that option in the form
+  document.querySelectorAll<HTMLAnchorElement>('.adv-ask').forEach((a) => a.addEventListener('click', () => {
+    const box = form.querySelector<HTMLInputElement>(`input[name=slots][value="${CSS.escape(a.dataset.slot!)}"]`);
+    if (box) box.checked = true;
+  }));
+
+  form.addEventListener('input', () => say(''));
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const data = { ...Object.fromEntries(fd), slots: fd.getAll('slots') } as Record<string, unknown>;
+    const str = (k: string) => String(data[k] ?? '').trim();
+    if (!str('name') || !str('business')) return say('Add your name and your business or school.', true);
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(str('email'))) return say('Add an email address so we can reply.', true);
+    send.disabled = true; send.textContent = 'Sending…'; say('');
+    try {
+      const r = await fetch('/api/enquiry', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+      if (!r.ok) throw new Error(String(r.status));
+      form.reset(); form.hidden = true; done.hidden = false; done.focus();
+    } catch {
+      say('Sorry, that didn’t send. Check your connection and try again in a minute.', true);
+    } finally {
+      send.disabled = false; send.textContent = 'Send enquiry';
+    }
+  });
+</script>
 
 <style>
   .area-acts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
   .adv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 32px; }
-  .adv-slot { background: #fff; border: 2px solid var(--ink); border-radius: 16px; padding: 22px; display: grid; gap: 8px; align-content: start; }
+  .adv-slot { background: #fff; border: 2px solid var(--ink); border-radius: 16px; padding: 22px; display: grid; gap: 8px; grid-template-rows: auto 1fr auto auto auto; }
   .adv-slot h3 { font: 700 20px var(--body); }
   .adv-slot p { color: var(--muted); line-height: 1.5; }
   .adv-who { font-size: 14px; }
   .adv-price { font-weight: 700; color: var(--ink) !important; margin-top: 4px; }
+  .adv-ask { justify-self: start; margin-top: 8px; }
   .adv-season { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 28px; }
   .adv-season h3 { font: 700 20px var(--body); margin: 10px 0 6px; }
   .adv-season p { color: var(--muted); line-height: 1.5; }
   .adv-rules { margin: 24px 0 0; padding-left: 20px; display: grid; gap: 12px; max-width: 760px; font-size: 18px; line-height: 1.55; color: var(--muted); }
   .adv-rules b { color: var(--ink); }
-  @media (max-width: 760px) { .adv-season { grid-template-columns: 1fr; } }
+  .enq { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 48px; align-items: start; }
+  .enq-form, .enq-done { background: #fff; border: 2px solid var(--ink); border-radius: 20px; padding: 28px; display: grid; gap: 18px; box-shadow: 6px 6px 0 var(--ink); }
+  .enq-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .enq-form select { width: 100%; font: 400 16px/1.5 var(--body); color: var(--ink); padding: 10px 12px; border: 2px solid var(--ink); border-radius: 12px; background: #fff; }
+  .enq-slots { border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .enq-slots legend { font-weight: 700; font-size: 15px; margin-bottom: 10px; padding: 0; }
+  .enq-slots legend em { font-style: normal; font-weight: 400; color: var(--muted-2); }
+  .enq-note { font-size: 14px; color: var(--muted-2); }
+  .enq-done h3 { font-size: 30px; }
+  .enq-done p { color: var(--muted); }
+  @media (max-width: 960px) { .enq { grid-template-columns: 1fr; gap: 24px; } }
+  @media (max-width: 760px) { .adv-season, .enq-row { grid-template-columns: 1fr; } .enq-form { padding: 20px; box-shadow: 4px 4px 0 var(--ink); } }
 </style>
