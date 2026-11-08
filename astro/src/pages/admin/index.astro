@@ -1,0 +1,36 @@
+---
+// Admin dashboard. Stage 2: who's signed in and quick counts from the admin database.
+// Visits, ad views and clicks come in stage 4.
+import Admin from '../../layouts/Admin.astro';
+const stats = [
+  ['showing', 'Ads showing today'],
+  ['ads', 'Ads in total'],
+  ['advertisers', 'Advertisers'],
+  ['new_enquiries', 'New enquiries'],
+  ['ending_soon', 'Ending in 14 days'],
+];
+---
+<Admin title="Dashboard" active="dashboard">
+  <section class="adm-stats" aria-label="At a glance">
+    {stats.map(([key, label]) => <div class="adm-card adm-stat"><span>{label}</span><b data-stat={key}>–</b></div>)}
+  </section>
+  <section class="adm-card">
+    <h2 class="adm-h2">Coming next</h2>
+    <p class="adm-note">Managing ads and advertisers, the ad spots grid and enquiries come in stage 3. Visits, ad views and clicks in stage 4. The schools table and ad specs in stage 5.</p>
+  </section>
+</Admin>
+
+<script>
+  fetch('/api/admin/summary').then((r) => (r.ok ? r.json() : {})).then((s: Record<string, number>) => {
+    document.querySelectorAll<HTMLElement>('[data-stat]').forEach((el) => { el.textContent = String(s[el.dataset.stat!] ?? 0); });
+  });
+</script>
+
+<style>
+  .adm-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+  .adm-stat { display: grid; gap: 6px; }
+  .adm-stat span { font-size: 14px; font-weight: 600; color: var(--muted); }
+  .adm-stat b { font: 700 36px/1 var(--display); color: var(--ink); }
+  .adm-h2 { font: 700 20px var(--body); letter-spacing: 0; margin-bottom: 6px; }
+  .adm-note { color: var(--muted); line-height: 1.55; max-width: 760px; }
+</style>

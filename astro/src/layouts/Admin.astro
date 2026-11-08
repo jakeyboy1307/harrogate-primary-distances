@@ -1,0 +1,91 @@
+---
+// The admin's frame: side menu, who's signed in, and whether this is the live site or a preview.
+// Every /admin page and /api/admin request is checked by the Worker (worker/auth.js) before it's served.
+import '../styles/fonts.css';
+import '../styles/global.css';
+import Rose from '../components/Rose.astro';
+interface Props { title: string; active: string }
+const { title, active } = Astro.props;
+// later stages fill in the pages marked soon
+const menu = [
+  ['dashboard', 'Dashboard', '/admin/', false],
+  ['ads', 'Ads', '/admin/ads/', true],
+  ['advertisers', 'Advertisers', '/admin/advertisers/', true],
+  ['spots', 'Ad spots', '/admin/spots/', true],
+  ['enquiries', 'Enquiries', '/admin/enquiries/', true],
+  ['schools', 'Schools', '/admin/schools/', true],
+  ['specs', 'Ad specs', '/admin/specs/', true],
+] as const;
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{title} · Admin · Yorkshire School Checker</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body class="adm">
+    <aside class="adm-side">
+      <a class="adm-brand" href="/admin/"><Rose size={24} /><span>School Checker<small>Admin</small></span></a>
+      <nav aria-label="Admin">
+        {menu.map(([id, label, href, soon]) => soon
+          ? <span class="adm-link soon" aria-disabled="true">{label}<em>soon</em></span>
+          : <a class:list={['adm-link', { on: active === id }]} href={href} aria-current={active === id ? 'page' : undefined}>{label}</a>)}
+      </nav>
+      <a class="adm-link adm-out" href="/">View the site ↗</a>
+    </aside>
+    <div class="adm-main">
+      <header class="adm-top">
+        <h1>{title}</h1>
+        <div class="adm-who">
+          <span class="adm-env" id="admEnv" hidden></span>
+          <span id="admEmail">Checking sign-in…</span>
+          <a href="/cdn-cgi/access/logout">Sign out</a>
+        </div>
+      </header>
+      <main class="adm-body"><slot /></main>
+    </div>
+    <script>
+      // who's signed in, and whether this is the live database or the preview one
+      fetch('/api/admin/me').then((r) => (r.ok ? r.json() : Promise.reject(r.status))).then((me) => {
+        document.getElementById('admEmail')!.textContent = me.email;
+        const env = document.getElementById('admEnv')!;
+        env.textContent = ({ production: 'Live site', preview: 'Preview (demo data)', local: 'Local test' } as Record<string, string>)[me.environment] ?? me.environment;
+        env.classList.toggle('live', me.environment === 'production');
+        env.hidden = false;
+      }).catch(() => { document.getElementById('admEmail')!.textContent = 'Not signed in'; });
+    </script>
+    <style is:global>
+      .adm { display: grid; grid-template-columns: 232px minmax(0, 1fr); min-height: 100vh; background: var(--pale); }
+      .adm-side { background: #fff; border-right: 1px solid var(--line); padding: 20px 14px; display: flex; flex-direction: column; gap: 18px; position: sticky; top: 0; height: 100vh; }
+      .adm-brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px 12px; text-decoration: none; font: 700 17px var(--display); color: var(--ink); }
+      .adm-brand small { display: block; font: 700 11px var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted-2); }
+      .adm-side nav { display: grid; gap: 2px; }
+      .adm-link { display: flex; justify-content: space-between; align-items: center; padding: 9px 12px; border-radius: 10px; font-weight: 600; font-size: 15px; color: var(--ink); text-decoration: none; }
+      a.adm-link:hover { background: var(--pale); }
+      .adm-link.on { background: var(--ink); color: #fff; }
+      .adm-link.soon { color: var(--faint); cursor: default; }
+      .adm-link em { font: 600 11px var(--body); font-style: normal; text-transform: uppercase; letter-spacing: .05em; }
+      .adm-out { margin-top: auto; color: var(--muted); }
+      .adm-main { min-width: 0; }
+      .adm-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding: 22px 32px; background: #fff; border-bottom: 1px solid var(--line); }
+      .adm-top h1 { font-size: 30px; letter-spacing: -0.02em; }
+      .adm-who { display: flex; align-items: center; gap: 14px; font-size: 14px; color: var(--muted); }
+      .adm-who a { color: var(--ink); font-weight: 600; }
+      .adm-env { padding: 3px 10px; border-radius: 999px; background: var(--sticky); color: var(--ink); font-weight: 700; font-size: 12px; }
+      .adm-env.live { background: var(--bad-bg); color: var(--bad); }
+      .adm-body { padding: 28px 32px 48px; display: grid; gap: 24px; }
+      .adm-card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; }
+      @media (max-width: 860px) {
+        .adm { grid-template-columns: 1fr; }
+        .adm-side { position: static; height: auto; flex-direction: row; flex-wrap: wrap; align-items: center; padding: 12px 16px; gap: 8px; border-right: 0; border-bottom: 1px solid var(--line); }
+        .adm-side nav { display: flex; flex-wrap: wrap; gap: 4px; }
+        .adm-brand { padding: 0 8px 0 0; }
+        .adm-out { margin-top: 0; margin-left: auto; }
+        .adm-top, .adm-body { padding-left: 16px; padding-right: 16px; }
+      }
+    </style>
+  </body>
+</html>

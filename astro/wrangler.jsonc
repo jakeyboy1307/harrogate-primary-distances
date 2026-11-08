@@ -4,12 +4,12 @@
 {
   "name": "yorkshire-school-checker",
   "compatibility_date": "2026-10-01",
-  // only /api/* runs the Worker code (the advertising enquiry form); everything else is a static file
+  // only /api/* and /admin run the Worker code; everything else is a static file
   "main": "worker/index.js",
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
-    "run_worker_first": ["/api/*"],
+    "run_worker_first": ["/api/*", "/admin", "/admin/*"],
     // unknown addresses get the site's own "page not found" page with a 404 status
     "not_found_handling": "404-page"
   },
@@ -17,12 +17,15 @@
   "d1_databases": [{ "binding": "DB", "database_name": "ysc-admin", "database_id": "99cede6d-318f-452c-a0b6-805e00109d3b" }],
   // emails enquiries to one fixed, verified address (Email Service > Email Routing > Destination Addresses)
   "send_email": [{ "name": "ENQUIRY", "destination_address": "jake.adams1307@gmail.com" }],
-  "vars": { "ENVIRONMENT": "production" },
+  // ADMIN_EMAILS: who may use /admin, after signing in with Cloudflare Access (see worker/auth.js)
+  "vars": { "ENVIRONMENT": "production", "ADMIN_EMAILS": "jake.adams1307@gmail.com" },
+  // only for `wrangler dev`: pretend Access signed this email in, so the admin can be tested locally
+  "access": { "dev": { "aud": "local-dev", "identity": { "email": "jake.adams1307@gmail.com" } } },
   // branch builds publish a preview link with "npx wrangler preview" (Preview settings in Cloudflare).
   // Previews don't inherit bindings, and use their own database, which holds the demo ads (db/seed-demo.sql),
   // so nothing done on a preview can change the live site.
   "previews": {
-    "vars": { "ENVIRONMENT": "preview" },
+    "vars": { "ENVIRONMENT": "preview", "ADMIN_EMAILS": "jake.adams1307@gmail.com" },
     "d1_databases": [{ "binding": "DB", "database_name": "ysc-admin-preview", "database_id": "752d8729-d970-45a6-b45f-8dcb02d18de6" }],
     "send_email": [{ "name": "ENQUIRY", "destination_address": "jake.adams1307@gmail.com" }]
   }

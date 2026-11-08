@@ -2,7 +2,10 @@
 //   GET  /api/sponsors  the ads running today, for the ad slots on the site (from the DB binding, a D1 database)
 //   POST /api/enquiry   the advertising enquiry form on /advertise/: saved to the database, then emailed with
 //                       Cloudflare Email Service (the ENQUIRY binding). Under `wrangler dev` nothing is sent.
+//   /admin, /api/admin/* only for a signed-in admin (worker/auth.js); everyone else gets "not allowed".
 // The live site and previews use separate databases (see wrangler.jsonc), so preview data never shows live.
+
+import { adminEmail } from './auth.js';
 
 const FROM = 'enquiries@yorkshireschoolchecker.co.uk';
 const TO = 'jake.adams1307@gmail.com';   // must match destination_address in wrangler.jsonc
@@ -82,10 +85,45 @@ async function enquiry(request, env) {
   return id != null || emailed ? json({ ok: true }) : json({ error: 'send' }, 502);
 }
 
+// what anyone who isn't a signed-in admin sees at /admin
+const DENIED = `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>Not allowed</title>
+<body style="font:17px/1.5 system-ui,sans-serif;max-width:520px;margin:15vh auto;padding:0 20px;color:#14182B">
+<h1 style="font-size:28px">You can’t see this page</h1><p>This part of the site is for the people who run it.</p>
+<p><a href="/">Back to the school checker</a></p></body>`;
+const PRIVATE = { 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex', 'X-Frame-Options': 'DENY' };
+
+async function admin(request, env, ctx, pathname) {
+  const email = await adminEmail(request, env, ctx);
+  if (pathname.startsWith('/api/admin/')) {
+    if (!email) return json({ error: 'not allowed' }, 403, PRIVATE);
+    if (pathname === '/api/admin/me') return json({ email, environment: env.ENVIRONMENT ?? 'unknown' }, 200, PRIVATE);
+    if (pathname === '/api/admin/summary') {
+      const day = today();
+      const r = env.DB ? await env.DB.prepare(
+        `SELECT
+           (SELECT count(*) FROM ads WHERE status = 'live' AND (start_date IS NULL OR start_date <= ?1) AND (end_date IS NULL OR end_date >= ?1)) AS showing,
+           (SELECT count(*) FROM ads) AS ads,
+           (SELECT count(*) FROM advertisers) AS advertisers,
+           (SELECT count(*) FROM enquiries WHERE status = 'new') AS new_enquiries,
+           (SELECT count(*) FROM ads WHERE status = 'live' AND end_date BETWEEN ?1 AND date(?1, '+14 days')) AS ending_soon`,
+      ).bind(day).first() : null;
+      return json(r ?? {}, 200, PRIVATE);
+    }
+    return json({ error: 'not found' }, 404, PRIVATE);
+  }
+  if (!email) return new Response(DENIED, { status: 403, headers: { 'Content-Type': 'text/html; charset=utf-8', ...PRIVATE } });
+  const page = await env.ASSETS.fetch(request);
+  const res = new Response(page.body, page);
+  for (const [k, v] of Object.entries(PRIVATE)) res.headers.set(k, v);
+  return res;
+}
+
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const { pathname } = new URL(request.url);
     try {
+      if (pathname === '/admin' || pathname.startsWith('/admin/') || pathname.startsWith('/api/admin/')) return await admin(request, env, ctx, pathname);
       if (pathname === '/api/sponsors' && request.method === 'GET') return await sponsors(env);
       if (pathname === '/api/enquiry') return await enquiry(request, env);
     } catch (e) {
