@@ -13,8 +13,17 @@
     // unknown addresses get the site's own "page not found" page with a 404 status
     "not_found_handling": "404-page"
   },
-  // lets branch builds publish a preview link with "npx wrangler preview" (Preview settings in Cloudflare)
-  "previews": {},
+  // the admin database: advertisers, ads and enquiries (tables in migrations/)
+  "d1_databases": [{ "binding": "DB", "database_name": "ysc-admin", "database_id": "99cede6d-318f-452c-a0b6-805e00109d3b" }],
   // emails enquiries to one fixed, verified address (Email Service > Email Routing > Destination Addresses)
-  "send_email": [{ "name": "ENQUIRY", "destination_address": "jake.adams1307@gmail.com" }]
+  "send_email": [{ "name": "ENQUIRY", "destination_address": "jake.adams1307@gmail.com" }],
+  "vars": { "ENVIRONMENT": "production" },
+  // branch builds publish a preview link with "npx wrangler preview" (Preview settings in Cloudflare).
+  // Previews don't inherit bindings, and use their own database, which holds the demo ads (db/seed-demo.sql),
+  // so nothing done on a preview can change the live site.
+  "previews": {
+    "vars": { "ENVIRONMENT": "preview" },
+    "d1_databases": [{ "binding": "DB", "database_name": "ysc-admin-preview", "database_id": "752d8729-d970-45a6-b45f-8dcb02d18de6" }],
+    "send_email": [{ "name": "ENQUIRY", "destination_address": "jake.adams1307@gmail.com" }]
+  }
 }

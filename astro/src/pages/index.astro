@@ -163,7 +163,7 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
   import { $, $$, chip, distTxt, ICON, toast, vOf } from '../lib/ui';
   import { initPanel, openPanel, refreshPanel } from '../lib/panel';
   import { initPList, renderPList } from '../lib/plist';
-  import { adCard, areaOf, sponsorsFor } from '../lib/sponsors';
+  import { adCard, areaOf, loadSponsors, sponsorsFor } from '../lib/sponsors';
   import type { SchoolMap } from '../lib/map';
 
   // The form works straight away; a search waits for the school data, so an early click can't reload the page
@@ -210,6 +210,8 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
     onOpen: (s: School) => openPanel(s.id), emptyText: 'Add a school from the list, or leave it. Four is fine.',
   };
   initPList(plOpts);
+  // ads arrive separately; draw them in once they do (the results work without them)
+  loadSponsors().then(() => { if (place) render(); });
 
   // ---------- search ----------
   async function run(p: Place, save = true) {

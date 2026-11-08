@@ -54,7 +54,7 @@ import { url } from '../lib/url';
   import { initPanel, openPanel, refreshPanel } from '../lib/panel';
   import { initPList, renderPList } from '../lib/plist';
   import { url } from '../lib/url';
-  import { adCard, areaOf, sponsorsFor } from '../lib/sponsors';
+  import { adCard, areaOf, loadSponsors, sponsorsFor } from '../lib/sponsors';
 
   const saved = getSearch();
   const cn = council(saved?.place.district);   // the council you apply to, from your postcode
@@ -140,6 +140,8 @@ import { url } from '../lib/url';
 
   const scored = () => [...new Set([...near, ...getList().map((d) => byUrn.get(d)!).filter(Boolean)])];
   render();
+  // ads arrive separately; draw them in once they do
+  loadSponsors().then(render);
   if (saved) {
     $('#planLede').textContent = `Here’s your plan for a Reception place in September 2027, with your schools for ${saved.place.label === 'your location' ? 'your location' : saved.place.label} and the dates that matter.`;
     near = prepareSearch(schools, catches, saved.place, saved.radius).near;

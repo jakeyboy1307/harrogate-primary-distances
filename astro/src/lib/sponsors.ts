@@ -1,11 +1,11 @@
-// Paid placements. Shared by the build (area pages) and the browser (results, school panel, plan page).
+// Paid placements, drawn in the browser on the results, school panel, plan and area pages.
 // The rule that keeps the checker trustworthy: a sponsor never changes a school's label, its place in the
 // results, the sort order or the numbers. Sponsors sit in their own clearly labelled boxes.
 //
-// Real sponsors are listed in REAL below. The demo businesses (sponsors-demo.ts) only appear on preview
-// and local builds.
+// The ads come from /api/sponsors (astro/worker/index.js), which reads the admin database and only returns
+// live ads inside their dates. The live site and previews have separate databases; the preview one holds
+// made-up demo businesses (astro/db/seed-demo.sql).
 import { esc } from './engine';
-import { DEMO_SPONSORS } from './sponsors-demo';
 
 export type Area = 'harrogate' | 'york';
 export type Placement =
@@ -26,7 +26,8 @@ export interface Sponsor {
   placements: Placement[];
   areas: Area[];
   urns?: number[];            // only these schools (uniform suppliers, school profiles)
-  logo: string;               // two letters for the demo logo tile
+  logo: string;               // two letters for the logo tile, used when there's no logo image
+  logoUrl?: string;
   colour: string;
   offer?: string;             // a short line such as "10% off with code YSC10"
   openDays?: string[];        // school profiles
@@ -39,27 +40,35 @@ export interface Sponsor {
 export const today = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/London' }).format(new Date());
 export const isLive = (s: Pick<Sponsor, 'start' | 'end'>, day = today()) => (!s.start || s.start <= day) && (!s.end || s.end >= day);
 
-// Real sponsors go here. Each needs start and end dates (YYYY-MM-DD, both days included): the ad switches
-// itself off after the end date, and before the start date, with no code change needed.
-const REAL: Sponsor[] = [];
-
-export const SPONSORS: Sponsor[] = [...REAL, ...(__DEMO_SPONSORS__ ? DEMO_SPONSORS : [])];
+// The ads running today, filled in by loadSponsors(). Empty until then, or if the request fails, so the
+// pages always work without ads.
+let SPONSORS: Sponsor[] = [];
+let loading: Promise<Sponsor[]> | null = null;
+export function loadSponsors() {
+  loading ??= fetch('/api/sponsors')
+    .then((r) => (r.ok ? r.json() : []))
+    .then((list: Sponsor[]) => (SPONSORS = Array.isArray(list) ? list : []))
+    .catch(() => (SPONSORS = []));
+  return loading;
+}
 
 // Harrogate district schools are "harrogate"; York and the North Yorkshire villages round it are "york"
 export const areaOf = (s: { council: string; district?: string }): Area =>
   s.council === 'North Yorkshire' && s.district === 'Harrogate' ? 'harrogate' : 'york';
 
-// The sponsors for a slot that are running today. Pass day = null to skip the date check (the area pages,
-// which are built ahead of time and check the dates in the browser instead).
-export function sponsorsFor(p: Placement, area: Area, urn?: number, day: string | null = today()) {
+// The sponsors for a slot that are running today (checked here too, in case a page stays open past midnight)
+export function sponsorsFor(p: Placement, area: Area, urn?: number) {
+  const day = today();
   return SPONSORS.filter((s) => s.placements.includes(p) && s.areas.includes(area)
-    && (!s.urns || (urn != null && s.urns.includes(urn))) && (day == null || isLive(s, day)));
+    && (!s.urns || (urn != null && s.urns.includes(urn))) && isLive(s, day));
 }
 
 // Add tags so the sponsor's own analytics show visits from here. No cookies or tracking on our side.
 export function link(s: Sponsor, slot: Placement) {
   if (s.url.startsWith('#')) return s.url;
-  const u = new URL(s.url);
+  let u: URL;
+  try { u = new URL(s.url); } catch { return '#'; }
+  if (u.protocol !== 'https:' && u.protocol !== 'http:') return '#';
   u.searchParams.set('utm_source', 'yorkshireschoolchecker');
   u.searchParams.set('utm_medium', 'sponsored');
   u.searchParams.set('utm_campaign', slot);
@@ -70,16 +79,17 @@ export function link(s: Sponsor, slot: Placement) {
 export const adLabel = (text = 'Sponsored', demo = false) =>
   `<span class="ad-label">${esc(text)}</span>${demo ? '<span class="ad-label ad-demo">Demo</span>' : ''}`;
 
-// Dates on the element, so pages built ahead of time can hide an ad in the browser once it has ended
-export const dateAttrs = (s: Sponsor) => `${s.start ? ` data-ad-start="${esc(s.start)}"` : ''}${s.end ? ` data-ad-end="${esc(s.end)}"` : ''}`;
-
-const logo = (s: Sponsor) => `<span class="ad-logo" style="background:${s.colour}" aria-hidden="true">${esc(s.logo)}</span>`;
+// a logo image if there is one, otherwise a coloured tile with two letters
+const colour = (c?: string) => (/^#[0-9a-f]{3,8}$/i.test(c ?? '') ? c : '#14182B');
+const logo = (s: Sponsor) => s.logoUrl
+  ? `<img class="ad-logo ad-logo-img" src="${esc(s.logoUrl)}" alt="" width="44" height="44" loading="lazy" />`
+  : `<span class="ad-logo" style="background:${colour(s.colour)}" aria-hidden="true">${esc(s.logo)}</span>`;
 const go = (s: Sponsor, slot: Placement, cls = 'btn btn-sm') =>
   `<a class="${cls}" href="${esc(link(s, slot))}" target="_blank" rel="sponsored noopener">${esc(s.cta)}</a>`;
 
 // A sponsor card in the HTML the browser builds (results, panel, plan page)
 export function adCard(s: Sponsor, slot: Placement, label = 'Sponsored') {
-  return `<aside class="ad-card" aria-label="${esc(label)}: ${esc(s.name)}"${dateAttrs(s)}>
+  return `<aside class="ad-card" aria-label="${esc(label)}: ${esc(s.name)}">
     <div class="ad-top">${adLabel(label, s.demo)}</div>
     <div class="ad-body">${logo(s)}<div><span class="ad-cat">${esc(s.category)}</span><h3 class="ad-name">${esc(s.name)}</h3>
       <p class="ad-blurb">${esc(s.blurb)}</p>${s.offer ? `<p class="ad-offer">${esc(s.offer)}</p>` : ''}</div></div>
