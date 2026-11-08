@@ -33,7 +33,7 @@ const types = ['School uniform shop', 'Independent school or nursery', 'State sc
     <div class="adv-grid">
       {slots.map((s) => (
         <div class="adv-slot">
-          <a class="adv-shot" href={`/advertise/${s.id}.webp`} target="_blank" rel="noopener" aria-label={`${s.h}: see where it appears, full size`}>
+          <a class="adv-shot" href={`/advertise/${s.id}.webp`} data-title={s.h} aria-haspopup="dialog" aria-label={`${s.h}: see where it appears, full size`}>
             <img src={`/advertise/${s.id}.webp`} alt={s.alt} width="1100" height="688" loading="lazy" decoding="async" />
             <span>Where it appears</span>
           </a>
@@ -100,9 +100,33 @@ const types = ['School uniform shop', 'Independent school or nursery', 'State sc
       </div>
     </div>
   </section>
+  <dialog class="shot-pop" id="shotPop" aria-labelledby="shotTitle">
+    <div class="shot-head">
+      <h2 id="shotTitle"></h2>
+      <button type="button" class="close" id="shotClose" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
+      </button>
+    </div>
+    <img id="shotImg" alt="" width="1100" height="688" />
+    <p class="shot-cap">The highlighted box is where your listing appears. Shown with an example business.</p>
+  </dialog>
 </Base>
 
 <script>
+  // a screenshot opens in a popup on the page (the link still works without JavaScript)
+  const pop = document.getElementById('shotPop') as HTMLDialogElement;
+  const popImg = document.getElementById('shotImg') as HTMLImageElement;
+  document.querySelectorAll<HTMLAnchorElement>('.adv-shot').forEach((a) => a.addEventListener('click', (e) => {
+    e.preventDefault();
+    const img = a.querySelector('img')!;
+    popImg.src = a.href; popImg.alt = img.alt;
+    document.getElementById('shotTitle')!.textContent = a.dataset.title ?? '';
+    pop.showModal();
+  }));
+  document.getElementById('shotClose')!.addEventListener('click', () => pop.close());
+  // a click on the dimmed backdrop closes it
+  pop.addEventListener('click', (e) => { if (e.target === pop) pop.close(); });
+
   const form = document.getElementById('enqForm') as HTMLFormElement;
   const status = document.getElementById('enqStatus')!;
   const send = document.getElementById('enqSend') as HTMLButtonElement;
@@ -170,5 +194,12 @@ const types = ['School uniform shop', 'Independent school or nursery', 'State sc
   @media (max-width: 960px) { .enq { grid-template-columns: 1fr; gap: 24px; } }
   @media (max-width: 640px) { .adv-grid { grid-template-columns: 1fr; } }
   @media (prefers-reduced-motion: reduce) { .adv-shot img { transition: none; } }
+  .shot-pop { width: min(1100px, calc(100% - 32px)); max-height: calc(100% - 32px); padding: 0; border: 2.5px solid var(--ink); border-radius: 20px; box-shadow: 6px 6px 0 var(--cobalt); color: var(--ink); overflow: auto; }
+  .shot-pop::backdrop { background: rgba(20, 24, 43, .6); }
+  .shot-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 16px 14px 24px; }
+  .shot-head h2 { font-size: 26px; letter-spacing: -0.02em; }
+  .shot-pop img { display: block; width: 100%; height: auto; border-top: 1.5px solid var(--line-2); border-bottom: 1.5px solid var(--line-2); }
+  .shot-cap { padding: 12px 24px 16px; font-size: 14px; color: var(--muted-2); }
+  @media (max-width: 640px) { .shot-head h2 { font-size: 20px; } .shot-head { padding-left: 16px; } .shot-cap { padding-left: 16px; padding-right: 16px; } }
   @media (max-width: 760px) { .adv-season, .enq-row { grid-template-columns: 1fr; } .enq-form { padding: 20px; box-shadow: 4px 4px 0 var(--ink); } }
 </style>
