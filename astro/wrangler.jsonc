@@ -8,5 +8,7 @@
     "directory": "./dist",
     // unknown addresses get the site's own "page not found" page with a 404 status
     "not_found_handling": "404-page"
-  }
+  },
+  // lets branch builds publish a preview link with "npx wrangler preview" (Preview settings in Cloudflare)
+  "previews": {}
 }
