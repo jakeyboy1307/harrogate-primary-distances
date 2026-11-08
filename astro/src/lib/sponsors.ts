@@ -7,14 +7,8 @@
 // made-up demo businesses (astro/db/seed-demo.sql).
 import { esc } from './engine';
 
-export type Area = 'harrogate' | 'york';
-export type Placement =
-  | 'uniform'     // school panel: the uniform supplier for that school
-  | 'profile'     // school panel: open days and a note, supplied by the school itself
-  | 'nearby'      // school panel: one family service near the school
-  | 'results'     // results list: one featured card among the schools
-  | 'plan'        // plan page: "Get ready for September" partners
-  | 'area';       // area pages: the page sponsor and the local services directory
+import type { Area, Placement } from './specs';
+export type { Area, Placement } from './specs';
 
 export interface Sponsor {
   id: string;

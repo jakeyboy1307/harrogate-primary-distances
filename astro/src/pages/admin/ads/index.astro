@@ -1,0 +1,77 @@
+---
+// Every ad, newest first, with quick go live / pause. Editing is on /admin/ads/edit/?id=N.
+import Admin from '../../../layouts/Admin.astro';
+import { AREAS, SPOTS } from '../../../lib/specs';
+---
+<Admin title="Ads" active="ads">
+  <div class="adm-bar">
+    <select id="fState" aria-label="Show">
+      <option value="">All ads</option>
+      <option value="showing">Showing now</option>
+      <option value="scheduled">Scheduled</option>
+      <option value="draft">Drafts</option>
+      <option value="paused">Paused</option>
+      <option value="ended">Ended or dates passed</option>
+    </select>
+    <select id="fSpot" aria-label="Ad spot"><option value="">Every spot</option>{Object.entries(SPOTS).map(([k, s]) => <option value={k}>{s.label}</option>)}</select>
+    <select id="fArea" aria-label="Area"><option value="">Both areas</option>{Object.entries(AREAS).map(([k, a]) => <option value={k}>{a}</option>)}</select>
+    <input type="search" id="fText" placeholder="Search name or advertiser" aria-label="Search" />
+    <span class="grow"></span>
+    <a class="btn btn-sm btn-primary" href="/admin/ads/edit/">New ad</a>
+  </div>
+  <div class="adm-table-wrap">
+    <table class="adm-table">
+      <thead><tr><th>Ad</th><th>Where</th><th>Dates</th><th>Price</th><th>Status</th><th></th></tr></thead>
+      <tbody id="rows"><tr><td colspan="6" class="adm-empty">Loading…</td></tr></tbody>
+    </table>
+  </div>
+</Admin>
+
+<script>
+  import { api, areaNames, confirmAction, dates, day, esc, money, spotNames, statePill, toast, type Ad } from '../../../lib/admin';
+  let all: Ad[] = [];
+  const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
+
+  function row(a: Ad) {
+    const go = a.status === 'live'
+      ? `<button class="btn btn-xs" data-status="paused" data-id="${a.id}">Pause</button>`
+      : `<button class="btn btn-xs btn-dark" data-status="live" data-id="${a.id}">Go live</button>`;
+    return `<tr>
+      <td><a class="name" href="/admin/ads/edit/?id=${a.id}">${esc(a.name)}</a>${a.demo ? ' <span class="pill-s demo">Demo</span>' : ''}
+        <div class="sub">${esc(a.category)}${a.advertiser && a.advertiser !== a.name ? ` · ${esc(a.advertiser)}` : ''}</div></td>
+      <td>${esc(spotNames(a.placements))}<div class="sub">${esc(areaNames(a.areas))}${a.urns ? ` · ${a.urns.length} school${a.urns.length > 1 ? 's' : ''}` : ''}</div></td>
+      <td>${esc(dates(a))}</td>
+      <td>${esc(money(a.pricePence, a.pricePeriod)) || '<span class="sub">Not set</span>'}${a.pricePence != null ? `<div class="sub">${a.paid ? 'Paid' : 'Not paid'}</div>` : ''}</td>
+      <td>${statePill(a.state)}</td>
+      <td class="acts">${go} <a class="btn btn-xs" href="/admin/ads/edit/?id=${a.id}">Edit</a></td>
+    </tr>`;
+  }
+
+  function render() {
+    const st = $('fState').value, sp = $('fSpot').value, ar = $('fArea').value, q = $('fText').value.trim().toLowerCase();
+    const list = all.filter((a) => (!st || a.state === st || (st === 'ended' && a.state === 'finished'))
+      && (!sp || a.placements.includes(sp as any)) && (!ar || a.areas.includes(ar as any))
+      && (!q || `${a.name} ${a.advertiser ?? ''} ${a.category}`.toLowerCase().includes(q)));
+    document.getElementById('rows')!.innerHTML = list.length ? list.map(row).join('')
+      : `<tr><td colspan="6" class="adm-empty">${all.length ? 'No ads match those filters.' : 'No ads yet. Start with New ad.'}</td></tr>`;
+  }
+
+  async function load() { all = await api<Ad[]>('ads'); render(); }
+  ['fState', 'fSpot', 'fArea', 'fText'].forEach((id) => $(id).addEventListener('input', render));
+
+  document.getElementById('rows')!.addEventListener('click', async (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-status]');
+    if (!b) return;
+    const ad = all.find((a) => a.id === +b.dataset.id!)!;
+    const live = b.dataset.status === 'live';
+    if (live && !(await confirmAction(`Put “${ad.name}” live? It shows on the site within about a minute${ad.start ? `, from ${day(ad.start)}` : ''}.`, 'Go live'))) return;
+    b.disabled = true;
+    try {
+      await api(`ads/${ad.id}/status`, { body: { status: b.dataset.status } });
+      toast(live ? `${ad.name} is live` : `${ad.name} is paused`);
+      await load();
+    } catch (err) { toast((err as Error).message, true); b.disabled = false; }
+  });
+
+  load().catch((e) => toast(e.message, true));
+</script>

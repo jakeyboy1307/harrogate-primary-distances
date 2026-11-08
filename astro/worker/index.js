@@ -5,6 +5,7 @@
 //   /admin, /api/admin/* only for a signed-in admin (worker/auth.js); everyone else gets "not allowed".
 // The live site and previews use separate databases (see wrangler.jsonc), so preview data never shows live.
 
+import { adminApi } from './admin.js';
 import { adminEmail } from './auth.js';
 
 const FROM = 'enquiries@yorkshireschoolchecker.co.uk';
@@ -110,7 +111,8 @@ async function admin(request, env, ctx, pathname) {
       ).bind(day).first() : null;
       return json(r ?? {}, 200, PRIVATE);
     }
-    return json({ error: 'not found' }, 404, PRIVATE);
+    const r = await adminApi(request, env, pathname);
+    return json(r.body, r.status ?? 200, PRIVATE);
   }
   if (!email) return new Response(DENIED, { status: 403, headers: { 'Content-Type': 'text/html; charset=utf-8', ...PRIVATE } });
   const page = await env.ASSETS.fetch(request);
