@@ -5,6 +5,7 @@ import {
 } from './engine';
 import { addedText, addSchool, backupOf, getList, onListChange, ordinal, promoteBackup, rankOf, removeBackup, removeFromList } from './store';
 import { $, chip, toast } from './ui';
+import { areaOf, panelSponsors, profileBlock, sponsorsFor } from './sponsors';
 
 interface Ctx { order: () => number[]; byId: (id: number) => School | undefined; mode: () => Mode; home: () => LatLng | null; onChangeOrder?: () => void }
 let ctx: Ctx;
@@ -214,6 +215,8 @@ function body(s: School, mode: Mode, home: LatLng | null) {
   <section class="p-sec">${ofBlock}</section>
   <div class="two"><div><h4>Admissions</h4><p>${policy}${notes ? '<br>' + notes : ''}</p></div>${s.addr ? `<div><h4>Address</h4><p>${esc(s.addr)}</p></div>` : ''}</div>
   ${contact(s)}
+  ${sponsorsFor('profile', areaOf(s), s.urn).map(profileBlock).join('')}
   <div class="links">${links}</div>
+  ${panelSponsors(s)}
   ${s.walkErr && s.method === 'walking' ? '<p class="p-note">Distances here are straight lines, because the walking-route service didn’t respond.</p>' : ''}`;
 }

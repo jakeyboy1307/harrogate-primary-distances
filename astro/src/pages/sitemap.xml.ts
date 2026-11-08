@@ -1,10 +1,10 @@
-// The list of pages for search engines (robots.txt points here). New pages are picked up automatically; 404 is left out.
+// The list of pages for search engines (robots.txt points here). New pages are picked up automatically; 404 and advertise (not for search) are left out.
 import type { APIRoute } from 'astro';
 import { url } from '../lib/url';
 
 const pages = Object.keys(import.meta.glob('./*.astro'))
   .map((f) => f.slice(2, -'.astro'.length))
-  .filter((p) => p !== '404')
+  .filter((p) => p !== '404' && p !== 'advertise')   // pages marked index={false}
   .map((p) => (p === 'index' ? '' : `${p}/`))
   .sort();
 

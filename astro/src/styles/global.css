@@ -586,3 +586,32 @@ body.panel-open .toast { bottom: calc(96px + env(safe-area-inset-bottom)); }
 .toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 1000; padding: 12px 18px; background: var(--ink); color: #fff; border-radius: 12px; font-weight: 600; box-shadow: 4px 4px 0 var(--cobalt); max-width: calc(100% - 40px); }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* ---------- sponsored placements: always labelled, always visibly separate from the schools ---------- */
+.ad-label { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 6px; background: var(--none-bg); color: var(--none); font: 700 11px/1.5 var(--body); letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+.ad-demo { background: var(--sticky); color: var(--ink); margin-left: 6px; }
+.ad-card { display: grid; gap: 12px; padding: 16px 18px; border: 1.5px dashed var(--line-2); border-radius: 16px; background: var(--sticky-soft); }
+.ad-top { display: flex; align-items: center; }
+.ad-body { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: start; }
+.ad-logo { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; color: #fff; font: 700 15px var(--body); letter-spacing: .02em; }
+.ad-cat { font-size: 13px; font-weight: 700; color: var(--muted-2); }
+.ad-name { font: 700 18px/1.3 var(--body); letter-spacing: 0; margin: 1px 0 4px; }
+.ad-blurb { font-size: 15px; line-height: 1.5; color: var(--muted); }
+.ad-offer { margin-top: 6px; font-size: 14px; font-weight: 700; color: var(--close); }
+.ad-foot { display: flex; }
+.ad-foot .btn { text-decoration: none; }
+.ad-row { padding: 14px 0; }
+.ad-stack { display: grid; gap: 12px; margin-top: 12px; }
+.ad-profile .p-sec-head span { display: inline-flex; }
+.ad-dates { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.ad-dates li { padding: 10px 14px; border-radius: 12px; background: var(--pale); font-weight: 700; font-size: 15px; }
+.ad-strip { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-top: 20px; font-size: 15px; color: var(--muted); max-width: 640px; line-height: 1.5; }
+.ad-strip a { color: var(--ink); }
+.ready { padding-top: 56px; padding-bottom: 72px; }
+.ready-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px 32px; flex-wrap: wrap; }
+.ready-head h2 { font-size: 40px; line-height: 1.1; letter-spacing: -0.03em; }
+.ready-head .muted { margin-top: 8px; font-size: 17px; line-height: 1.5; max-width: 560px; }
+.ready-note { font-size: 14px; color: var(--muted-2); max-width: 340px; line-height: 1.45; }
+.ready-grid .ad-card { grid-template-rows: auto 1fr auto; }
+.ready-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 28px; }
+@media (max-width: 760px) { .ready-head h2 { font-size: 30px; } }

@@ -4,13 +4,17 @@
 import Base from '../layouts/Base.astro';
 import { url } from '../lib/url';
 import { byPlace, hardest, openToAll, outstanding, type AreaSchool } from '../lib/areas';
+import { adCard, adLabel, link, sponsorsFor, type Area } from '../lib/sponsors';
 interface Props {
-  title: string; description: string; h1: string; lede: string; area: string;
+  title: string; description: string; h1: string; lede: string; area: string; areaKey: Area;
   schools: AreaSchool[];
   groups: { label: string; note: string; schools: AreaSchool[] }[];
   faqs: [string, string][];   // question, answer (HTML)
 }
-const { title, description, h1, lede, area, schools, groups, faqs } = Astro.props;
+const { title, description, h1, lede, area, areaKey, schools, groups, faqs } = Astro.props;
+const local = sponsorsFor('area', areaKey);
+// the page sponsor: one business named under the heading (the estate agent in the demo)
+const pageSponsor = local.find((s) => s.category === 'Moving house');
 const hard = hardest(schools);
 const open = openToAll(schools);
 const top = outstanding(schools);
@@ -22,6 +26,9 @@ const short = (n: string) => n.replace(/,.*$/, '').replace(/ (Church of England|
       <h1>{h1}</h1>
       <p class="lede">{lede}</p>
       <p class="area-acts"><a class="btn btn-primary" href={url('')}>Check your postcode</a><a class="btn" href={url('how-places-work/')}>How places work</a></p>
+      {pageSponsor && (
+        <p class="ad-strip"><Fragment set:html={adLabel('Page sponsor')} /><span>{area} school guide supported by <a href={link(pageSponsor, 'area')} target="_blank" rel="sponsored noopener"><b>{pageSponsor.name}</b></a>, {pageSponsor.blurb.charAt(0).toLowerCase() + pageSponsor.blurb.slice(1)}</span></p>
+      )}
     </div>
     <dl class="area-stats">
       <div><dt>Primary schools</dt><dd>{schools.length}</dd></div>
@@ -66,6 +73,17 @@ const short = (n: string) => n.replace(/,.*$/, '').replace(/ (Church of England|
       </div>
     ))}
   </section>
+
+  {local.length > 0 && (
+    <section class="how-sec wrap" style="border-top:1px solid var(--line)" aria-labelledby="localTitle">
+      <div class="ready-head">
+        <div><h2 id="localTitle">Local help for {area} families</h2>
+          <p class="intro">Uniform, wraparound care, shoes and more, from businesses near you.</p></div>
+        <span class="ready-note">These are paid listings. They don’t change anything the checker tells you. <a href={url('advertise/')}>Advertise here</a></span>
+      </div>
+      <div class="ready-grid"><Fragment set:html={local.map((s) => adCard(s, 'area', 'Sponsored')).join('')} /></div>
+    </section>
+  )}
 
   <section class="how-sec sec-pale wrap">
     <h2>Questions parents ask</h2>
