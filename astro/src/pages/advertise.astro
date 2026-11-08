@@ -186,6 +186,14 @@ const types = ['School uniform shop', 'Independent school or nursery', 'State sc
   .enq-form select { width: 100%; font: 400 16px/1.5 var(--body); color: var(--ink); padding: 10px 12px; border: 2px solid var(--ink); border-radius: 12px; background: #fff; }
   .enq-slots { border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
   .enq-slots legend { font-weight: 700; font-size: 15px; margin-bottom: 10px; padding: 0; }
+  /* the option chips lift on hover and show a tick once chosen, so it's clear they can be clicked */
+  .enq-slots .pill { position: relative; display: inline-flex; align-items: center; gap: 6px; border-width: 2px; transition: transform .15s, box-shadow .15s, border-color .15s, background-color .15s; }
+  .enq-slots .pill:hover { border-color: var(--ink); background: var(--sticky-soft); transform: translateY(-2px); box-shadow: 2px 3px 0 var(--ink); }
+  .enq-slots .pill:active { transform: translateY(0); box-shadow: none; }
+  .enq-slots .pill::before { content: '+'; font-weight: 700; width: 12px; text-align: center; }
+  .enq-slots .pill:has(input:checked)::before { content: '✓'; }
+  .enq-slots .pill:has(input:checked):hover { background: var(--ink); color: #fff; }
+  .enq-form button[type=submit] { cursor: pointer; }
   .enq-slots legend em { font-style: normal; font-weight: 400; color: var(--muted-2); }
   .enq-note { font-size: 14px; color: var(--muted-2); }
   .enq-done h3 { font-size: 30px; }
@@ -193,7 +201,7 @@ const types = ['School uniform shop', 'Independent school or nursery', 'State sc
   @media (max-width: 1100px) { .adv-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 960px) { .enq { grid-template-columns: 1fr; gap: 24px; } }
   @media (max-width: 640px) { .adv-grid { grid-template-columns: 1fr; } }
-  @media (prefers-reduced-motion: reduce) { .adv-shot img { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .adv-shot img, .enq-slots .pill { transition: none; } .enq-slots .pill:hover { transform: none; } }
   .shot-pop { width: min(1100px, calc(100% - 32px)); max-height: calc(100% - 32px); padding: 0; border: 2.5px solid var(--ink); border-radius: 20px; box-shadow: 6px 6px 0 var(--cobalt); color: var(--ink); overflow: auto; }
   .shot-pop::backdrop { background: rgba(20, 24, 43, .6); }
   .shot-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 16px 14px 24px; }
