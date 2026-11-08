@@ -66,7 +66,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .site-foot { display: grid; grid-template-columns: 1fr auto auto; grid-template-areas: 'areas areas areas' 'legal fb credit'; column-gap: 32px; align-items: center; gap: 16px; padding: 32px var(--gr) 32px var(--gl); border-top: 1px solid var(--line); color: var(--muted); font-size: 15px; margin-top: 0; }
 .foot-brand, .foot-links, .foot-rule { display: none; }
 .foot-legal { grid-area: legal; }
-.foot-areas { grid-area: areas; display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 24px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.foot-nav { grid-area: areas; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 40px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.foot-areas { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 24px; }
 .foot-areas span { font-weight: 700; color: var(--ink); }
 .foot-areas a { color: var(--ink); font-weight: 600; }
 .foot-fb { grid-area: fb; }
@@ -80,7 +81,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
   .foot-links { grid-area: links; display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 15px; font-weight: 600; color: var(--ink); }
   .foot-links a { text-decoration: none; }
   .foot-rule { grid-area: rule; display: block; width: 100%; border: 0; border-top: 1px solid var(--line); margin: 0; }
-  .foot-areas { padding-bottom: 0; border-bottom: 0; font-size: 15px; gap: 8px 20px; }
+  .foot-nav { flex-direction: column; gap: 16px; padding-bottom: 0; border-bottom: 0; }
+  .foot-areas { font-size: 15px; gap: 8px 20px; }
 }
 
 /* ---------- buttons, chips, pills ---------- */
