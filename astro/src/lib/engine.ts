@@ -39,7 +39,7 @@ export interface YearRec {
   n?: string;
 }
 export interface Ofsted {
-  kind: 'card' | 'grade' | 'areas' | 'ungraded';
+  kind: 'card' | 'grade' | 'areas' | 'ungraded' | 'none';   // none: a new school, not inspected yet
   link: string; date?: string; grade?: string;
   areas?: [string, string][];
   safeguarding?: string;
@@ -308,6 +308,7 @@ export type Tone = 'top' | 'ok' | 'warn' | 'bad' | 'na';
 const toneOf = (w: number | null | undefined): Tone => (['top', 'ok', 'warn', 'bad'] as Tone[])[w ?? -1] || 'na';
 export function ofsted(o?: Ofsted): { tone: Tone; head: string; sub: string; short: string } {
   if (!o) return { tone: 'na', head: 'No match', sub: '', short: 'Not found' };
+  if (o.kind === 'none' || (o.kind === 'ungraded' && !o.ungraded)) return { tone: 'na', head: 'Not inspected yet', sub: 'No Ofsted report published yet', short: 'Not inspected' };
   const areas = o.areas || [];
   const worst = areas.length ? Math.max(...areas.map((a) => RANK[a[1]] ?? 1)) : null;
   let head: string, sub = '', tone: Tone, short: string;
