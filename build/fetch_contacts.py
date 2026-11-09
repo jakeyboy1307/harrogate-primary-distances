@@ -31,13 +31,17 @@ SKIP = ('example.', 'helpdesk', 'webanywhere', 'nyes.digital', 'carltonprimary@s
 
 
 # Emails set by hand, by council code, where a school's own site can't give the right one: North Rigton and All Saints,
-# Kirkby Overblow share one site, which lists both offices, as do North and South Cowton and Melsonby; Barton's site
+# Kirkby Overblow share one site, which lists both offices, as do North and South Cowton and Melsonby, and the Ribblesdale schools; Barton's site
 # also lists its trust's office, which isn't the school's
 FIXED = {'3260': ('admin@northrigton.ycway.uk', 'https://asnrfellowship.ycst.co.uk/contact/'),
          '3361': ('admin@allsaints.ycway.uk', 'https://asnrfellowship.ycst.co.uk/contact/'),
          '2081': ('admin@northsouthcowton.n-yorks.sch.uk', 'https://www.fednscmms.co.uk/'),
          '3208': ('admin@melsonby.n-yorks.sch.uk', 'https://www.fednscmms.co.uk/'),
-         '3133': ('admin@barton.dalesmat.org', 'https://www.barton.dalesmat.org/contact-us/')}
+         '3133': ('admin@barton.dalesmat.org', 'https://www.barton.dalesmat.org/contact-us/'),
+         # the Ribblesdale Federation's site lists all three offices
+         '2324': ('office@giggleswick-pri.n-yorks.sch.uk', 'https://ribblesdalefed.n-yorks.sch.uk/contact-us/'),
+         '2336': ('office@hellifield.n-yorks.sch.uk', 'https://ribblesdalefed.n-yorks.sch.uk/contact-us/'),
+         '3362': ('office@longpreston.n-yorks.sch.uk', 'https://ribblesdalefed.n-yorks.sch.uk/contact-us/')}
 
 
 def get(url, timeout=20, hops=3):

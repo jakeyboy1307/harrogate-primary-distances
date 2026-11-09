@@ -1,0 +1,56 @@
+---
+// Area page: the old Craven district (Skipton, South Craven, Settle, Ingleton, Bentham, Grassington and the Dales
+// villages). Questions follow Google's suggestions (November 2026): parents search the catchment areas of Skipton's
+// secondary and grammar schools, "Skipton primary school" also brings up Skipton in Victoria, Australia, and
+// "Ingleton primary school" the one in County Durham.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { COUNCILS } from '../lib/engine';
+import { NY_TERM_DATES } from '../lib/specs';
+import { url } from '../lib/url';
+const ny = COUNCILS['North Yorkshire'];
+const schools = loadArea('north-yorkshire.json').filter((s) => s.district === 'Craven');
+// Skipton and the Aire valley villages, apart from Settle, Grassington and the Dales to the north and west
+const SOUTH = new Set(['Skipton', 'Embsay', 'Carleton', 'Thornton-in-Craven', 'Bradley', 'Cononley', 'Lothersdale', 'Kildwick', 'Glusburn',
+  'Sutton-in-Craven', 'Cowling', 'Gargrave', 'Beamsley']);
+const south = schools.filter((s) => SOUTH.has(s.place)), dales = schools.filter((s) => !SOUTH.has(s.place));
+const faqs: [string, string][] = [
+  ['What is my catchment school in Skipton?',
+    `Put your postcode into the <a href="${url('')}">school catchment checker</a>. It tells you which primary school catchment area you’re in, and your chances at every primary school nearby, in Skipton, Settle, Ingleton, Bentham, Grassington, the South Craven villages and the Dales. Every school here has a catchment except St Stephen’s Catholic Primary School in Skipton, which sets its own rules.`],
+  ['Is there a school catchment area map for Skipton and Craven?',
+    `Yes. North Yorkshire Council publishes a <a href="${ny.catchMap}" target="_blank" rel="noopener">school catchment area map</a> covering every school in the county. The checker uses the same map, so your postcode gives you the answer. A few villages share a catchment between two schools, such as Sutton-in-Craven’s two schools, and Bentham and Austwick. The checker shows both. Near a boundary? Check your exact address on the council’s map.`],
+  ['How do school catchment areas work in Craven?',
+    `North Yorkshire Council fills each school’s places in order: children in care, then approved medical or social need, then children in the catchment, then children of staff, then everyone else. Brothers and sisters, then distance, decide who goes first inside each group. <a href="${url('how-places-work/')}">How school catchment areas work</a> explains the queue.`],
+  ['When do I apply for a Reception place for September 2027?',
+    `Apply online to <a href="${ny.apply}" target="_blank" rel="noopener">North Yorkshire Council</a> by Friday 15 January 2027. You can name up to five primary schools, in the order you want them.`],
+  ['When are primary school places announced?',
+    'Offers go out on national offer day, Friday 16 April 2027, by email from the council.'],
+  ['Can my child get into a school outside our catchment?',
+    `Often. In the latest year each school published, ${openLatest(schools).length} of the ${schools.length} schools here took everyone who applied. Where a school was full, the council publishes how far the last place went, and the checker compares that with your distance.`],
+  ['Which are the best primary schools in Skipton?',
+    'There’s no official ranking, so be wary of league tables. Ofsted is the fairest guide, alongside a visit. The checker shows each school’s latest Ofsted outcome, and each school’s own page explains it.'],
+  ['What about the Skipton Academy, Ermysted’s or Skipton Girls’ High catchment area?',
+    'The checker covers primary schools and Reception places only. Ermysted’s and Skipton Girls’ High School are grammar schools, which offer places by an entrance test rather than by catchment. For Skipton Academy and the other secondary schools, check North Yorkshire Council’s secondary admissions pages.'],
+  ['Looking for Skipton Primary School in Australia, or Ingleton Primary School in County Durham?',
+    'Those are different schools. This page covers Skipton and Ingleton in North Yorkshire. Skipton’s primary schools are Water Street, Greatwood, Skipton Parish, Christ Church and St Stephen’s.'],
+  ['We live in Barnoldswick, Earby, Silsden or Sedbergh. Which council do I apply to?',
+    'The council for where you live, even when you want a school in another council’s area. Barnoldswick and Earby are in Lancashire, so you apply to Lancashire County Council. Silsden, Steeton and Keighley are Bradford Council. Sedbergh is Westmorland and Furness Council. You can still name North Yorkshire schools on that form. The checker covers North Yorkshire and York schools only.'],
+  ['When are the school term dates and holidays?',
+    `Community and voluntary controlled schools follow <a href="${NY_TERM_DATES}" target="_blank" rel="noopener">North Yorkshire Council’s term and holiday dates</a>. Academies and voluntary aided schools can set their own, so check with the school.`],
+  ['How do I find open days?',
+    'Ask the school. Open the school in the checker for its phone number, email and website.'],
+];
+---
+<AreaPage areaKey="craven"
+  title="Skipton primary school catchment areas, map and Ofsted · Yorkshire School Checker"
+  description="Skipton, Settle and Dales primary school catchment areas: find your catchment school, which schools are hardest to get into, Ofsted ratings and the 2027 Reception dates."
+  h1="Skipton, Settle and the Dales primary schools and catchment areas"
+  lede="Primary school catchment areas for every school in Skipton, Settle, Ingleton, Bentham and Grassington, the South Craven villages from Gargrave to Cowling, and the Dales."
+  area="Skipton"
+  schools={schools}
+  groups={[
+    { label: 'Skipton and South Craven', note: `${south.length} North Yorkshire Council primary schools.`, schools: south },
+    { label: 'Settle, Grassington and the Dales', note: `${dales.length} North Yorkshire Council primary schools.`, schools: dales },
+  ]}
+  faqs={faqs}
+/>

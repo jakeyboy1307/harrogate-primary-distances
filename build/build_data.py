@@ -22,7 +22,7 @@ MI = 1609.344
 # Every school in the FULL districts is in. Harrogate district schools are matched with the hand-written keys below;
 # the rest are matched automatically, by council code, postcode and name. In the NEAR_YORK districts, only schools
 # within NEAR_YORK_MI of York Minster are in. To cover a new district, move it from NEAR_YORK to FULL.
-FULL = ('Harrogate', 'Selby', 'Hambleton', 'Ryedale', 'Scarborough', 'Richmondshire')
+FULL = ('Harrogate', 'Selby', 'Hambleton', 'Ryedale', 'Scarborough', 'Richmondshire', 'Craven')
 NEAR_YORK = ()
 YORK = (53.9622, -1.0819)
 NEAR_YORK_MI = 15
@@ -91,7 +91,7 @@ PLACE = {
     3372: 'Ripon', 2011: 'Starbeck', 2358: 'Staveley', 2335: 'Summerbridge', 3278: 'Tockwith',
     2333: 'Harrogate', 2364: 'Harrogate',
     # outside Harrogate, where the council's address gives a post town or a neighbouring village
-    3060: 'Ingleby Greenhow', 2166: 'RAF Leeming', 2014: 'Thirsk', 3614: 'Richmond', 2015: 'Scarborough', 2042: 'Lealholm', 2081: 'North Cowton', 2017: 'Catterick Garrison', 2005: 'Hawes',
+    3060: 'Ingleby Greenhow', 2166: 'RAF Leeming', 2014: 'Thirsk', 3614: 'Richmond', 2015: 'Scarborough', 2042: 'Lealholm', 2081: 'North Cowton', 2017: 'Catterick Garrison', 2005: 'Hawes', 2360: 'Thornton-in-Craven',
     2250: 'Brompton-by-Sawdon',
 }
 # School websites the council has wrong or missing, each checked by opening it (9 November 2026): old council
@@ -113,6 +113,9 @@ WEB = {
     2117: 'https://gladstoneroadschool.co.uk/', 2170: 'https://overdalecps.co.uk/', 3035: 'https://sleights.n-yorks.sch.uk/',
     3602: 'https://stheddas.npcat.org.uk/',
     2081: 'https://www.fednscmms.co.uk/', 3208: 'https://www.fednscmms.co.uk/',   # the Cowton and Melsonby federation's site
+    2365: 'https://www.greatwoodcommunityprimary.org.uk/', 2020: 'https://www.parish.ycst.co.uk/',
+    3235: 'https://www.theupperwharfedaleprimaryfederation.co.uk/cracoe-rylstone-primary-school',   # its own domain has lapsed
+    2324: 'https://ribblesdalefed.n-yorks.sch.uk/',
 }
 METHOD = {'shortest walking distance': 'walking', 'straight line': 'straight_line'}
 

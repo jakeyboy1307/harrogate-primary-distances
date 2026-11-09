@@ -12,8 +12,8 @@ Plan, updated 9 November 2026.
 | Ryedale | `/malton-primary-schools/` | 29 | Live 9 Nov |
 | City of York | `/york-primary-schools/` | 48 | Live |
 | Scarborough | `/scarborough-primary-schools/` | 40 | Live 9 Nov |
-| Richmondshire | `/richmond-primary-schools/` | 25 | Built 9 Nov, not yet live |
-| **Craven** | to do | **31** | Phase C |
+| Richmondshire | `/richmond-primary-schools/` | 25 | Live 9 Nov |
+| Craven | `/skipton-primary-schools/` | 31 | Built 9 Nov, not yet live |
 
 When all three are done the checker covers every Reception place in North Yorkshire and York: about 330 schools.
 
@@ -195,6 +195,12 @@ The same steps for every district. Phase A, B and C below only list what's speci
   - "Trinity Academy Richmond" keeps "Academy" where it is in its name and address.
   - North and South Cowton and Melsonby share a federation site; each gets its own office email. Barton gets its own email, not its trust's.
   - 28 random postcodes match the council's map.
+- **Craven:**
+  - 31 schools and the Skipton page, with Skipton and South Craven, and Settle, Grassington and the Dales, listed separately.
+  - Websites fixed: Greatwood (now .org.uk), Skipton Parish (parish.ycst.co.uk) and Cracoe and Rylstone (its own domain has lapsed, so it links to its page on the Upper Wharfedale federation's site).
+  - Giggleswick, Hellifield and Long Preston share the Ribblesdale Federation site; each gets its own office email.
+  - 26 random postcodes match the council's map.
+  - With Craven, every North Yorkshire district is fully covered. The admin's "2 left to add" are Askrigg, which the national register still lists from age 4, and one Harrogate school that was already counted before.
 - **Admin:** the coverage page's live areas are now a sortable table below the map, with a totals row.
 - **Search Console:** sitemaps submitted on 9 November. Scheduled tasks on 10 and 11 November add the Ryedale sitemap and request indexing for the Selby, Northallerton, Malton, home and York pages. Check the Pages report around 23 November.
 

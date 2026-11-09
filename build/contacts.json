@@ -17,6 +17,12 @@
   "emailSrc": "https://staynorhall.ebor.academy/",
   "tel": "01757 616428"
  },
+ "2003": {
+  "checked": "2026-11-09",
+  "email": "admin@st-stephens.n-yorks.sch.uk",
+  "emailSrc": "https://www.st-stephens.n-yorks.sch.uk",
+  "tel": "01756 709451"
+ },
  "2004": {
   "checked": "2026-11-09",
   "email": "admin.cam@ebor.academy",
@@ -97,6 +103,12 @@
   "emailSrc": "https://www.thorntondaleprimaryschool.org",
   "tel": "01751 474345"
  },
+ "2020": {
+  "checked": "2026-11-09",
+  "email": "admin@parish.ycst.co.uk",
+  "emailSrc": "https://www.parish.ycst.co.uk/",
+  "tel": "01756 793314"
+ },
  "2021": {
   "checked": "2026-11-09",
   "email": "admin@alanbrookeacademy.org",
@@ -108,6 +120,12 @@
   "email": "enquiries@alne.outwood.com",
   "emailSrc": "https://www.alne.outwood.com/contact",
   "tel": "01347 838427"
+ },
+ "2024": {
+  "checked": "2026-11-09",
+  "email": "admin@carletonendowed.com",
+  "emailSrc": "https://www.carletonendowedprimary.org.uk/",
+  "tel": "01756 792910"
  },
  "2025": {
   "checked": "2026-11-09",
@@ -205,9 +223,9 @@
  },
  "2081": {
   "checked": "2026-11-09",
-  "tel": "01325 378240",
   "email": "admin@northsouthcowton.n-yorks.sch.uk",
-  "emailSrc": "https://www.fednscmms.co.uk/"
+  "emailSrc": "https://www.fednscmms.co.uk/",
+  "tel": "01325 378240"
  },
  "2083": {
   "checked": "2026-11-09",
@@ -469,11 +487,21 @@
   "emailSrc": "https://askwith.n-yorks.sch.uk/",
   "tel": "01943 462896"
  },
+ "2305": {
+  "checked": "2026-11-09",
+  "tel": "01524 261412"
+ },
  "2309": {
   "checked": "2026-11-06",
   "email": "admin@boroughbridge-pri.n-yorks.sch.uk",
   "emailSrc": "https://boroughbridge-pri.n-yorks.sch.uk/",
   "tel": "01423 322208"
+ },
+ "2310": {
+  "checked": "2026-11-09",
+  "email": "admin@bradleysboth.n-yorks.sch.uk",
+  "emailSrc": "https://www.bradleysbothcpschool.org.uk",
+  "tel": "01535 633116"
  },
  "2312": {
   "checked": "2026-11-09",
@@ -484,6 +512,16 @@
  "2314": {
   "checked": "2026-11-09",
   "tel": "01405 860736"
+ },
+ "2316": {
+  "checked": "2026-11-09",
+  "email": "admin@cononley.n-yorks.sch.uk",
+  "emailSrc": "https://www.cononleyprimary.org.uk/",
+  "tel": "01535 633040"
+ },
+ "2317": {
+  "checked": "2026-11-09",
+  "tel": "01535 632198"
  },
  "2320": {
   "checked": "2026-11-09",
@@ -496,6 +534,12 @@
   "email": "kettadmin@rbk.n-yorks.sch.uk",
   "emailSrc": "https://rbk.n-yorks.sch.uk/kettlesing-felliscliffe/",
   "tel": "01423 770576"
+ },
+ "2324": {
+  "checked": "2026-11-09",
+  "email": "office@giggleswick-pri.n-yorks.sch.uk",
+  "emailSrc": "https://ribblesdalefed.n-yorks.sch.uk/contact-us/",
+  "tel": "01729 822248"
  },
  "2327": {
   "checked": "2026-11-09",
@@ -537,6 +581,12 @@
   "checked": "2026-11-06",
   "tel": "01423 780446"
  },
+ "2336": {
+  "checked": "2026-11-09",
+  "email": "office@hellifield.n-yorks.sch.uk",
+  "emailSrc": "https://ribblesdalefed.n-yorks.sch.uk/contact-us/",
+  "tel": "01729 850215"
+ },
  "2337": {
   "checked": "2026-11-09",
   "email": "office.hensall@wrfed.pmat.academy",
@@ -546,6 +596,16 @@
  "2338": {
   "checked": "2026-11-06",
   "tel": "01423 711440"
+ },
+ "2343": {
+  "checked": "2026-11-09",
+  "tel": "01756 760280"
+ },
+ "2346": {
+  "checked": "2026-11-09",
+  "email": "lothersdale@ycatschools.co.uk",
+  "emailSrc": "https://www.lothersdaleschool.org.uk/",
+  "tel": "01535 632510"
  },
  "2347": {
   "checked": "2026-11-06",
@@ -571,6 +631,10 @@
   "checked": "2026-11-06",
   "tel": "01937 582494"
  },
+ "2356": {
+  "checked": "2026-11-09",
+  "tel": "01756 793026"
+ },
  "2357": {
   "checked": "2026-11-06",
   "email": "enquiries@ylt.org.uk",
@@ -583,6 +647,18 @@
   "emailSrc": "https://staveley.n-yorks.sch.uk/n-yorks/primary/staveley/site/pages/contactus",
   "tel": "01423 340338"
  },
+ "2359": {
+  "checked": "2026-11-09",
+  "email": "administrator@suttoncp.uk",
+  "emailSrc": "https://www.wherelearnersgrow.co.uk/",
+  "tel": "01535 633064"
+ },
+ "2360": {
+  "checked": "2026-11-09",
+  "email": "admin@thornton-in-craven.n-yorks.sch.uk",
+  "emailSrc": "https://www.thorntonincravenprimary.org.uk/",
+  "tel": "01282 843381"
+ },
  "2363": {
   "checked": "2026-11-09",
   "email": "admin@whitley.n-yorks.sch.uk",
@@ -594,6 +670,12 @@
   "email": "admin@willowtree.nsat.org.uk",
   "emailSrc": "https://www.willowtreeprimary.org.uk/",
   "tel": "01423 883551"
+ },
+ "2365": {
+  "checked": "2026-11-09",
+  "email": "admin@greatwood.nsat.org.uk",
+  "emailSrc": "https://www.greatwoodcommunityprimary.org.uk/",
+  "tel": "01756 793609"
  },
  "2367": {
   "checked": "2026-11-06",
@@ -653,11 +735,23 @@
   "emailSrc": "https://www.barwicparade.co.uk/contact-details",
   "tel": "01757 705591"
  },
+ "2391": {
+  "checked": "2026-11-09",
+  "email": "admin@ingleton-pri.n-yorks.sch.uk",
+  "emailSrc": "https://ingleton-pri.n-yorks.sch.uk/",
+  "tel": "01524 241592"
+ },
  "2392": {
   "checked": "2026-11-06",
   "email": "admin.tad@ebor.academy",
   "emailSrc": "https://tadcaster.ebor.academy",
   "tel": "01937 833795"
+ },
+ "2393": {
+  "checked": "2026-11-09",
+  "email": "admin@glusburn.n-yorks.sch.uk",
+  "emailSrc": "https://www.glusburn.n-yorks.sch.uk/",
+  "tel": "01535 632145"
  },
  "2400": {
   "checked": "2026-11-09",
@@ -1043,6 +1137,14 @@
   "emailSrc": "https://chapelhaddleseyschool.org.uk/",
   "tel": "01757 270282"
  },
+ "3235": {
+  "checked": "2026-11-09",
+  "tel": "01756 730259"
+ },
+ "3236": {
+  "checked": "2026-11-09",
+  "tel": "01756 793426"
+ },
  "3237": {
   "checked": "2026-11-06",
   "email": "office@ffspschools.co.uk",
@@ -1054,6 +1156,10 @@
   "email": "admingps@nwfederation.com",
   "emailSrc": "https://www.goldsboroughprimary.co.uk/",
   "tel": "01423 862617"
+ },
+ "3241": {
+  "checked": "2026-11-09",
+  "tel": "01756 752365"
  },
  "3242": {
   "checked": "2026-11-06",
@@ -1175,17 +1281,35 @@
   "emailSrc": "https://www.selbyabbeyprimaryschool.co.uk/",
   "tel": "01757 703817"
  },
+ "3270": {
+  "checked": "2026-11-09",
+  "tel": "01729 822019"
+ },
  "3271": {
   "checked": "2026-11-06",
   "email": "admin@sharow.n-yorks.sch.uk",
   "emailSrc": "https://sharow.n-yorks.sch.uk/",
   "tel": "01765 604362"
  },
+ "3273": {
+  "checked": "2026-11-09",
+  "tel": "01756 793030"
+ },
  "3275": {
   "checked": "2026-11-06",
   "email": "admin@spofforth.n-yorks.sch.uk",
   "emailSrc": "https://follifootandspofforth.co.uk/",
   "tel": "01937 590655"
+ },
+ "3276": {
+  "checked": "2026-11-09",
+  "email": "admin@sutton-in-cravencofe.n-yorks.sch.uk",
+  "emailSrc": "http://sutton-in-cravencofe.n-yorks.sch.uk/",
+  "tel": "01535 632181"
+ },
+ "3277": {
+  "checked": "2026-11-09",
+  "tel": "01756 752348"
  },
  "3278": {
   "checked": "2026-11-06",
@@ -1196,6 +1320,16 @@
  "3282": {
   "checked": "2026-11-06",
   "tel": "01757 268378"
+ },
+ "3285": {
+  "checked": "2026-11-09",
+  "email": "admin@gargrave.ycst.co.uk",
+  "emailSrc": "https://gargrave.ycst.co.uk/",
+  "tel": "01756 749433"
+ },
+ "3287": {
+  "checked": "2026-11-09",
+  "tel": "01535 633682"
  },
  "3288": {
   "checked": "2026-11-09",
@@ -1255,6 +1389,22 @@
   "checked": "2026-11-09",
   "tel": "01677 423183"
  },
+ "3350": {
+  "checked": "2026-11-09",
+  "email": "admin@austwick.n-yorks.sch.uk",
+  "emailSrc": "https://www.austwickprimary.co.uk/contact-details",
+  "tel": "01524 251366"
+ },
+ "3351": {
+  "checked": "2026-11-09",
+  "email": "admin@boyle-petyt.n-yorks.sch.uk",
+  "emailSrc": "https://www.boyle-petyt.n-yorks.sch.uk/contact",
+  "tel": "01756 710378"
+ },
+ "3352": {
+  "checked": "2026-11-09",
+  "tel": "01756 720273"
+ },
  "3355": {
   "checked": "2026-11-06",
   "tel": "01757 268368"
@@ -1265,11 +1415,21 @@
   "emailSrc": "https://www.dacrebraithwaite.n-yorks.sch.uk/",
   "tel": "01423 780285"
  },
+ "3360": {
+  "checked": "2026-11-09",
+  "tel": "01729 830214"
+ },
  "3361": {
   "checked": "2026-11-06",
   "email": "admin@allsaints.ycway.uk",
   "emailSrc": "https://asnrfellowship.ycst.co.uk/contact/",
   "tel": "01423 872491"
+ },
+ "3362": {
+  "checked": "2026-11-09",
+  "email": "office@longpreston.n-yorks.sch.uk",
+  "emailSrc": "https://ribblesdalefed.n-yorks.sch.uk/contact-us/",
+  "tel": "01729 840377"
  },
  "3363": {
   "checked": "2026-11-06",
