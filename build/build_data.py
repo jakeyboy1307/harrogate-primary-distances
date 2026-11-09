@@ -22,7 +22,7 @@ MI = 1609.344
 # Every school in the FULL districts is in. Harrogate district schools are matched with the hand-written keys below;
 # the rest are matched automatically, by council code, postcode and name. In the NEAR_YORK districts, only schools
 # within NEAR_YORK_MI of York Minster are in. To cover a new district, move it from NEAR_YORK to FULL.
-FULL = ('Harrogate', 'Selby', 'Hambleton', 'Ryedale', 'Scarborough')
+FULL = ('Harrogate', 'Selby', 'Hambleton', 'Ryedale', 'Scarborough', 'Richmondshire')
 NEAR_YORK = ()
 YORK = (53.9622, -1.0819)
 NEAR_YORK_MI = 15
@@ -91,7 +91,7 @@ PLACE = {
     3372: 'Ripon', 2011: 'Starbeck', 2358: 'Staveley', 2335: 'Summerbridge', 3278: 'Tockwith',
     2333: 'Harrogate', 2364: 'Harrogate',
     # outside Harrogate, where the council's address gives a post town or a neighbouring village
-    3060: 'Ingleby Greenhow', 2166: 'RAF Leeming', 2014: 'Thirsk', 3614: 'Richmond', 2015: 'Scarborough', 2042: 'Lealholm',
+    3060: 'Ingleby Greenhow', 2166: 'RAF Leeming', 2014: 'Thirsk', 3614: 'Richmond', 2015: 'Scarborough', 2042: 'Lealholm', 2081: 'North Cowton', 2017: 'Catterick Garrison', 2005: 'Hawes',
     2250: 'Brompton-by-Sawdon',
 }
 # School websites the council has wrong or missing, each checked by opening it (9 November 2026): old council
@@ -112,6 +112,7 @@ WEB = {
     2027: 'https://luttons.ebor.academy/', 2028: 'https://sherburn.ebor.academy/', 2132: 'http://slingsby.n-yorks.sch.uk/',
     2117: 'https://gladstoneroadschool.co.uk/', 2170: 'https://overdalecps.co.uk/', 3035: 'https://sleights.n-yorks.sch.uk/',
     3602: 'https://stheddas.npcat.org.uk/',
+    2081: 'https://www.fednscmms.co.uk/', 3208: 'https://www.fednscmms.co.uk/',   # the Cowton and Melsonby federation's site
 }
 METHOD = {'shortest walking distance': 'walking', 'straight line': 'straight_line'}
 
@@ -348,6 +349,9 @@ def by_name(rows, c, name):
     return []
 
 
+MERGED = set()   # (year, code) where find_row joined a school's two rows
+
+
 def find_row(y, dfe, name_keys, name=None, district=None):
     head, rows, c = sheets[y]
     if 'dfe' in c:
@@ -359,7 +363,13 @@ def find_row(y, dfe, name_keys, name=None, district=None):
         else:
             hit = [r for r in rows if r[c['dfe']] == dfe and 'junior' not in r[c['name']].lower()]
         if len(hit) > 1:   # two rows under one code (see reception_rows): the one with places
-            hit = [r for r in hit if num(r[c['pan']]) is not None] or hit
+            keep = [r for r in hit if num(r[c['pan']]) is not None]
+            if len(keep) == 1:
+                # its applications and offers are on the other row, the school as it was: take them from there
+                other = next(r for r in hit if r is not keep[0])
+                blank = lambda v: v is None or str(v).strip().upper() in ('', 'N/A', 'NA')
+                hit = [tuple(o if blank(k) and i != c['pan'] else k for i, (k, o) in enumerate(zip(keep[0], other)))]
+                MERGED.add((y, dfe))
         if not hit and dfe not in KEYS and name:   # a new number, e.g. on becoming an academy: the same name in the same district
             hit = by_name([r for r in rows if r[c['district']] == district], c, name)
     elif name_keys:
@@ -399,7 +409,7 @@ for r in base:
             rec['p'] = next((num(x[pc['pan']]) for x in prow if has_keys(x[pc['name']], ['holy trinity', 'primary'])), None)
         if dfe == 3263 and y < 2026:
             rec['n'] = 'as Holy Trinity CE Infant School'
-        if dfe in FORMERLY and y < 2026:
+        if dfe in FORMERLY and (y < 2026 or (y, dfe) in MERGED):
             rec['n'] = f'as {FORMERLY[dfe]}'
         if rec['s'] == 'distance' and rec['g'] not in ('sib', 'staff') and rec['m'] > 16 * MI:
             # e.g. 533.56 miles: the last place went to a family far away, so everyone local got in
@@ -483,8 +493,11 @@ for s in schools:
         for i, f in enumerate(feats):
             cat = f['properties']['School']
             parts = cat.split(' & ')
-            if len(parts) > 1 and near(i, s) and any(part_sim(part, n, cut=len(cat) >= 60 and j == len(parts) - 1, place=s['place']) >= 0.6
-                                                     for j, part in enumerate(parts) for n in (s['name'], FORMERLY.get(s['dfe'], ''))):
+            # a school with "&" in its own name spans two parts: "Hunton & Arrathorne CP & Aiskew Leeming Bar CE & ..."
+            cands = [(part, j == len(parts) - 1) for j, part in enumerate(parts)] + \
+                    [(f'{a} & {b}', j == len(parts) - 2) for j, (a, b) in enumerate(zip(parts, parts[1:])) if len(parts) > 2]
+            if len(parts) > 1 and near(i, s) and any(part_sim(part, n, cut=len(cat) >= 60 and last, place=s['place']) >= 0.6
+                                                     for part, last in cands for n in (s['name'], FORMERLY.get(s['dfe'], ''))):
                 AUTO_CATCH.setdefault(s['dfe'], set()).add(i)
 
 catch, used = [], {}

@@ -1,7 +1,7 @@
 // The ad spots and the rules for what goes in them. One list, used by the admin form, the admin API
 // (worker/admin.js, which enforces it) and the ad specs page, so they can't disagree.
 
-export type Area = 'harrogate' | 'york' | 'selby' | 'hambleton' | 'ryedale' | 'scarborough';
+export type Area = 'harrogate' | 'york' | 'selby' | 'hambleton' | 'richmondshire' | 'ryedale' | 'scarborough';
 export type Placement = 'uniform' | 'profile' | 'nearby' | 'results' | 'plan' | 'area' | 'pagesponsor';
 
 // Every area the checker covers, in one place: the area pages, the school pages' breadcrumbs, the ad areas, the
@@ -21,12 +21,13 @@ export const AREA_INFO: Record<Area, AreaInfo> = {
   harrogate: { label: 'Harrogate and Knaresborough', short: 'Harrogate', name: 'Harrogate and Knaresborough', page: 'harrogate-primary-schools/', council: 'North Yorkshire', district: 'Harrogate', home: ['E07000165'], example: ['HG2 0NA', 'Harrogate'] },
   york: { label: 'York and villages', short: 'York', name: 'York', page: 'york-primary-schools/', council: 'York', home: ['E06000014'], example: ['YO24 1HW', 'York'] },
   hambleton: { label: 'Northallerton, Thirsk and Bedale', short: 'Northallerton', name: 'Northallerton, Thirsk and Bedale', page: 'northallerton-primary-schools/', council: 'North Yorkshire', district: 'Hambleton', home: ['E07000164'], example: ['DL6 1QE', 'Northallerton'] },
+  richmondshire: { label: 'Richmond, Catterick and Leyburn', short: 'Richmond', name: 'Richmond, Catterick and Leyburn', page: 'richmond-primary-schools/', council: 'North Yorkshire', district: 'Richmondshire', home: ['E07000166'], example: ['DL10 4EJ', 'Richmond'] },
   ryedale: { label: 'Malton, Pickering and Ryedale', short: 'Malton', name: 'Malton, Norton and Pickering', page: 'malton-primary-schools/', council: 'North Yorkshire', district: 'Ryedale', home: ['E07000167'], example: ['YO17 7XJ', 'Malton'] },
   scarborough: { label: 'Scarborough, Whitby and Filey', short: 'Scarborough', name: 'Scarborough, Whitby and Filey', page: 'scarborough-primary-schools/', council: 'North Yorkshire', district: 'Scarborough', home: ['E07000168'], example: ['YO12 7HU', 'Scarborough'] },
   selby: { label: 'Selby and Tadcaster', short: 'Selby', name: 'Selby and Tadcaster', page: 'selby-primary-schools/', council: 'North Yorkshire', district: 'Selby', home: ['E07000169'], example: ['YO8 4QB', 'Selby'] },
 };
 // The areas' names for the site's wording, so a new area appears everywhere from its line above:
-// PLACES "Harrogate, York, Northallerton, Malton, Scarborough and Selby"; NY_PLACES the same without York
+// PLACES "Harrogate, York, Northallerton, Richmond, Malton, Scarborough and Selby"; NY_PLACES the same without York
 export const listOf = (xs: string[], last = 'and') => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} ${last} ${xs[xs.length - 1]}`);
 export const PLACES = listOf(Object.values(AREA_INFO).map((a) => a.short));
 export const NY_PLACES = listOf(Object.values(AREA_INFO).filter((a) => a.council === 'North Yorkshire').map((a) => a.short));

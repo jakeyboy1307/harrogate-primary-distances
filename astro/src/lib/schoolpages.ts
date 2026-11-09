@@ -58,15 +58,19 @@ export function schoolPages(): SchoolPage[] {
   const all = [...loadArea('north-yorkshire.json'), ...loadArea('york.json')];
   const shorts = all.map((s) => `${shortOf(s.name)}|${kindOf(s.name)}`);
   const pages = all.map((s, i) => {
-    const short = shortOf(s.name), kind = kindOf(s.name);
-    const withPlace = GENERIC.test(short) || shorts.filter((x) => x === shorts[i]).length > 1;
+    const kind = kindOf(s.name);
     const label = isAcademy(s.name) ? 'Academy' : title(kind);
-    const base = `${short} ${label}`;
+    // "Trinity Academy Richmond": the word Academy sits inside the name, so it stays there, in the short name too
+    const [before, after = ''] = s.name.replace(/,.*$/, '').split(/\bAcademy\b/);
+    const inside = label === 'Academy' && !!shortOf(after);
+    const short = inside ? `${shortOf(before)} Academy ${shortOf(after)}` : shortOf(s.name);
+    const base = inside ? short : `${short} ${label}`;
+    const withPlace = GENERIC.test(shortOf(s.name)) || shorts.filter((x) => x === shorts[i]).length > 1;
     const area = areaOf(s);
     return {
       s, short, kind, withPlace, area,
       name: withPlace && s.place && !short.includes(s.place) ? `${base}, ${s.place}` : base,
-      slug: kebab(withPlace && !short.includes(s.place) ? `${short} ${label} ${s.place}` : `${short} ${label}`),
+      slug: kebab(withPlace && !short.includes(s.place) ? `${base} ${s.place}` : base),
       areaName: AREA_INFO[area].short,
       areaPage: AREA_INFO[area].page,
     };

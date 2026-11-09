@@ -1,0 +1,59 @@
+---
+// Area page: the old Richmondshire district (Richmond, Catterick Garrison, Catterick Village, Leyburn, Hawes and the
+// villages of Wensleydale and Swaledale). The title says North Yorkshire because "Richmond primary school" searches
+// are mostly for Richmond in London and for schools of that name in Hinckley, Sheerness and Skegness (Google's
+// suggestions, November 2026). "Richmond School" is the town's secondary school.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { COUNCILS } from '../lib/engine';
+import { NY_TERM_DATES } from '../lib/specs';
+import { url } from '../lib/url';
+const ny = COUNCILS['North Yorkshire'];
+const schools = loadArea('north-yorkshire.json').filter((s) => s.district === 'Richmondshire');
+// the Wensleydale and Swaledale schools, apart from Richmond, Catterick and the villages towards Darlington
+const DALES = new Set(['Leyburn', 'Hawes', 'Bainbridge', 'Reeth', 'Spennithorne', 'Hunton']);
+const dales = schools.filter((s) => DALES.has(s.place)), north = schools.filter((s) => !DALES.has(s.place));
+const faqs: [string, string][] = [
+  ['What is my catchment school in Richmond?',
+    `Put your postcode into the <a href="${url('')}">school catchment checker</a>. It tells you which primary school catchment area you’re in, and your chances at every primary school nearby, in Richmond, Catterick Garrison, Catterick Village, Leyburn, Hawes and the villages. Most schools here have a catchment. Cambrai Primary School at Catterick Garrison and St Mary’s Catholic Primary School in Richmond don’t, and set their own rules.`],
+  ['Is there a school catchment area map for Richmond and Catterick?',
+    `Yes. North Yorkshire Council publishes a <a href="${ny.catchMap}" target="_blank" rel="noopener">school catchment area map</a> covering every school in the county. The checker uses the same map, so your postcode gives you the answer. Richmond Methodist and Trinity Academy Richmond share a catchment over much of the town, and the checker shows both. Near a boundary? Check your exact address on the council’s map.`],
+  ['How do school catchment areas work in Richmondshire?',
+    `North Yorkshire Council fills each school’s places in order: children in care, then approved medical or social need, then children in the catchment, then children of staff, then everyone else. Brothers and sisters, then distance, decide who goes first inside each group. <a href="${url('how-places-work/')}">How school catchment areas work</a> explains the queue.`],
+  ['When do I apply for a Reception place for September 2027?',
+    `Apply online to <a href="${ny.apply}" target="_blank" rel="noopener">North Yorkshire Council</a> by Friday 15 January 2027. You can name up to five primary schools, in the order you want them.`],
+  ['When are primary school places announced?',
+    'Offers go out on national offer day, Friday 16 April 2027, by email from the council.'],
+  ['We’re a forces family moving to Catterick Garrison. Can we apply before we arrive?',
+    `Yes. Under the national School Admissions Code, you can apply before you move, using your unit or quartering address, if you have an official letter confirming the posting. Send it with your application to <a href="${ny.apply}" target="_blank" rel="noopener">North Yorkshire Council</a>. Cambrai, Carnagill, Le Cateau, Wavell, Hipswell and Colburn all serve the garrison. Moving in partway through the year is a different application, and the checker covers Reception places only.`],
+  ['Can my child get into a school outside our catchment?',
+    `Often. In the latest year each school published, ${openLatest(schools).length} of the ${schools.length} schools here took everyone who applied. Where a school was full, the council publishes how far the last place went, and the checker compares that with your distance.`],
+  ['How do the Dales infant and junior schools work?',
+    'Three Dales schools take Reception to Year 2 from September 2027, with a junior school nearby for Year 3 onwards: Bainbridge with Askrigg, Reeth with Gunnerside, and Spennithorne with Middleham. You apply for the Reception place at the infant school, then again for the junior place while your child is in Year 2. The checker covers the infant schools. Their earlier years’ figures are from when they took children all the way through.'],
+  ['Which are the best primary schools in Richmond?',
+    'There’s no official ranking, so be wary of league tables. Ofsted is the fairest guide, alongside a visit. The checker shows each school’s latest Ofsted outcome, and each school’s own page explains it.'],
+  ['Is Richmond School on here?',
+    'No. Richmond School, Risedale School at Catterick Garrison and The Wensleydale School at Leyburn are secondary schools, and the checker covers primary schools and Reception places only.'],
+  ['Looking for Richmond Primary School in Hinckley, Sheerness or Skegness?',
+    'Those are different schools. This page covers Richmond in North Yorkshire, where no school is called Richmond Primary. The town’s primary schools are Richmond Methodist, Trinity Academy Richmond and St Mary’s Catholic.'],
+  ['We live near Darlington, Barnard Castle or Kirkby Stephen. Which council do I apply to?',
+    'The council for where you live, even when you want a school in another council’s area. That’s Darlington Borough Council, Durham County Council, or Westmorland and Furness Council. You can still name North Yorkshire schools on that form. The checker covers North Yorkshire and York schools only.'],
+  ['When are the school term dates and holidays?',
+    `Community and voluntary controlled schools follow <a href="${NY_TERM_DATES}" target="_blank" rel="noopener">North Yorkshire Council’s term and holiday dates</a>. Academies, free schools and voluntary aided schools can set their own, so check with the school.`],
+  ['How do I find open days?',
+    'Ask the school. Open the school in the checker for its phone number, email and website.'],
+];
+---
+<AreaPage areaKey="richmondshire"
+  title="Richmond, North Yorkshire primary school catchment areas, map and Ofsted · Yorkshire School Checker"
+  description="Richmond, Catterick and Leyburn primary school catchment areas in North Yorkshire: find your catchment school, which schools are hardest to get into, Ofsted ratings and the 2027 Reception dates."
+  h1="Richmond, Catterick and Leyburn primary schools and catchment areas"
+  lede="Primary school catchment areas for every school in Richmond, Catterick Garrison, Catterick Village, Leyburn and Hawes in North Yorkshire, and the villages of Wensleydale, Swaledale and the Tees valley."
+  area="Richmond"
+  schools={schools}
+  groups={[
+    { label: 'Richmond, Catterick and the villages', note: `${north.length} North Yorkshire Council primary schools.`, schools: north },
+    { label: 'Wensleydale and Swaledale', note: `${dales.length} North Yorkshire Council primary and infant schools. The junior schools at Askrigg, Gunnerside and Middleham, which start at Year 3, aren’t included.`, schools: dales },
+  ]}
+  faqs={faqs}
+/>

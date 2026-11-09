@@ -11,8 +11,8 @@ Plan, updated 9 November 2026.
 | Selby | `/selby-primary-schools/` | 40 | Live 9 Nov |
 | Ryedale | `/malton-primary-schools/` | 29 | Live 9 Nov |
 | City of York | `/york-primary-schools/` | 48 | Live |
-| Scarborough | `/scarborough-primary-schools/` | 40 | Built 9 Nov, not yet live |
-| **Richmondshire** | to do | **25** | Phase B |
+| Scarborough | `/scarborough-primary-schools/` | 40 | Live 9 Nov |
+| Richmondshire | `/richmond-primary-schools/` | 25 | Built 9 Nov, not yet live |
 | **Craven** | to do | **31** | Phase C |
 
 When all three are done the checker covers every Reception place in North Yorkshire and York: about 330 schools.
@@ -188,6 +188,14 @@ The same steps for every district. Phase A, B and C below only list what's speci
   - Northstead gets its two shared catchments, with Gladstone Road and with Friarage.
   - Four website links fixed: Gladstone Road, Overdale, Sleights and St Hedda's. Hackness and Wykeham's shared site blocks automated checks.
   - 36 random postcodes match the council's map. The check script now sends the council's map grid references, because latitude and longitude come out about 70 m off near boundaries.
+- **Richmondshire:**
+  - 25 schools and the Richmond page, with Richmond and Catterick, and Wensleydale and Swaledale, listed separately.
+  - Bainbridge, Reeth and Spennithorne: their 2026 figures sit on the old primary row and their 2027 places on the new infant row, so the build joins the two.
+  - Hunton and Arrathorne now gets the catchment it shares with Michael Syddall, Crakehall and Leeming St John's. Shared catchment names are also matched two parts at a time, because "Hunton & Arrathorne" has its own "&".
+  - "Trinity Academy Richmond" keeps "Academy" where it is in its name and address.
+  - North and South Cowton and Melsonby share a federation site; each gets its own office email. Barton gets its own email, not its trust's.
+  - 28 random postcodes match the council's map.
+- **Admin:** the coverage page's live areas are now a sortable table below the map, with a totals row.
 - **Search Console:** sitemaps submitted on 9 November. Scheduled tasks on 10 and 11 November add the Ryedale sitemap and request indexing for the Selby, Northallerton, Malton, home and York pages. Check the Pages report around 23 November.
 
 ---

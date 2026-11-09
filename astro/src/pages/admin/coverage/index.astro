@@ -2,7 +2,7 @@
 // Where the checker covers, and where to go next, on a map of the UK. Every council district is outlined, with the
 // ones holding our schools shaded (fully where every primary school is in, partly where only some are), county and
 // unitary council borders on top, and our catchment areas and schools. "Where to grow" shades the rest of England by
-// how many state primary schools each district has. Below the map: each live area's figures, a planner for one
+// how many state primary schools each district has. Below the map: a table of the live areas' figures, a planner for one
 // council's districts, and every council in England ranked by size.
 // Data: public/geo/uk-districts.json and uk-counties.json (scripts/uk-boundaries.mjs), district-schools.json
 // (scripts/district-schools.mjs). Which district each area is built around is AREA_HOME in lib/specs.ts.
@@ -50,12 +50,32 @@ import Admin from '../../../layouts/Admin.astro';
         <span><i class="sw" style="background:#8A5300"></i>200 or more</span>
         <span><i class="sw none"></i>No figures (outside England)</span>
       </div>
+      <p class="adm-note cov-explain" style="margin:0"><b>Fully covered</b> means every primary school in the district is in the checker (junior schools, which start at Year 3, aren’t). <b>Partly covered</b> means only the schools within reach of one of our areas.</p>
     </div>
-    <aside class="cov-side">
-      <h2 class="adm-h2">Live areas</h2>
-      <div id="areas"><p class="adm-note">Loading…</p></div>
-      <p class="adm-note cov-explain"><b>Fully covered</b> means every primary school in the district is in the checker (junior schools, which start at Year 3, aren’t). <b>Partly covered</b> means only the schools within reach of one of our areas.</p>
-    </aside>
+  </section>
+
+  <section class="cov-live" aria-labelledby="liveTitle">
+    <div class="adm-bar">
+      <h2 class="adm-h2" id="liveTitle" style="margin:0">Live areas</h2>
+      <span class="grow"></span>
+      <span class="adm-note" style="margin:0">Click an area to see it on the map. Click a heading to sort.</span>
+    </div>
+    <div class="adm-table-wrap" style="margin-top:12px">
+      <table class="adm-table cov-areas">
+        <thead><tr>
+          <th><button type="button" data-sort="label">Area</button></th>
+          <th class="r"><button type="button" data-sort="schools">Schools</button></th>
+          <th class="r"><button type="button" data-sort="catch">With a catchment</button></th>
+          <th class="r"><button type="button" data-sort="searches">Searches</button></th>
+          <th class="r"><button type="button" data-sort="opened">Schools opened</button></th>
+          <th class="r"><button type="button" data-sort="ads">Ads showing</button></th>
+          <th class="r"><button type="button" data-sort="advertisers">Advertisers</button></th>
+        </tr></thead>
+        <tbody id="areas"><tr><td colspan="7" class="adm-empty">Loading…</td></tr></tbody>
+        <tfoot id="areaTotals"></tfoot>
+      </table>
+    </div>
+    <p class="adm-note cov-src">Searches and schools opened are for the last 30 days. An ad or advertiser in several areas counts in each of them, but only once in the total.</p>
   </section>
 
   <section class="adm-card cov-plan">
@@ -237,33 +257,62 @@ import Admin from '../../../layouts/Admin.astro';
     document.getElementById('showSchools')!.addEventListener('change', fitDots);
     fitDots();
 
-    // ---------- each live area ----------
+    // ---------- each live area, as a table that grows a row per area ----------
     const showing = ads.filter((a) => a.state === 'showing');
-    document.getElementById('areas')!.innerHTML = (Object.entries(AREAS) as [Area, string][]).map(([key, label]) => {
+    type Row = { key: Area; label: string; dists: string; schools: number; catch: number; searches: number; opened: number; ads: number; advertisers: number };
+    const areaRows: Row[] = (Object.entries(AREAS) as [Area, string][]).map(([key, label]) => {
       const mine = schools.filter((s) => areaOf(s) === key);
-      const dists = covered.filter((i) => i.r!.areas.has(key)).map((i) => i.d.name);
       const live = showing.filter((a) => a.areas.includes(key));
-      const advertisers = new Set(live.map((a) => a.advertiserId).filter(Boolean)).size;
-      const opened = mine.reduce((n, s) => n + (opens[String(s.urn)] ?? 0), 0);
-      const rows: [string, string][] = [
-        ['Schools', num(mine.length)],
-        ['With a catchment', num(mine.filter((s) => s.cz?.length).length)],
-        ['Searches, 30 days', stats ? num(searches[key] ?? 0) : 'n/a'],
-        ['Schools opened, 30 days', num(opened)],
-        ['Ads showing', num(live.length)],
-        ['Advertisers', num(advertisers)],
-      ];
-      return `<button type="button" class="adm-card cov-area" data-area="${key}">
-        <span class="cov-area-head"><b>${esc(label)}</b><span class="pill-s good">Live</span></span>
-        <span class="sub">${esc(dists.join(', '))}</span>
-        <dl>${rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>
-      </button>`;
-    }).join('');
-    document.querySelectorAll<HTMLButtonElement>('.cov-area').forEach((b) => b.addEventListener('click', () => {
-      const pts = schools.filter((s) => areaOf(s) === b.dataset.area).map((s) => s.ll);
-      pressed('view', '');
-      map.flyToBounds(L.latLngBounds(pts), { padding: [30, 30], duration: 0.6 });
+      return {
+        key, label,
+        dists: covered.filter((i) => i.r!.areas.has(key)).map((i) => i.d.name).join(', '),
+        schools: mine.length,
+        catch: mine.filter((s) => s.cz?.length).length,
+        searches: searches[key] ?? 0,
+        opened: mine.reduce((n, s) => n + (opens[String(s.urn)] ?? 0), 0),
+        ads: live.length,
+        advertisers: new Set(live.map((a) => a.advertiserId).filter(Boolean)).size,
+      };
+    });
+    const NUMS = ['schools', 'catch', 'searches', 'opened', 'ads', 'advertisers'] as const;
+    const cell = (k: (typeof NUMS)[number], v: number) => (k === 'searches' && !stats ? 'n/a' : num(v));
+    let sortBy: keyof Row = 'label', desc = false;
+    const drawAreas = () => {
+      const rows = [...areaRows].sort((a, b) => {
+        const x = a[sortBy], y = b[sortBy];
+        const c = typeof x === 'number' ? (x as number) - (y as number) : String(x).localeCompare(String(y));
+        return desc ? -c : c;
+      });
+      document.getElementById('areas')!.innerHTML = rows.map((r) => `<tr data-area="${r.key}" tabindex="0">
+        <td><div class="name">${esc(r.label)}</div><div class="sub">${esc(r.dists)}</div></td>
+        ${NUMS.map((k) => `<td class="r${r[k] ? '' : ' zero'}">${cell(k, r[k])}</td>`).join('')}
+      </tr>`).join('');
+      document.querySelectorAll<HTMLButtonElement>('[data-sort]').forEach((b) => {
+        const on = b.dataset.sort === sortBy;
+        b.closest('th')!.setAttribute('aria-sort', on ? (desc ? 'descending' : 'ascending') : 'none');
+      });
+    };
+    const total = (k: (typeof NUMS)[number]) => areaRows.reduce((n, r) => n + r[k], 0);
+    // ads can run in several areas, so the advertiser total counts each advertiser once
+    const totals = { ...Object.fromEntries(NUMS.map((k) => [k, total(k)])),
+      ads: showing.length, advertisers: new Set(showing.map((a) => a.advertiserId).filter(Boolean)).size } as Record<(typeof NUMS)[number], number>;
+    document.getElementById('areaTotals')!.innerHTML = `<tr><td><div class="name">All ${areaRows.length} areas</div></td>${NUMS.map((k) => `<td class="r">${cell(k, totals[k])}</td>`).join('')}</tr>`;
+    document.querySelectorAll<HTMLButtonElement>('[data-sort]').forEach((b) => b.addEventListener('click', () => {
+      const k = b.dataset.sort as keyof Row;
+      desc = k === sortBy ? !desc : k !== 'label';   // numbers start biggest first
+      sortBy = k;
+      drawAreas();
     }));
+    drawAreas();
+    const showArea = (key: string) => {
+      const pts = schools.filter((s) => areaOf(s) === key).map((s) => s.ll);
+      pressed('view', '');
+      document.querySelector('.cov-mapcard')!.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      map.flyToBounds(L.latLngBounds(pts), { padding: [30, 30], duration: 0.6 });
+    };
+    const areasBody = document.getElementById('areas')!;
+    areasBody.addEventListener('click', (e) => { const tr = (e.target as HTMLElement).closest<HTMLElement>('tr[data-area]'); if (tr) showArea(tr.dataset.area!); });
+    areasBody.addEventListener('keydown', (e) => { const tr = (e.target as HTMLElement).closest<HTMLElement>('tr[data-area]'); if (tr && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); showArea(tr.dataset.area!); } });
 
     // ---------- plan the next area: one council's districts ----------
     const sel = document.getElementById('county') as HTMLSelectElement;
@@ -326,7 +375,7 @@ import Admin from '../../../layouts/Admin.astro';
   }
 
   main().catch((e) => {
-    document.getElementById('areas')!.innerHTML = `<p class="adm-error">${esc(String(e.message ?? e))}</p>`;
+    document.getElementById('areas')!.innerHTML = `<tr><td colspan="7" class="adm-error">${esc(String(e.message ?? e))}</td></tr>`;
   });
 </script>
 
@@ -341,13 +390,13 @@ import Admin from '../../../layouts/Admin.astro';
   .seg button + button { border-left: 1.5px solid var(--line-2); }
   .seg button[aria-pressed='true'] { background: var(--ink); color: #fff; }
 
-  .cov-wrap { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; align-items: start; }
+  .cov-wrap { display: block; }
   .cov-mapcard { padding: 14px; display: grid; gap: 12px; }
   .cov-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
   .cov-tools .grow { flex: 1; }
   .cov-toggle { display: inline-flex; align-items: center; gap: 6px; font: 600 14px var(--body); cursor: pointer; }
   .cov-toggle input { accent-color: var(--ink); }
-  .cov-map { height: 720px; border-radius: 12px; border: 1px solid var(--line); background: #F4F4F2; }
+  .cov-map { height: min(720px, 75vh); border-radius: 12px; border: 1px solid var(--line); background: #F4F4F2; }
   .cov-map .leaflet-tooltip { font: 500 13px/1.45 var(--body); }
   .cov-key { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13px; color: var(--muted); }
   .cov-key span { display: inline-flex; align-items: center; gap: 7px; }
@@ -360,15 +409,17 @@ import Admin from '../../../layouts/Admin.astro';
   .sw.none { background: #E8EAF0; border: 1px solid var(--faint); }
   .sw.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 1.5px #fff, 0 0 0 2.5px var(--line-2); }
 
-  .cov-side { display: grid; gap: 12px; }
-  .cov-area { display: grid; gap: 6px; text-align: left; font: inherit; color: inherit; cursor: pointer; width: 100%; transition: border-color .15s, box-shadow .15s; }
-  .cov-area + .cov-area { margin-top: 12px; }
-  .cov-area:hover { border-color: var(--cobalt); box-shadow: 0 4px 14px rgba(39, 71, 216, .12); }
-  .cov-area-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 16px; }
-  .cov-area .sub { color: var(--muted-2); font-size: 13px; }
-  .cov-area dl { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; margin-top: 8px; }
-  .cov-area dt { font-size: 12px; color: var(--muted-2); font-weight: 600; }
-  .cov-area dd { font: 700 20px var(--display); margin: 0; }
+  .cov-areas th button { all: unset; cursor: pointer; }
+  .cov-areas th button:hover, .cov-areas th button:focus-visible { color: var(--ink); text-decoration: underline; }
+  .cov-areas th[aria-sort='ascending'] button::after { content: ' ↑'; }
+  .cov-areas th[aria-sort='descending'] button::after { content: ' ↓'; }
+  .cov-areas th[aria-sort='ascending'], .cov-areas th[aria-sort='descending'] { color: var(--ink); }
+  .cov-areas td.r { font: 700 17px var(--display); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .cov-areas td.zero { color: var(--muted-2); font-weight: 500; }
+  .cov-areas tbody tr { cursor: pointer; }
+  .cov-areas tbody tr:focus-visible { outline: 2px solid var(--cobalt); outline-offset: -2px; }
+  .cov-areas tfoot td { border-top: 2px solid var(--line-2); border-bottom: 0; background: #FAFBFF; }
+  .cov-areas td:first-child { min-width: 220px; }
   .cov-explain, .cov-src { font-size: 13px; }
   .cov-src { margin-top: 10px; }
 

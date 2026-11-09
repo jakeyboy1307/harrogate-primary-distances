@@ -23,6 +23,16 @@
   "emailSrc": "https://camblesforth.ebor.academy/",
   "tel": "01757 616374"
  },
+ "2005": {
+  "checked": "2026-11-09",
+  "email": "hawes@ycatschools.co.uk",
+  "emailSrc": "https://www.hawesprimary.co.uk/",
+  "tel": "01969 667308"
+ },
+ "2007": {
+  "checked": "2026-11-09",
+  "tel": "01748 822104"
+ },
  "2008": {
   "checked": "2026-11-06",
   "email": "enquiries@greystone.outwood.com",
@@ -53,6 +63,12 @@
   "emailSrc": "https://www.keeblegatewayacademy.org",
   "tel": "01845 448227"
  },
+ "2013": {
+  "checked": "2026-11-09",
+  "email": "admin@cambrai.lingfieldtrust.org.uk",
+  "emailSrc": "https://www.cambraiprimaryschool.co.uk/contact-us",
+  "tel": "01748 503130"
+ },
  "2014": {
   "checked": "2026-11-09",
   "tel": "01845 523058"
@@ -64,6 +80,10 @@
  "2016": {
   "checked": "2026-11-06",
   "tel": "01757 704308"
+ },
+ "2017": {
+  "checked": "2026-11-09",
+  "tel": "01748 833622"
  },
  "2018": {
   "checked": "2026-11-09",
@@ -147,11 +167,19 @@
   "emailSrc": "https://www.seton.n-yorks.sch.uk/",
   "tel": "01947 840257"
  },
+ "2063": {
+  "checked": "2026-11-09",
+  "tel": "01677 450342"
+ },
  "2064": {
   "checked": "2026-11-09",
   "email": "office@kirkbymoorside-alt.uk",
   "emailSrc": "https://www.kirkbymoorside-alt.uk/",
   "tel": "01751 431517"
+ },
+ "2065": {
+  "checked": "2026-11-09",
+  "tel": "01969 623187"
  },
  "2074": {
   "checked": "2026-11-09",
@@ -175,9 +203,19 @@
   "emailSrc": "https://www.applegarth.n-yorks.sch.uk",
   "tel": "01609 773521"
  },
+ "2081": {
+  "checked": "2026-11-09",
+  "tel": "01325 378240",
+  "email": "admin@northsouthcowton.n-yorks.sch.uk",
+  "emailSrc": "https://www.fednscmms.co.uk/"
+ },
  "2083": {
   "checked": "2026-11-09",
   "tel": "01609 883329"
+ },
+ "2096": {
+  "checked": "2026-11-09",
+  "tel": "01748 884308"
  },
  "2097": {
   "checked": "2026-11-09",
@@ -261,6 +299,12 @@
   "checked": "2026-11-09",
   "tel": "01677 422675"
  },
+ "2167": {
+  "checked": "2026-11-09",
+  "email": "admin@colburn.n-yorks.sch.uk",
+  "emailSrc": "https://www.colburn.n-yorks.sch.uk/",
+  "tel": "01748 832676"
+ },
  "2170": {
   "checked": "2026-11-09",
   "tel": "01723 582360"
@@ -270,6 +314,12 @@
   "email": "admin@linton.n-yorks.sch.uk",
   "emailSrc": "https://www.linton.n-yorks.sch.uk/",
   "tel": "01347 848234"
+ },
+ "2173": {
+  "checked": "2026-11-09",
+  "email": "admin@le-cateau.n-yorks.sch.uk",
+  "emailSrc": "https://www.lecateauprimary.co.uk/",
+  "tel": "01748 832292"
  },
  "2183": {
   "checked": "2026-11-09",
@@ -282,6 +332,10 @@
   "email": "admin@sheriffhutton.n-yorks.sch.uk",
   "emailSrc": "https://sheriffhuttonschool.org/contact-us/",
   "tel": "01347 878441"
+ },
+ "2189": {
+  "checked": "2026-11-09",
+  "tel": "01748 832298"
  },
  "2190": {
   "checked": "2026-11-09",
@@ -689,6 +743,10 @@
   "checked": "2026-11-09",
   "tel": "01677 422403"
  },
+ "3008": {
+  "checked": "2026-11-09",
+  "tel": "01969 650336"
+ },
  "3010": {
   "checked": "2026-11-09",
   "email": "admin@bedale-ce.n-yorks.sch.uk",
@@ -698,6 +756,12 @@
  "3012": {
   "checked": "2026-11-09",
   "tel": "01642 778202"
+ },
+ "3015": {
+  "checked": "2026-11-09",
+  "email": "admin@bromptonschool.net",
+  "emailSrc": "https://www.bromptonschool.net",
+  "tel": "01748 811683"
  },
  "3020": {
   "checked": "2026-11-09",
@@ -710,6 +774,12 @@
   "email": "admin@crayke.n-yorks.sch.uk",
   "emailSrc": "https://craykeschool.org/",
   "tel": "01347 821767"
+ },
+ "3022": {
+  "checked": "2026-11-09",
+  "email": "admin@croft.dalesmat.org",
+  "emailSrc": "https://www.croft.dalesmat.org/contact-us/",
+  "tel": "01325 720528"
  },
  "3025": {
   "checked": "2026-11-09",
@@ -726,6 +796,12 @@
   "email": "admin@dalesmat.org",
   "emailSrc": "https://www.eckf.dalesmat.org/contact-us/",
   "tel": "01325 378347"
+ },
+ "3034": {
+  "checked": "2026-11-09",
+  "email": "mtadmin@efmt.dalesmat.org",
+  "emailSrc": "https://www.efmt.dalesmat.org/contact-us/",
+  "tel": "01325 718298"
  },
  "3035": {
   "checked": "2026-11-09",
@@ -761,6 +837,12 @@
   "emailSrc": "https://heritagecoastfederation.org.uk/hawsker_school/contact_us/contact_us.html",
   "tel": "01947 602772"
  },
+ "3053": {
+  "checked": "2026-11-09",
+  "email": "admin@hipswell.n-yorks.sch.uk",
+  "emailSrc": "http://hipswell.n-yorks.sch.uk/",
+  "tel": "01748 832513"
+ },
  "3055": {
   "checked": "2026-11-06",
   "email": "admin@huby.n-yorks.sch.uk",
@@ -789,11 +871,23 @@
   "checked": "2026-11-09",
   "tel": "01947 893373"
  },
+ "3079": {
+  "checked": "2026-11-09",
+  "email": "mtadmin@efmt.dalesmat.org",
+  "emailSrc": "https://www.efmt.dalesmat.org/contact-us/",
+  "tel": "01325 377285"
+ },
  "3088": {
   "checked": "2026-11-09",
   "email": "admin@pickhill.school",
   "emailSrc": "https://www.pickhill.school/",
   "tel": "01845 567339"
+ },
+ "3090": {
+  "checked": "2026-11-09",
+  "email": "admin@ravensworth.dalesmat.org",
+  "emailSrc": "https://www.dalesmat.org/Academies/ravensworth-ce-primary-school/",
+  "tel": "01325 718375"
  },
  "3099": {
   "checked": "2026-11-06",
@@ -816,6 +910,12 @@
   "email": "admin@southkilvingtonacademy.org",
   "emailSrc": "https://www.southkilvingtonacademy.org",
   "tel": "01845 523191"
+ },
+ "3110": {
+  "checked": "2026-11-09",
+  "email": "contactus@fed-mas.n-yorks.sch.uk",
+  "emailSrc": "https://fed-mas.n-yorks.sch.uk/contact-us/",
+  "tel": "01969 623474"
  },
  "3113": {
   "checked": "2026-11-06",
@@ -855,6 +955,12 @@
   "checked": "2026-11-09",
   "tel": "01723 862413"
  },
+ "3133": {
+  "checked": "2026-11-09",
+  "email": "admin@barton.dalesmat.org",
+  "emailSrc": "https://www.barton.dalesmat.org/contact-us/",
+  "tel": "01325 377246"
+ },
  "3139": {
   "checked": "2026-11-09",
   "email": "fylingdalesadmin@hcfed.co.uk",
@@ -888,6 +994,16 @@
  "3165": {
   "checked": "2026-11-09",
   "tel": "01944 728286"
+ },
+ "3208": {
+  "checked": "2026-11-09",
+  "email": "admin@melsonby.n-yorks.sch.uk",
+  "emailSrc": "https://www.fednscmms.co.uk/",
+  "tel": "01325 718318"
+ },
+ "3210": {
+  "checked": "2026-11-09",
+  "tel": "01748 822794"
  },
  "3223": {
   "checked": "2026-11-06",
@@ -1091,6 +1207,12 @@
   "checked": "2026-11-09",
   "tel": "01609 776273"
  },
+ "3301": {
+  "checked": "2026-11-09",
+  "email": "admin@bolton-on-swale.n-yorks.sch.uk",
+  "emailSrc": "http://bolton-on-swale.n-yorks.sch.uk/",
+  "tel": "01748 818401"
+ },
  "3304": {
   "checked": "2026-11-09",
   "email": "admin@st-peters-brafferton.n-yorks.sch.uk",
@@ -1100,6 +1222,12 @@
  "3306": {
   "checked": "2026-11-09",
   "tel": "01642 712340"
+ },
+ "3307": {
+  "checked": "2026-11-09",
+  "email": "admin@michael-syddall.n-yorks.sch.uk",
+  "emailSrc": "https://michael-syddall.n-yorks.sch.uk/",
+  "tel": "01748 818485"
  },
  "3308": {
   "checked": "2026-11-09",
@@ -1212,6 +1340,10 @@
  "3610": {
   "checked": "2026-11-09",
   "tel": "01751 473102"
+ },
+ "3614": {
+  "checked": "2026-11-09",
+  "tel": "01748 822365"
  },
  "3615": {
   "checked": "2026-11-09",
