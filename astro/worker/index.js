@@ -7,6 +7,7 @@
 
 import { adminApi } from './admin.js';
 import { adminEmail } from './auth.js';
+import { AREAS } from '../src/lib/specs.ts';
 
 const FROM = 'enquiries@yorkshireschoolchecker.co.uk';
 const TO = 'jake.adams1307@gmail.com';   // must match destination_address in wrangler.jsonc
@@ -42,7 +43,7 @@ async function sponsors(env) {
 const SPOT_KEYS = 'uniform|profile|nearby|results|plan|area|pagesponsor';
 const HIT_KEYS = {
   page: /^(404|\/[a-z0-9\-\/]{0,80})$/,
-  search: /^(harrogate|york|outside)$/,
+  search: new RegExp(`^(${Object.keys(AREAS).join('|')}|outside)$`),   // the area searched (lib/specs.ts)
   panel: /^\d{5,7}$/,
   ad_view: new RegExp(`^\\d{1,9}:(${SPOT_KEYS})$`),
   ad_click: new RegExp(`^\\d{1,9}:(${SPOT_KEYS})$`),

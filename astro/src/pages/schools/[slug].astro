@@ -5,7 +5,7 @@
 // school's details open.
 import Base from '../../layouts/Base.astro';
 import { url } from '../../lib/url';
-import { mon, whoGotIn } from '../../lib/engine';
+import { mon, noDist, whoGotIn } from '../../lib/engine';
 import { miles, nearby, published, schoolPages, summary, yearLine, type SchoolPage } from '../../lib/schoolpages';
 
 export function getStaticPaths() {
@@ -26,7 +26,7 @@ const where = p.name.includes(`, ${s.place}`) || (p.withPlace && p.short.include
 const article = /^[aeiou]/.test(typeText) ? 'an' : 'a';
 const hasCatchment = !!s.cz?.length;
 const years = published(s);
-const dists = s.d.filter((y) => y.s === 'distance' && y.g !== 'sib' && y.m != null);
+const dists = s.d.filter((y) => y.s === 'distance' && !noDist(y) && y.m != null);
 const ratio = sm.perPlace ? (sm.perPlace >= 1.05 ? `${sm.perPlace.toFixed(1)} children for every place` : 'fewer children than places') : null;
 const near = nearby(p);
 

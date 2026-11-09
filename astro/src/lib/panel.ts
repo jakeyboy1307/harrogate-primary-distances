@@ -1,11 +1,11 @@
 // Fills and drives the school slide-out panel shared by Find schools and My plan.
 import {
-  council, esc, fmt, headlineAnswer, mon, ofsted, plural, whoGotIn, yearVerdict, youText,
+  council, esc, fmt, headlineAnswer, mon, noDist, ofsted, plural, whoGotIn, yearVerdict, youText,
   MAX_SHORT, MI, type LatLng, type Mode, type School, type YearRec,
 } from './engine';
 import { addedText, addSchool, backupOf, getList, onListChange, ordinal, promoteBackup, rankOf, removeBackup, removeFromList } from './store';
 import { $, chip, toast } from './ui';
-import { areaOf, panelSponsors, profileBlock, sponsorsFor } from './sponsors';
+import { adAreasOf, panelSponsors, profileBlock, sponsorsFor } from './sponsors';
 import { track } from './track';
 
 interface Ctx { order: () => number[]; byId: (id: number) => School | undefined; mode: () => Mode; home: () => LatLng | null; onChangeOrder?: () => void }
@@ -117,7 +117,7 @@ const catchNote = (x: YearRec) => {
 // Year by year as bars: how far the last place went each year, coloured by whether you'd have got in,
 // with your own distance marked. Years with no distance cut-off get a plain label instead of a bar.
 function yearChart(s: School) {
-  const dists = s.d.filter((x) => x.s === 'distance' && x.g !== 'sib').map((x) => x.m!);
+  const dists = s.d.filter((x) => x.s === 'distance' && !noDist(x)).map((x) => x.m!);
   const you = dists.length ? s.used ?? null : null;   // nothing to measure your distance against without cut-offs
   const max = Math.max(...dists, you ?? 0, 0.25 * MI) * 1.12;
   const pct = (m: number) => `${Math.min(100, (m / max) * 100).toFixed(1)}%`;
@@ -126,11 +126,11 @@ function yearChart(s: School) {
     const yv = yearVerdict(x, s.used, s.inC), t = tone(yv.v);
     const tip = `${x.y}: ${whoGotIn(x)}. ${yv.label}.`;
     let track: string, val: string;
-    if (x.s === 'distance' && x.g !== 'sib') {
+    if (x.s === 'distance' && !noDist(x)) {
       track = `<div class="bar${t}" style="width:${pct(x.m!)}"></div>`;
       val = fmt(x.m);
     } else {
-      const txt = x.s === 'all_offered' ? 'Everyone got in' : x.s === 'distance' ? 'Siblings only' : x.s === 'catchment' ? catchNote(x) : 'Not published';
+      const txt = x.s === 'all_offered' ? 'Everyone got in' : x.s === 'distance' ? (x.g === 'staff' ? 'Staff children only' : 'Siblings only') : x.s === 'catchment' ? catchNote(x) : 'Not published';
       track = `<div class="bar-note${t}">${txt}</div>`;
       val = '';
     }
@@ -202,7 +202,7 @@ function body(s: School, mode: Mode, home: LatLng | null) {
     <div><dt>${s.method === 'walking' && s.walk != null ? 'Your walk' : 'Your distance'}</dt><dd>${yours != null ? fmt(yours) : 'n/a'}</dd></div>
     <div><dt>Catchment</dt><dd>${cz}</dd></div>
     ${last || !outsiders
-      ? `<div><dt>${last ? 'Last place, ' + last.y : 'Last place'}</dt><dd>${last ? (last.g === 'sib' ? 'Siblings only' : fmt(last.m)) : 'Not published'}</dd></div>`
+      ? `<div><dt>${last ? 'Last place, ' + last.y : 'Last place'}</dt><dd>${last ? (last.g === 'sib' ? 'Siblings only' : last.g === 'staff' ? 'Staff children only' : fmt(last.m)) : 'Not published'}</dd></div>`
       : `<div><dt>${outsiders.s === 'catchment' && outsiders.ia ? 'From outside' : 'Got in'}, ${outsiders.y}</dt><dd>${outsiders.s === 'all_offered' ? 'Everyone' : `${outsiders.xa! - outsiders.xr!} of ${outsiders.xa}`}</dd></div>`}
     ${sg ? `<div><dt>Safeguarding</dt><dd class="${sg === 'Met' ? 'good' : 'bad'}">${esc(sg)}</dd></div>`
          : `<div><dt>Ofsted</dt><dd class="${of.tone === 'bad' ? 'bad' : of.tone === 'na' ? '' : 'good'}">${esc(of.short)}</dd></div>`}
@@ -217,7 +217,7 @@ function body(s: School, mode: Mode, home: LatLng | null) {
   <section class="p-sec">${ofBlock}</section>
   <div class="two"><div><h4>Admissions</h4><p>${policy}${notes ? '<br>' + notes : ''}</p></div>${s.addr ? `<div><h4>Address</h4><p>${esc(s.addr)}</p></div>` : ''}</div>
   ${contact(s)}
-  ${sponsorsFor('profile', areaOf(s), s.urn).map(profileBlock).join('')}
+  ${sponsorsFor('profile', adAreasOf(s), s.urn).map(profileBlock).join('')}
   <div class="links">${links}</div>
   ${panelSponsors(s)}
   ${s.walkErr && s.method === 'walking' ? '<p class="p-note">Distances here are straight lines, because the walking-route service didn’t respond.</p>' : ''}`;

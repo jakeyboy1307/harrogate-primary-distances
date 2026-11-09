@@ -5,11 +5,11 @@ import Base from '../layouts/Base.astro';
 import { url } from '../lib/url';
 import { byPlace, hardest, openToAll, outstanding, type AreaSchool } from '../lib/areas';
 import type { Area } from '../lib/sponsors';
-import { pageOf } from '../lib/schoolpages';
+import { pageOf, shortOf } from '../lib/schoolpages';
 interface Props {
   title: string; description: string; h1: string; lede: string; area: string; areaKey: Area;
   schools: AreaSchool[];
-  groups: { label: string; note: string; schools: AreaSchool[] }[];
+  groups: { label: string; note: string; schools: AreaSchool[] }[];   // note is HTML
   faqs: [string, string][];   // question, answer (HTML)
 }
 const { title, description, h1, lede, area, areaKey, schools, groups, faqs } = Astro.props;
@@ -21,7 +21,7 @@ const top = outstanding(schools);
 const href = (urn: number) => url(`schools/${pageOf(urn)!.slug}/`);
 // the questions, for search engines
 const faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a.replace(/<[^>]+>/g, '') } })) };
-const short = (n: string) => n.replace(/,.*$/, '').replace(/ (Church of England|CE|C of E)? ?(Voluntary (Controlled|Aided) )?(Community )?Primary (School|Academy)$/i, '');
+const short = shortOf;   // "Marwood", as parents search for it (lib/schoolpages.ts)
 ---
 <Base title={title} description={description}>
   <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
@@ -67,7 +67,7 @@ const short = (n: string) => n.replace(/,.*$/, '').replace(/ (Church of England|
     {groups.map((g) => (
       <div class="place-group">
         {groups.length > 1 && <h3>{g.label}</h3>}
-        <p class="intro">{g.note}</p>
+        <p class="intro" set:html={g.note} />
         <div class="places">
           {byPlace(g.schools).map(([place, list]) => (
             <div class="place"><h4>{place}</h4><ul>{list.map((s) => <li><a class="sch-link" href={href(s.urn)}>{s.name}</a>{s.pan ? <span class="muted"> · <strong class="pan">{s.pan} places</strong> a year</span> : ''}</li>)}</ul></div>

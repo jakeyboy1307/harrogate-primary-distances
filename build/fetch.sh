@@ -17,13 +17,11 @@ get p2024.xlsx "$HUB/aebd87cc-a828-4196-b584-f43d66fbb045/resource/b8db89a3-99f1
 get p2023.xlsx "$HUB/b7d3bf98-aecc-4445-aa04-0a4648da06f9/resource/8c686bad-eec6-40a3-8d16-4ac1fb89f75c/download/2023-24-all-primary-stats-complete.xlsx"
 get p2022.xlsx "$HUB/3f9f20ee-4246-4fd5-8d98-7876a492ec46/resource/d64aa6f1-40e6-44c7-b189-0f07ed4958b3/download/2022-23-all-primary-data-completed-30.08.2022.xlsx"
 
-# Council catchment areas and school points, from the layers behind its "Finding a school" map
+# Council catchment areas and school points for the whole county, from the layers behind its "Finding a school" map
 ARC=https://utility.arcgis.com/usrsvcs/servers
 REF="Referer: https://experience.arcgis.com/"
-ENV='{"xmin":-2.2,"ymin":53.65,"xmax":-0.7,"ymax":54.35,"spatialReference":{"wkid":4326}}'   # Harrogate district and 15 miles round York
 curl -fsS -H "$REF" -G "$ARC/9e566a3f72394ae383d424b80f254861/rest/services/CYPS/Primary_School_Catchment_Areas/FeatureServer/4/query" \
-  --data-urlencode "where=1=1" --data-urlencode "outFields=*" --data-urlencode "geometry=$ENV" \
-  --data-urlencode "geometryType=esriGeometryEnvelope" --data-urlencode "inSR=4326" --data-urlencode "outSR=4326" \
+  --data-urlencode "where=1=1" --data-urlencode "outFields=*" --data-urlencode "outSR=4326" \
   --data-urlencode "geometryPrecision=6" --data-urlencode "f=geojson" -o "$RAW/catch.geojson"; echo "  catch.geojson"
 curl -fsS -H "$REF" -G "$ARC/8d0777ada12b49a4b3591d03ebd03ffd/rest/services/CYPS/Primary_Schools/FeatureServer/2/query" \
   --data-urlencode "where=1=1" --data-urlencode "outFields=*" --data-urlencode "outSR=4326" --data-urlencode "f=geojson" \

@@ -7,7 +7,7 @@ import { AREAS } from '../../../lib/specs';
 <Admin title="Schools" active="schools">
   <div class="adm-bar">
     <input type="search" id="q" placeholder="Search school, town or URN" aria-label="Search schools" />
-    <select id="fArea" aria-label="Area"><option value="">Both areas</option>{Object.entries(AREAS).map(([k, a]) => <option value={k}>{a}</option>)}</select>
+    <select id="fArea" aria-label="Area"><option value="">All areas</option>{Object.entries(AREAS).map(([k, a]) => <option value={k}>{a}</option>)}</select>
     <select id="fOfsted" aria-label="Ofsted"><option value="">Any Ofsted</option><option value="good">Good or better</option><option value="bad">Below Good</option><option value="na">No Ofsted match</option></select>
     <select id="fAds" aria-label="Ads"><option value="">With or without ads</option><option value="yes">Has an ad in its panel</option><option value="no">No ad in its panel</option></select>
     <span class="grow"></span>
@@ -40,10 +40,10 @@ import { AREAS } from '../../../lib/specs';
 <script>
   import { api, esc, money, spotNames, statePill, toast, type Ad } from '../../../lib/admin';
   import { council, loadData, ofsted, whoGotIn, type School } from '../../../lib/engine';
-  import { areaOf } from '../../../lib/sponsors';
-  import { AREAS } from '../../../lib/specs';
+  import { adAreasOf, areaOf } from '../../../lib/sponsors';
+  import { AREA_SHORT, AREAS, type Area } from '../../../lib/specs';
 
-  interface Row { s: School; area: 'harrogate' | 'york'; of: ReturnType<typeof ofsted>; latest: School['d'][number] | undefined; opens: number; ads: Ad[] }
+  interface Row { s: School; area: Area; of: ReturnType<typeof ofsted>; latest: School['d'][number] | undefined; opens: number; ads: Ad[] }
   let rows: Row[] = [];
   let sortKey = 'name', sortDir = 1;
   const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
@@ -76,7 +76,7 @@ import { AREAS } from '../../../lib/specs';
     document.querySelectorAll<HTMLElement>('[data-sort]').forEach((b) => b.dataset.dir = b.dataset.sort === sortKey ? (sortDir > 0 ? 'up' : 'down') : '');
     document.getElementById('rows')!.innerHTML = list.length ? list.map((r) => `<tr data-urn="${r.s.urn}">
       <td><button class="sch-name" data-open="${r.s.urn}">${esc(r.s.name.replace(/,.*$/, ''))}</button><div class="sub">${esc(r.s.place)} · URN ${r.s.urn}${r.s.own ? ' · own admissions' : ''}</div></td>
-      <td>${esc(AREAS[r.area].split(' ')[0])}<div class="sub">${esc(council(r.s.council).name)}</div></td>
+      <td>${esc(AREA_SHORT[r.area])}<div class="sub">${esc(council(r.s.council).name)}</div></td>
       <td class="r">${r.s.pan ?? '–'}</td>
       <td><span class="of of-${r.of.tone}">${esc(r.of.short)}</span></td>
       <td>${r.latest ? `${r.latest.y}: ${esc(whoGotIn(r.latest))}` : '<span class="sub">Not published</span>'}</td>
@@ -150,7 +150,7 @@ import { AREAS } from '../../../lib/specs';
       const area = areaOf(s);
       return {
         s, area, of: ofsted(s.of), latest: s.d.find((y) => y.s !== 'not_published'), opens: opens[String(s.urn)] ?? 0,
-        ads: running.filter((a) => a.areas.includes(area) && (!a.urns || a.urns.includes(s.urn))),
+        ads: running.filter((a) => adAreasOf(s).some((x) => a.areas.includes(x)) && (!a.urns || a.urns.includes(s.urn))),
       };
     });
     render();

@@ -97,7 +97,7 @@ const categories = ['School uniform', 'Independent school', 'Wraparound care', '
   import { api, confirmAction, day, statePill, toast, type Ad, type Advertiser } from '../../../../lib/admin';
   import { loadData } from '../../../../lib/engine';
   import { adCard, areaOf, profileBlock, type Sponsor } from '../../../../lib/sponsors';
-  import { AREAS, LIMITS } from '../../../../lib/specs';
+  import { AREA_SHORT, LIMITS } from '../../../../lib/specs';
 
   const params = new URLSearchParams(location.search);
   let id = params.get('id') ? Number(params.get('id')) : null;
@@ -186,7 +186,7 @@ const categories = ['School uniform', 'Independent school', 'Wraparound care', '
     const q = search.value.trim().toLowerCase(), areas = checked('areas');
     const hits = q.length < 2 ? [] : schools.filter((s) => !urns.includes(s.urn) && (!areas.length || areas.includes(s.area))
       && `${s.name} ${s.place}`.toLowerCase().includes(q)).slice(0, 8);
-    results.innerHTML = hits.map((s) => `<button type="button" data-add="${s.urn}">${s.name.replace(/,.*$/, '')}<span>${s.place} · ${AREAS[s.area as keyof typeof AREAS].split(' ')[0]}</span></button>`).join('')
+    results.innerHTML = hits.map((s) => `<button type="button" data-add="${s.urn}">${s.name.replace(/,.*$/, '')}<span>${s.place} · ${AREA_SHORT[s.area as keyof typeof AREA_SHORT]}</span></button>`).join('')
       || (q.length >= 2 ? '<p>No school matches.</p>' : '');
     results.hidden = q.length < 2;
   });

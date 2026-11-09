@@ -1,4 +1,4 @@
-"""Build the North Yorkshire school data: the Harrogate district, plus schools near York.
+"""Build the North Yorkshire school data: every school in the FULL districts, plus schools near York in NEAR_YORK.
 
 Usage:  python3 -I build/build_data.py <raw-dir> <out.json>
 
@@ -19,9 +19,11 @@ from common import OWN_RULES, kind, ofsted, read_mi
 RAW, OUT = sys.argv[1], sys.argv[2]
 MI = 1609.344
 
-# Harrogate district schools are matched with the hand-written keys below. Schools in these districts within
-# NEAR_YORK_MI of York Minster are matched automatically, by council code, postcode and name.
-NEAR_YORK = ('Selby', 'Hambleton', 'Ryedale')
+# Every school in the FULL districts is in. Harrogate district schools are matched with the hand-written keys below;
+# the rest are matched automatically, by council code, postcode and name. In the NEAR_YORK districts, only schools
+# within NEAR_YORK_MI of York Minster are in. To cover a new district, move it from NEAR_YORK to FULL.
+FULL = ('Harrogate', 'Selby', 'Hambleton')
+NEAR_YORK = ('Ryedale',)
 YORK = (53.9622, -1.0819)
 NEAR_YORK_MI = 15
 
@@ -66,7 +68,9 @@ CATCH_KEYS = {2425: [['saltergate']], 2331: [['oatlands inf']], 3378: [], 3371: 
               3363: [['marton-cum-grafton']]}
 # 2023 names that the keys alone can't place
 KEYS_2023 = {3263: ['holy trinity', 'infant'], 3378: ["st joseph's", 'harrogate'], 3371: ["st mary's", 'knaresborough'],
-             3372: ["st wilfrid's"], 2031: ['masham'], 2427: ['riverside', '(n)']}
+             3372: ["st wilfrid's"], 2031: ['masham'], 2427: ['riverside', '(n)'], 3001: ['aiskew']}
+# Schools renamed since: the name they had in the years before 2026
+FORMERLY = {3001: 'Aiskew, Leeming Bar CE Primary School'}
 
 PLACE = {
     3228: 'Burnt Yates', 3361: 'Kirkby Overblow', 2302: 'Askwith', 2377: 'Knaresborough', 2348: 'Beckwithshaw',
@@ -83,6 +87,24 @@ PLACE = {
     3225: 'Pateley Bridge', 3378: 'Harrogate', 3371: 'Knaresborough', 3247: 'Harrogate', 3377: 'Harrogate',
     3372: 'Ripon', 2011: 'Starbeck', 2358: 'Staveley', 2335: 'Summerbridge', 3278: 'Tockwith',
     2333: 'Harrogate', 2364: 'Harrogate',
+    # outside Harrogate, where the council's address gives a post town or a neighbouring village
+    3060: 'Ingleby Greenhow', 2166: 'RAF Leeming', 2014: 'Thirsk',
+}
+# School websites the council has wrong or missing, each checked by opening it (9 November 2026): old council
+# addresses that no longer answer, trust sites that moved, and Burneston's old domain, which now belongs to a
+# cashback site. Re-check them at the yearly refresh: python3 build/check_websites.py
+WEB = {
+    2021: 'https://www.alanbrookeacademy.org/', 2225: 'https://www.broomfield-alt.uk/', 2163: 'https://www.millhill-alt.uk/',
+    3101: 'http://www.sessayprimaryschool.org/', 2247: 'http://appletonwiske.n-yorks.sch.uk/', 2097: 'http://romanby.n-yorks.sch.uk/',
+    2320: 'https://fairburn.n-yorks.sch.uk/', 3010: 'https://www.bedale-ce.n-yorks.sch.uk/', 3337: 'http://burneston.n-yorks.sch.uk/',
+    3228: 'https://www.admirallongprimary.co.uk/', 2302: 'https://askwith.n-yorks.sch.uk/',
+    2400: 'https://sites.google.com/barlbybridge.n-yorks.sch.uk/barlbybridgeschool/home', 3150: 'https://www.cliffe.setschools.uk/',
+    3288: 'https://www.fog.hlt.academy/', 2327: 'https://greatouseburn-n-yorks.secure-dbprimary.com/n-yorks/primary/greatouseburn',
+    3263: 'https://www.htjce.co.uk/', 2030: 'https://www.husthwaiteprimaryschool.org/',
+    3260: 'https://asnrfellowship.ycst.co.uk/',   # North Rigton shares a site with All Saints, Kirkby Overblow
+    2331: 'https://www.oatlandsinf.ycst.co.uk/', 3902: 'https://shn.npcat.org.uk/', 3225: 'https://uppernidderdalefed.school/',
+    3247: 'https://stpeters.ycst.co.uk/', 2011: 'https://www.starbeckprimaryacademy.org.uk/', 2151: 'https://welburnprimary.academy/',
+    2364: 'https://www.willowtreeprimary.org.uk/',
 }
 METHOD = {'shortest walking distance': 'walking', 'straight line': 'straight_line'}
 
@@ -100,7 +122,8 @@ STOP = {'school', 'primary', 'the', 'and', 'a', 'of', 'ce', 'church', 'england',
 
 def tokens(name):
     # (N), (P) and the like are the 2023 sheet's own codes; 'comm.' and cut-off endings like 'Scho' are stop words
-    return {t for t in re.findall(r"[a-z0-9]+", re.sub(r'\(.*?\)', '', norm(name)).replace("'", '')) if t not in STOP}
+    # one-letter leftovers are cut-off words too: "...Voluntary Controlled Primary S" (catchment names stop at 60 characters)
+    return {t for t in re.findall(r"[a-z0-9]+", re.sub(r'\(.*?\)', '', norm(name)).replace("'", '')) if t not in STOP and len(t) > 1}
 
 
 def sim(a, b):
@@ -183,6 +206,8 @@ def parse_cutoff(v):
         g = 'out'
     elif re.search(r'\bin catchment', tl):
         g = 'in'
+    elif tl.startswith('staff'):   # "Staff - 10.003 miles": the last place went to a child of staff, after the catchment
+        g = 'staff'
     elif 'criteria' in tl:
         g = 'crit'
     else:
@@ -218,21 +243,31 @@ for y in (2022, 2023, 2024, 2025, 2026):
     sheets[y] = (head, rows, c)
 
 head, rows26, c26 = sheets[2026]
-base = [r for r in rows26 if r[c26['district']] == 'Harrogate' and 'junior' not in r[c26['name']].lower()]
-unknown = [r[0] for r in base if r[0] not in KEYS]
-assert not unknown, f'add keys for {unknown}'
 
-# Council school points and Ofsted rows are read here because they place the schools near York
+# Council school points and Ofsted rows are read here because they place the schools outside Harrogate
 pts = json.load(open(f'{RAW}/pschools.geojson'))['features']
 raw = open(f'{RAW}/ofsted.csv', 'rb').read().decode('utf-8-sig', errors='replace')
 mi = list(csv.reader(io.StringIO(raw)))
 mi = {r[2]: dict(zip(mi[0], r)) for r in mi[1:]}
 
-# Schools near York: Ofsted's LAESTAB is 815 plus the council's code, which gives the postcode to find the council's point
+
+def junior(r):
+    """A school whose youngest children are 7, so it has no Reception class. Ofsted's register says so even when the
+    name doesn't (Gunnerside Methodist Primary); the name is the fallback."""
+    x = mi.get(f'815{r[0]}')
+    age = num(x.get('Statutory lowest age')) if x else None
+    return age >= 6 if age is not None else 'junior' in r[c26['name']].lower()
+
+
+base = [r for r in rows26 if r[c26['district']] == 'Harrogate' and not junior(r)]
+unknown = [r[0] for r in base if r[0] not in KEYS]
+assert not unknown, f'add keys for {unknown}'
+
+# The other districts: Ofsted's LAESTAB is 815 plus the council's code, which gives the postcode to find the council's point
 POINT = {}
 for r in rows26:
     name = r[c26['name']]
-    if r[c26['district']] not in NEAR_YORK or 'junior' in name.lower():
+    if r[c26['district']] == 'Harrogate' or r[c26['district']] not in FULL + NEAR_YORK or junior(r):
         continue
     x = mi.get(f'815{r[0]}')
     hit = [f for f in pts if x and same_pc(f['properties']['Postcode'], x['Postcode'])]
@@ -244,12 +279,22 @@ for r in rows26:
         print(f'  no council point for {name}, left out')
         continue
     lng, lat = hit[0]['geometry']['coordinates']
-    if miles((lat, lng), YORK) <= NEAR_YORK_MI:
+    if r[c26['district']] in FULL or miles((lat, lng), YORK) <= NEAR_YORK_MI:
         base.append(r)
         POINT[r[0]] = hit[0]
 
 
-def find_row(y, dfe, name_keys, name=None):
+def by_name(rows, c, name):
+    """The one row whose name is clearly this school's, or none if two are equally close."""
+    for score, floor in ((sim, 0.6), (overlap, 1)):   # a close match first, else one whose name contains this one's
+        scored = sorted(((score(r[c['name']], name), i) for i, r in enumerate(rows) if 'junior' not in str(r[c['name']]).lower()),
+                        reverse=True)
+        if scored and scored[0][0] >= floor and (len(scored) < 2 or scored[1][0] < scored[0][0]):
+            return [rows[scored[0][1]]]
+    return []
+
+
+def find_row(y, dfe, name_keys, name=None, district=None):
     head, rows, c = sheets[y]
     if 'dfe' in c:
         if dfe == 3263:   # Holy Trinity: before 2026 the reception intake was the infant school
@@ -259,16 +304,12 @@ def find_row(y, dfe, name_keys, name=None):
             hit = [r for r in rows if has_keys(r[c['name']], ['masham']) and r[c['district']] == 'Harrogate']
         else:
             hit = [r for r in rows if r[c['dfe']] == dfe and 'junior' not in r[c['name']].lower()]
+        if not hit and dfe not in KEYS and name:   # a new number, e.g. on becoming an academy: the same name in the same district
+            hit = by_name([r for r in rows if r[c['district']] == district], c, name)
     elif name_keys:
         hit = [r for r in rows if has_keys(r[c['name']], name_keys) and 'junior' not in r[c['name']].lower()]
-    else:   # no keys: take the one row whose name is clearly this school's, or none if two are equally close
-        hit = []
-        for score, floor in ((sim, 0.6), (overlap, 1)):   # a close match first, else one whose name contains this one's
-            scored = sorted(((score(r[c['name']], name), i) for i, r in enumerate(rows) if 'junior' not in str(r[c['name']]).lower()),
-                            reverse=True)
-            if scored and scored[0][0] >= floor and (len(scored) < 2 or scored[1][0] < scored[0][0]):
-                hit = [rows[scored[0][1]]]
-                break
+    else:
+        hit = by_name(rows, c, name)
     if len(hit) > 1:
         raise ValueError(f'{y} {dfe}: ambiguous {[h[c["name"]] for h in hit]}')
     return hit[0] if hit else None
@@ -277,12 +318,13 @@ def find_row(y, dfe, name_keys, name=None):
 schools = []
 for r in base:
     dfe, name = r[0], r[c26['name']]
+    name = re.sub(r'\s*\(formerly.*$', '', name).strip()   # "Leeming St. John's ... (formerly Aiskew, ...)"
     s = {'dfe': dfe, 'name': name, 'district': r[c26['district']], 'place': PLACE.get(dfe) or place_of(POINT[dfe]['properties']), 'kind': r[c26['type']],
          'method': METHOD.get(str(r[c26['method']]).strip().lower(), 'unknown'),
          'pan': num(r[c26['pan']]), 'd': []}
     for y in (2026, 2025, 2024, 2023):
         keys = KEYS_2023.get(dfe, KEYS.get(dfe)) if y == 2023 else KEYS.get(dfe)
-        row = find_row(y, dfe, keys, name)
+        row = find_row(y, dfe, keys, name, s['district'])
         if row is None:
             print(f'  no {y} row for {name}')
             continue
@@ -292,7 +334,7 @@ for r in base:
         rec['o'] = num(row[c['off']])
         if 'first' in c:
             rec['f'] = num(row[c['first']])
-        prev = find_row(y - 1, dfe, KEYS_2023.get(dfe, KEYS.get(dfe)) if y - 1 <= 2023 else KEYS.get(dfe), name)
+        prev = find_row(y - 1, dfe, KEYS_2023.get(dfe, KEYS.get(dfe)) if y - 1 <= 2023 else KEYS.get(dfe), name, s['district'])
         if prev is not None:   # each sheet gives next year's admission number
             rec['p'] = num(prev[sheets[y - 1][2]['pan']])
         if dfe == 3263 and rec.get('p') is None:   # the 2025 sheet puts the new primary's number on its own row
@@ -300,7 +342,9 @@ for r in base:
             rec['p'] = next((num(x[pc['pan']]) for x in prow if has_keys(x[pc['name']], ['holy trinity', 'primary'])), None)
         if dfe == 3263 and y < 2026:
             rec['n'] = 'as Holy Trinity CE Infant School'
-        if rec['s'] == 'distance' and rec['g'] != 'sib' and rec['m'] > 16 * MI:
+        if dfe in FORMERLY and y < 2026:
+            rec['n'] = f'as {FORMERLY[dfe]}'
+        if rec['s'] == 'distance' and rec['g'] not in ('sib', 'staff') and rec['m'] > 16 * MI:
             # e.g. 533.56 miles: the last place went to a family far away, so everyone local got in
             rec['n'] = f"Last place went to a child {rec['mi']:g} miles away, so everyone nearby who applied got in"
             rec = {k: v for k, v in rec.items() if k not in ('m', 'g', 'mi')} | {'s': 'all_offered'}
@@ -331,6 +375,10 @@ for s in schools:
         web = str(p.get('School_website') or '').strip()
         if web:
             s['web'] = web if web.startswith('http') else 'https://' + web
+        if s['dfe'] in WEB:
+            s['web'] = WEB[s['dfe']]
+            if not s['web']:
+                del s['web']
     else:
         print(f'  point matches for {s["name"]}: {len(hit)}')
 
@@ -373,7 +421,12 @@ for s in schools:
         own = (tokens(s['name']) - {'st'} - tokens(s['place'])) or (tokens(s['name']) - {'st'})
         good = [t for t in good if t[0] >= 0.6 or (own & tokens(feats[t[1]]['properties']['School']) and geoms[t[1]].contains(pt))]
         if good:
-            AUTO_CATCH[s['dfe']] = max(good)[1]
+            AUTO_CATCH[s['dfe']] = {max(good)[1]}
+        # a catchment two schools share is named after both: "Roseberry Academy & Marwood CE VC Infant School"
+        for i, f in enumerate(feats):
+            if ' & ' in f['properties']['School'] and near(i, s) and any(sim(part, n) >= 0.6 for part in f['properties']['School'].split(' & ')
+                                                                for n in (s['name'], FORMERLY.get(s['dfe'], ''))):
+                AUTO_CATCH.setdefault(s['dfe'], set()).add(i)
 
 catch, used = [], {}
 for i, f in enumerate(feats):
@@ -383,7 +436,7 @@ for i, f in enumerate(feats):
             keysets = CATCH_KEYS.get(s['dfe'], [KEYS[s['dfe']]])
             if any(has_keys(f['properties']['School'], ks) for ks in keysets) and near(i, s):
                 owners.append(s)
-        elif AUTO_CATCH.get(s['dfe']) == i:
+        elif i in AUTO_CATCH.get(s['dfe'], ()):
             owners.append(s)
     if not owners:
         continue
@@ -412,7 +465,9 @@ for s in schools:
     for k in ('kind', 'faith'):
         s.pop(k, None)
 
+import datetime
 out = {'schools': sorted(schools, key=lambda s: s['name']), 'catch': catch,
-       'sources': [{'year': y, 'url': u} for y, u in DATASETS.items()]}
+       'sources': [{'year': y, 'url': u} for y, u in DATASETS.items()],
+       'updated': datetime.date.today().isoformat()}   # the sitemap's last-updated date for the school and area pages
 json.dump(out, open(OUT, 'w'), separators=(',', ':'))
 print(f'{len(schools)} schools, {len(catch)} catchment areas, {len(json.dumps(out, separators=(",", ":"))) // 1024} KB')

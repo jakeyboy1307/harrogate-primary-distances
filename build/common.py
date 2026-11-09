@@ -69,7 +69,8 @@ def ofsted(x, mi19):
 
 # The council sheets' school types; schools that aren't community or voluntary controlled set their own admission rules
 TYPES = {'Community School': 'community', 'Voluntary Controlled': 'voluntary controlled',
-         'Voluntary Aided': 'voluntary aided', 'Academy': 'academy', 'Foundation': 'foundation'}
+         'Voluntary Aided': 'voluntary aided', 'Academy': 'academy', 'Foundation': 'foundation',
+         'Free School': 'free school'}
 OWN_RULES = lambda k: k not in ('Community School', 'Voluntary Controlled')
 
 

@@ -9,6 +9,8 @@ import { esc } from './engine';
 
 import type { Area, Placement } from './specs';
 export type { Area, Placement } from './specs';
+export { adAreasOf, areaOf } from './specs';
+import { adAreasOf } from './specs';
 
 export interface Sponsor {
   id: string;
@@ -46,14 +48,11 @@ export function loadSponsors() {
   return loading;
 }
 
-// Harrogate district schools are "harrogate"; York and the North Yorkshire villages round it are "york"
-export const areaOf = (s: { council: string; district?: string }): Area =>
-  s.council === 'North Yorkshire' && s.district === 'Harrogate' ? 'harrogate' : 'york';
-
-// The sponsors for a slot that are running today (checked here too, in case a page stays open past midnight)
-export function sponsorsFor(p: Placement, area: Area, urn?: number) {
-  const day = today();
-  return SPONSORS.filter((s) => s.placements.includes(p) && s.areas.includes(area)
+// The sponsors for a slot that are running today (checked here too, in case a page stays open past midnight).
+// A school near York takes ads from its own area and York's (adAreasOf), so this takes one area or several.
+export function sponsorsFor(p: Placement, area: Area | Area[], urn?: number) {
+  const day = today(), want = Array.isArray(area) ? area : [area];
+  return SPONSORS.filter((s) => s.placements.includes(p) && s.areas.some((a) => want.includes(a))
     && (!s.urns || (urn != null && s.urns.includes(urn))) && isLive(s, day));
 }
 
@@ -104,8 +103,8 @@ export function profileBlock(s: Sponsor) {
 const turn = new Map<number, number>();
 
 // The uniform supplier and one nearby service, under a school's details in its panel
-export function panelSponsors(school: { urn: number; council: string; district?: string; name: string }) {
-  const a = areaOf(school);
+export function panelSponsors(school: { urn: number; council: string; district?: string; name: string; ll?: [number, number] }) {
+  const a = adAreasOf(school);
   // a supplier that holds this school's uniform contract comes before a general uniform shop
   const uni = sponsorsFor('uniform', a, school.urn).sort((x, y) => Number(!!y.urns) - Number(!!x.urns))[0];
   const near = sponsorsFor('nearby', a);

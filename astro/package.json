@@ -7,7 +7,8 @@
     "data": "node scripts/copy-data.mjs",
     "dev": "npm run data && astro dev",
     "build": "npm run data && astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "lock-slugs": "node scripts/lock-slugs.mjs"
   },
   "dependencies": {
     "astro": "^5.18.2",

@@ -3,6 +3,7 @@ import Rose from './Rose.astro';
 import Mammoth from './Mammoth.astro';
 import Feedback from './Feedback.astro';
 import { url } from '../lib/url';
+import { AREA_INFO } from '../lib/specs';
 ---
 <footer class="site-foot">
   <div class="foot-brand"><Rose size={26} /><span>Yorkshire School Checker</span></div>
@@ -16,8 +17,7 @@ import { url } from '../lib/url';
   <div class="foot-nav">
     <nav class="foot-areas" aria-label="Areas we cover">
       <span>Areas we cover</span>
-      <a href={url('harrogate-primary-schools/')}>Harrogate and Knaresborough primary schools</a>
-      <a href={url('york-primary-schools/')}>York primary schools</a>
+      {Object.values(AREA_INFO).map((a) => <a href={url(a.page)}>{a.name} primary schools</a>)}
     </nav>
     <nav class="foot-areas" aria-label="For businesses">
       <span>For businesses</span>

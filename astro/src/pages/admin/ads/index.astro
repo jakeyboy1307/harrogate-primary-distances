@@ -14,7 +14,7 @@ import { AREAS, SPOTS } from '../../../lib/specs';
       <option value="ended">Ended or dates passed</option>
     </select>
     <select id="fSpot" aria-label="Ad spot"><option value="">Every spot</option>{Object.entries(SPOTS).map(([k, s]) => <option value={k}>{s.label}</option>)}</select>
-    <select id="fArea" aria-label="Area"><option value="">Both areas</option>{Object.entries(AREAS).map(([k, a]) => <option value={k}>{a}</option>)}</select>
+    <select id="fArea" aria-label="Area"><option value="">All areas</option>{Object.entries(AREAS).map(([k, a]) => <option value={k}>{a}</option>)}</select>
     <input type="search" id="fText" placeholder="Search name or advertiser" aria-label="Search" />
     <span class="grow"></span>
     <a class="btn btn-sm btn-primary" href="/admin/ads/edit/">New ad</a>

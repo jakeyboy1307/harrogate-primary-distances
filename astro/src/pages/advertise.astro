@@ -3,13 +3,14 @@
 // and an enquiry form that posts to /api/enquiry (astro/worker/index.js), which emails it on.
 // Prices are a DRAFT starting point (see MONETISATION.md). Kept out of search until they're agreed.
 import Base from '../layouts/Base.astro';
+import { AREAS } from '../lib/specs';
 const slots = [
   { id: 'uniform', alt: 'A school’s panel on the checker, with the uniform shop card highlighted under the school’s details', h: 'School uniform', p: 'Your shop in the panel for each school you supply, seen by parents choosing that school.', price: 'From £40 a month per area', who: 'Uniform shops, PE kit, book bags' },
   { id: 'results', alt: 'Postcode search results, with the featured card highlighted after the fourth school', h: 'Featured in results', p: 'One card among the schools after a postcode search, never above the first four.', price: 'From £150 a month per area', who: 'Independent schools, nurseries, after-school care' },
   { id: 'profile', alt: 'A school’s panel, with its open days and Book a tour button highlighted', h: 'School profile', p: 'Your open days, a welcome note and a “Book a tour” button, in your school’s own panel.', price: 'From £150 a year', who: 'Primary schools and academy trusts' },
   { id: 'nearby', alt: 'A school’s panel, with a local wraparound care card highlighted under the uniform shop', h: 'Near this school', p: 'One local service in each school’s panel, shared in turn with other sponsors.', price: 'From £60 a month per area', who: 'Wraparound care, clubs, estate agents, tutors' },
   { id: 'plan', alt: 'The My plan page, with the Get ready for September business cards highlighted', h: 'Get ready for September', p: 'On every parent’s plan page, alongside their list of schools.', price: 'From £50 a month per area', who: 'Uniform, shoes, care, tutoring' },
-  { id: 'area', alt: 'The Harrogate area page, with the page sponsor line highlighted under the heading', h: 'Area page sponsor', p: 'Your name under the heading of the Harrogate or York area page, one business per page.', price: 'From £100 a month', who: 'Estate agents, mortgage brokers' },
+  { id: 'area', alt: 'The Harrogate area page, with the page sponsor line highlighted under the heading', h: 'Area page sponsor', p: 'Your name under the heading of an area page, such as Harrogate or Selby, one business per page.', price: 'From £100 a month', who: 'Estate agents, mortgage brokers' },
 ];
 const season = [
   ['September to January', 'Peak', 'Parents compare schools and apply. Forms close on 15 January.'],
@@ -18,11 +19,11 @@ const season = [
 ];
 const types = ['School uniform shop', 'Independent school or nursery', 'State school or academy trust', 'Estate agent or mortgage broker', 'Childcare, clubs or tutoring', 'Something else'];
 ---
-<Base title="Advertise with us · Yorkshire School Checker" description="Reach Harrogate and York parents while they choose a primary school. Clearly labelled placements for local businesses and schools." index={false}>
+<Base title="Advertise with us · Yorkshire School Checker" description="Reach parents in Harrogate, York, Northallerton and Selby while they choose a primary school. Clearly labelled placements for local businesses and schools." index={false}>
   <section class="how-hero wrap">
     <div>
       <h1>Reach parents choosing a primary school</h1>
-      <p class="lede">Parents in Harrogate, York and the villages between use the checker to choose a Reception place. Be there when they’re planning for September.</p>
+      <p class="lede">Parents in Harrogate, York, Northallerton, Selby and the villages between use the checker to choose a Reception place. Be there when they’re planning for September.</p>
       <p class="area-acts"><a class="btn btn-primary" href="#enquire">Get in touch</a><a class="btn" href="#options">See the options</a></p>
     </div>
   </section>
@@ -80,7 +81,7 @@ const types = ['School uniform shop', 'Independent school or nursery', 'State sc
           <label class="fb-field"><span>What kind of business?</span>
             <select name="type"><option value="">Choose one</option>{types.map((t) => <option>{t}</option>)}</select></label>
           <label class="fb-field"><span>Which area?</span>
-            <select name="area"><option value="">Choose one</option><option>Harrogate and Knaresborough</option><option>York and villages</option><option>Both</option></select></label>
+            <select name="area"><option value="">Choose one</option>{Object.values(AREAS).map((a) => <option>{a}</option>)}<option>More than one</option></select></label>
         </div>
         <fieldset class="enq-slots">
           <legend>Which options interest you? <em>(tick any)</em></legend>

@@ -32,7 +32,7 @@ export interface YearRec {
   // outside (xa) the catchment were turned away (ir, xr), where a council publishes no distances (York).
   s: 'distance' | 'catchment' | 'all_offered' | 'not_published';
   m?: number;
-  g?: 'in' | 'out' | 'sib' | 'crit';
+  g?: 'in' | 'out' | 'sib' | 'staff' | 'crit';
   crit?: string;
   a?: number; o?: number; p?: number; f?: number;
   ia?: number; ir?: number; xa?: number; xr?: number;
@@ -130,9 +130,13 @@ export function cutoff(s: School, mode: Mode) {
   if (mode === 'latest') return s.d.find((r) => r.s !== 'not_published') || s.d[0] || null;
   return s.d.find((r) => String(r.y) === mode) || null;
 }
+// A year whose last place went to a brother or sister (sib) or a child of staff (staff) from outside the catchment:
+// everyone in the catchment got in and no other outsider did, so its distance doesn't help anyone else
+export const noDist = (r: YearRec) => r.s === 'distance' && (r.g === 'sib' || r.g === 'staff');
+export const WHO_ELSE = { sib: 'brothers and sisters of pupils', staff: 'children of staff' } as const;
 // Whether a year's record can only be judged once your distance is known.
 export function needsDist(r: YearRec, inC: boolean | null) {
-  if (r.s !== 'distance' || r.g === 'sib') return false;
+  if (r.s !== 'distance' || noDist(r)) return false;
   if (r.g === 'out') return inC !== true && r.m! < UNDERSUB_M;
   if (r.g === 'in') return inC !== false;
   return true;
@@ -152,11 +156,11 @@ export function yearVerdict(c: YearRec | null, dist: number | null | undefined, 
     return { v: 'edge', label: `${got} of ${c.xa} ${who} got a place, depending on brothers and sisters and distance` };
   }
   if (c.s !== 'distance') return { v: 'na', label: 'The council didn’t publish this year. Ask the school' };
-  if (c.g === 'sib') {
+  if (c.g === 'sib' || c.g === 'staff') {
     if (inC == null) return { v: 'na', label: 'Depends on whether you live in the catchment' };
     return inC
       ? { v: 'in', label: IN_CATCH }
-      : { v: 'out', label: 'From outside the catchment only brothers and sisters of pupils got places, so you’d have missed out' };
+      : { v: 'out', label: `From outside the catchment only ${WHO_ELSE[c.g]} got places, so you’d have missed out` };
   }
   if (c.g === 'out' && inC) return { v: 'in', label: IN_CATCH };
   if (c.g === 'in' && inC === false) return { v: 'out', label: 'Only children in the catchment got places, and you’re outside it' };
@@ -279,7 +283,7 @@ export function whoGotIn(x: YearRec) {
     const d = fmt(x.m);
     return x.g === 'out' ? `Everyone in the catchment, plus others within ${d}`
       : x.g === 'in' ? `Only children in the catchment, within ${d}`
-      : x.g === 'sib' ? 'Everyone in the catchment, plus brothers and sisters of pupils'
+      : x.g === 'sib' || x.g === 'staff' ? `Everyone in the catchment, plus ${WHO_ELSE[x.g]}`
       : `Children within ${d}, by the school’s own rules`;
   }
   if (x.s === 'catchment') {

@@ -1,6 +1,6 @@
 # Yorkshire school checker
 
-A one-page map tool for parents choosing a Reception place in the Harrogate district. Enter a postcode and every primary school nearby is shown with your walking or straight-line distance, whether you're in its catchment, and how far the last place went on national offer day in 2023, 2024, 2025 and 2026. Modelled on [SW London primary school distances](https://peterstuart3-arch.github.io/sw-primary-distances/), reworked for North Yorkshire's catchment-first admissions.
+A map tool for parents choosing a Reception place in the Harrogate, Northallerton (old Hambleton district) and Selby areas of North Yorkshire, and in York. Enter a postcode and every primary school nearby is shown with your walking or straight-line distance, whether you're in its catchment, and how far the last place went on national offer day in 2023, 2024, 2025 and 2026. Modelled on [SW London primary school distances](https://peterstuart3-arch.github.io/sw-primary-distances/), reworked for North Yorkshire's catchment-first admissions.
 
 Live at **https://yorkshireschoolchecker.co.uk**. The site is built from `astro/` (see `astro/README.md`) and needs a connection for the map tiles, postcode lookups (postcodes.io) and walking routes (FOSSGIS OSRM). The `index.html` at the top of this folder is the earlier single-page version.
 
@@ -23,12 +23,23 @@ python3 -I build/assemble.py build/data.json                         # writes in
 The Astro redesign (`astro/`) also shows each school's office phone and email. Refresh them after the data:
 
 ```sh
-python3 -I build/fetch_contacts.py build/data.json build/contacts.json   # phones from GIAS, emails from school websites
+python3 -I build/fetch_contacts.py build/data.json build/contacts.json --all   # phones from GIAS, emails from school websites
 ```
+
+Without `--all` it only looks up schools that aren't in `contacts.json` yet, which is what you want when adding an area.
 
 Phone numbers come from Get Information about Schools. GIAS doesn't publish emails, so they're read from each school's own website, and the page each was found on is saved in `contacts.json`. Some school sites block automated visits, so expect a few gaps; those schools show their phone number and a pointer to their website.
 
-The build prints any school it can't match to a map point, Ofsted record or catchment. Five faith schools have no council catchment, which is expected.
+The build prints any school it can't match to a map point, Ofsted record or catchment. Eleven schools, all faith academies or free schools, have no council catchment, which is expected: the build lists them. Oakbridge opened in 2024, so it has no 2023 figures.
+
+## Adding a North Yorkshire district
+
+The plan and what's left are in `EXPANSION.md`. For each district:
+
+1. Add it to `FULL` in `build/build_data.py` (and take it out of `NEAR_YORK` if it's there), then run the data build. Check what it prints: any new cut-off wording, renamed or renumbered schools (`FORMERLY`, `KEYS_2023`) and broken school websites (`WEB`).
+2. Run `fetch_contacts.py` without `--all` to add the new schools' phones and emails, and `python3 build/check_websites.py` to catch website links that are dead or now belong to someone else.
+3. Add the area to `AREA_INFO` in `astro/src/lib/specs.ts`, and give it a page in `astro/src/pages/` using `AreaPage`, like `selby-primary-schools.astro`. The footer, sitemap, school pages, ads and admin all read `AREA_INFO`.
+4. `npm run build` in `astro/`, then `npm run lock-slugs` so the new school pages' addresses never change, and commit `src/lib/slugs.json`.
 
 ## Feedback form (parked)
 

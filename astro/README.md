@@ -24,6 +24,9 @@ SITE_BASE=/harrogate-primary-distances npm run build
 
 ## Data and services
 
+- Areas: every area the site covers (Harrogate, York, Northallerton, Selby) is one line in `src/lib/specs.ts` (`AREA_INFO`): its page, the districts it covers, its ad area and its example postcode.
+- School page addresses are locked in `src/lib/slugs.json` once published, so renaming rules can't move a page Google already has. After adding schools, build and run `npm run lock-slugs`.
+- `sitemap.xml` is an index of one sitemap per area plus `sitemap-pages.xml`, so Search Console can show each area's indexing on its own.
 - School data comes from `../build/data.json`, produced by the yearly refresh described in the main README. `npm run data` writes one file per council into `public/data/` (listed in `public/data/areas.json`), keys each school by its national URN, and adds its office phone and email from `../build/contacts.json`.
 - Postcodes: postcodes.io. Walking routes: the FOSSGIS OSRM table service, cached for the browser session because it's rate-limited. Map tiles: Esri World Street Map. Catchments: North Yorkshire Council.
 - Your list is stored in `localStorage` under `ysc-shortlist`, the same key as the live site, so existing shortlists carry over. The last search is stored under `ysc-search`.

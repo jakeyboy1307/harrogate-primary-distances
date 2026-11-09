@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import SchoolPanel from '../components/SchoolPanel.astro';
 import { url } from '../lib/url';
 ---
-<Base title="Reception key dates and your school list · Yorkshire School Checker" description="Your plan for a Reception place in Harrogate, York and North Yorkshire: the key dates and your schools in order." active="plan">
+<Base title="Reception key dates and your school list · Yorkshire School Checker" description="Your plan for a Reception place in Harrogate, York, Northallerton, Selby and North Yorkshire: the key dates and your schools in order." active="plan">
   <section class="plan-hero wrap">
     <div>
       <h1>Finding a school, one step at a time.</h1>
@@ -54,7 +54,7 @@ import { url } from '../lib/url';
   import { initPanel, openPanel, refreshPanel } from '../lib/panel';
   import { initPList, renderPList } from '../lib/plist';
   import { url } from '../lib/url';
-  import { adCard, areaOf, loadSponsors, sponsorsFor } from '../lib/sponsors';
+  import { adAreasOf, adCard, loadSponsors, sponsorsFor } from '../lib/sponsors';
 
   const saved = getSearch();
   const cn = council(saved?.place.district);   // the council you apply to, from your postcode
@@ -122,7 +122,7 @@ import { url } from '../lib/url';
       + (!saved ? `<a class="btn" href="${url('')}" style="justify-self:start">Find my schools</a>` : '');
     // get ready for September: partners for the area of your nearest (or first listed) school
     const base = [...near].sort((a, b) => (a.straight ?? 0) - (b.straight ?? 0))[0] ?? listed[0];
-    const partners = base ? sponsorsFor('plan', areaOf(base)) : [];
+    const partners = base ? sponsorsFor('plan', adAreasOf(base)) : [];
     $('#ready').hidden = !partners.length;
     $('#readyGrid').innerHTML = partners.map((s) => adCard(s, 'plan', 'Sponsored')).join('');
     // also near you

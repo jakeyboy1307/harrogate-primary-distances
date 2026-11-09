@@ -64,7 +64,7 @@ const tiles = [
 <script>
   import { api, day, esc, toast } from '../../lib/admin';
   import { loadData } from '../../lib/engine';
-  import { AREAS, SPOTS } from '../../lib/specs';
+  import { AREA_INFO, AREAS, SPOTS } from '../../lib/specs';
 
   interface AdStat { id: number; name: string; advertiser: string | null; advertiserId: number | null; status: string; demo: boolean; views: number; clicks: number; slots: Record<string, { views: number; clicks: number }> }
   interface Stats { from: string; to: string; days: number; total: Record<string, number>; daily: { day: string; pages: number; searches: number }[];
@@ -73,7 +73,8 @@ const tiles = [
   const num = (n: number) => n.toLocaleString('en-GB');
   const PAGE_NAMES: Record<string, string> = {
     '/': 'Find schools (home)', '/plan/': 'My plan', '/how-places-work/': 'How places work', '/privacy/': 'Privacy',
-    '/advertise/': 'Advertise with us', '/harrogate-primary-schools/': 'Harrogate area page', '/york-primary-schools/': 'York area page',
+    '/advertise/': 'Advertise with us',
+    ...Object.fromEntries(Object.values(AREA_INFO).map((a) => [`/${a.page}`, `${a.short} area page`])),
   };
   const rate = (c: number, v: number) => (v ? `${((c / v) * 100).toFixed(1)}%` : '–');
   const none = (cols: number, text = 'Nothing counted yet.') => `<tr><td colspan="${cols}" class="adm-empty">${text}</td></tr>`;

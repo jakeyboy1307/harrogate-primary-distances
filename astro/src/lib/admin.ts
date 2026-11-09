@@ -1,6 +1,6 @@
 // Small helpers shared by the admin pages: calling the admin API, messages, and formatting.
 import { esc } from './engine';
-import { AREAS, SPOTS, type Area, type Placement } from './specs';
+import { AREA_SHORT, SPOTS, type Area, type Placement } from './specs';
 export { esc };
 
 export class ApiError extends Error {}
@@ -51,7 +51,7 @@ export const dates = (a: { start: string | null; end: string | null }) =>
 export const money = (p: number | null | undefined, period?: string | null) =>
   p == null ? '' : `£${(p / 100).toLocaleString('en-GB', { minimumFractionDigits: p % 100 ? 2 : 0 })}${period && period !== 'once' ? ` a ${period}` : ''}`;
 export const spotNames = (ps: Placement[]) => ps.map((p) => SPOTS[p]?.label ?? p).join(', ');
-export const areaNames = (as: Area[]) => as.map((a) => AREAS[a]?.split(' ')[0] ?? a).join(', ');
+export const areaNames = (as: Area[]) => as.map((a) => AREA_SHORT[a] ?? a).join(', ');
 
 const STATE: Record<Ad['state'], [string, string]> = {
   showing: ['Showing', 'good'], scheduled: ['Scheduled', 'open'], finished: ['Dates passed', 'none'],

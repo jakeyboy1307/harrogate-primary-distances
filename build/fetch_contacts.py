@@ -4,15 +4,18 @@ Phone numbers come from Get Information about Schools (the DfE register), looked
 GIAS doesn't publish email addresses, so emails are taken from mailto links on the school's own website
 (the homepage, then its contact page), and the page each one was found on is kept as its source.
 
-    python3 -I build/fetch_contacts.py build/data.json build/contacts.json
+    python3 -I build/fetch_contacts.py build/data.json build/contacts.json          # only schools not in the file yet
+    python3 -I build/fetch_contacts.py build/data.json build/contacts.json --all    # every school again
 
-Re-run it alongside the yearly data refresh. Schools whose email can't be found are left without one.
+Re-run it with --all alongside the yearly data refresh, and without it when schools are added. Schools whose email
+can't be found are left without one.
 """
 import html
 import json
 import re
 import sys
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import date
@@ -27,10 +30,26 @@ OFFICE = ('admin', 'office', 'enquir', 'admission', 'head', 'info', 'school', 'r
 SKIP = ('example.', 'helpdesk', 'webanywhere', 'carltonprimary@setschools', 'jcollins@stocktonprimary', 'sentry', 'wixpress', 'webmaster', 'safeguard', 'dpo', 'governor', 'gdpr', 'data', 'pta', 'friends')
 
 
-def get(url, timeout=20):
+# Emails set by hand, by council code, where a school's own site can't give the right one: North Rigton and All Saints,
+# Kirkby Overblow share one site, which lists both offices
+FIXED = {'3260': ('admin@northrigton.ycway.uk', 'https://asnrfellowship.ycst.co.uk/contact/'),
+         '3361': ('admin@allsaints.ycway.uk', 'https://asnrfellowship.ycst.co.uk/contact/')}
+
+
+def get(url, timeout=20, hops=3):
     req = urllib.request.Request(url, headers=UA)
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        return r.geturl(), r.read().decode('utf-8', 'ignore')
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            return r.geturl(), r.read().decode('utf-8', 'ignore')
+    except urllib.error.HTTPError as e:   # older Pythons don't follow 308s
+        if e.code in (307, 308) and e.headers.get('Location') and hops:
+            return get(urllib.parse.urljoin(url, e.headers['Location']), timeout, hops - 1)
+        raise
+    except urllib.error.URLError as e:   # council records list some sites as www. when only the bare address works
+        host = urllib.parse.urlparse(url).hostname or ''
+        if host.startswith('www.') and hops:
+            return get(url.replace('://www.', '://', 1), timeout, hops - 1)
+        raise
 
 
 def gias_phone(urn):
@@ -80,10 +99,16 @@ def site_email(web):
     return None, None
 
 
-def main(data_path, out_path):
+def main(data_path, out_path, everything=False):
     schools = json.load(open(data_path))['schools']
-    out = {}
+    try:
+        old = {} if everything else json.load(open(out_path))
+    except FileNotFoundError:
+        old = {}
+    out = {k: v for k, v in old.items() if k in {str(s['dfe']) for s in schools}}
     for s in schools:
+        if str(s['dfe']) in out:
+            continue
         rec = {'checked': date.today().isoformat()}
         urn = (s.get('of') or {}).get('urn')
         try:
@@ -97,6 +122,8 @@ def main(data_path, out_path):
                 rec['email'], rec['emailSrc'] = email, src
         except Exception as e:
             print(f"  website failed for {s['name']}: {e}", file=sys.stderr)
+        if str(s['dfe']) in FIXED:
+            rec['email'], rec['emailSrc'] = FIXED[str(s['dfe'])]
         out[str(s['dfe'])] = {k: v for k, v in rec.items() if v}
         print(f"{s['name'][:45]:45}  {rec.get('tel') or '-':13}  {rec.get('email') or '-'}")
         time.sleep(0.5)   # be gentle with GIAS and the schools' sites
@@ -107,4 +134,4 @@ def main(data_path, out_path):
 
 
 if __name__ == '__main__':
-    main(sys.argv[1], sys.argv[2])
+    main(sys.argv[1], sys.argv[2], '--all' in sys.argv[3:])

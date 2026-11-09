@@ -1,0 +1,47 @@
+---
+// Area page: the old Selby district (Selby, Tadcaster, Sherburn in Elmet and the villages). Questions follow
+// Google's suggestions (November 2026).
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea } from '../lib/areas';
+import { COUNCILS } from '../lib/engine';
+import { NY_TERM_DATES } from '../lib/specs';
+import { url } from '../lib/url';
+const ny = COUNCILS['North Yorkshire'];
+const schools = loadArea('north-yorkshire.json').filter((s) => s.district === 'Selby');
+const faqs: [string, string][] = [
+  ['What is my catchment school in Selby?',
+    `Put your postcode into the <a href="${url('')}">school catchment checker</a>. It tells you which Selby primary school catchment area you’re in, and your chances at every primary school nearby, from Tadcaster and Sherburn in Elmet to Barlby, Riccall and Eggborough.`],
+  ['Is there a Selby school catchment area map?',
+    `Yes. North Yorkshire Council publishes a <a href="${ny.catchMap}" target="_blank" rel="noopener">school catchment area map</a> covering every Selby district school. The checker uses the same map, so your postcode gives you the answer. Near a boundary? Check your exact address on the council’s map.`],
+  ['How do school catchment areas work in Selby?',
+    `North Yorkshire Council fills each school’s places in order: children in care, then approved medical or social need, then children in the catchment, then children of staff, then everyone else. Brothers and sisters, then distance, decide who goes first inside each group. <a href="${url('how-places-work/')}">How school catchment areas work</a> explains the queue.`],
+  ['When do I apply for a Reception place for September 2027?',
+    `Apply online to <a href="${ny.apply}" target="_blank" rel="noopener">North Yorkshire Council</a> by Friday 15 January 2027. You can name up to five primary schools, in the order you want them.`],
+  ['When are primary school places announced?',
+    'Offers go out on national offer day, Friday 16 April 2027, by email from the council.'],
+  ['Can my child get into a Selby school outside our catchment?',
+    'Often, if places are left once children in the catchment have theirs. Each year the council publishes how far the last place went, and the checker compares that with your distance.'],
+  ['Which are the best primary schools in Selby?',
+    'There’s no official ranking, so be wary of league tables. Ofsted is the fairest guide, alongside a visit. The checker shows each school’s latest Ofsted outcome, and each school’s own page explains it.'],
+  ['We live near Leeds, Wakefield or Doncaster. Which council do we apply to?',
+    'Apply to the council for where you live, and you can name schools run by other councils among your five. If you live in the Selby district, that’s North Yorkshire Council, even if your nearest school is over the border. The checker only covers North Yorkshire and York schools.'],
+  ['Is this Sherburn in Elmet or Sherburn near Malton?',
+    'Sherburn in Elmet. Athelstan Community Primary and Sherburn Hungate Primary are both in this list. Sherburn near Malton is in Ryedale, which the checker doesn’t cover yet.'],
+  ['When are Selby school term dates and holidays?',
+    `Community and voluntary controlled schools follow <a href="${NY_TERM_DATES}" target="_blank" rel="noopener">North Yorkshire Council’s term and holiday dates</a>. Academies and voluntary aided schools can set their own, so check with the school.`],
+  ['Where can I see North Yorkshire school admissions data?',
+    'The council publishes its admissions figures each year on <a href="https://hub.datanorthyorkshire.org/" target="_blank" rel="noopener">Data North Yorkshire</a>. The checker turns the last four years into plain answers for every Selby, Tadcaster and Sherburn primary school.'],
+  ['How do I find open days?',
+    'Ask the school. Open the school in the checker for its phone number, email and website.'],
+];
+---
+<AreaPage areaKey="selby"
+  title="Selby primary school catchment areas, map and Ofsted · Yorkshire School Checker"
+  description="Selby primary school catchment areas, plus Tadcaster, Sherburn in Elmet, Brayton and the villages: find your catchment school, which schools are hardest to get into, Ofsted ratings and the 2027 Reception dates."
+  h1="Selby primary schools and catchment areas"
+  lede="Primary school catchment areas for every school in Selby, Tadcaster and Sherburn in Elmet, and the villages from Escrick and Riccall to Brotherton and Eggborough."
+  area="Selby"
+  schools={schools}
+  groups={[{ label: 'In the old Selby district', note: `${schools.length} North Yorkshire Council primary schools.`, schools }]}
+  faqs={faqs}
+/>

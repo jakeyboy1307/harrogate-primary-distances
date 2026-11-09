@@ -44,6 +44,9 @@ def place_of(addr, ward):
     return before[-1] if before else ward.replace(' & ', ' and ')
 
 
+# School websites the council has wrong (checked 9 November 2026): the trust moved from hslt.academy to hlt.academy
+WEB = {2024: 'https://www.bgp.hlt.academy/', 2029: 'https://www.pop.hlt.academy/', 2169: 'https://www.ske.hlt.academy/'}
+
 mi, mi19 = read_mi(f'{NY}/ofsted.csv'), read_mi(f'{NY}/ofsted2019.csv')
 york_primary = {k: x for k, x in mi.items() if k.startswith('816') and x.get('Ofsted phase') == 'Primary'}
 
@@ -67,7 +70,7 @@ for f in json.load(open(f'{RAW}/points.geojson'))['features']:
         'dfe': new, 'codes': sorted({old, new}), 'name': x['School name'].split(' - ')[0], 'place': place_of(addr, p['WARD']),
         'kind': TYPES[x['Type of education']], 'faith': x['Designated religious character'],
         'method': 'walking', 'd': [], 'll': [round(lat, 6), round(lng, 6)], 'postcode': pc, 'addr': addr,
-        'web': p['WEBSITE'], 'of': ofsted(x, mi19),
+        'web': WEB.get(new, p['WEBSITE']), 'of': ofsted(x, mi19),
     })
 
 # ---------- each year's outcomes, from the applicant files ----------
@@ -140,6 +143,8 @@ for s in schools:
     for k in ('kind', 'faith', 'codes'):
         s.pop(k, None)
 
-out = {'schools': sorted(schools, key=lambda s: s['name']), 'catch': catch, 'sources': [{'year': y, 'url': SRC} for y in YEARS]}
+import datetime
+out = {'schools': sorted(schools, key=lambda s: s['name']), 'catch': catch, 'sources': [{'year': y, 'url': SRC} for y in YEARS],
+       'updated': datetime.date.today().isoformat()}   # the sitemap's last-updated date for the school and area pages
 json.dump(out, open(OUT, 'w'), separators=(',', ':'))
 print(f'{len(schools)} schools, {len(catch)} catchment areas, {len(json.dumps(out, separators=(",", ":"))) // 1024} KB')

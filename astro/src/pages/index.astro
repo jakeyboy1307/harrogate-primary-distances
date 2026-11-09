@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import SchoolPanel from '../components/SchoolPanel.astro';
 import { COUNCILS } from '../lib/engine';
 import { url } from '../lib/url';
+import { AREA_INFO } from '../lib/specs';
 const keys = [
   ['in', 'Safe bet', 'You’d have got in every year published.'],
   ['all', 'Open to all', 'Everyone who applied got a place.'],
@@ -22,11 +23,11 @@ const about: [string, string][] = [
   ['How do school catchment areas work?',
     `Each council fills a school’s places in a set order. Children in care always come first, and children who live in the catchment come before most children from outside it. Inside each group, brothers and sisters of pupils go first, then whoever lives nearest. <a href="${url('how-places-work/')}">How school catchment areas work</a> walks through it.`],
   ['Is there a school catchment area map?',
-    `Yes. The councils publish them: <a href="${ny.catchMap}" target="_blank" rel="noopener">North Yorkshire Council’s school catchment area map</a> covers Harrogate and the villages round York, and <a href="${cyc.catchMap}" target="_blank" rel="noopener">City of York Council’s primary schools map</a> covers York. The checker uses the same maps, so your postcode tells you the answer without hunting through them.`],
+    `Yes. The councils publish them: <a href="${ny.catchMap}" target="_blank" rel="noopener">North Yorkshire Council’s school catchment area map</a> covers Harrogate, Northallerton, Thirsk, Selby and the rest of the county, and <a href="${cyc.catchMap}" target="_blank" rel="noopener">City of York Council’s primary schools map</a> covers York. The checker uses the same maps, so your postcode tells you the answer without hunting through them.`],
 ];
 const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: about.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a.replace(/<[^>]+>/g, '') } })) };
 ---
-<Base title="School catchment checker for Harrogate and York primary schools · Yorkshire School Checker" description="Free school catchment checker for Harrogate, York and the villages between. Find your catchment school and your chances at every primary school by postcode, from four years of Reception offers." active="find">
+<Base title="School catchment checker for Harrogate and York primary schools · Yorkshire School Checker" description="Free school catchment checker for Harrogate, York, Northallerton, Thirsk, Selby and the villages between. Find your catchment school and your chances at every primary school by postcode, from four years of Reception offers." active="find">
   <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify([siteSchema, aboutSchema])} />
 
   <!-- ONBOARDING -->
@@ -70,9 +71,10 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
         <button class="example" type="button" data-pc="HG2 0NA">Harrogate · HG2 0NA</button>
         <button class="example" type="button" data-pc="HG5 0SL">Knaresborough · HG5 0SL</button>
         <button class="example" type="button" data-pc="YO24 1HW">York · YO24 1HW</button>
-        <button class="example" type="button" data-pc="YO61 3HJ">Easingwold · YO61 3HJ</button>
+        <button class="example" type="button" data-pc="DL6 1QE">Northallerton · DL6 1QE</button>
+        <button class="example" type="button" data-pc="YO8 4QB">Selby · YO8 4QB</button>
       </div>
-      <p class="coverage">Covers the Harrogate district, York, and the North Yorkshire villages round York from Easingwold to Selby and Tadcaster. Nothing to sign up for.</p>
+      <p class="coverage">Covers York and the Harrogate, Northallerton and Selby areas of North Yorkshire, from Ripon to Stokesley and Tadcaster. Nothing to sign up for.</p>
     </div>
     <aside class="key-card" aria-label="What the labels mean">
       <span class="hand" style="font-size:26px">what you’ll see next</span>
@@ -84,10 +86,10 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
 
   <!-- ABOUT: the catchment questions parents search for, hidden once a search runs -->
   <section class="how-sec sec-pale wrap home-about" id="about">
-    <h2>A school catchment checker for Harrogate and York</h2>
+    <h2>A school catchment checker for Harrogate, York, Northallerton and Selby</h2>
     <p class="intro">Primary school catchment areas decide a lot about who gets a Reception place. Here’s what they are and how to find yours.</p>
     <div class="sources home-faqs">{about.map(([q, a]) => <div><h3>{q}</h3><p set:html={a} /></div>)}</div>
-    <p class="intro">Browse <a href={url('harrogate-primary-schools/')}>Harrogate primary school catchment areas</a> or <a href={url('york-primary-schools/')}>York primary school catchment areas</a>, with every school’s own page.</p>
+    <p class="intro">Browse primary school catchment areas for {Object.values(AREA_INFO).map((a, i, all) => <>{i ? (i === all.length - 1 ? ' or ' : ', ') : ''}<a href={url(a.page)}>{a.short}</a></>)}, with every school’s own page.</p>
   </section>
 
   <!-- RESULTS -->
@@ -190,7 +192,7 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
   import { $, $$, chip, distTxt, ICON, toast, vOf } from '../lib/ui';
   import { initPanel, openPanel, refreshPanel } from '../lib/panel';
   import { initPList, renderPList } from '../lib/plist';
-  import { adCard, areaOf, loadSponsors, sponsorsFor } from '../lib/sponsors';
+  import { adAreasOf, adCard, areaOf, loadSponsors, sponsorsFor } from '../lib/sponsors';
   import { track } from '../lib/track';
   import type { SchoolMap } from '../lib/map';
 
@@ -293,11 +295,11 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
     const list = visible(), cap = showAll || isPhone() ? list.length : 8;
     // one featured card, after the 4th school (or after the last, if there are fewer). It never moves a school.
     const nearest = [...near].sort((a, b) => a.straight! - b.straight!)[0];
-    const feat = nearest ? sponsorsFor('results', areaOf(nearest))[0] : undefined;
+    const feat = nearest ? sponsorsFor('results', adAreasOf(nearest))[0] : undefined;
     const rowsHtml = list.slice(0, cap).map((s) => row(s, m));
     if (feat && rowsHtml.length) rowsHtml.splice(Math.min(4, rowsHtml.length), 0, `<div class="ad-row">${adCard(feat, 'results', 'Sponsored')}</div>`);
     $('#rows').innerHTML = list.length ? rowsHtml.join('')
-      : `<div class="no-results"><strong>No schools in range.</strong><br>Try a larger distance. This checker covers the Harrogate district, York, and the North Yorkshire villages round York from Easingwold to Selby and Tadcaster.</div>`;
+      : `<div class="no-results"><strong>No schools in range.</strong><br>Try a larger distance. This checker covers York and the Harrogate, Northallerton and Selby areas of North Yorkshire.</div>`;
     const more = $('#more');
     more.hidden = list.length <= cap;
     more.textContent = `Show ${plural(list.length - cap, 'more school')}`;

@@ -2,14 +2,15 @@
 // address, and the plain-English summaries of each school's figures. Names follow Google's suggestions
 // (November 2026): parents type the short name plus "primary school", "catchment area", "Ofsted", "term dates",
 // and the town when the name is shared with schools elsewhere (St Peter's, St Mary's...).
-import { COUNCILS, fmt, haversine, MI, ofsted, whoGotIn, type YearRec } from './engine';
+import { COUNCILS, fmt, haversine, MI, noDist, ofsted, whoGotIn, WHO_ELSE, type YearRec } from './engine';
 import { loadArea, type AreaSchool } from './areas';
+import { AREA_INFO, areaOf, type Area } from './specs';
+// Every published school page's address, by URN. Once Google knows an address it mustn't change, so a school in
+// here keeps its address even if the naming rules below would now give it another. New schools get one from the
+// rules; after building, `npm run lock-slugs` adds them here (scripts/lock-slugs.mjs).
+import LOCKED from './slugs.json';
 
 export type Kind = 'primary school' | 'infant school' | 'junior school';
-
-// Harrogate district schools are "harrogate"; York and the North Yorkshire villages round it are "york"
-const areaOf = (s: { council: string; district?: string }) =>
-  (s.council === 'North Yorkshire' && s.district === 'Harrogate' ? 'harrogate' : 'york') as 'harrogate' | 'york';
 
 // Words parents leave out when they search: the faith, the legal status and the type of school
 const DROP: RegExp[] = [
@@ -31,6 +32,8 @@ export function shortOf(name: string) {
   return s.replace(/\s+/g, ' ').trim();
 }
 const title = (k: Kind) => k.replace(/\b\w/g, (c) => c.toUpperCase());
+// "Alanbrooke Academy", "Knayton CofE Academy": no primary, infant or junior in the name, so it stays an Academy
+const isAcademy = (name: string) => /\bAcademy\b/i.test(name) && !/\b(Primary|Infants?|Junior)\b/i.test(name);
 const kebab = (s: string) => s.toLowerCase().replace(/[’']/g, '').replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 export interface SchoolPage {
@@ -40,8 +43,8 @@ export interface SchoolPage {
   kind: Kind;             // "primary school"
   name: string;           // "Admiral Long Primary School" (with ", Harrogate" when the name is shared)
   withPlace: boolean;
-  area: 'harrogate' | 'york';
-  areaName: string;       // "Harrogate" / "York"
+  area: Area;
+  areaName: string;       // "Harrogate", "York", "Northallerton"... (lib/specs.ts AREA_INFO)
   areaPage: string;       // the area page's address
 }
 
@@ -53,18 +56,27 @@ export function schoolPages(): SchoolPage[] {
   const pages = all.map((s, i) => {
     const short = shortOf(s.name), kind = kindOf(s.name);
     const withPlace = GENERIC.test(short) || shorts.filter((x) => x === shorts[i]).length > 1;
-    const base = `${short} ${title(kind)}`;
+    const label = isAcademy(s.name) ? 'Academy' : title(kind);
+    const base = `${short} ${label}`;
     const area = areaOf(s);
     return {
       s, short, kind, withPlace, area,
       name: withPlace && s.place && !short.includes(s.place) ? `${base}, ${s.place}` : base,
-      slug: kebab(withPlace && !short.includes(s.place) ? `${short} ${kind} ${s.place}` : `${short} ${kind}`),
-      areaName: area === 'harrogate' ? 'Harrogate' : 'York',
-      areaPage: area === 'harrogate' ? 'harrogate-primary-schools/' : 'york-primary-schools/',
+      slug: kebab(withPlace && !short.includes(s.place) ? `${short} ${label} ${s.place}` : `${short} ${label}`),
+      areaName: AREA_INFO[area].short,
+      areaPage: AREA_INFO[area].page,
     };
   });
+  const locked = LOCKED as Record<string, string>, taken = new Set(Object.values(locked));
+  for (const p of pages) {
+    const keep = locked[p.s.urn];
+    if (keep) p.slug = keep;
+    else if (taken.has(p.slug)) p.slug = `${p.slug}-${p.s.urn}`;   // a published page already has this address
+  }
   // any address still shared gets the school's URN on the end
-  for (const p of pages) if (pages.filter((q) => q.slug === p.slug).length > 1) p.slug = `${p.slug}-${p.s.urn}`;
+  for (const p of pages) if (!locked[p.s.urn] && pages.filter((q) => q.slug === p.slug).length > 1) p.slug = `${p.slug}-${p.s.urn}`;
+  const fresh = pages.filter((p) => !locked[p.s.urn]);
+  if (fresh.length) console.log(`  ${fresh.length} school pages aren't in src/lib/slugs.json yet; run npm run lock-slugs after this build`);
   return (cache = pages);
 }
 
@@ -79,7 +91,7 @@ export function yearLine(y: YearRec) {
   if (y.s === 'distance') {
     if (y.g === 'out') return `In ${y.y}, everyone in the catchment got a place, and so did children from outside it who lived within ${d}.`;
     if (y.g === 'in') return `In ${y.y}, only children in the catchment got a place, and the last one went to a child ${d} away.`;
-    if (y.g === 'sib') return `In ${y.y}, everyone in the catchment got a place, plus brothers and sisters of pupils, but no other children from outside it.`;
+    if (y.g === 'sib' || y.g === 'staff') return `In ${y.y}, everyone in the catchment got a place, plus ${WHO_ELSE[y.g]}, but no other children from outside it.`;
     return `In ${y.y}, places went by the school’s own rules, and the last one went to a child ${d} away.`;
   }
   if (y.s === 'catchment') {
@@ -103,7 +115,7 @@ export function summary(p: SchoolPage) {
       : `Applications have stayed around ${Math.round((first.a + last.a) / 2)} a year.`
     : '';
   // the furthest the last place went, over the years with a distance
-  const dists = s.d.filter((y) => y.s === 'distance' && y.g !== 'sib' && y.m != null);
+  const dists = s.d.filter((y) => y.s === 'distance' && !noDist(y) && y.m != null);
   const furthest = dists.length ? dists.reduce((a, b) => (b.m! > a.m! ? b : a)) : null;
   const closest = dists.length ? dists.reduce((a, b) => (b.m! < a.m! ? b : a)) : null;
   const allIn = s.d.filter((y) => y.s === 'all_offered').length;
