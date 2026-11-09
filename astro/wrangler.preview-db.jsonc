@@ -1,0 +1,5 @@
+// Only for setting up the PREVIEW database by hand (Wrangler reads databases from the top level of a config):
+//   npx wrangler d1 migrations apply ysc-admin-preview --remote --config wrangler.preview-db.jsonc
+//   npx wrangler d1 execute ysc-admin-preview --remote --config wrangler.preview-db.jsonc --file db/seed-demo.sql
+{ "name": "yorkshire-school-checker", "compatibility_date": "2026-10-01",
+  "d1_databases": [{ "binding": "DB", "database_name": "ysc-admin-preview", "database_id": "752d8729-d970-45a6-b45f-8dcb02d18de6", "migrations_dir": "migrations" }] }

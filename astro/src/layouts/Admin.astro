@@ -1,0 +1,148 @@
+---
+// The admin's frame: side menu, who's signed in, and whether this is the live site or a preview.
+// Every /admin page and /api/admin request is checked by the Worker (worker/auth.js) before it's served.
+import '../styles/fonts.css';
+import '../styles/global.css';
+import Rose from '../components/Rose.astro';
+interface Props { title: string; active: string }
+const { title, active } = Astro.props;
+const menu = [
+  ['dashboard', 'Dashboard', '/admin/', false],
+  ['ads', 'Ads', '/admin/ads/', false],
+  ['advertisers', 'Advertisers', '/admin/advertisers/', false],
+  ['spots', 'Ad spots', '/admin/spots/', false],
+  ['enquiries', 'Enquiries', '/admin/enquiries/', false],
+  ['schools', 'Schools', '/admin/schools/', false],
+  ['specs', 'Ad specs', '/admin/specs/', false],
+] as const;
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{title} · Admin · Yorkshire School Checker</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body class="adm">
+    <aside class="adm-side">
+      <a class="adm-brand" href="/admin/"><Rose size={24} /><span>School Checker<small>Admin</small></span></a>
+      <nav aria-label="Admin">
+        {menu.map(([id, label, href, soon]) => soon
+          ? <span class="adm-link soon" aria-disabled="true">{label}<em>soon</em></span>
+          : <a class:list={['adm-link', { on: active === id }]} href={href} aria-current={active === id ? 'page' : undefined}>{label}</a>)}
+      </nav>
+      <a class="adm-link adm-out" href="/">View the site ↗</a>
+    </aside>
+    <div class="adm-main">
+      <header class="adm-top">
+        <h1>{title}</h1>
+        <div class="adm-who">
+          <span class="adm-env" id="admEnv" hidden></span>
+          <span id="admEmail">Checking sign-in…</span>
+          <a href="/cdn-cgi/access/logout">Sign out</a>
+        </div>
+      </header>
+      <main class="adm-body"><slot /></main>
+    </div>
+    <div class="adm-toast" id="admToast" role="status" aria-live="polite" hidden></div>
+    <dialog class="adm-dialog adm-confirm" id="admConfirm">
+      <form method="dialog">
+        <p></p>
+        <div class="adm-actions"><button class="btn btn-sm" value="no">Cancel</button><button class="btn btn-sm btn-dark" value="yes" data-yes>Yes</button></div>
+      </form>
+    </dialog>
+    <script>
+      // who's signed in, and whether this is the live database or the preview one
+      fetch('/api/admin/me').then((r) => (r.ok ? r.json() : Promise.reject(r.status))).then((me) => {
+        document.getElementById('admEmail')!.textContent = me.email;
+        const env = document.getElementById('admEnv')!;
+        env.textContent = ({ production: 'Live site', preview: 'Preview (demo data)', local: 'Local test' } as Record<string, string>)[me.environment] ?? me.environment;
+        env.classList.toggle('live', me.environment === 'production');
+        env.hidden = false;
+      }).catch(() => { document.getElementById('admEmail')!.textContent = 'Not signed in'; });
+    </script>
+    <style is:global>
+      .adm { display: grid; grid-template-columns: 232px minmax(0, 1fr); min-height: 100vh; background: var(--pale); }
+      .adm-side { background: #fff; border-right: 1px solid var(--line); padding: 20px 14px; display: flex; flex-direction: column; gap: 18px; position: sticky; top: 0; height: 100vh; }
+      .adm-brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px 12px; text-decoration: none; font: 700 17px var(--display); color: var(--ink); }
+      .adm-brand small { display: block; font: 700 11px var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted-2); }
+      .adm-side nav { display: grid; gap: 2px; }
+      .adm-link { display: flex; justify-content: space-between; align-items: center; padding: 9px 12px; border-radius: 10px; font-weight: 600; font-size: 15px; color: var(--ink); text-decoration: none; }
+      a.adm-link:hover { background: var(--pale); }
+      .adm-link.on { background: var(--ink); color: #fff; }
+      .adm-link.soon { color: var(--faint); cursor: default; }
+      .adm-link em { font: 600 11px var(--body); font-style: normal; text-transform: uppercase; letter-spacing: .05em; }
+      .adm-out { margin-top: auto; color: var(--muted); }
+      .adm-main { min-width: 0; }
+      .adm-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding: 22px 32px; background: #fff; border-bottom: 1px solid var(--line); }
+      .adm-top h1 { font-size: 30px; letter-spacing: -0.02em; }
+      .adm-who { display: flex; align-items: center; gap: 14px; font-size: 14px; color: var(--muted); }
+      .adm-who a { color: var(--ink); font-weight: 600; }
+      .adm-env { padding: 3px 10px; border-radius: 999px; background: var(--sticky); color: var(--ink); font-weight: 700; font-size: 12px; }
+      .adm-env.live { background: var(--bad-bg); color: var(--bad); }
+      .adm-body { padding: 28px 32px 48px; display: grid; gap: 24px; }
+      .adm-card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; }
+      .adm-h2 { font: 700 20px var(--body); letter-spacing: 0; margin-bottom: 6px; }
+      .adm-note { color: var(--muted); line-height: 1.55; max-width: 760px; font-size: 15px; }
+      .adm-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+      .adm-bar .grow { flex: 1; }
+      .adm-bar select, .adm-bar input[type=search] { font: 500 15px var(--body); padding: 8px 12px; border: 1.5px solid var(--line-2); border-radius: 10px; background: #fff; color: var(--ink); }
+      /* tables */
+      .adm-table-wrap { background: #fff; border: 1px solid var(--line); border-radius: 16px; overflow-x: auto; }
+      .adm-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+      .adm-table th { text-align: left; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted-2); padding: 12px 14px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+      .adm-table td { padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+      .adm-table tr:last-child td { border-bottom: 0; }
+      .adm-table tbody tr:hover { background: #FAFBFF; }
+      .adm-table .name { font-weight: 700; color: var(--ink); }
+      .adm-table .sub { color: var(--muted-2); font-size: 13px; margin-top: 2px; }
+      .adm-table .acts { white-space: nowrap; text-align: right; }
+      .adm-empty { padding: 40px 20px; text-align: center; color: var(--muted); }
+      /* small status pills */
+      .pill-s { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+      .pill-s.good { background: var(--good-bg); color: var(--good); }
+      .pill-s.open { background: var(--open-bg); color: var(--open); }
+      .pill-s.close { background: var(--close-bg); color: var(--close); }
+      .pill-s.bad { background: var(--bad-bg); color: var(--bad); }
+      .pill-s.none { background: var(--none-bg); color: var(--none); }
+      .pill-s.demo { background: var(--sticky); color: var(--ink); }
+      /* forms */
+      .adm-form { display: grid; gap: 18px; }
+      .adm-field { display: grid; gap: 6px; font-weight: 700; font-size: 14px; }
+      .adm-field em { font-style: normal; font-weight: 400; color: var(--muted-2); }
+      .adm-field input, .adm-field select, .adm-field textarea { font: 400 15px/1.45 var(--body); color: var(--ink); padding: 9px 12px; border: 1.5px solid var(--line-2); border-radius: 10px; background: #fff; width: 100%; }
+      .adm-field input:focus, .adm-field select:focus, .adm-field textarea:focus { outline: 2px solid var(--cobalt); outline-offset: 1px; border-color: var(--cobalt); }
+      .adm-field input[type=checkbox], .adm-field input[type=radio] { width: auto; padding: 0; border: 0; }
+      .adm-field .count { font-weight: 500; font-size: 12px; color: var(--muted-2); justify-self: end; margin-top: -2px; }
+      .adm-field .count.over { color: var(--bad); font-weight: 700; }
+      .adm-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+      .adm-checks { display: flex; flex-wrap: wrap; gap: 8px; }
+      .adm-checks label { display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px; border: 1.5px solid var(--line-2); border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer; background: #fff; }
+      .adm-checks label:has(input:checked) { border-color: var(--ink); background: var(--ink); color: #fff; }
+      .adm-checks input { accent-color: var(--ink); }
+      .adm-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
+      .adm-error { color: var(--bad); font-weight: 600; font-size: 14px; }
+      .adm-error:empty { display: none; }
+      .btn-link { background: none; border: 0; padding: 4px 6px; font: 600 14px var(--body); color: var(--cobalt); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+      .btn-link.bad { color: var(--bad); }
+      .btn-xs { padding: 5px 10px; font-size: 13px; border-radius: 9px; border-width: 1.5px; }
+      /* dialogs and messages */
+      .adm-dialog { width: min(560px, calc(100% - 32px)); border: 2px solid var(--ink); border-radius: 18px; padding: 24px; box-shadow: 6px 6px 0 var(--cobalt); color: var(--ink); }
+      .adm-dialog::backdrop { background: rgba(20, 24, 43, .45); }
+      .adm-confirm p { font-size: 16px; line-height: 1.5; margin-bottom: 18px; }
+      .adm-toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 12px 18px; border-radius: 12px; font-weight: 600; font-size: 14px; z-index: 100; max-width: calc(100% - 32px); box-shadow: 0 8px 24px rgba(20, 24, 43, .25); }
+      .adm-toast.bad { background: var(--bad); }
+      @media (max-width: 860px) {
+        .adm { grid-template-columns: 1fr; }
+        .adm-side { position: static; height: auto; flex-direction: row; flex-wrap: wrap; align-items: center; padding: 12px 16px; gap: 8px; border-right: 0; border-bottom: 1px solid var(--line); }
+        .adm-side nav { display: flex; flex-wrap: wrap; gap: 4px; }
+        .adm-brand { padding: 0 8px 0 0; }
+        .adm-out { margin-top: 0; margin-left: auto; }
+        .adm-top, .adm-body { padding-left: 16px; padding-right: 16px; }
+        .adm-row2 { grid-template-columns: 1fr; }
+      }
+    </style>
+  </body>
+</html>

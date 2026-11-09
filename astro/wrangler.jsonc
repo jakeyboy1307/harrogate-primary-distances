@@ -4,9 +4,31 @@
 {
   "name": "yorkshire-school-checker",
   "compatibility_date": "2026-10-01",
+  // only /api/* and /admin run the Worker code; everything else is a static file
+  "main": "worker/index.js",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*", "/admin", "/admin/*"],
     // unknown addresses get the site's own "page not found" page with a 404 status
     "not_found_handling": "404-page"
+  },
+  // the admin database: advertisers, ads and enquiries (tables in migrations/)
+  "d1_databases": [{ "binding": "DB", "database_name": "ysc-admin", "database_id": "99cede6d-318f-452c-a0b6-805e00109d3b" }],
+  // emails enquiries to one fixed, verified address (Email Service > Email Routing > Destination Addresses)
+  "send_email": [{ "name": "ENQUIRY", "destination_address": "jake.adams1307@gmail.com" }],
+  // ADMIN_EMAILS: who may use /admin, after signing in with Cloudflare Access (see worker/auth.js).
+  // ACCESS_*: the Zero Trust team and the "School Checker admin" Access application's Audience (AUD) Tag,
+  // used to check the signed login token (Zero Trust > Access controls > Applications > Additional settings).
+  "vars": { "ENVIRONMENT": "production", "ADMIN_EMAILS": "jake.adams1307@gmail.com", "ACCESS_TEAM_DOMAIN": "https://mute-meadow-7209.cloudflareaccess.com", "ACCESS_AUD": "69371ae8437b5636cd859063490a7c352b88b417af07c1a3a044ba9dc30bfef1" },
+  // only for `wrangler dev`: pretend Access signed this email in, so the admin can be tested locally
+  "access": { "dev": { "aud": "local-dev", "identity": { "email": "jake.adams1307@gmail.com" } } },
+  // branch builds publish a preview link with "npx wrangler preview" (Preview settings in Cloudflare).
+  // Previews don't inherit bindings, and use their own database, which holds the demo ads (db/seed-demo.sql),
+  // so nothing done on a preview can change the live site.
+  "previews": {
+    "vars": { "ENVIRONMENT": "preview", "ADMIN_EMAILS": "jake.adams1307@gmail.com", "ACCESS_TEAM_DOMAIN": "https://mute-meadow-7209.cloudflareaccess.com", "ACCESS_AUD": "69371ae8437b5636cd859063490a7c352b88b417af07c1a3a044ba9dc30bfef1" },
+    "d1_databases": [{ "binding": "DB", "database_name": "ysc-admin-preview", "database_id": "752d8729-d970-45a6-b45f-8dcb02d18de6" }],
+    "send_email": [{ "name": "ENQUIRY", "destination_address": "jake.adams1307@gmail.com" }]
   }
 }

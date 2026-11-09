@@ -163,6 +163,8 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
   import { $, $$, chip, distTxt, ICON, toast, vOf } from '../lib/ui';
   import { initPanel, openPanel, refreshPanel } from '../lib/panel';
   import { initPList, renderPList } from '../lib/plist';
+  import { adCard, areaOf, loadSponsors, sponsorsFor } from '../lib/sponsors';
+  import { track } from '../lib/track';
   import type { SchoolMap } from '../lib/map';
 
   // The form works straight away; a search waits for the school data, so an early click can't reload the page
@@ -209,8 +211,11 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
     onOpen: (s: School) => openPanel(s.id), emptyText: 'Add a school from the list, or leave it. Four is fine.',
   };
   initPList(plOpts);
+  // ads arrive separately; draw them in once they do (the results work without them)
+  loadSponsors().then(() => { if (place) render(); });
 
   // ---------- search ----------
+  let lastCounted = '';   // a new place counts as a search; changing the distance or years doesn't
   async function run(p: Place, save = true) {
     await ready();
     const my = ++seq;
@@ -219,6 +224,9 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
     if (p.isPostcode) history.replaceState(null, '', '#pc=' + p.label.replace(/\s+/g, ''));
     const res = prepareSearch(schools, catches, p, radius());
     near = res.near; outside = res.outside; filter = null; showAll = false;
+    // count the search by area (only the area, never the postcode)
+    const nearestSchool = [...res.near].sort((a, b) => a.straight! - b.straight!)[0];
+    if (p.label !== lastCounted) { lastCounted = p.label; track('search', res.outside || !nearestSchool ? 'outside' : areaOf(nearestSchool)); }
     scoreAll(scored(), mode());
     $('#onboard').hidden = true; $('#results').hidden = false;
     const m = mode();
@@ -256,7 +264,12 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
       : '';
     // rows
     const list = visible(), cap = showAll || isPhone() ? list.length : 8;
-    $('#rows').innerHTML = list.length ? list.slice(0, cap).map((s) => row(s, m)).join('')
+    // one featured card, after the 4th school (or after the last, if there are fewer). It never moves a school.
+    const nearest = [...near].sort((a, b) => a.straight! - b.straight!)[0];
+    const feat = nearest ? sponsorsFor('results', areaOf(nearest))[0] : undefined;
+    const rowsHtml = list.slice(0, cap).map((s) => row(s, m));
+    if (feat && rowsHtml.length) rowsHtml.splice(Math.min(4, rowsHtml.length), 0, `<div class="ad-row">${adCard(feat, 'results', 'Sponsored')}</div>`);
+    $('#rows').innerHTML = list.length ? rowsHtml.join('')
       : `<div class="no-results"><strong>No schools in range.</strong><br>Try a larger distance. This checker covers the Harrogate district, York, and the North Yorkshire villages round York from Easingwold to Selby and Tadcaster.</div>`;
     const more = $('#more');
     more.hidden = list.length <= cap;

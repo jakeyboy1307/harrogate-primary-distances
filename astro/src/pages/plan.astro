@@ -35,6 +35,15 @@ import { url } from '../lib/url';
     </div>
   </section>
 
+  <section class="ready wrap" id="ready" hidden aria-labelledby="readyTitle">
+    <div class="ready-head">
+      <div><h2 id="readyTitle">Get ready for September</h2>
+        <p class="muted">Once you have a place, there’s uniform to buy and care to sort. Local businesses that can help.</p></div>
+      <span class="ready-note">These are paid listings. They don’t change anything the checker tells you.</span>
+    </div>
+    <div class="ready-grid" id="readyGrid"></div>
+  </section>
+
   <SchoolPanel />
 </Base>
 
@@ -45,6 +54,7 @@ import { url } from '../lib/url';
   import { initPanel, openPanel, refreshPanel } from '../lib/panel';
   import { initPList, renderPList } from '../lib/plist';
   import { url } from '../lib/url';
+  import { adCard, areaOf, loadSponsors, sponsorsFor } from '../lib/sponsors';
 
   const saved = getSearch();
   const cn = council(saved?.place.district);   // the council you apply to, from your postcode
@@ -110,6 +120,11 @@ import { url } from '../lib/url';
     $('#planCheck').innerHTML = `<h2>${good ? 'Your plan looks good' : !saved ? 'Let’s get started' : 'A few things to check'}</h2>`
       + checks.map((c) => `<div class="check">${c}</div>`).join('')
       + (!saved ? `<a class="btn" href="${url('')}" style="justify-self:start">Find my schools</a>` : '');
+    // get ready for September: partners for the area of your nearest (or first listed) school
+    const base = [...near].sort((a, b) => (a.straight ?? 0) - (b.straight ?? 0))[0] ?? listed[0];
+    const partners = base ? sponsorsFor('plan', areaOf(base)) : [];
+    $('#ready').hidden = !partners.length;
+    $('#readyGrid').innerHTML = partners.map((s) => adCard(s, 'plan', 'Sponsored')).join('');
     // also near you
     const pool = near.filter((s) => !rankOf(s.urn) && !backupOf(s.urn)).sort((a, b) => ORDER[vOf(a)] - ORDER[vOf(b)] || (a.straight ?? 0) - (b.straight ?? 0)).slice(0, 5);
     $('#pool').innerHTML = !saved || !pool.length ? '' : `<div class="pool-head"><h2>Also near you</h2><span class="hand">tap one to look closer</span></div>`
@@ -125,6 +140,8 @@ import { url } from '../lib/url';
 
   const scored = () => [...new Set([...near, ...getList().map((d) => byUrn.get(d)!).filter(Boolean)])];
   render();
+  // ads arrive separately; draw them in once they do
+  loadSponsors().then(render);
   if (saved) {
     $('#planLede').textContent = `Here’s your plan for a Reception place in September 2027, with your schools for ${saved.place.label === 'your location' ? 'your location' : saved.place.label} and the dates that matter.`;
     near = prepareSearch(schools, catches, saved.place, saved.radius).near;

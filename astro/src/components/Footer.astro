@@ -13,11 +13,17 @@ import { url } from '../lib/url';
     <a href={url('how-places-work/#sources')}>Where our numbers come from</a>
     <a href={url('privacy/')}>Privacy</a>
   </nav>
-  <nav class="foot-areas" aria-label="Areas we cover">
-    <span>Areas we cover</span>
-    <a href={url('harrogate-primary-schools/')}>Harrogate and Knaresborough primary schools</a>
-    <a href={url('york-primary-schools/')}>York primary schools</a>
-  </nav>
+  <div class="foot-nav">
+    <nav class="foot-areas" aria-label="Areas we cover">
+      <span>Areas we cover</span>
+      <a href={url('harrogate-primary-schools/')}>Harrogate and Knaresborough primary schools</a>
+      <a href={url('york-primary-schools/')}>York primary schools</a>
+    </nav>
+    <nav class="foot-areas" aria-label="For businesses">
+      <span>For businesses</span>
+      <a href={url('advertise/')}>Advertise with us</a>
+    </nav>
+  </div>
   <div class="foot-fb"><Feedback /></div>
   <hr class="foot-rule" />
   <p class="foot-legal">An independent tool, not run by North Yorkshire Council, City of York Council or any school.</p>

@@ -1,0 +1,109 @@
+---
+// Every business that advertises (or might): contact details, notes, and their ads.
+import Admin from '../../../layouts/Admin.astro';
+---
+<Admin title="Advertisers" active="advertisers">
+  <div class="adm-bar">
+    <input type="search" id="q" placeholder="Search advertisers" aria-label="Search advertisers" />
+    <span class="grow"></span>
+    <button class="btn btn-sm btn-primary" id="add">New advertiser</button>
+  </div>
+  <div class="adm-table-wrap">
+    <table class="adm-table">
+      <thead><tr><th>Business</th><th>Contact</th><th>Ads</th><th>Booked</th><th></th></tr></thead>
+      <tbody id="rows"><tr><td colspan="5" class="adm-empty">Loading…</td></tr></tbody>
+    </table>
+  </div>
+
+  <dialog class="adm-dialog adv-dlg" id="dlg">
+    <form class="adm-form" id="form" novalidate>
+      <h2 class="adm-h2" id="dlgTitle">Advertiser</h2>
+      <label class="adm-field">Business name <input name="name" required /></label>
+      <div class="adm-row2">
+        <label class="adm-field">Contact name <input name="contactName" /></label>
+        <label class="adm-field">Phone <input name="phone" type="tel" /></label>
+      </div>
+      <label class="adm-field">Email <input name="email" type="email" /></label>
+      <label class="adm-field">Notes <em>(only you see these)</em><textarea name="notes" rows="4"></textarea></label>
+      <div id="theirAds"></div>
+      <p class="adm-error" id="err"></p>
+      <div class="adm-actions">
+        <button type="button" class="btn-link bad" id="del" hidden>Delete</button>
+        <span style="flex:1"></span>
+        <button type="button" class="btn btn-sm" id="cancel">Close</button>
+        <button type="submit" class="btn btn-sm btn-dark">Save</button>
+      </div>
+    </form>
+  </dialog>
+</Admin>
+
+<script>
+  import { api, confirmAction, dates, esc, money, spotNames, statePill, toast, type Ad, type Advertiser } from '../../../lib/admin';
+  let all: Advertiser[] = [], ads: Ad[] = [], editing: Advertiser | null = null;
+  const dlg = document.getElementById('dlg') as HTMLDialogElement, form = document.getElementById('form') as HTMLFormElement;
+  const f = (n: string) => form.elements.namedItem(n) as HTMLInputElement;
+  const q = document.getElementById('q') as HTMLInputElement;
+
+  function render() {
+    const s = q.value.trim().toLowerCase();
+    const list = all.filter((a) => !s || `${a.name} ${a.contactName ?? ''} ${a.email ?? ''}`.toLowerCase().includes(s));
+    document.getElementById('rows')!.innerHTML = list.length ? list.map((a) => `<tr>
+      <td><button class="btn-link name" data-open="${a.id}" style="padding:0;color:var(--ink);text-decoration:none">${esc(a.name)}</button>${a.demo ? ' <span class="pill-s demo">Demo</span>' : ''}</td>
+      <td>${esc(a.contactName ?? '')}<div class="sub">${a.email ? `<a href="mailto:${esc(a.email)}">${esc(a.email)}</a>` : ''}${a.phone ? ` · ${esc(a.phone)}` : ''}</div></td>
+      <td>${a.ads}${a.live ? ` <span class="pill-s good">${a.live} live</span>` : ''}</td>
+      <td>${esc(money(a.bookedPence)) || '<span class="sub">£0</span>'}</td>
+      <td class="acts"><a class="btn btn-xs" href="/admin/ads/edit/?advertiser=${a.id}">New ad</a> <button class="btn btn-xs" data-open="${a.id}">Open</button></td>
+    </tr>`).join('') : `<tr><td colspan="5" class="adm-empty">${all.length ? 'No advertiser matches.' : 'No advertisers yet.'}</td></tr>`;
+  }
+
+  function open(a: Advertiser | null) {
+    editing = a; form.reset(); document.getElementById('err')!.textContent = '';
+    document.getElementById('dlgTitle')!.textContent = a ? a.name : 'New advertiser';
+    if (a) for (const k of ['name', 'contactName', 'email', 'phone', 'notes'] as const) f(k).value = a[k] ?? '';
+    document.getElementById('del')!.hidden = !a;
+    const theirs = a ? ads.filter((x) => x.advertiserId === a.id) : [];
+    document.getElementById('theirAds')!.innerHTML = a ? `<div class="adm-field">Their ads
+      ${theirs.length ? `<ul class="their">${theirs.map((x) => `<li><a href="/admin/ads/edit/?id=${x.id}">${esc(x.name)}</a> ${statePill(x.state)}<span>${esc(spotNames(x.placements))} · ${esc(dates(x))}${x.pricePence != null ? ` · ${esc(money(x.pricePence, x.pricePeriod))}` : ''}</span></li>`).join('')}</ul>` : '<span class="sub" style="font-weight:400">None yet.</span>'}
+      <a class="btn btn-xs" href="/admin/ads/edit/?advertiser=${a.id}" style="justify-self:start">New ad for them</a></div>` : '';
+    dlg.showModal();
+  }
+
+  async function load() {
+    [all, ads] = await Promise.all([api<Advertiser[]>('advertisers'), api<Ad[]>('ads')]);
+    render();
+    const want = new URLSearchParams(location.search).get('id');
+    if (want && !dlg.open) { const a = all.find((x) => x.id === +want); if (a) open(a); }
+  }
+
+  q.addEventListener('input', render);
+  document.getElementById('add')!.addEventListener('click', () => open(null));
+  document.getElementById('cancel')!.addEventListener('click', () => dlg.close());
+  document.getElementById('rows')!.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLElement>('[data-open]');
+    if (b) open(all.find((a) => a.id === +b.dataset.open!)!);
+  });
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const body = Object.fromEntries(new FormData(form));
+    try {
+      await (editing ? api(`advertisers/${editing.id}`, { method: 'PUT', body }) : api('advertisers', { body }));
+      dlg.close(); toast('Saved'); await load();
+    } catch (er) { document.getElementById('err')!.textContent = (er as Error).message; }
+  });
+  document.getElementById('del')!.addEventListener('click', async () => {
+    dlg.close();
+    if (!(await confirmAction(`Delete ${editing!.name}? This can’t be undone.`, 'Delete'))) return open(editing);
+    try { await api(`advertisers/${editing!.id}`, { method: 'DELETE' }); toast('Deleted'); await load(); }
+    catch (er) { toast((er as Error).message, true); }
+  });
+  load().catch((e) => toast(e.message, true));
+</script>
+
+<!-- global: the script draws this HTML after load, which page-scoped styles don't reach -->
+<style is:global>
+  .adv-dlg { width: min(620px, calc(100% - 32px)); }
+  .their { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-weight: 400; }
+  .their li { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+  .their a { font-weight: 700; color: var(--ink); }
+  .their span:last-child { width: 100%; color: var(--muted-2); font-size: 13px; }
+</style>

@@ -33,6 +33,8 @@ h1, h2, h3 { font-family: var(--display); font-weight: 600; margin: 0; letter-sp
 p { margin: 0; }
 a { color: inherit; text-underline-offset: 3px; }
 button { font: inherit; color: inherit; cursor: pointer; }
+/* labels that act as buttons (the option chips) and dropdowns get the hand cursor too */
+label.pill, select { cursor: pointer; }
 :focus-visible { outline: 3px solid var(--cobalt); outline-offset: 2px; border-radius: 6px; }
 .skip { position: absolute; left: -9999px; top: 8px; z-index: 100; background: var(--ink); color: #fff; padding: 8px 14px; border-radius: 8px; }
 .skip:focus { left: 8px; }
@@ -66,7 +68,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .site-foot { display: grid; grid-template-columns: 1fr auto auto; grid-template-areas: 'areas areas areas' 'legal fb credit'; column-gap: 32px; align-items: center; gap: 16px; padding: 32px var(--gr) 32px var(--gl); border-top: 1px solid var(--line); color: var(--muted); font-size: 15px; margin-top: 0; }
 .foot-brand, .foot-links, .foot-rule { display: none; }
 .foot-legal { grid-area: legal; }
-.foot-areas { grid-area: areas; display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 24px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.foot-nav { grid-area: areas; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 40px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.foot-areas { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 24px; }
 .foot-areas span { font-weight: 700; color: var(--ink); }
 .foot-areas a { color: var(--ink); font-weight: 600; }
 .foot-fb { grid-area: fb; }
@@ -80,7 +83,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
   .foot-links { grid-area: links; display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 15px; font-weight: 600; color: var(--ink); }
   .foot-links a { text-decoration: none; }
   .foot-rule { grid-area: rule; display: block; width: 100%; border: 0; border-top: 1px solid var(--line); margin: 0; }
-  .foot-areas { padding-bottom: 0; border-bottom: 0; font-size: 15px; gap: 8px 20px; }
+  .foot-nav { flex-direction: column; gap: 16px; padding-bottom: 0; border-bottom: 0; }
+  .foot-areas { font-size: 15px; gap: 8px 20px; }
 }
 
 /* ---------- buttons, chips, pills ---------- */
@@ -586,3 +590,33 @@ body.panel-open .toast { bottom: calc(96px + env(safe-area-inset-bottom)); }
 .toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 1000; padding: 12px 18px; background: var(--ink); color: #fff; border-radius: 12px; font-weight: 600; box-shadow: 4px 4px 0 var(--cobalt); max-width: calc(100% - 40px); }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* ---------- sponsored placements: always labelled, always visibly separate from the schools ---------- */
+.ad-label { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 6px; background: var(--none-bg); color: var(--none); font: 700 11px/1.5 var(--body); letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+.ad-demo { background: var(--sticky); color: var(--ink); margin-left: 6px; }
+.ad-card { display: grid; gap: 12px; padding: 16px 18px; border: 1.5px dashed var(--line-2); border-radius: 16px; background: var(--sticky-soft); }
+.ad-top { display: flex; align-items: center; }
+.ad-body { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: start; }
+.ad-logo { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; color: #fff; font: 700 15px var(--body); letter-spacing: .02em; }
+.ad-logo-img { object-fit: contain; background: #fff; border: 1px solid var(--line); }
+.ad-cat { font-size: 13px; font-weight: 700; color: var(--muted-2); }
+.ad-name { font: 700 18px/1.3 var(--body); letter-spacing: 0; margin: 1px 0 4px; }
+.ad-blurb { font-size: 15px; line-height: 1.5; color: var(--muted); }
+.ad-offer { margin-top: 6px; font-size: 14px; font-weight: 700; color: var(--close); }
+.ad-foot { display: flex; }
+.ad-foot .btn { text-decoration: none; }
+.ad-row { padding: 14px 0; }
+.ad-stack { display: grid; gap: 12px; margin-top: 12px; }
+.ad-profile .p-sec-head span { display: inline-flex; }
+.ad-dates { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.ad-dates li { padding: 10px 14px; border-radius: 12px; background: var(--pale); font-weight: 700; font-size: 15px; }
+.ad-strip { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-top: 20px; font-size: 15px; color: var(--muted); max-width: 640px; line-height: 1.5; }
+.ad-strip a { color: var(--ink); }
+.ready { padding-top: 56px; padding-bottom: 72px; }
+.ready-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px 32px; flex-wrap: wrap; }
+.ready-head h2 { font-size: 40px; line-height: 1.1; letter-spacing: -0.03em; }
+.ready-head .muted { margin-top: 8px; font-size: 17px; line-height: 1.5; max-width: 560px; }
+.ready-note { font-size: 14px; color: var(--muted-2); max-width: 340px; line-height: 1.45; }
+.ready-grid .ad-card { grid-template-rows: auto 1fr auto; }
+.ready-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 28px; }
+@media (max-width: 760px) { .ready-head h2 { font-size: 30px; } }

@@ -1,0 +1,305 @@
+---
+// Create or edit one ad: /admin/ads/edit/ for a new one, ?id=N to edit, ?advertiser=N to start one for an
+// advertiser, ?school=URN to start one for a school.
+// The preview on the right is drawn with the same code the site uses, so it's exactly what parents see.
+import Admin from '../../../../layouts/Admin.astro';
+import { AREAS, LIMITS, SPOTS } from '../../../../lib/specs';
+const categories = ['School uniform', 'Independent school', 'Wraparound care', 'After-school clubs', 'School shoes', 'Tutoring', 'Moving house', 'Nursery', 'From the school'];
+---
+<Admin title="Ad" active="ads">
+  <div class="adm-bar">
+    <a class="btn-link" href="/admin/ads/">← All ads</a>
+    <span class="grow"></span>
+    <span id="stateNow"></span>
+  </div>
+  <div class="ed">
+    <form class="adm-card adm-form" id="form" novalidate>
+      <div class="adm-row2">
+        <label class="adm-field">Advertiser
+          <select name="advertiserId" id="advertiser"><option value="">None yet</option></select>
+        </label>
+        <div class="adm-field">&nbsp;<button type="button" class="btn btn-sm" id="newAdv" style="justify-self:start">New advertiser</button></div>
+      </div>
+
+      <fieldset class="adm-field ed-set"><legend>Ad spots</legend>
+        <div class="adm-checks">{Object.entries(SPOTS).map(([k, s]) => <label title={s.where}><input type="checkbox" name="placements" value={k} />{s.label}</label>)}</div>
+      </fieldset>
+      <fieldset class="adm-field ed-set"><legend>Areas</legend>
+        <div class="adm-checks">{Object.entries(AREAS).map(([k, a]) => <label><input type="checkbox" name="areas" value={k} />{a}</label>)}</div>
+      </fieldset>
+      <div class="adm-field ed-schools" id="schoolsBox">
+        <span>Schools <em id="schoolsHint">(optional: leave empty for every school in the areas)</em></span>
+        <div class="ed-chips" id="chips"></div>
+        <input type="search" id="schoolSearch" placeholder="Type a school name to add it" autocomplete="off" />
+        <div class="ed-results" id="schoolResults" hidden></div>
+      </div>
+
+      <div class="adm-row2">
+        <label class="adm-field">Business name <input name="name" maxlength={LIMITS.name + 20} data-limit={LIMITS.name} required /><span class="count"></span></label>
+        <label class="adm-field">Category <input name="category" list="cats" data-limit={LIMITS.category} required /><span class="count"></span>
+          <datalist id="cats">{categories.map((c) => <option value={c} />)}</datalist></label>
+      </div>
+      <label class="adm-field">Description <textarea name="blurb" rows="3" data-limit={LIMITS.blurb} required></textarea><span class="count"></span></label>
+      <div class="adm-row2">
+        <label class="adm-field">Button text <input name="cta" data-limit={LIMITS.cta} placeholder="Book a visit" required /><span class="count"></span></label>
+        <label class="adm-field">Link <input name="url" type="url" placeholder="https://" required /></label>
+      </div>
+      <label class="adm-field">Offer line <em>(optional)</em><input name="offer" data-limit={LIMITS.offer} placeholder="10% off with code YSC10" /><span class="count"></span></label>
+      <div class="adm-row2">
+        <label class="adm-field">Logo letters <em>(when there's no logo image)</em><input name="logoText" data-limit={LIMITS.logoText} placeholder="ST" /><span class="count"></span></label>
+        <label class="adm-field">Logo colour <span class="ed-colour"><input type="color" id="colourPick" value="#2747D8" aria-label="Pick a colour" /><input name="colour" placeholder="#2747D8" /></span></label>
+      </div>
+      <label class="adm-field">Logo image link <em>(optional, a square image; uploads come later)</em><input name="logoUrl" type="url" placeholder="https://" /></label>
+      <label class="adm-field" id="openDaysBox" hidden>Open days <em>(one per line, up to {LIMITS.openDays})</em><textarea name="openDays" rows="3" placeholder="Tue 18 November, 9:30am"></textarea></label>
+
+      <div class="adm-row2">
+        <label class="adm-field">Starts <em>(optional)</em><input name="start" type="date" /></label>
+        <label class="adm-field">Ends <em>(optional)</em><input name="end" type="date" /></label>
+      </div>
+      <div class="adm-row2">
+        <label class="adm-field">Price <em>(£)</em><input name="price" type="number" min="0" step="0.01" inputmode="decimal" /></label>
+        <label class="adm-field">Per <select name="pricePeriod"><option value="month">month</option><option value="year">year</option><option value="once">one-off</option></select></label>
+      </div>
+      <label class="ed-paid"><input type="checkbox" name="paid" /> Paid</label>
+
+      <p class="adm-error" id="err" role="alert"></p>
+      <div class="adm-actions ed-actions">
+        <button type="button" class="btn-link bad" id="del" hidden>Delete</button>
+        <button type="button" class="btn-link" id="dup" hidden>Duplicate</button>
+        <span class="grow"></span>
+        <button type="button" class="btn btn-sm" id="pause" hidden>Pause</button>
+        <button type="submit" class="btn btn-sm" id="save">Save draft</button>
+        <button type="button" class="btn btn-sm btn-primary" id="live">Save and go live</button>
+      </div>
+    </form>
+
+    <aside class="ed-preview">
+      <div class="ed-sticky">
+        <h2 class="adm-h2">Preview</h2>
+        <p class="adm-note" id="previewNote">How the card looks on the site.</p>
+        <div id="preview" class="ed-preview-box"></div>
+      </div>
+    </aside>
+  </div>
+
+  <dialog class="adm-dialog" id="advDlg">
+    <form class="adm-form" id="advForm" method="dialog">
+      <h2 class="adm-h2">New advertiser</h2>
+      <label class="adm-field">Business name <input name="name" required /></label>
+      <div class="adm-row2"><label class="adm-field">Contact <input name="contactName" /></label><label class="adm-field">Email <input name="email" type="email" /></label></div>
+      <p class="adm-error" id="advErr"></p>
+      <div class="adm-actions"><button class="btn btn-sm" value="cancel" formnovalidate>Cancel</button><button class="btn btn-sm btn-dark" value="save" id="advSave">Add</button></div>
+    </form>
+  </dialog>
+</Admin>
+
+<script>
+  import { api, confirmAction, day, statePill, toast, type Ad, type Advertiser } from '../../../../lib/admin';
+  import { loadData } from '../../../../lib/engine';
+  import { adCard, areaOf, profileBlock, type Sponsor } from '../../../../lib/sponsors';
+  import { AREAS, LIMITS } from '../../../../lib/specs';
+
+  const params = new URLSearchParams(location.search);
+  let id = params.get('id') ? Number(params.get('id')) : null;
+  let current: Ad | null = null;
+  let urns: number[] = [];
+  let schools: { urn: number; name: string; place: string; area: string }[] = [];
+
+  const form = document.getElementById('form') as HTMLFormElement;
+  const f = (name: string) => form.elements.namedItem(name) as HTMLInputElement;
+  const checked = (name: string) => [...form.querySelectorAll<HTMLInputElement>(`input[name=${name}]:checked`)].map((i) => i.value);
+  const err = (t = '') => { document.getElementById('err')!.textContent = t; };
+
+  // ---------- reading and filling the form ----------
+  function values() {
+    const price = f('price').value.trim();
+    return {
+      advertiserId: f('advertiserId').value || null, placements: checked('placements'), areas: checked('areas'), urns,
+      name: f('name').value, category: f('category').value, blurb: f('blurb').value, cta: f('cta').value, url: f('url').value,
+      offer: f('offer').value, logoText: f('logoText').value.toUpperCase(), colour: f('colour').value, logoUrl: f('logoUrl').value,
+      openDays: f('openDays').value.split('\n').map((s) => s.trim()).filter(Boolean),
+      start: f('start').value || null, end: f('end').value || null,
+      pricePence: price === '' ? null : Math.round(Number(price) * 100), pricePeriod: f('pricePeriod').value, paid: f('paid').checked,
+    };
+  }
+  function fill(a: Ad) {
+    f('advertiserId').value = a.advertiserId ? String(a.advertiserId) : '';
+    form.querySelectorAll<HTMLInputElement>('input[name=placements]').forEach((i) => (i.checked = a.placements.includes(i.value as any)));
+    form.querySelectorAll<HTMLInputElement>('input[name=areas]').forEach((i) => (i.checked = a.areas.includes(i.value as any)));
+    urns = a.urns ?? [];
+    for (const k of ['name', 'category', 'blurb', 'cta', 'url', 'offer', 'logoUrl'] as const) f(k).value = (a as any)[k] ?? '';
+    f('logoText').value = a.logoText ?? ''; f('colour').value = a.colour ?? '';
+    f('openDays').value = (a.openDays ?? []).join('\n');
+    f('start').value = a.start ?? ''; f('end').value = a.end ?? '';
+    f('price').value = a.pricePence != null ? String(a.pricePence / 100) : ''; f('pricePeriod').value = a.pricePeriod ?? 'month';
+    f('paid').checked = a.paid;
+  }
+
+  // ---------- status, buttons and preview ----------
+  function showState() {
+    document.getElementById('stateNow')!.innerHTML = current ? `${statePill(current.state)}${current.demo ? ' <span class="pill-s demo">Demo</span>' : ''}` : '<span class="pill-s none">New</span>';
+    const live = current?.status === 'live';
+    document.getElementById('save')!.textContent = live ? 'Save changes' : 'Save draft';
+    document.getElementById('live')!.hidden = live;
+    document.getElementById('pause')!.hidden = !live;
+    document.getElementById('del')!.hidden = !current;
+    document.getElementById('dup')!.hidden = !current;
+    document.title = `${current ? current.name : 'New ad'} · Admin · Yorkshire School Checker`;
+  }
+
+  function preview() {
+    const v = values();
+    const s: Sponsor = {
+      id: 'preview', name: v.name || 'Business name', category: v.category || 'Category', blurb: v.blurb || 'Your description goes here.',
+      cta: v.cta || 'Button', url: v.url || '#', placements: v.placements as any, areas: v.areas as any, logo: v.logoText || '··',
+      logoUrl: v.logoUrl || undefined, colour: v.colour || '#14182B', offer: v.offer || undefined, openDays: v.openDays,
+    };
+    const onlyProfile = v.placements.length === 1 && v.placements[0] === 'profile';
+    document.getElementById('preview')!.innerHTML = (v.placements.includes('profile') ? `<div class="panel-like">${profileBlock(s)}</div>` : '')
+      + (onlyProfile ? '' : adCard(s, 'nearby', v.placements.includes('pagesponsor') && v.placements.length === 1 ? 'Page sponsor' : 'Sponsored'));
+    document.getElementById('openDaysBox')!.hidden = !v.placements.includes('profile');
+    document.getElementById('schoolsHint')!.textContent = v.placements.includes('profile') ? '(needed: the school this profile belongs to)'
+      : v.placements.includes('uniform') ? '(the schools whose uniform they supply; empty means every school in the areas)' : '(optional: leave empty for every school in the areas)';
+    // character counters
+    form.querySelectorAll<HTMLInputElement>('[data-limit]').forEach((el) => {
+      const c = el.parentElement!.querySelector('.count');
+      if (!c) return;
+      const n = el.value.length, max = +el.dataset.limit!;
+      c.textContent = `${n} / ${max}`;
+      c.classList.toggle('over', n > max);
+    });
+  }
+
+  // ---------- schools ----------
+  function chips() {
+    document.getElementById('chips')!.innerHTML = urns.map((u) => {
+      const s = schools.find((x) => x.urn === u);
+      return `<span class="ed-chip">${s ? s.name.replace(/,.*$/, '') : `URN ${u}`}<button type="button" data-rm="${u}" aria-label="Remove">×</button></span>`;
+    }).join('');
+  }
+  document.getElementById('chips')!.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLElement>('[data-rm]');
+    if (b) { urns = urns.filter((u) => u !== +b.dataset.rm!); chips(); preview(); }
+  });
+  const search = document.getElementById('schoolSearch') as HTMLInputElement, results = document.getElementById('schoolResults')!;
+  search.addEventListener('input', () => {
+    const q = search.value.trim().toLowerCase(), areas = checked('areas');
+    const hits = q.length < 2 ? [] : schools.filter((s) => !urns.includes(s.urn) && (!areas.length || areas.includes(s.area))
+      && `${s.name} ${s.place}`.toLowerCase().includes(q)).slice(0, 8);
+    results.innerHTML = hits.map((s) => `<button type="button" data-add="${s.urn}">${s.name.replace(/,.*$/, '')}<span>${s.place} · ${AREAS[s.area as keyof typeof AREAS].split(' ')[0]}</span></button>`).join('')
+      || (q.length >= 2 ? '<p>No school matches.</p>' : '');
+    results.hidden = q.length < 2;
+  });
+  results.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLElement>('[data-add]');
+    if (!b) return;
+    urns.push(+b.dataset.add!); search.value = ''; results.hidden = true; chips(); preview(); search.focus();
+  });
+
+  // ---------- saving ----------
+  async function save(goLive = false) {
+    err();
+    const v = values();
+    const over = [...form.querySelectorAll<HTMLInputElement>('[data-limit]')].find((el) => el.value.length > +el.dataset.limit!);
+    if (over) return err(`${over.closest('label')!.firstChild!.textContent!.trim()} is too long.`);
+    if (goLive && !(await confirmAction(`Put “${v.name}” live? It shows on the site within about a minute${v.start ? `, from ${day(v.start)}` : ''}.`, 'Go live'))) return;
+    // save first as it stands, then switch it live, so a full spot doesn't lose the edits
+    try {
+      const body = { ...v, status: current?.status ?? 'draft' };
+      current = id ? await api<Ad>(`ads/${id}`, { method: 'PUT', body }) : await api<Ad>('ads', { body });
+      if (!id) { id = current.id; history.replaceState(null, '', `?id=${id}`); }
+      fill(current); chips(); showState(); preview();
+    } catch (e) { return err((e as Error).message); }
+    if (!goLive) return toast('Saved');
+    try {
+      current = await api<Ad>(`ads/${id}/status`, { body: { status: 'live' } });
+      showState(); toast('Saved and live');
+    } catch (e) { err(`Saved as a draft, but it can’t go live: ${(e as Error).message}`); }
+  }
+  form.addEventListener('submit', (e) => { e.preventDefault(); save(false); });
+  document.getElementById('live')!.addEventListener('click', () => save(true));
+  document.getElementById('pause')!.addEventListener('click', async () => {
+    try { current = await api<Ad>(`ads/${id}/status`, { body: { status: 'paused' } }); showState(); toast('Paused. It leaves the site within about a minute.'); }
+    catch (e) { err((e as Error).message); }
+  });
+  document.getElementById('dup')!.addEventListener('click', async () => {
+    const copy = await api<Ad>(`ads/${id}/duplicate`, { method: 'POST' });
+    location.href = `/admin/ads/edit/?id=${copy.id}`;
+  });
+  document.getElementById('del')!.addEventListener('click', async () => {
+    if (!(await confirmAction(`Delete “${current!.name}” for good? This can’t be undone. Pausing keeps it.`, 'Delete'))) return;
+    await api(`ads/${id}`, { method: 'DELETE' });
+    location.href = '/admin/ads/';
+  });
+
+  // colour picker and text box stay in step
+  const pick = document.getElementById('colourPick') as HTMLInputElement;
+  pick.addEventListener('input', () => { f('colour').value = pick.value.toUpperCase(); preview(); });
+  f('colour').addEventListener('input', () => { if (/^#[0-9a-f]{6}$/i.test(f('colour').value)) pick.value = f('colour').value; });
+  form.addEventListener('input', preview);
+
+  // ---------- new advertiser, without leaving the page ----------
+  const dlg = document.getElementById('advDlg') as HTMLDialogElement, advForm = document.getElementById('advForm') as HTMLFormElement;
+  document.getElementById('newAdv')!.addEventListener('click', () => { advForm.reset(); document.getElementById('advErr')!.textContent = ''; dlg.showModal(); });
+  document.getElementById('advSave')!.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(advForm));
+    try {
+      const a = await api<Advertiser>('advertisers', { body: data });
+      const opt = new Option(a.name, String(a.id), true, true);
+      f('advertiserId').append(opt);
+      if (!f('name').value) f('name').value = a.name;
+      dlg.close(); preview(); toast('Advertiser added');
+    } catch (er) { document.getElementById('advErr')!.textContent = (er as Error).message; }
+  });
+
+  // ---------- start ----------
+  (async () => {
+    const [advs, data] = await Promise.all([api<Advertiser[]>('advertisers'), loadData().catch(() => ({ schools: [] as any[] }))]);
+    f('advertiserId').append(...advs.map((a) => new Option(a.name, String(a.id))));
+    schools = data.schools.map((s: any) => ({ urn: s.urn, name: s.name, place: s.place, area: areaOf(s) })).sort((a: any, b: any) => a.name.localeCompare(b.name));
+    if (id) { current = await api<Ad>(`ads/${id}`); fill(current); }
+    else if (params.get('school')) {
+      // started from a school in the schools table: that school, its area, and the school panel spots ticked
+      const sc = schools.find((x) => x.urn === +params.get('school')!);
+      if (sc) {
+        urns = [sc.urn];
+        form.querySelectorAll<HTMLInputElement>('input[name=areas]').forEach((i) => (i.checked = i.value === sc.area));
+      }
+    }
+    else if (params.get('advertiser')) {
+      f('advertiserId').value = params.get('advertiser')!;
+      const a = advs.find((x) => x.id === +params.get('advertiser')!);
+      if (a) f('name').value = a.name;
+    }
+    if (!f('colour').value) f('colour').value = '#2747D8';
+    pick.value = /^#[0-9a-f]{6}$/i.test(f('colour').value) ? f('colour').value : '#2747D8';
+    chips(); showState(); preview();
+  })().catch((e) => err(e.message));
+</script>
+
+<!-- global: the script draws this HTML after load, which page-scoped styles don't reach -->
+<style is:global>
+  .ed { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr); gap: 24px; align-items: start; }
+  .ed-set { border: 0; padding: 0; margin: 0; }
+  .ed-set legend { padding: 0; margin-bottom: 6px; font-weight: 700; font-size: 14px; }
+  .ed-schools { position: relative; }
+  .ed-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ed-chips:empty { display: none; }
+  .ed-chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 4px 4px 10px; border-radius: 999px; background: var(--tint); font-weight: 600; font-size: 13px; }
+  .ed-chip button { border: 0; background: none; font-size: 16px; line-height: 1; padding: 0 6px; cursor: pointer; color: var(--muted); }
+  .ed-results { position: absolute; left: 0; right: 0; top: 100%; z-index: 5; background: #fff; border: 1.5px solid var(--line-2); border-radius: 12px; box-shadow: 0 12px 28px rgba(20, 24, 43, .14); padding: 6px; display: grid; }
+  .ed-results button { text-align: left; border: 0; background: none; padding: 8px 10px; border-radius: 8px; font: 600 14px var(--body); cursor: pointer; display: grid; }
+  .ed-results button:hover { background: var(--pale); }
+  .ed-results span { font-weight: 400; font-size: 12px; color: var(--muted-2); }
+  .ed-results p { padding: 8px 10px; font-weight: 400; color: var(--muted); }
+  .ed-colour { display: flex; gap: 8px; }
+  .ed-colour input[type=color] { width: 46px; padding: 2px; flex-shrink: 0; height: 40px; cursor: pointer; }
+  .ed-paid { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; cursor: pointer; }
+  .ed-actions { align-items: center; padding-top: 6px; border-top: 1px solid var(--line); }
+  .ed-actions .grow { flex: 1; }
+  .ed-sticky { position: sticky; top: 20px; display: grid; gap: 10px; }
+  .ed-preview-box { display: grid; gap: 14px; }
+  .panel-like { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 4px 18px 16px; }
+  @media (max-width: 1000px) { .ed { grid-template-columns: 1fr; } .ed-sticky { position: static; } }
+</style>

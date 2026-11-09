@@ -2,11 +2,11 @@
 // What happens to a parent's postcode and list. Keep in step with the code: storage keys in lib/store.ts, outside services in lib/engine.ts and lib/map.ts.
 import Base from '../layouts/Base.astro';
 ---
-<Base title="Privacy · Yorkshire School Checker" description="What the Yorkshire School Checker does with your postcode and your list of schools. No account, no cookies and no tracking.">
+<Base title="Privacy · Yorkshire School Checker" description="What the Yorkshire School Checker does with your postcode and your list of schools. No account, no cookies, and only anonymous daily counts.">
   <section class="how-hero wrap">
     <div>
       <h1>Your privacy</h1>
-      <p class="lede">There’s no account, we never ask for your name or email, and there are no cookies or tracking. Here’s exactly where your postcode goes and what stays on your phone.</p>
+      <p class="lede">There’s no account, we never ask for your name or email, and there are no cookies. We only keep anonymous daily counts. Here’s exactly where your postcode goes and what stays on your phone.</p>
     </div>
   </section>
 
@@ -28,8 +28,11 @@ import Base from '../layouts/Base.astro';
 
   <section class="how-sec wrap" style="border-top:1px solid var(--line)">
     <h2>Hosting and who runs this</h2>
-    <p class="intro">The site is delivered by Cloudflare, which handles visitors’ IP addresses to serve pages and block attacks, as every web host does. We don’t run visitor stats or adverts.</p>
+    <p class="intro">The site is delivered by Cloudflare, which handles visitors’ IP addresses to serve pages and block attacks, as every web host does. We don’t use cookies or third-party analytics.</p>
+    <p class="intro">To see how the site is used, we count page views, searches by area (never the postcode), how often each school’s details are opened, and how often sponsored listings are seen and clicked. Only daily totals are kept, like “120 views of the plan page today”. Nothing is linked to you or your device, and your IP address isn’t stored.</p>
+    <p class="intro">Some pages show listings from local businesses, marked “Sponsored”. They’re plain links: no ad networks, no cookies, and sponsors never learn who you are. Each link carries a tag naming this site, so the business can count visits from us.</p>
+    <p class="intro">If you send an advertising enquiry from our advertise page, your name, business and contact details are emailed to us so we can reply. We don’t add you to a mailing list.</p>
     <p class="intro">The Yorkshire School Checker is an independent tool made by <a href="https://www.mammothwebsites.co.uk" target="_blank" rel="noopener">Mammoth Websites</a>. For questions about this page, get in touch through their website.</p>
-    <p class="caveat">Last updated 6 November 2026.</p>
+    <p class="caveat">Last updated 9 November 2026.</p>
   </section>
 </Base>

@@ -1,0 +1,77 @@
+---
+// Enquiries from the form on /advertise/, newest first. Each can be replied to, marked, or turned into an advertiser.
+import Admin from '../../../layouts/Admin.astro';
+---
+<Admin title="Enquiries" active="enquiries">
+  <div class="adm-bar">
+    <select id="fStatus" aria-label="Show">
+      <option value="">All enquiries</option><option value="new">New</option><option value="replied">Replied</option><option value="won">Won</option><option value="lost">Lost</option>
+    </select>
+  </div>
+  <div class="enqs" id="list"><p class="adm-note">Loading…</p></div>
+</Admin>
+
+<script>
+  import { api, confirmAction, day, esc, toast } from '../../../lib/admin';
+  interface Enq { id: number; created_at: string; name: string; business: string; email: string; phone: string | null; type: string | null;
+    area: string | null; slots: string[]; message: string | null; status: string; emailed: boolean; advertiser_id: number | null }
+  let all: Enq[] = [];
+  const fStatus = document.getElementById('fStatus') as HTMLSelectElement;
+  const PILL: Record<string, string> = { new: 'open', replied: 'none', won: 'good', lost: 'bad' };
+
+  function render() {
+    const list = all.filter((e) => !fStatus.value || e.status === fStatus.value);
+    document.getElementById('list')!.innerHTML = list.length ? list.map((e) => `<article class="adm-card enq">
+      <div class="enq-head">
+        <div><h2 class="adm-h2">${esc(e.business)}</h2><span class="sub">${esc(e.name)} · ${day(e.created_at)}${e.emailed ? '' : ' · email not sent, saved here only'}</span></div>
+        <span class="pill-s ${PILL[e.status]}">${e.status[0].toUpperCase() + e.status.slice(1)}</span>
+      </div>
+      <dl class="enq-facts">
+        <div><dt>Email</dt><dd><a href="mailto:${esc(e.email)}?subject=${encodeURIComponent('Advertising on Yorkshire School Checker')}">${esc(e.email)}</a></dd></div>
+        ${e.phone ? `<div><dt>Phone</dt><dd><a href="tel:${esc(e.phone.replace(/\s/g, ''))}">${esc(e.phone)}</a></dd></div>` : ''}
+        ${e.type ? `<div><dt>Type</dt><dd>${esc(e.type)}</dd></div>` : ''}
+        ${e.area ? `<div><dt>Area</dt><dd>${esc(e.area)}</dd></div>` : ''}
+        ${e.slots.length ? `<div><dt>Interested in</dt><dd>${e.slots.map(esc).join(', ')}</dd></div>` : ''}
+      </dl>
+      ${e.message ? `<p class="enq-msg">${esc(e.message)}</p>` : ''}
+      <div class="adm-bar">
+        <label class="sub">Mark as <select data-status="${e.id}">${['new', 'replied', 'won', 'lost'].map((s) => `<option value="${s}"${s === e.status ? ' selected' : ''}>${s[0].toUpperCase() + s.slice(1)}</option>`).join('')}</select></label>
+        <span class="grow"></span>
+        <button class="btn-link bad" data-del="${e.id}">Delete</button>
+        ${e.advertiser_id ? `<a class="btn btn-xs" href="/admin/advertisers/?id=${e.advertiser_id}">Open advertiser</a>` : `<button class="btn btn-xs btn-dark" data-convert="${e.id}">Make advertiser</button>`}
+      </div>
+    </article>`).join('') : `<p class="adm-note">${all.length ? 'Nothing with that status.' : 'No enquiries yet. They arrive from the form on the advertise page.'}</p>`;
+  }
+
+  async function load() { all = await api<Enq[]>('enquiries'); render(); }
+  fStatus.addEventListener('change', render);
+  const list = document.getElementById('list')!;
+  list.addEventListener('change', async (ev) => {
+    const s = (ev.target as HTMLElement).closest<HTMLSelectElement>('[data-status]');
+    if (!s) return;
+    try { await api(`enquiries/${s.dataset.status}`, { method: 'PUT', body: { status: s.value } }); toast('Updated'); await load(); }
+    catch (e) { toast((e as Error).message, true); }
+  });
+  list.addEventListener('click', async (ev) => {
+    const t = ev.target as HTMLElement, c = t.closest<HTMLElement>('[data-convert]'), d = t.closest<HTMLElement>('[data-del]');
+    try {
+      if (c) { const r = await api<{ advertiserId: number }>(`enquiries/${c.dataset.convert}/convert`, { method: 'POST' }); location.href = `/admin/advertisers/?id=${r.advertiserId}`; }
+      if (d && (await confirmAction('Delete this enquiry for good?', 'Delete'))) { await api(`enquiries/${d.dataset.del}`, { method: 'DELETE' }); toast('Deleted'); await load(); }
+    } catch (e) { toast((e as Error).message, true); }
+  });
+  load().catch((e) => toast(e.message, true));
+</script>
+
+<!-- global: the script draws this HTML after load, which page-scoped styles don't reach -->
+<style is:global>
+  .enqs { display: grid; gap: 14px; }
+  .enq { display: grid; gap: 12px; }
+  .enq-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .enq-head .adm-h2 { margin: 0; }
+  .sub { color: var(--muted-2); font-size: 13px; }
+  .enq-facts { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 0; font-size: 14px; }
+  .enq-facts dt { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted-2); }
+  .enq-facts dd { margin: 2px 0 0; }
+  .enq-msg { white-space: pre-wrap; background: var(--pale); border-radius: 10px; padding: 12px 14px; font-size: 15px; line-height: 1.5; }
+  .enq select { font: 600 13px var(--body); padding: 4px 8px; border-radius: 8px; border: 1.5px solid var(--line-2); margin-left: 4px; }
+</style>

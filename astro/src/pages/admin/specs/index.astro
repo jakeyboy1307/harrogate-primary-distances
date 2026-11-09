@@ -1,0 +1,75 @@
+---
+// The rules for every ad spot, from the same list the API enforces (src/lib/specs.ts), plus a version to send to advertisers.
+import Admin from '../../../layouts/Admin.astro';
+import { AREAS, LIMITS, SPEC_NOTES, SPOTS } from '../../../lib/specs';
+const shots: Record<string, string> = { uniform: 'uniform', profile: 'profile', nearby: 'nearby', results: 'results', plan: 'plan', area: 'plan', pagesponsor: 'area' };
+const send = [
+  'Ad specs: Yorkshire School Checker',
+  '',
+  'What we need from you:',
+  ...SPEC_NOTES.map((n) => `- ${n}`),
+  '',
+  `Areas: ${Object.values(AREAS).join(', ')}.`,
+  'Every ad is marked “Sponsored”. We check the wording before it goes live and may ask for changes.',
+].join('\n');
+---
+<Admin title="Ad specs" active="specs">
+  <p class="adm-note">These rules are checked when you save an ad, so an ad that breaks them can’t go live.</p>
+
+  <section class="adm-card">
+    <h2 class="adm-h2">Ad spots</h2>
+    <div class="adm-table-wrap flat">
+      <table class="adm-table">
+        <thead><tr><th>Spot</th><th>Where it shows</th><th class="r">How many at once</th><th>Needs</th><th>Example</th></tr></thead>
+        <tbody>
+          {Object.entries(SPOTS).map(([k, s]) => (
+            <tr>
+              <td class="name">{s.label}</td>
+              <td>{s.where}</td>
+              <td class="r">{s.limit} {s.perSchool ? 'per school' : 'per area'}</td>
+              <td>{s.needsSchools ? 'The school it belongs to' : k === 'uniform' ? 'The schools it supplies, or all' : '–'}</td>
+              <td><a href={`/advertise/${shots[k]}.webp`} target="_blank" rel="noopener">Screenshot</a></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="adm-card">
+    <h2 class="adm-h2">Wording limits</h2>
+    <div class="adm-table-wrap flat">
+      <table class="adm-table">
+        <thead><tr><th>Field</th><th class="r">Up to</th></tr></thead>
+        <tbody>
+          <tr><td>Business name</td><td class="r">{LIMITS.name} characters</td></tr>
+          <tr><td>Category, for example “School uniform”</td><td class="r">{LIMITS.category} characters</td></tr>
+          <tr><td>Description</td><td class="r">{LIMITS.blurb} characters</td></tr>
+          <tr><td>Button text</td><td class="r">{LIMITS.cta} characters</td></tr>
+          <tr><td>Offer line</td><td class="r">{LIMITS.offer} characters</td></tr>
+          <tr><td>Logo letters, when there’s no logo image</td><td class="r">{LIMITS.logoText} letters</td></tr>
+          <tr><td>Open days, school profiles only</td><td class="r">{LIMITS.openDays}, each up to {LIMITS.openDay} characters</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="adm-card">
+    <div class="adm-bar"><h2 class="adm-h2" style="margin:0">To send to advertisers</h2><span class="grow"></span><button class="btn btn-sm" id="copy">Copy</button></div>
+    <pre class="spec-send" id="send">{send}</pre>
+  </section>
+</Admin>
+
+<script>
+  import { toast } from '../../../lib/admin';
+  document.getElementById('copy')!.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(document.getElementById('send')!.textContent!); toast('Copied'); }
+    catch { toast('Couldn’t copy. Select the text and copy it instead.', true); }
+  });
+</script>
+
+<style>
+  .adm-table-wrap.flat { border: 0; border-radius: 0; }
+  .r { text-align: right; white-space: nowrap; }
+  .spec-send { white-space: pre-wrap; font: 400 14px/1.6 var(--body); background: var(--pale); border-radius: 10px; padding: 14px 16px; margin: 12px 0 0; }
+</style>

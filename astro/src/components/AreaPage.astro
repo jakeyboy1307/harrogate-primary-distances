@@ -4,14 +4,16 @@
 import Base from '../layouts/Base.astro';
 import { url } from '../lib/url';
 import { byPlace, hardest, openToAll, outstanding, type AreaSchool } from '../lib/areas';
+import type { Area } from '../lib/sponsors';
 import { pageOf } from '../lib/schoolpages';
 interface Props {
-  title: string; description: string; h1: string; lede: string; area: string;
+  title: string; description: string; h1: string; lede: string; area: string; areaKey: Area;
   schools: AreaSchool[];
   groups: { label: string; note: string; schools: AreaSchool[] }[];
   faqs: [string, string][];   // question, answer (HTML)
 }
-const { title, description, h1, lede, area, schools, groups, faqs } = Astro.props;
+const { title, description, h1, lede, area, areaKey, schools, groups, faqs } = Astro.props;
+
 const hard = hardest(schools);
 const open = openToAll(schools);
 const top = outstanding(schools);
@@ -25,6 +27,8 @@ const short = (n: string) => n.replace(/,.*$/, '').replace(/ (Church of England|
       <h1>{h1}</h1>
       <p class="lede">{lede}</p>
       <p class="area-acts"><a class="btn btn-primary" href={url('')}>Check your postcode</a><a class="btn" href={url('how-places-work/')}>How places work</a></p>
+      <!-- the page sponsor, filled in by the script below from /api/sponsors -->
+      <p class="ad-strip" id="adStrip" hidden></p>
     </div>
     <dl class="area-stats">
       <div><dt>Primary schools</dt><dd>{schools.length}</dd></div>
@@ -70,12 +74,41 @@ const short = (n: string) => n.replace(/,.*$/, '').replace(/ (Church of England|
     ))}
   </section>
 
+  <!-- local businesses, filled in by the script below from /api/sponsors -->
+  <section class="how-sec wrap" style="border-top:1px solid var(--line)" aria-labelledby="localTitle" id="adLocal" hidden data-area={areaKey} data-area-name={area}>
+    <div class="ready-head">
+      <div><h2 id="localTitle">Local help for {area} families</h2>
+        <p class="intro">Uniform, wraparound care, shoes and more, from businesses near you.</p></div>
+      <span class="ready-note">These are paid listings. They don’t change anything the checker tells you. <a href={url('advertise/')}>Advertise here</a></span>
+    </div>
+    <div class="ready-grid" id="adLocalGrid"></div>
+  </section>
+
   <section class="how-sec sec-pale wrap">
     <h2>Questions parents ask</h2>
     <div class="faqs">{faqs.map(([q, a]) => <div class="faq"><h3>{q}</h3><p set:html={a} /></div>)}</div>
     <p class="area-acts"><a class="btn btn-primary" href={url('')}>Check your postcode</a></p>
   </section>
 </Base>
+
+<script>
+  import { esc } from '../lib/engine';
+  import { adCard, adLabel, link, loadSponsors, sponsorsFor, type Area } from '../lib/sponsors';
+  const sec = document.getElementById('adLocal')!, strip = document.getElementById('adStrip')!;
+  const area = sec.dataset.area as Area, name = sec.dataset.areaName ?? '';
+  loadSponsors().then(() => {
+    const local = sponsorsFor('area', area);
+    // the page sponsor: the one business named under the heading
+    const page = sponsorsFor('pagesponsor', area)[0];
+    if (page) {
+      strip.innerHTML = `${adLabel('Page sponsor', page.demo)}<span>${esc(name)} school guide supported by <a href="${esc(link(page, 'pagesponsor'))}" target="_blank" rel="sponsored noopener"><b>${esc(page.name)}</b></a>, ${esc(page.blurb.charAt(0).toLowerCase() + page.blurb.slice(1))}</span>`;
+      strip.dataset.adId = page.id; strip.dataset.adSlot = 'pagesponsor';
+      strip.hidden = false;
+    }
+    document.getElementById('adLocalGrid')!.innerHTML = local.map((s) => adCard(s, 'area', 'Sponsored')).join('');
+    sec.hidden = !local.length;
+  });
+</script>
 
 <style>
   .area-acts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
