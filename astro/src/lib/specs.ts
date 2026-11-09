@@ -9,6 +9,14 @@ export const AREAS: Record<Area, string> = {
   york: 'York and villages',
 };
 
+// The council district each area is built around, by ONS code (public/geo/uk-districts.json, used by the admin's
+// coverage map). Every primary school in these districts is in the checker, so they show as fully covered; other
+// districts with some of our schools in them show as partly covered. Add a line here when a new area goes live.
+export const AREA_HOME: Record<Area, string[]> = {
+  harrogate: ['E07000165'],   // Harrogate
+  york: ['E06000014'],        // York
+};
+
 export interface Spot {
   label: string;
   where: string;

@@ -8,6 +8,7 @@ interface Props { title: string; active: string }
 const { title, active } = Astro.props;
 const menu = [
   ['dashboard', 'Dashboard', '/admin/', false],
+  ['coverage', 'Coverage', '/admin/coverage/', false],
   ['ads', 'Ads', '/admin/ads/', false],
   ['advertisers', 'Advertisers', '/admin/advertisers/', false],
   ['spots', 'Ad spots', '/admin/spots/', false],
@@ -82,7 +83,7 @@ const menu = [
       .adm-who a { color: var(--ink); font-weight: 600; }
       .adm-env { padding: 3px 10px; border-radius: 999px; background: var(--sticky); color: var(--ink); font-weight: 700; font-size: 12px; }
       .adm-env.live { background: var(--bad-bg); color: var(--bad); }
-      .adm-body { padding: 28px 32px 48px; display: grid; gap: 24px; }
+      .adm-body { padding: 28px 32px 48px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; }
       .adm-card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; }
       .adm-h2 { font: 700 20px var(--body); letter-spacing: 0; margin-bottom: 6px; }
       .adm-note { color: var(--muted); line-height: 1.55; max-width: 760px; font-size: 15px; }
