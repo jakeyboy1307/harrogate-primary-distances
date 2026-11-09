@@ -19,14 +19,13 @@ import { AREA_INFO } from '../lib/specs';
       <span>Areas we cover</span>
       {Object.values(AREA_INFO).map((a) => <a href={url(a.page)}>{a.name} primary schools</a>)}
     </nav>
-    <nav class="foot-areas" aria-label="For businesses">
-      <span>For businesses</span>
-      <a href={url('advertise/')}>Advertise with us</a>
-    </nav>
   </div>
   <div class="foot-fb"><Feedback /></div>
   <hr class="foot-rule" />
-  <p class="foot-legal">An independent tool, not run by North Yorkshire Council, City of York Council or any school.</p>
+  <div class="foot-legal">
+    <p>An independent tool, not run by North Yorkshire Council, City of York Council or any school.</p>
+    <p class="foot-biz">Local business? <a href={url('advertise/')}>Advertise with us</a></p>
+  </div>
   <p class="credit">
     <span>Made by</span>
     <a class="credit-link" href="https://www.mammothwebsites.co.uk" target="_blank" rel="noopener"><Mammoth /><span>Mammoth Websites</span></a>

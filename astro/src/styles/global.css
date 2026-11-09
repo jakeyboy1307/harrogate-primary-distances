@@ -67,7 +67,8 @@ label.pill, select { cursor: pointer; }
 /* ---------- footer ---------- */
 .site-foot { display: grid; grid-template-columns: 1fr auto auto; grid-template-areas: 'areas areas areas' 'legal fb credit'; column-gap: 32px; align-items: center; gap: 16px; padding: 32px var(--gr) 32px var(--gl); border-top: 1px solid var(--line); color: var(--muted); font-size: 15px; margin-top: 0; }
 .foot-brand, .foot-links, .foot-rule { display: none; }
-.foot-legal { grid-area: legal; }
+.foot-legal { grid-area: legal; display: grid; gap: 6px; }
+.foot-biz a { color: var(--ink); font-weight: 600; }
 .foot-nav { grid-area: areas; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 40px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
 .foot-areas { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 24px; }
 .foot-areas span { font-weight: 700; color: var(--ink); }
