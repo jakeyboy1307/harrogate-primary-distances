@@ -1,8 +1,7 @@
 // Fills and drives the school slide-out panel shared by Find schools and My plan.
 import {
   council, esc, fmt, headlineAnswer, mon, noDist, ofsted, plural, whoGotIn, yearVerdict, youText,
-  MAX_SHORT, MI, type LatLng, type Mode, type School, type YearRec,
-} from './engine';
+  MAX_SHORT, MI, type LatLng, type Mode, type School, type YearRec, firstsOk } from './engine';
 import { addedText, addSchool, backupOf, getList, onListChange, ordinal, promoteBackup, rankOf, removeBackup, removeFromList } from './store';
 import { $, chip, toast } from './ui';
 import { adAreasOf, panelSponsors, profileBlock, sponsorsFor } from './sponsors';
@@ -130,7 +129,7 @@ function yearChart(s: School) {
       track = `<div class="bar${t}" style="width:${pct(x.m!)}"></div>`;
       val = fmt(x.m);
     } else {
-      const txt = x.s === 'all_offered' ? 'Everyone got in' : x.s === 'distance' ? (x.g === 'staff' ? 'Staff children only' : 'Siblings only') : x.s === 'catchment' ? catchNote(x) : 'Not published';
+      const txt = x.s === 'all_offered' ? 'Everyone got in' : x.s === 'firsts' ? (firstsOk(x) ? 'All first choices got in' : `${x.fo} of ${x.f} first choices`) : x.s === 'distance' ? (x.g === 'staff' ? 'Staff children only' : 'Siblings only') : x.s === 'catchment' ? catchNote(x) : 'Not published';
       track = `<div class="bar-note${t}">${txt}</div>`;
       val = '';
     }
@@ -148,7 +147,7 @@ function yearChart(s: School) {
   const sibs = s.d.some((x) => x.s === 'distance' && x.g === 'sib');
   const inNote = s.inC && dists.length ? 'You’re in the catchment, so the bars only matter for children outside it. ' : '';
   const note = !dists.length
-    ? `${council(s.council).name} doesn’t publish how far places went, so this shows who got in from inside and outside the catchment.`
+    ? `${council(s.council).name} doesn’t publish how far places went, so this shows ${s.d.some((x) => x.s === 'firsts') ? 'whether everyone who put it first got a place' : 'who got in from inside and outside the catchment'}.`
     : you == null ? 'Check your postcode to see where you’d fall.' : 'The dotted line is your distance from the school.';
   return `<section class="p-sec"><figure class="chart in-panel">
     <div class="chart-head"><h3>Year by year</h3><span>${dists.length ? 'How far the last place went' : 'Who got a place'}</span></div>
@@ -173,7 +172,7 @@ function body(s: School, mode: Mode, home: LatLng | null) {
   const r = s.result;
   const of = ofsted(s.of);
   const last = s.d.find((x) => x.s === 'distance');
-  const outsiders = s.d.find((x) => x.s === 'catchment' || x.s === 'all_offered');   // the latest year, where there are no distances
+  const outsiders = s.d.find((x) => x.s === 'catchment' || x.s === 'all_offered' || x.s === 'firsts');   // the latest year, where there are no distances
   const yours = s.used ?? s.straight;
   const cz = !s.cz ? `None${/Catholic/.test(s.type) ? ', faith school' : ''}` : s.inC == null ? 'Not checked' : s.inC ? 'You’re in it' : 'Outside it';
   const first = s.d.find((x) => x.f != null);
@@ -203,7 +202,7 @@ function body(s: School, mode: Mode, home: LatLng | null) {
     <div><dt>Catchment</dt><dd>${cz}</dd></div>
     ${last || !outsiders
       ? `<div><dt>${last ? 'Last place, ' + last.y : 'Last place'}</dt><dd>${last ? (last.g === 'sib' ? 'Siblings only' : last.g === 'staff' ? 'Staff children only' : fmt(last.m)) : 'Not published'}</dd></div>`
-      : `<div><dt>${outsiders.s === 'catchment' && outsiders.ia ? 'From outside' : 'Got in'}, ${outsiders.y}</dt><dd>${outsiders.s === 'all_offered' ? 'Everyone' : `${outsiders.xa! - outsiders.xr!} of ${outsiders.xa}`}</dd></div>`}
+      : `<div><dt>${outsiders.s === 'catchment' && outsiders.ia ? 'From outside' : 'Got in'}, ${outsiders.y}</dt><dd>${outsiders.s === 'all_offered' ? 'Everyone' : outsiders.s === 'firsts' ? (firstsOk(outsiders) ? 'All first choices' : `${outsiders.fo} of ${outsiders.f} first choices`) : `${outsiders.xa! - outsiders.xr!} of ${outsiders.xa}`}</dd></div>`}
     ${sg ? `<div><dt>Safeguarding</dt><dd class="${sg === 'Met' ? 'good' : 'bad'}">${esc(sg)}</dd></div>`
          : `<div><dt>Ofsted</dt><dd class="${of.tone === 'bad' ? 'bad' : of.tone === 'na' ? '' : 'good'}">${esc(of.short)}</dd></div>`}
   </dl>

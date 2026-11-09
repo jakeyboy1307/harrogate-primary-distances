@@ -2,20 +2,13 @@
 // sitemap.xml. Search Console's Pages report can be filtered by sitemap, so each area's indexing can be watched
 // on its own. School and area pages carry the date their data was last refreshed; other pages carry no date
 // rather than a made-up one.
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { dataDate } from './areas';
 import { schoolPages } from './schoolpages';
 import { AREA_INFO, type Area } from './specs';
 
 export interface Entry { path: string; lastmod?: string }
 
-// the newest refresh date across the council data files
-export function dataDate() {
-  const dates = ['north-yorkshire.json', 'york.json']
-    .map((f) => JSON.parse(readFileSync(join(process.cwd(), 'public/data', f), 'utf8')).updated as string | undefined)
-    .filter(Boolean) as string[];
-  return dates.sort().pop();
-}
+export { dataDate };
 
 // top-level pages: every .astro file in src/pages, less the ones kept out of search
 const NOT_FOR_SEARCH = ['404', 'advertise'];

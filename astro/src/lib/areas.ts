@@ -2,12 +2,17 @@
 // council files the checker loads, so the pages stay right whenever the data is refreshed.
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { MI, whoGotIn, type RawSchool, type YearRec } from './engine';
+import { firstsOk, MI, whoGotIn, type RawSchool, type YearRec } from './engine';
 
 export type AreaSchool = RawSchool & { district?: string };
 
-export const loadArea = (file: string): AreaSchool[] =>
-  JSON.parse(readFileSync(join(process.cwd(), 'public/data', file), 'utf8')).schools;
+const readData = (file: string) => JSON.parse(readFileSync(join(process.cwd(), 'public/data', file), 'utf8'));
+export const loadArea = (file: string): AreaSchool[] => readData(file).schools;
+// Every council's data file, as listed in public/data/areas.json (scripts/copy-data.mjs)
+export const councilFiles = (): string[] => readData('areas.json').map((c: { file: string }) => c.file);
+export const loadAll = (): AreaSchool[] => councilFiles().flatMap(loadArea);
+// the newest refresh date across the council data files
+export const dataDate = () => (councilFiles().map((f) => readData(f).updated as string | undefined).filter(Boolean) as string[]).sort().pop();
 
 const latest = (s: AreaSchool) => s.d.find((r) => r.s !== 'not_published');
 
@@ -20,6 +25,7 @@ function difficulty(r?: YearRec) {
     if (r.g === 'out') return r.m! < 2 * MI ? 1 + 1 / (1 + r.m! / MI) : null;
     return null;                                                    // the school's own rules
   }
+  if (r.s === 'firsts') return firstsOk(r) ? null : 1 + 1 - r.fo! / r.f!;   // share of first choices turned away
   if (r.s === 'catchment') {
     if (r.ir) return 3 + r.ir / r.ia!;                              // some in the catchment missed out
     return r.xa ? 1 + r.xr! / r.xa : null;                          // share of outside applicants turned away
@@ -36,12 +42,14 @@ export function hardest(schools: AreaSchool[], n = 8) {
     .map(({ s, r }) => ({ urn: s.urn, name: s.name, place: s.place, year: r.y, who: whoGotIn(r), applied: r.a, places: r.p }));
 }
 
-// Schools where everyone who applied got a place in the latest year published
-export const openLatest = (schools: AreaSchool[]) => schools.filter((s) => latest(s)?.s === 'all_offered');
+// Everyone who applied got a place (or, with only the DfE's figures, everyone who put it first)
+const open = (r?: YearRec) => !!r && (r.s === 'all_offered' || firstsOk(r));
+// Schools that took everyone in the latest year published
+export const openLatest = (schools: AreaSchool[]) => schools.filter((s) => open(latest(s)));
 
 // Schools where everyone who applied got a place in every year published
 export const openToAll = (schools: AreaSchool[]) =>
-  schools.filter((s) => s.d.length && s.d.every((r) => r.s === 'all_offered'));
+  schools.filter((s) => s.d.length && s.d.every(open));
 
 // Outstanding at the latest graded inspection, including schools whose later short (ungraded) inspections kept that grade
 export const outstanding = (schools: AreaSchool[]) =>

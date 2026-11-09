@@ -6,7 +6,7 @@
 import AreaPage from '../components/AreaPage.astro';
 import { loadArea, openLatest } from '../lib/areas';
 import { COUNCILS } from '../lib/engine';
-import { NY_TERM_DATES } from '../lib/specs';
+import { COVERED, NY_TERM_DATES } from '../lib/specs';
 import { url } from '../lib/url';
 const ny = COUNCILS['North Yorkshire'];
 const schools = loadArea('north-yorkshire.json').filter((s) => s.district === 'Craven');
@@ -34,7 +34,7 @@ const faqs: [string, string][] = [
   ['Looking for Skipton Primary School in Australia, or Ingleton Primary School in County Durham?',
     'Those are different schools. This page covers Skipton and Ingleton in North Yorkshire. Skipton’s primary schools are Water Street, Greatwood, Skipton Parish, Christ Church and St Stephen’s.'],
   ['We live in Barnoldswick, Earby, Silsden or Sedbergh. Which council do I apply to?',
-    'The council for where you live, even when you want a school in another council’s area. Barnoldswick and Earby are in Lancashire, so you apply to Lancashire County Council. Silsden, Steeton and Keighley are Bradford Council. Sedbergh is Westmorland and Furness Council. You can still name North Yorkshire schools on that form. The checker covers North Yorkshire and York schools only.'],
+    `The council for where you live, even when you want a school in another council’s area. Barnoldswick and Earby are in Lancashire, so you apply to Lancashire County Council. Silsden, Steeton and Keighley are Bradford Council. Sedbergh is Westmorland and Furness Council. You can still name North Yorkshire schools on that form. The checker covers ${COVERED} schools only.`],
   ['When are the school term dates and holidays?',
     `Community and voluntary controlled schools follow <a href="${NY_TERM_DATES}" target="_blank" rel="noopener">North Yorkshire Council’s term and holiday dates</a>. Academies and voluntary aided schools can set their own, so check with the school.`],
   ['How do I find open days?',

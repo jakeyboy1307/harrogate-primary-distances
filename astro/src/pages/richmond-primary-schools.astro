@@ -6,7 +6,7 @@
 import AreaPage from '../components/AreaPage.astro';
 import { loadArea, openLatest } from '../lib/areas';
 import { COUNCILS } from '../lib/engine';
-import { NY_TERM_DATES } from '../lib/specs';
+import { COVERED, NY_TERM_DATES } from '../lib/specs';
 import { url } from '../lib/url';
 const ny = COUNCILS['North Yorkshire'];
 const schools = loadArea('north-yorkshire.json').filter((s) => s.district === 'Richmondshire');
@@ -37,7 +37,7 @@ const faqs: [string, string][] = [
   ['Looking for Richmond Primary School in Hinckley, Sheerness or Skegness?',
     'Those are different schools. This page covers Richmond in North Yorkshire, where no school is called Richmond Primary. The town’s primary schools are Richmond Methodist, Trinity Academy Richmond and St Mary’s Catholic.'],
   ['We live near Darlington, Barnard Castle or Kirkby Stephen. Which council do I apply to?',
-    'The council for where you live, even when you want a school in another council’s area. That’s Darlington Borough Council, Durham County Council, or Westmorland and Furness Council. You can still name North Yorkshire schools on that form. The checker covers North Yorkshire and York schools only.'],
+    `The council for where you live, even when you want a school in another council’s area. That’s Darlington Borough Council, Durham County Council, or Westmorland and Furness Council. You can still name North Yorkshire schools on that form. The checker covers ${COVERED} schools only.`],
   ['When are the school term dates and holidays?',
     `Community and voluntary controlled schools follow <a href="${NY_TERM_DATES}" target="_blank" rel="noopener">North Yorkshire Council’s term and holiday dates</a>. Academies, free schools and voluntary aided schools can set their own, so check with the school.`],
   ['How do I find open days?',

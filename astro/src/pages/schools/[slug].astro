@@ -40,6 +40,8 @@ const reach = dists.length
   ? `The last place went ${miles(dists[0].m)} from the school in ${dists[0].y}${dists.length > 1 && sm.furthest && sm.closest && sm.furthest !== sm.closest ? `. Over the years published it has ranged from ${miles(sm.closest.m)} (${sm.closest.y}) to ${miles(sm.furthest.m)} (${sm.furthest.y})` : ''}.`
   : s.council === 'York'
     ? `City of York Council doesn’t publish how far the last place went, but it does publish how many children from outside the catchment got in. ${latest ? yearLine(latest) : ''}`
+    : latest?.s === 'firsts'
+    ? `${council.name} doesn’t publish how far the last place went, but national figures show how many families put each school first and how many of them got a place. ${yearLine(latest)}`
     : sm.allIn ? 'In the years published, everyone who applied got a place, so there was no cut-off distance.' : 'The council hasn’t published a cut-off distance for this school.';
 
 const faqs: [string, string][] = [
@@ -138,7 +140,7 @@ const schema = [
           <thead><tr><th>Year</th><th class="n">Applied</th><th class="n">Places</th><th class="n">1st choice</th><th>Who got a place</th></tr></thead>
           <tbody>{s.d.map((y) => <tr><td class="yr">{y.y}</td><td class="n">{y.a ?? '–'}</td><td class="n">{y.p ?? '–'}</td><td class="n">{y.f ?? '–'}</td><td>{whoGotIn(y).replace(/ mi\b/, ' miles')}</td></tr>)}</tbody>
         </table></div>
-        <p class="sp-src">Source: <a href={s.src} target="_blank" rel="noopener">{council.name} admissions figures</a>.</p>
+        <p class="sp-src">Source: <a href={s.src} target="_blank" rel="noopener">{s.src.includes('explore-education-statistics') ? 'Department for Education' : council.name} admissions figures</a>.</p>
       </div>
     </div>
   </section>
@@ -149,7 +151,8 @@ const schema = [
         <h2>How hard is it to get into {p.name}?</h2>
         {latest?.a && latest?.p && <p class="intro">In {latest.y}, {latest.a} children applied for {latest.p} places: {ratio}.{latest.f ? ` ${latest.f} families put ${p.short} as their first choice.` : ''}</p>}
         {sm.trend && <p class="intro">{sm.trend}</p>}
-        {years.length > 0 && sm.allIn === years.length && <p class="intro">In every year published, everyone who applied got a place.</p>}
+        {years.length > 0 && (sm.allIn === years.length ? <p class="intro">In every year published, everyone who applied got a place.</p>
+          : sm.firstsIn > 0 && sm.allIn + sm.firstsIn === years.length && <p class="intro">In every year published, everyone who put it as their first choice got a place.</p>)}
         <p class="intro">Brothers and sisters of pupils get priority, so if you already have a child there, your chances are better than these figures suggest.</p>
       </div>
       <div>

@@ -6,14 +6,17 @@ export type Placement = 'uniform' | 'profile' | 'nearby' | 'results' | 'plan' | 
 
 // Every area the checker covers, in one place: the area pages, the school pages' breadcrumbs, the ad areas, the
 // admin and the coverage map all read this. To add an area: add a line here, build its schools into the data
-// (build/build_data.py's FULL list) and give it an area page (src/pages/<page>.astro, using AreaPage).
+// (build/build_data.py's FULL list, or a new council's own build) and give it an area page (src/pages/<page>.astro,
+// using AreaPage). An area is a North Yorkshire district, a whole council (York), or part of a council by
+// parliamentary constituency, for councils with no districts (East Riding).
 export interface AreaInfo {
   label: string;          // the ad area's name, and the footer link
   short: string;          // one or two words, for tables and the breadcrumb ("Northallerton primary schools")
   name: string;           // the area page's place names, for links to it ("York primary schools")
   page: string;           // the area page's address
-  council: 'North Yorkshire' | 'York';
+  council: string;        // a key of COUNCILS in lib/engine.ts
   district?: string;      // North Yorkshire's old district (the council sheets' "District" column)
+  constituencies?: string[];   // or the parliamentary constituencies it covers, as the DfE names them
   home: string[];         // the council district it covers in full, by ONS code (public/geo/uk-districts.json)
   example: [string, string];   // a postcode to try, and the place it's in
 }
@@ -33,6 +36,10 @@ export const listOf = (xs: string[], last = 'and') => (xs.length < 2 ? xs.join('
 export const PLACES = listOf(Object.values(AREA_INFO).map((a) => a.short));
 export const NY_PLACES = listOf(Object.values(AREA_INFO).filter((a) => a.council === 'North Yorkshire').map((a) => a.short));
 
+// The councils covered, as parents call them, for wording like "The checker covers North Yorkshire and York schools"
+const COUNCIL_SHORT: Record<string, string> = { 'East Riding of Yorkshire': 'East Riding', 'Kingston upon Hull, City of': 'Hull' };
+export const COVERED = listOf([...new Set(Object.values(AREA_INFO).map((a) => COUNCIL_SHORT[a.council] ?? a.council))]);
+
 // North Yorkshire Council's term and holiday dates, for the area pages' term dates question
 export const NY_TERM_DATES = 'https://www.northyorks.gov.uk/education-and-learning/education-and-learning/school-term-and-holiday-dates';
 export const AREAS = Object.fromEntries(Object.entries(AREA_INFO).map(([k, a]) => [k, a.label])) as Record<Area, string>;
@@ -40,15 +47,15 @@ export const AREA_SHORT = Object.fromEntries(Object.entries(AREA_INFO).map(([k, 
 // Used by the admin's coverage map: these districts show as fully covered, others with some of our schools as partly
 export const AREA_HOME = Object.fromEntries(Object.entries(AREA_INFO).map(([k, a]) => [k, a.home])) as Record<Area, string[]>;
 
-type Placed = { council: string; district?: string; ll?: [number, number] };
-// A school's own area: its North Yorkshire district's, or York for York schools (and for the North Yorkshire schools
-// near York in any district we don't cover in full yet)
+type Placed = { council: string; district?: string; con?: string; ll?: [number, number] };
+// A school's own area: the one for its district or constituency, or the one covering its whole council (York).
+// North Yorkshire schools in a district without an area of its own (none now) fall back to York.
 export function areaOf(s: Placed): Area {
-  if (s.council === 'North Yorkshire') {
-    const hit = (Object.keys(AREA_INFO) as Area[]).find((a) => AREA_INFO[a].district === s.district);
-    if (hit) return hit;
-  }
-  return 'york';
+  const mine = (Object.keys(AREA_INFO) as Area[]).filter((a) => AREA_INFO[a].council === s.council);
+  return mine.find((a) => s.district && AREA_INFO[a].district === s.district)
+    ?? mine.find((a) => s.con && AREA_INFO[a].constituencies?.includes(s.con))
+    ?? mine.find((a) => !AREA_INFO[a].district && !AREA_INFO[a].constituencies)
+    ?? 'york';
 }
 
 // North Yorkshire schools outside the Harrogate district within 15 miles of York Minster: before their districts had

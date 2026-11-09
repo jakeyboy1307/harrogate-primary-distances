@@ -6,7 +6,7 @@ import { url } from '../lib/url';
 import { byPlace, hardest, openLatest, openToAll, outstanding, type AreaSchool } from '../lib/areas';
 import type { Area } from '../lib/sponsors';
 import { pageOf, shortOf } from '../lib/schoolpages';
-import { MI } from '../lib/engine';
+import { firstsOk, MI } from '../lib/engine';
 interface Props {
   title: string; description: string; h1: string; lede: string; area: string; areaKey: Area;
   schools: AreaSchool[];
@@ -21,7 +21,7 @@ const openNow = openLatest(schools);
 // when no school is hard to get into: whether every school that was full still took children from over two miles away
 const farOnly = schools.every((s) => {
   const r = s.d.find((y) => y.s !== 'not_published');
-  return !r || r.s === 'all_offered' || (r.s === 'distance' && r.m != null && r.m >= 2 * MI);
+  return !r || r.s === 'all_offered' || firstsOk(r) || (r.s === 'distance' && r.m != null && r.m >= 2 * MI);
 });
 const top = outstanding(schools);
 // each school's own page, for the links in the lists

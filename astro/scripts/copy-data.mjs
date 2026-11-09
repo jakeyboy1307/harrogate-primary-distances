@@ -13,8 +13,8 @@ const here = dirname(fileURLToPath(import.meta.url));
 const read = (p) => JSON.parse(readFileSync(resolve(here, p), 'utf8'));
 const readIf = (p) => (existsSync(resolve(here, p)) ? read(p) : {});
 
-// One entry per council, named as engine.ts's COUNCILS names them. North Yorkshire holds the Harrogate district
-// and the schools near York.
+// One entry per council, named as engine.ts's COUNCILS names them (the name postcodes.io gives the council). A new
+// council's build writes the same shape of file as build_data.py; add it here.
 const areas = [
   { id: 'north-yorkshire', name: 'North Yorkshire', data: read('../../build/data.json'), contacts: readIf('../../build/contacts.json') },
   { id: 'york', name: 'York', data: read('../../build/york.json'), contacts: readIf('../../build/york-contacts.json') },
@@ -33,11 +33,11 @@ for (const { id, name, data, contacts } of areas) {
     if (!s.urn) throw new Error(`${s.name} has no URN`);
     delete s.dfe;
   }
-  // each shape goes with the district of the first school that uses it
+  // each shape goes with the district of the first school that uses it (one file for a council without districts)
   const tiles = new Map();
   data.catch.forEach((c, i) => {
     const owner = data.schools.find((s) => s.cz?.includes(i));
-    const key = name === 'York' ? 'york' : String(owner?.district ?? 'other').toLowerCase().replace(/[^a-z]+/g, '-');
+    const key = owner?.district ? owner.district.toLowerCase().replace(/[^a-z]+/g, '-') : id;
     if (!tiles.has(key)) tiles.set(key, { c: [], box: [90, 180, -90, -180] });
     const t = tiles.get(key);
     t.c.push({ i, name: c.name, p: c.p });

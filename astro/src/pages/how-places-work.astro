@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import { url } from '../lib/url';
 import { COUNCILS } from '../lib/engine';
-import { AREA_INFO, NY_PLACES, PLACES } from '../lib/specs';
+import { AREA_INFO, COVERED, NY_PLACES, PLACES } from '../lib/specs';
 const ny = COUNCILS['North Yorkshire'], cyc = COUNCILS.York;
 // the catchment questions in section 1, for search engines
 const faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: [
@@ -50,7 +50,7 @@ const phrases = [
 
   <section class="how-sec wrap" id="catchment">
     <h2>1. What is a school catchment area?</h2>
-    <p class="intro">A catchment area is the patch of streets a council links to a school. Most community and voluntary controlled primary schools in North Yorkshire and York have one. Children who live inside it get priority for that school’s Reception places, ahead of most children from outside it.</p>
+    <p class="intro">A catchment area is the patch of streets a council links to a school. Most community and voluntary controlled primary schools in {COVERED} have one. Children who live inside it get priority for that school’s Reception places, ahead of most children from outside it.</p>
     <div class="sources">
       <div><h3>What is my catchment school?</h3><p>It’s the school whose catchment area your home is in. The council draws the lines, not the map distance, so your catchment school isn’t always the nearest one. A few homes sit in two catchments, and a few in none.</p></div>
       <div><h3>What is my school catchment area?</h3><p>Put your postcode into the <a href={url('')}>school catchment checker</a>. It tells you which catchment you’re in and your chances at every primary school nearby, using the councils’ own catchment maps.</p></div>

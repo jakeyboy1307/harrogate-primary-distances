@@ -135,6 +135,10 @@ To Hull City Council (LSadmissions@hullcc.gov.uk):
 >
 > Spreadsheet or CSV format would be ideal.
 
+## Progress
+
+- **Groundwork (H0), 9 November:** done on the `humber-groundwork` branch. The "firsts" year record and its verdicts, the DfE reader in `common.py` and `fetch.sh`, areas by council and constituency, every council's data file read from `areas.json`, and generated coverage wording. The footer now says "not run by any council or school". Every North Yorkshire and York page is otherwise unchanged.
+
 ## Decisions (9 November 2026)
 
 1. **No Lincolnshire for now.** North and North East Lincolnshire are left out. The admin coverage map now names their county as Lincolnshire rather than "Yorkshire and The Humber".

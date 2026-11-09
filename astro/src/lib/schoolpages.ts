@@ -2,8 +2,8 @@
 // address, and the plain-English summaries of each school's figures. Names follow Google's suggestions
 // (November 2026): parents type the short name plus "primary school", "catchment area", "Ofsted", "term dates",
 // and the town when the name is shared with schools elsewhere (St Peter's, St Mary's...).
-import { COUNCILS, fmt, haversine, MI, noDist, ofsted, whoGotIn, WHO_ELSE, type YearRec } from './engine';
-import { loadArea, type AreaSchool } from './areas';
+import { COUNCILS, firstsOk, fmt, haversine, MI, noDist, ofsted, whoGotIn, WHO_ELSE, type YearRec } from './engine';
+import { loadAll, type AreaSchool } from './areas';
 import { AREA_INFO, areaOf, type Area } from './specs';
 // Every published school page's address, by URN. Once Google knows an address it mustn't change, so a school in
 // here keeps its address even if the naming rules below would now give it another. New schools get one from the
@@ -55,7 +55,7 @@ export interface SchoolPage {
 let cache: SchoolPage[] | null = null;
 export function schoolPages(): SchoolPage[] {
   if (cache) return cache;
-  const all = [...loadArea('north-yorkshire.json'), ...loadArea('york.json')];
+  const all = loadAll();
   const shorts = all.map((s) => `${shortOf(s.name)}|${kindOf(s.name)}`);
   const pages = all.map((s, i) => {
     const kind = kindOf(s.name);
@@ -110,6 +110,9 @@ export function yearLine(y: YearRec) {
       : `In ${y.y}, only children in the catchment got a place.`;
   }
   if (y.s === 'all_offered') return `In ${y.y}, everyone who applied got a place.`;
+  if (y.s === 'firsts') return firstsOk(y)
+    ? `In ${y.y}, everyone who put it as their first choice got a place (${y.f} families did).`
+    : `In ${y.y}, ${y.f} families put it first and ${y.fo} of them got a place. The council doesn’t publish who got the last place.`;
   return `The council didn’t publish who got a place in ${y.y}.`;
 }
 
@@ -127,7 +130,8 @@ export function summary(p: SchoolPage) {
   const furthest = dists.length ? dists.reduce((a, b) => (b.m! > a.m! ? b : a)) : null;
   const closest = dists.length ? dists.reduce((a, b) => (b.m! < a.m! ? b : a)) : null;
   const allIn = s.d.filter((y) => y.s === 'all_offered').length;
-  return { latest, perPlace, trend, furthest, closest, allIn, of: ofsted(s.of), council: COUNCILS[s.council] ?? COUNCILS['North Yorkshire'] };
+  const firstsIn = s.d.filter(firstsOk).length;   // DfE-only years where everyone who put it first got in
+  return { latest, perPlace, trend, furthest, closest, allIn, firstsIn, of: ofsted(s.of), council: COUNCILS[s.council] ?? COUNCILS['North Yorkshire'] };
 }
 
 export const miles = (m?: number | null) => (m == null ? '' : fmt(m).replace(' mi', ' miles'));

@@ -30,11 +30,13 @@ export interface YearRec {
   y: number;
   // distance: how far the last place went (North Yorkshire). catchment: how many applicants from inside (ia) and
   // outside (xa) the catchment were turned away (ir, xr), where a council publishes no distances (York).
-  s: 'distance' | 'catchment' | 'all_offered' | 'not_published';
+  // firsts: only the DfE's national figures, how many put the school first (f) and how many of them got it (fo),
+  // where a council publishes nothing on who got the last place (Hull, and East Riding's earlier years).
+  s: 'distance' | 'catchment' | 'all_offered' | 'not_published' | 'firsts';
   m?: number;
   g?: 'in' | 'out' | 'sib' | 'staff' | 'crit';
   crit?: string;
-  a?: number; o?: number; p?: number; f?: number;
+  a?: number; o?: number; p?: number; f?: number; fo?: number;
   ia?: number; ir?: number; xa?: number; xr?: number;
   n?: string;
 }
@@ -55,6 +57,7 @@ export interface RawSchool {
   tel?: string; email?: string;   // the school office, from GIAS and the school's website
   council: string;                // which council's file it came from: a key of COUNCILS
   district?: string;              // North Yorkshire's old district, for the area pages
+  con?: string;                   // parliamentary constituency, for the area pages of councils with no districts
 }
 export interface Area { name: string; p: LatLng[][][] }
 export interface Data { schools: RawSchool[]; catch: Area[] }
@@ -164,6 +167,12 @@ export function cutoff(s: School, mode: Mode) {
 // A year whose last place went to a brother or sister (sib) or a child of staff (staff) from outside the catchment:
 // everyone in the catchment got in and no other outsider did, so its distance doesn't help anyone else
 export const noDist = (r: YearRec) => r.s === 'distance' && (r.g === 'sib' || r.g === 'staff');
+// A DfE-only year where everyone who put the school first got it; one where they didn't is oversubscribed, with no
+// cut-off to judge your chances by
+export const firstsOk = (r: YearRec) => r.s === 'firsts' && r.fo! >= r.f!;
+const FIRSTS_ALL = 'Everyone who put it first got a place';
+const firstsOver = (r: YearRec) => `${r.f} put it first, but only ${r.fo} of them got a place. The council doesn’t publish who got the last one`;
+const isOver = (r?: YearRec | null) => r?.s === 'firsts' && !firstsOk(r);
 export const WHO_ELSE = { sib: 'brothers and sisters of pupils', staff: 'children of staff' } as const;
 // Whether a year's record can only be judged once your distance is known.
 export function needsDist(r: YearRec, inC: boolean | null) {
@@ -177,6 +186,7 @@ const IN_CATCH = 'You’re in the catchment, and everyone in the catchment got a
 export function yearVerdict(c: YearRec | null, dist: number | null | undefined, inC: boolean | null): YearVerdict {
   if (!c) return { v: 'na', label: 'No figures for this year' };
   if (c.s === 'all_offered') return { v: 'all', label: 'Everyone who applied got a place' };
+  if (c.s === 'firsts') return firstsOk(c) ? { v: 'all', label: FIRSTS_ALL } : { v: 'edge', label: firstsOver(c) };
   if (c.s === 'catchment') {
     if (inC) return c.ir ? { v: 'edge', label: `Not everyone in the catchment got a place: ${c.ia! - c.ir} of ${c.ia} did` } : { v: 'in', label: IN_CATCH };
     // outside the catchment, or a school without one: no distances, so only "nobody", "everyone" or "some" got in
@@ -223,7 +233,9 @@ function trendVerdict(s: School, dist: number | null | undefined): Verdict {
   const out = yrs.filter((r) => r.v === 'out').length;
   const yearsTxt = n === 1 ? 'the only year published' : n === 2 ? 'both years published' : `all ${n} years`;
   const one = n === 1 ? '. Only one year was published, so treat this with caution' : '';
-  if (yrs.every((r) => r.v === 'all')) return { v: 'all', label: `Everyone who applied got a place in ${yearsTxt}`, c, yrs };
+  // with only the DfE's figures for some years, all that's known is that everyone who put it first got in
+  const firstsYrs = s.d.some((r) => r.s === 'firsts' && yrs.some((y) => y.y === r.y));
+  if (yrs.every((r) => r.v === 'all')) return { v: 'all', label: `${firstsYrs ? FIRSTS_ALL : 'Everyone who applied got a place'} in ${yearsTxt}`, c, yrs };
   const withDiff = yrs.filter((r) => r.diff != null);
   const nearest = () => withDiff.reduce<YearVerdict | null>((a, b) => (a && a.diff! > b.diff! ? a : b), null);
   if (ok === n) {
@@ -240,9 +252,25 @@ function trendVerdict(s: School, dist: number | null | undefined): Verdict {
     return { v: 'out', label: `You’d have missed out in ${yearsTxt}` + (near ? `. Nearest miss: ${near.y}, ${fmt(-near.diff!)} too far` : '') + one, c, yrs };
   }
   // Close years with no distance to measure by (York): some from outside the catchment got in and some didn't
+  const yrsOf = (l: YearVerdict[]) => l.map((r) => r.y).join(', ').replace(/, (?=\d+$)/, ' and ');
+  const recOf = (y: YearVerdict) => s.d.find((r) => r.y === y.y)!;
+  // Oversubscribed years with only the DfE's figures (Hull): no cut-off, so no way to judge your chances
+  const over = yrs.filter((r) => r.v === 'edge' && recOf(r).s === 'firsts');
+  if (over.length) {
+    const x = recOf(over[0]);
+    const okFirsts = yrs.filter((r) => r.v === 'all' && recOf(r).s === 'firsts');
+    const okOther = yrs.filter((r) => (r.v === 'in' || r.v === 'all') && recOf(r).s !== 'firsts');
+    const outYrs = yrs.filter((r) => r.v === 'out');
+    return {
+      v: 'edge', chip: 'Oversubscribed', c, yrs,
+      label: `In ${x.y}, ${firstsOver(x)}`
+        + (okFirsts.length ? `. In ${yrsOf(okFirsts)}, everyone who put it first got in` : '')
+        + (okOther.length ? `. You’d have got a place in ${yrsOf(okOther)}` : '')
+        + (outYrs.length ? `. You’d have missed out in ${yrsOf(outYrs)}` : ''),
+    };
+  }
   const open = yrs.filter((r) => r.v === 'edge' && r.diff == null);
   if (open.length) {
-    const yrsOf = (l: YearVerdict[]) => l.map((r) => r.y).join(', ').replace(/, (?=\d+$)/, ' and ');
     const who = s.inC === false ? 'children from outside the catchment' : s.inC ? 'children in the catchment' : 'applicants';
     const x = s.d.find((r) => r.s === 'catchment' && r.y === open[0].y)!;
     const [got, of] = s.inC ? [x.ia! - x.ir!, x.ia!] : [x.xa! - x.xr!, x.xa!];
@@ -277,7 +305,7 @@ function trendVerdict(s: School, dist: number | null | undefined): Verdict {
 export function verdict(s: School, dist: number | null | undefined, mode: Mode): Verdict {
   if (mode === 'trend') return trendVerdict(s, dist);
   const c = cutoff(s, mode);
-  return { ...yearVerdict(c, dist, s.inC), c, yrs: [] };
+  return { ...yearVerdict(c, dist, s.inC), ...(isOver(c) ? { chip: 'Oversubscribed' } : {}), c, yrs: [] };
 }
 
 // The label wording used across the redesign
@@ -295,16 +323,19 @@ export function headlineAnswer(s: School, mode: Mode) {
   const r = s.result;
   if (!r) return 'Check your postcode to see your chances.';
   if (r.label.startsWith('Working')) return 'Working out your distance…';
+  if (r.chip === 'Oversubscribed') return 'Oversubscribed, and the council doesn’t publish who got in.';
   if (mode === 'trend' && r.yrs && r.yrs.length) {
     const n = r.yrs.length;
     const ok = r.yrs.filter((y) => y.v === 'in' || y.v === 'all' || (y.v === 'edge' && y.diff! >= 0)).length;
-    if (r.v === 'all') return n === 1 ? 'Everyone who applied got a place.' : `Everyone who applied got a place, ${n === 2 ? 'both' : 'all ' + n} years.`;
+    const who = r.label.startsWith(FIRSTS_ALL) ? 'Everyone who put it first' : 'Everyone who applied';
+    if (r.v === 'all') return n === 1 ? `${who} got a place.` : `${who} got a place, ${n === 2 ? 'both' : 'all ' + n} years.`;
     if (ok === n) return n === 1 ? 'You’d have got in, the only year published.' : `You’d have got in every year, ${n === 2 ? 'both' : 'all ' + n} of them.`;
     const open = r.yrs.filter((y) => y.v === 'edge' && y.diff == null).length;   // York: some got in, some didn't
     if (ok === 0 && open) return open === n ? 'It’s too close to call.' : `Too close to call in ${open} of the last ${n} years.`;
     if (ok === 0) return n === 1 ? 'You’d have missed out, the only year published.' : `You’d have missed out in all ${n} years.`;
     return `You’d have got in ${ok} of the last ${n} years.`;
   }
+  if (r.v === 'all' && r.label.startsWith(FIRSTS_ALL)) return `${FIRSTS_ALL}.`;
   return { in: 'You’d have got in.', all: 'Everyone who applied got a place.', edge: 'It’s too close to call.', out: 'You’d have missed out.', na: 'No figures to go on.' }[r.v];
 }
 
@@ -323,9 +354,11 @@ export function whoGotIn(x: YearRec) {
     if (!x.ia) return `${got} of ${x.xa} applicants`;   // a school without a catchment
     return got ? `Everyone in the catchment, plus ${got} of ${x.xa} from outside it` : 'Only children in the catchment';
   }
+  if (x.s === 'firsts') return firstsOk(x) ? 'Everyone who put it first' : `${x.fo} of the ${x.f} who put it first`;
   return x.s === 'all_offered' ? 'Everyone who applied' : 'Not published by the council';
 }
 export function youText(yv: YearVerdict) {
+  if (yv.v === 'edge' && yv.label.endsWith('who got the last one')) return 'Not known';
   if (yv.v === 'edge' && yv.diff == null) return 'Too close to call';
   if (yv.v === 'edge') return yv.diff! >= 0 ? 'Only just in' : 'Only just missed';
   if (yv.v === 'na') return yv.label.startsWith('Working') ? 'Working…' : 'Not known';

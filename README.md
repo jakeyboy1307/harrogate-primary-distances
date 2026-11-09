@@ -1,6 +1,6 @@
 # Yorkshire school checker
 
-A map tool for parents choosing a Reception place in the Harrogate, Northallerton (old Hambleton district), Malton (old Ryedale district) and Selby areas of North Yorkshire, and in York. Enter a postcode and every primary school nearby is shown with your walking or straight-line distance, whether you're in its catchment, and how far the last place went on national offer day in 2023, 2024, 2025 and 2026. Modelled on [SW London primary school distances](https://peterstuart3-arch.github.io/sw-primary-distances/), reworked for North Yorkshire's catchment-first admissions.
+A map tool for parents choosing a Reception place anywhere in North Yorkshire (every old district: Harrogate, Craven, Hambleton, Richmondshire, Ryedale, Scarborough and Selby) and in York. Enter a postcode and every primary school nearby is shown with your walking or straight-line distance, whether you're in its catchment, and how far the last place went on national offer day in 2023, 2024, 2025 and 2026. Modelled on [SW London primary school distances](https://peterstuart3-arch.github.io/sw-primary-distances/), reworked for North Yorkshire's catchment-first admissions.
 
 Live at **https://yorkshireschoolchecker.co.uk**. The site is built from `astro/` (see `astro/README.md`) and needs a connection for the map tiles, postcode lookups (postcodes.io) and walking routes (FOSSGIS OSRM). The `index.html` at the top of this folder is the earlier single-page version.
 
@@ -41,6 +41,16 @@ The plan and what's left are in `EXPANSION.md`. For each district:
 3. Add the area to `AREA_INFO` in `astro/src/lib/specs.ts`, and give it a page in `astro/src/pages/` using `AreaPage`, like `selby-primary-schools.astro`. The footer, sitemap, school pages, ads and admin all read `AREA_INFO`.
 4. `npm run build` in `astro/`, then `npm run lock-slugs` so the new school pages' addresses never change, and commit `src/lib/slugs.json`.
 
+## Adding a new council
+
+The Humber plan is in `HUMBER.md`. A council is more than a district: it has its own figures, catchment map and rules.
+
+1. Write its own build, like `build/build_york.py`, writing the same shape of file as `data.json`. Shared pieces are in `build/common.py`: Ofsted, school types, and the DfE's applications and offers (`read_dfe`, `firsts_year`), which `fetch.sh` downloads for every school in England. Where a council publishes no cut-offs, a year is a `firsts` record: how many put the school first and how many of them got it.
+2. Give each school a `con` (its parliamentary constituency, from `read_dfe`) if the council will be split into areas by constituency.
+3. Add the council to `areas` in `astro/scripts/copy-data.mjs` and to `COUNCILS` in `astro/src/lib/engine.ts`, keyed by the name postcodes.io gives it.
+4. Add its areas to `AREA_INFO` with `council` and, to split it, `constituencies`. Wording like "the checker covers North Yorkshire and York schools" is generated from `AREA_INFO` (`COVERED`), so it updates itself.
+5. Then steps 2 to 4 above.
+
 ## Feedback form (parked)
 
 The page has a name, email and comments form that sends to the site owner's inbox through [FormSubmit](https://formsubmit.co). It stays hidden until `FEEDBACK_ID` in `build/template.html` is set to the FormSubmit form ID (the random string FormSubmit sends after activation). Set it, then run `assemble.py` again.
@@ -50,6 +60,7 @@ The page has a name, email and comments form that sends to the site owner's inbo
 - North Yorkshire Council admissions statistics, 2022 to 2026 entry ([Data North Yorkshire](https://hub.datanorthyorkshire.org/dataset/school-admissions-2026-2027-yearly-statistics-primary-and-secondary-school)). The 2022 sheet is only used for the 2023 admission numbers.
 - Catchment areas and school locations from the layers behind the council's [Finding a school map](https://experience.arcgis.com/experience/4dd5b97eae514b31a067137ebf7cdd6a) (September 2025). The council says the map is for reference only.
 - Ofsted management information, state-funded schools, latest inspections as at 30 September 2026.
+- DfE [primary and secondary school applications and offers](https://explore-education-statistics.service.gov.uk/find-statistics/primary-and-secondary-school-applications-and-offers), school level, 2014 to 2026 entry: for councils that publish no cut-offs, and for each school's constituency.
 
 ## Known limits
 

@@ -5,7 +5,7 @@ import AreaPage from '../components/AreaPage.astro';
 import { loadArea } from '../lib/areas';
 import { COUNCILS } from '../lib/engine';
 import { pageOf } from '../lib/schoolpages';
-import { NY_TERM_DATES } from '../lib/specs';
+import { COVERED, NY_TERM_DATES } from '../lib/specs';
 import { url } from '../lib/url';
 const ny = COUNCILS['North Yorkshire'];
 const all = loadArea('north-yorkshire.json');
@@ -28,7 +28,7 @@ const faqs: [string, string][] = [
   ['Which are the best primary schools in Selby?',
     'There’s no official ranking, so be wary of league tables. Ofsted is the fairest guide, alongside a visit. The checker shows each school’s latest Ofsted outcome, and each school’s own page explains it.'],
   ['We live near Leeds, Wakefield or Doncaster. Which council do we apply to?',
-    'Apply to the council for where you live, and you can name schools run by other councils among your five. If you live in the Selby district, that’s North Yorkshire Council, even if your nearest school is over the border. The checker only covers North Yorkshire and York schools.'],
+    `Apply to the council for where you live, and you can name schools run by other councils among your five. If you live in the Selby district, that’s North Yorkshire Council, even if your nearest school is over the border. The checker only covers ${COVERED} schools.`],
   ['Is this Sherburn in Elmet or Sherburn near Malton?',
     `Sherburn in Elmet. Athelstan Community Primary and Sherburn Hungate Primary are both in this list. Sherburn near Malton has ${otherSherburn ? `<a href="${url(`schools/${pageOf(otherSherburn.urn)!.slug}/`)}">its own primary school</a>, listed with the other <a href="${url('malton-primary-schools/')}">Malton and Ryedale primary schools</a>` : 'its own primary school'}.`],
   ['When are Selby school term dates and holidays?',

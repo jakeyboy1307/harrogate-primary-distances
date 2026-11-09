@@ -6,7 +6,7 @@
 import AreaPage from '../components/AreaPage.astro';
 import { loadArea, openLatest } from '../lib/areas';
 import { COUNCILS } from '../lib/engine';
-import { NY_TERM_DATES } from '../lib/specs';
+import { COVERED, NY_TERM_DATES } from '../lib/specs';
 import { url } from '../lib/url';
 const ny = COUNCILS['North Yorkshire'];
 const schools = loadArea('north-yorkshire.json').filter((s) => s.district === 'Scarborough');
@@ -36,7 +36,7 @@ const faqs: [string, string][] = [
   ['Looking for Whitby Heath Primary School in Ellesmere Port?',
     'That’s a different school, in Cheshire. This page covers Whitby in North Yorkshire: East Whitby, West Cliff, Airy Hill and Stakesby, and the villages around.'],
   ['We live near Bridlington or Loftus. Which council do I apply to?',
-    'The council for where you live, even when you want a school in another council’s area. South of Filey, from Reighton and Speeton, that’s East Riding of Yorkshire Council. North of Staithes, from Loftus, it’s Redcar and Cleveland Council. You can still name North Yorkshire schools on that form. The checker covers North Yorkshire and York schools only.'],
+    `The council for where you live, even when you want a school in another council’s area. South of Filey, from Reighton and Speeton, that’s East Riding of Yorkshire Council. North of Staithes, from Loftus, it’s Redcar and Cleveland Council. You can still name North Yorkshire schools on that form. The checker covers ${COVERED} schools only.`],
   ['When are the school term dates and holidays?',
     `Community and voluntary controlled schools follow <a href="${NY_TERM_DATES}" target="_blank" rel="noopener">North Yorkshire Council’s term and holiday dates</a>. Academies and voluntary aided schools can set their own, so check with the school.`],
   ['How do I find open days?',

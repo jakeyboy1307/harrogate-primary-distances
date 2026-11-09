@@ -1,4 +1,5 @@
-"""Pieces shared by build_data.py (North Yorkshire) and build_york.py (York): Ofsted outcomes and school types."""
+"""Pieces shared by the council builds (build_data.py for North Yorkshire, build_york.py for York, and the Humber's):
+Ofsted outcomes, school types and the DfE's applications and offers."""
 import csv, io, re
 
 ROW = {'1': 'Outstanding', '2': 'Good', '3': 'Requires improvement', '4': 'Inadequate'}
@@ -77,3 +78,35 @@ OWN_RULES = lambda k: k not in ('Community School', 'Voluntary Controlled')
 def kind(k, faith):
     f = {'Church of England': 'C of E', 'Roman Catholic': 'Catholic'}.get(faith or '')
     return f'{f} {TYPES[k]}' if f else TYPES[k]
+
+
+# ---------- DfE applications and offers (build/fetch.sh: dfe-offers.csv) ----------
+DFE_SRC = 'https://explore-education-statistics.service.gov.uk/find-statistics/primary-and-secondary-school-applications-and-offers'
+num0 = lambda v: int(v) if str(v).strip().isdigit() else None
+
+
+def read_dfe(path, councils):
+    """Reception entry figures for the named councils' primary schools, by URN then year (2026 for September 2026):
+    a = times put as any preference, f = times put first, fo = first choices offered, o = places offered.
+    Also each school's latest parliamentary constituency, under 'con'."""
+    out = {}
+    for r in csv.DictReader(open(path, encoding='utf-8-sig')):
+        if r['la_name'] not in councils or r['school_phase'] != 'Primary' or r['entry_year'] != 'R':
+            continue
+        urn, y = r['school_urn'], int(r['time_period'][:4])
+        rec = {'a': num0(r['times_put_as_any_preferred_school']), 'f': num0(r['times_put_as_1st_preference']),
+               'fo': num0(r['number_1st_preference_offers']), 'o': num0(r['total_number_places_offered'])}
+        s = out.setdefault(urn, {'years': {}})
+        s['years'][y] = rec
+        con = r['ParliamentaryConstituency_name']
+        if con not in ('', 'z') and y >= s.get('con_y', 0):
+            s['con'], s['con_y'] = con, y
+    return out
+
+
+def firsts_year(y, rec, places=None):
+    """A year with only the DfE's figures: everyone who put the school first got it, or only some did."""
+    r = {'y': y, 's': 'firsts', 'a': rec['a'], 'f': rec['f'], 'fo': rec['fo'], 'o': rec['o']}
+    if places:
+        r['p'] = places
+    return r

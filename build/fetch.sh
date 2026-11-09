@@ -27,6 +27,12 @@ curl -fsS -H "$REF" -G "$ARC/8d0777ada12b49a4b3591d03ebd03ffd/rest/services/CYPS
   --data-urlencode "where=1=1" --data-urlencode "outFields=*" --data-urlencode "outSR=4326" --data-urlencode "f=geojson" \
   -o "$RAW/pschools.geojson"; echo "  pschools.geojson"
 
+# DfE applications and offers for every school in England, every year since 2014 (published each June): how many put
+# a school first and how many of them got it. Used where a council publishes no cut-offs (East Riding's earlier years,
+# Hull), and for each school's parliamentary constituency. Each June, swap in the new release's "Download all data" link.
+get dfe.zip "https://content.explore-education-statistics.service.gov.uk/api/releases/0bf4f9cf-721d-44e3-8473-266c87e17e00/files?fromPage=ReleaseDownloads"
+unzip -o -q -j "$RAW/dfe.zip" 'supporting-files/AppsandOffers_*_SchoolLevel*.csv' -d "$RAW" && mv "$RAW"/AppsandOffers_*_SchoolLevel*.csv "$RAW/dfe-offers.csv"; echo "  dfe-offers.csv"
+
 # Ofsted management information: state-funded schools, latest inspections (monthly)
 get ofsted.csv "https://assets.publishing.service.gov.uk/media/6ad095a72de3184ccf8b818d/Management_information_-_state-funded_schools_-_latest_inspections_as_at_30_Sep_2026.csv"
 # Grades from before September 2019, for schools only short-inspected since
