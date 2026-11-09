@@ -1,5 +1,6 @@
 // Downloads the UK boundaries for the admin's coverage map (/admin/coverage/) and saves slimmed copies:
-//   public/geo/uk-districts.json  every local authority district (December 2022), with the county it sits in
+//   public/geo/uk-districts.json  every local authority district (December 2022), with the county it sits in, and
+//                                 for England its region and, for metropolitan districts, its metropolitan county
 //   public/geo/uk-counties.json   every county and unitary council (December 2024): the councils that run school
 //                                 admissions, so each one is a separate data source for the checker
 // Run it by hand when the boundaries need refreshing:  node scripts/uk-boundaries.mjs
@@ -42,6 +43,12 @@ const [lads, ctys] = await Promise.all([
   get(query('Local_Authority_Districts_December_2022_UK_BUC_V2', 'LAD22CD,LAD22NM,LAT,LONG'), 370),
   get(query('Counties_and_Unitary_Authorities_December_2024_Boundaries_UK_BUC', 'CTYUA24CD,CTYUA24NM'), 210),
 ]);
+// England's regions, and the metropolitan counties (West Yorkshire...), which the council boundaries above leave
+// out because they no longer have councils; the map's popups name them so every district says where it is
+const lookup = (service) => fetch(`${ONS}/${service}/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=false&resultRecordCount=2000&f=json`)
+  .then((r) => r.json()).then((j) => new Map(j.features.map(({ attributes: a }) => [a.LAD22CD, a])));
+const [rgn, mcty] = await Promise.all([lookup('LAD22_RGN22_EN_LU'), lookup('LAD22_CTY22_EN_LU')]);
+if (rgn.size < 300) throw new Error(`Only ${rgn.size} districts came back from the region lookup`);
 
 const counties = ctys
   .map((f) => ({ code: f.properties.CTYUA24CD, name: f.properties.CTYUA24NM, p: polys(f.geometry) }))
@@ -51,7 +58,13 @@ const counties = ctys
 const districts = lads.map((f) => {
   const pt = [f.properties.LAT, f.properties.LONG];
   const c = counties.find((x) => inShape(pt, x.p));
-  return { code: f.properties.LAD22CD, name: f.properties.LAD22NM, county: c?.code ?? null, pt, p: polys(f.geometry) };
+  const code = f.properties.LAD22CD, metro = mcty.get(code);
+  return {
+    code, name: f.properties.LAD22NM, county: c?.code ?? null,
+    region: rgn.get(code)?.RGN22NM ?? null,
+    metro: metro?.CTY22CD.startsWith('E11') ? metro.CTY22NM : null,
+    pt, p: polys(f.geometry),
+  };
 }).sort((a, b) => a.code.localeCompare(b.code));
 const lost = districts.filter((d) => !d.county).map((d) => d.name);
 if (lost.length) console.warn(`No county found for: ${lost.join(', ')}`);
