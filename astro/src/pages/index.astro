@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import SchoolPanel from '../components/SchoolPanel.astro';
 import { COUNCILS } from '../lib/engine';
 import { url } from '../lib/url';
-import { AREA_INFO } from '../lib/specs';
+import { AREA_INFO, NY_PLACES, PLACES } from '../lib/specs';
 const keys = [
   ['in', 'Safe bet', 'You’d have got in every year published.'],
   ['all', 'Open to all', 'Everyone who applied got a place.'],
@@ -23,11 +23,11 @@ const about: [string, string][] = [
   ['How do school catchment areas work?',
     `Each council fills a school’s places in a set order. Children in care always come first, and children who live in the catchment come before most children from outside it. Inside each group, brothers and sisters of pupils go first, then whoever lives nearest. <a href="${url('how-places-work/')}">How school catchment areas work</a> walks through it.`],
   ['Is there a school catchment area map?',
-    `Yes. The councils publish them: <a href="${ny.catchMap}" target="_blank" rel="noopener">North Yorkshire Council’s school catchment area map</a> covers Harrogate, Northallerton, Thirsk, Malton, Pickering, Selby and the rest of the county, and <a href="${cyc.catchMap}" target="_blank" rel="noopener">City of York Council’s primary schools map</a> covers York. The checker uses the same maps, so your postcode tells you the answer without hunting through them.`],
+    `Yes. The councils publish them: <a href="${ny.catchMap}" target="_blank" rel="noopener">North Yorkshire Council’s school catchment area map</a> covers ${NY_PLACES} and the rest of the county, and <a href="${cyc.catchMap}" target="_blank" rel="noopener">City of York Council’s primary schools map</a> covers York. The checker uses the same maps, so your postcode tells you the answer without hunting through them.`],
 ];
 const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: about.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a.replace(/<[^>]+>/g, '') } })) };
 ---
-<Base title="School catchment checker for Harrogate and York primary schools · Yorkshire School Checker" description="Free school catchment checker for Harrogate, York, Northallerton, Thirsk, Malton, Pickering, Selby and the villages between. Find your catchment school and your chances at every primary school by postcode, from four years of Reception offers." active="find">
+<Base title="School catchment checker for Harrogate and York primary schools · Yorkshire School Checker" description={`Free school catchment checker for primary schools in ${PLACES}. Find your catchment school and your chances at every primary school by postcode, from four years of Reception offers.`} active="find">
   <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify([siteSchema, aboutSchema])} />
 
   <!-- ONBOARDING -->
@@ -68,14 +68,9 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
       </form>
       <div class="examples">
         <span>Just having a look? Try</span>
-        <button class="example" type="button" data-pc="HG2 0NA">Harrogate · HG2 0NA</button>
-        <button class="example" type="button" data-pc="HG5 0SL">Knaresborough · HG5 0SL</button>
-        <button class="example" type="button" data-pc="YO24 1HW">York · YO24 1HW</button>
-        <button class="example" type="button" data-pc="DL6 1QE">Northallerton · DL6 1QE</button>
-        <button class="example" type="button" data-pc="YO8 4QB">Selby · YO8 4QB</button>
-        <button class="example" type="button" data-pc="YO17 7XJ">Malton · YO17 7XJ</button>
+        {Object.values(AREA_INFO).map(({ example: [pc, place] }) => <button class="example" type="button" data-pc={pc}>{place} · {pc}</button>)}
       </div>
-      <p class="coverage">Covers York and the Harrogate, Northallerton, Malton and Selby areas of North Yorkshire, from Ripon to Stokesley, Pickering and Tadcaster. Nothing to sign up for.</p>
+      <p class="coverage">Covers York and the {NY_PLACES} areas of North Yorkshire. Nothing to sign up for.</p>
     </div>
     <aside class="key-card" aria-label="What the labels mean">
       <span class="hand" style="font-size:26px">what you’ll see next</span>
@@ -87,7 +82,7 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
 
   <!-- ABOUT: the catchment questions parents search for, hidden once a search runs -->
   <section class="how-sec sec-pale wrap home-about" id="about">
-    <h2>A school catchment checker for Harrogate, York, Northallerton, Malton and Selby</h2>
+    <h2>A school catchment checker for {PLACES}</h2>
     <p class="intro">Primary school catchment areas decide a lot about who gets a Reception place. Here’s what they are and how to find yours.</p>
     <div class="sources home-faqs">{about.map(([q, a]) => <div><h3>{q}</h3><p set:html={a} /></div>)}</div>
     <p class="intro">Browse primary school catchment areas for {Object.values(AREA_INFO).map((a, i, all) => <>{i ? (i === all.length - 1 ? ' or ' : ', ') : ''}<a href={url(a.page)}>{a.short}</a></>)}, with every school’s own page.</p>
@@ -187,13 +182,14 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
 </style>
 
 <script>
-  import { addWalking, esc, lookupPostcode, loadData, ORDER, plural, prepareSearch, scoreAll, MAX_SHORT,
+  import { addWalking, esc, lookupPostcode, loadCatchments, loadData, ORDER, plural, prepareSearch, scoreAll, MAX_SHORT,
     type Area, type Mode, type Place, type School, type V, council } from '../lib/engine';
   import { addedText, addLabel, addSchool, backupOf, getList, getSearch, onListChange, ordinal, rankOf, setSearch } from '../lib/store';
   import { $, $$, chip, distTxt, ICON, toast, vOf } from '../lib/ui';
   import { initPanel, openPanel, refreshPanel } from '../lib/panel';
   import { initPList, renderPList } from '../lib/plist';
   import { adAreasOf, adCard, areaOf, loadSponsors, sponsorsFor } from '../lib/sponsors';
+  import { NY_PLACES } from '../lib/specs';
   import { track } from '../lib/track';
   import type { SchoolMap } from '../lib/map';
 
@@ -248,6 +244,7 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
   let lastCounted = '';   // a new place counts as a search; changing the distance or years doesn't
   async function run(p: Place, save = true) {
     await ready();
+    await loadCatchments(p.ll, radius());   // only the catchment shapes near this search
     const my = ++seq;
     place = p;
     if (save) setSearch({ place: p, radius: radius(), mode: mode() });
@@ -300,7 +297,7 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
     const rowsHtml = list.slice(0, cap).map((s) => row(s, m));
     if (feat && rowsHtml.length) rowsHtml.splice(Math.min(4, rowsHtml.length), 0, `<div class="ad-row">${adCard(feat, 'results', 'Sponsored')}</div>`);
     $('#rows').innerHTML = list.length ? rowsHtml.join('')
-      : `<div class="no-results"><strong>No schools in range.</strong><br>Try a larger distance. This checker covers York and the Harrogate, Northallerton, Malton and Selby areas of North Yorkshire.</div>`;
+      : `<div class="no-results"><strong>No schools in range.</strong><br>Try a larger distance. This checker covers York and the ${NY_PLACES} areas of North Yorkshire.</div>`;
     const more = $('#more');
     more.hidden = list.length <= cap;
     more.textContent = `Show ${plural(list.length - cap, 'more school')}`;

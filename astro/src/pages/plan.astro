@@ -2,8 +2,9 @@
 import Base from '../layouts/Base.astro';
 import SchoolPanel from '../components/SchoolPanel.astro';
 import { url } from '../lib/url';
+import { PLACES } from '../lib/specs';
 ---
-<Base title="Reception key dates and your school list · Yorkshire School Checker" description="Your plan for a Reception place in Harrogate, York, Northallerton, Malton, Selby and North Yorkshire: the key dates and your schools in order." active="plan">
+<Base title="Reception key dates and your school list · Yorkshire School Checker" description={`Your plan for a Reception place in ${PLACES}: the key dates and your schools in order.`} active="plan">
   <section class="plan-hero wrap">
     <div>
       <h1>Finding a school, one step at a time.</h1>
@@ -48,7 +49,7 @@ import { url } from '../lib/url';
 </Base>
 
 <script>
-  import { addWalking, council, dateState, esc, fmt, loadData, MAX_SHORT, ORDER, prepareSearch, scoreAll, type Mode, type School } from '../lib/engine';
+  import { addWalking, council, dateState, esc, fmt, loadCatchments, loadData, MAX_SHORT, ORDER, prepareSearch, scoreAll, type Mode, type School } from '../lib/engine';
   import { addedText, addLabel, addSchool, backupOf, getList, getSearch, onListChange, ordinal, rankOf } from '../lib/store';
   import { $, chip, ICON, shortName, toast, vOf } from '../lib/ui';
   import { initPanel, openPanel, refreshPanel } from '../lib/panel';
@@ -144,7 +145,10 @@ import { url } from '../lib/url';
   loadSponsors().then(render);
   if (saved) {
     $('#planLede').textContent = `Here’s your plan for a Reception place in September 2027, with your schools for ${saved.place.label === 'your location' ? 'your location' : saved.place.label} and the dates that matter.`;
+    const shapes = await loadCatchments(saved.place.ll, saved.radius).then(() => true, () => false);
     near = prepareSearch(schools, catches, saved.place, saved.radius).near;
+    // couldn't fetch the catchments: say "not checked" rather than "outside it"
+    if (!shapes) for (const s of schools) if (s.cz) s.inC = null;
     scoreAll(scored(), mode()); render();
     await addWalking(saved.place, scored());
     scoreAll(scored(), mode()); render();

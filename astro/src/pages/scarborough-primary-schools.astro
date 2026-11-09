@@ -1,0 +1,58 @@
+---
+// Area page: the old Scarborough district (Scarborough, Eastfield, Whitby, Filey, Hunmanby and the villages from
+// Staithes to the Wolds). Questions follow Google's suggestions (November 2026): "Scarborough primary school" also
+// brings up Scarborough in Western Australia, "Whitby primary school" Whitby Heath in Ellesmere Port, and "Filey
+// School" is the town's secondary school.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { COUNCILS } from '../lib/engine';
+import { NY_TERM_DATES } from '../lib/specs';
+import { url } from '../lib/url';
+const ny = COUNCILS['North Yorkshire'];
+const schools = loadArea('north-yorkshire.json').filter((s) => s.district === 'Scarborough');
+// Whitby, Staithes and the Esk Valley sit north of the moors, well apart from Scarborough and Filey
+const north = schools.filter((s) => s.ll[0] > 54.38), south = schools.filter((s) => s.ll[0] <= 54.38);
+const faqs: [string, string][] = [
+  ['What is my catchment school in Scarborough?',
+    `Put your postcode into the <a href="${url('')}">school catchment checker</a>. It tells you which primary school catchment area you’re in, and your chances at every primary school nearby, in Scarborough, Eastfield, Whitby, Filey, Hunmanby and the villages. Most schools here have a catchment. St Peter’s and St George’s in Scarborough, St Hedda’s at Egton Bridge and St Martin’s in Scarborough don’t, and set their own rules.`],
+  ['Is there a school catchment area map for Scarborough and Whitby?',
+    `Yes. North Yorkshire Council publishes a <a href="${ny.catchMap}" target="_blank" rel="noopener">school catchment area map</a> covering every school in the county. The checker uses the same map, so your postcode gives you the answer. Parts of Scarborough are in two or three schools’ catchments at once, and the checker shows them all. Near a boundary? Check your exact address on the council’s map.`],
+  ['How do school catchment areas work in Scarborough?',
+    `North Yorkshire Council fills each school’s places in order: children in care, then approved medical or social need, then children in the catchment, then children of staff, then everyone else. Brothers and sisters, then distance, decide who goes first inside each group. <a href="${url('how-places-work/')}">How school catchment areas work</a> explains the queue.`],
+  ['When do I apply for a Reception place for September 2027?',
+    `Apply online to <a href="${ny.apply}" target="_blank" rel="noopener">North Yorkshire Council</a> by Friday 15 January 2027. You can name up to five primary schools, in the order you want them.`],
+  ['When are primary school places announced?',
+    'Offers go out on national offer day, Friday 16 April 2027, by email from the council.'],
+  ['Can my child get into a school outside our catchment?',
+    `Often. In the latest year each school published, ${openLatest(schools).length} of the ${schools.length} schools here took everyone who applied. Where a school was full, the council publishes how far the last place went, and the checker compares that with your distance.`],
+  ['Which are the best primary schools in Scarborough?',
+    'There’s no official ranking, so be wary of league tables. Ofsted is the fairest guide, alongside a visit. The checker shows each school’s latest Ofsted outcome, and each school’s own page explains it.'],
+  ['How do Filey’s infant and junior schools work?',
+    'Filey CE Nursery and Infants Academy takes children from Reception to Year 2. They then move to Filey Junior School for Year 3, and you apply again for that place while your child is in Year 2. The checker covers the Reception place at the infant school. Hunmanby Primary School, nearby, takes children all the way through.'],
+  ['Is Filey School or Scalby School on here?',
+    'No. Filey School, Scalby School, Graham School and Eskdale School are secondary schools, and the checker covers primary schools and Reception places only.'],
+  ['Looking for Scarborough Primary School in Western Australia?',
+    'That’s a different school, in Perth. This page covers Scarborough on the North Yorkshire coast, where no school is called Scarborough Primary. The town’s primary schools are listed above.'],
+  ['Looking for Whitby Heath Primary School in Ellesmere Port?',
+    'That’s a different school, in Cheshire. This page covers Whitby in North Yorkshire: East Whitby, West Cliff, Airy Hill and Stakesby, and the villages around.'],
+  ['We live near Bridlington or Loftus. Which council do I apply to?',
+    'The council for where you live, even when you want a school in another council’s area. South of Filey, from Reighton and Speeton, that’s East Riding of Yorkshire Council. North of Staithes, from Loftus, it’s Redcar and Cleveland Council. You can still name North Yorkshire schools on that form. The checker covers North Yorkshire and York schools only.'],
+  ['When are the school term dates and holidays?',
+    `Community and voluntary controlled schools follow <a href="${NY_TERM_DATES}" target="_blank" rel="noopener">North Yorkshire Council’s term and holiday dates</a>. Academies and voluntary aided schools can set their own, so check with the school.`],
+  ['How do I find open days?',
+    'Ask the school. Open the school in the checker for its phone number, email and website.'],
+];
+---
+<AreaPage areaKey="scarborough"
+  title="Scarborough primary school catchment areas, map and Ofsted · Yorkshire School Checker"
+  description="Scarborough, Whitby and Filey primary school catchment areas: find your catchment school, which schools are hardest to get into, Ofsted ratings and the 2027 Reception dates."
+  h1="Scarborough, Whitby and Filey primary schools and catchment areas"
+  lede="Primary school catchment areas for every school in Scarborough, Eastfield, Whitby, Filey and Hunmanby, and the villages from Staithes and the Esk Valley to the edge of the Wolds."
+  area="Scarborough"
+  schools={schools}
+  groups={[
+    { label: 'Scarborough, Filey and the villages around', note: `${south.length} North Yorkshire Council primary and infant schools. Filey’s junior school, which starts at Year 3, isn’t included.`, schools: south },
+    { label: 'Whitby, Staithes and the Esk Valley', note: `${north.length} North Yorkshire Council primary schools.`, schools: north },
+  ]}
+  faqs={faqs}
+/>

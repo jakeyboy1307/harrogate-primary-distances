@@ -94,7 +94,7 @@ import Admin from '../../../layouts/Admin.astro';
   import L from 'leaflet';
   import 'leaflet/dist/leaflet.css';
   import { api, esc, type Ad } from '../../../lib/admin';
-  import { inArea, loadData, type Area as Shape, type LatLng, type School } from '../../../lib/engine';
+  import { inArea, loadCatchments, loadData, type Area as Shape, type LatLng, type School } from '../../../lib/engine';
   import { areaOf } from '../../../lib/sponsors';
   import { AREA_HOME, AREAS, type Area } from '../../../lib/specs';
 
@@ -124,7 +124,7 @@ import Admin from '../../../layouts/Admin.astro';
 
   async function main() {
     const [data, dGeo, cGeo, counts, ads, stats, opens] = await Promise.all([
-      loadData(),
+      loadCatchments().then(loadData),   // every catchment shape, for the whole map
       fetch('/geo/uk-districts.json').then((r) => r.json() as Promise<{ districts: District[] }>),
       fetch('/geo/uk-counties.json').then((r) => r.json() as Promise<{ counties: County[] }>),
       fetch('/geo/district-schools.json').then((r) => r.json() as Promise<{ date: string; districts: Record<string, [number, number]> }>),

@@ -22,7 +22,7 @@ MI = 1609.344
 # Every school in the FULL districts is in. Harrogate district schools are matched with the hand-written keys below;
 # the rest are matched automatically, by council code, postcode and name. In the NEAR_YORK districts, only schools
 # within NEAR_YORK_MI of York Minster are in. To cover a new district, move it from NEAR_YORK to FULL.
-FULL = ('Harrogate', 'Selby', 'Hambleton', 'Ryedale')
+FULL = ('Harrogate', 'Selby', 'Hambleton', 'Ryedale', 'Scarborough')
 NEAR_YORK = ()
 YORK = (53.9622, -1.0819)
 NEAR_YORK_MI = 15
@@ -37,7 +37,7 @@ DATASETS = {
 
 def norm(s):
     s = str(s or '').lower().replace('’', "'").replace('`', "'")
-    s = re.sub(r'church of england|c of e|cofe|c\.e\.', 'ce', s)
+    s = re.sub(r'church of england|c of e|cof e|cofe|c\.e\.', 'ce', s)   # "Cof E": Carleton Endowed
     return re.sub(r'\s+', ' ', s).strip()
 
 
@@ -68,7 +68,10 @@ CATCH_KEYS = {2425: [['saltergate']], 2331: [['oatlands inf']], 3378: [], 3371: 
               3363: [['marton-cum-grafton']]}
 # 2023 names that the keys alone can't place
 KEYS_2023 = {3263: ['holy trinity', 'infant'], 3378: ["st joseph's", 'harrogate'], 3371: ["st mary's", 'knaresborough'],
-             3372: ["st wilfrid's"], 2031: ['masham'], 2427: ['riverside', '(n)'], 3001: ['aiskew']}
+             3372: ["st wilfrid's"], 2031: ['masham'], 2427: ['riverside', '(n)'], 3001: ['aiskew'],
+             # names too unlike their 2023 ones to match automatically
+             3276: ['sutton in craven ce'], 2359: ['sutton in craven comm'], 3154: ['filey', 'infant and nursery'],
+             3615: ['st peters roman catholic']}
 # Schools renamed since: the name they had in the years before 2026
 FORMERLY = {3001: 'Aiskew, Leeming Bar CE Primary School'}
 
@@ -88,7 +91,8 @@ PLACE = {
     3372: 'Ripon', 2011: 'Starbeck', 2358: 'Staveley', 2335: 'Summerbridge', 3278: 'Tockwith',
     2333: 'Harrogate', 2364: 'Harrogate',
     # outside Harrogate, where the council's address gives a post town or a neighbouring village
-    3060: 'Ingleby Greenhow', 2166: 'RAF Leeming', 2014: 'Thirsk',
+    3060: 'Ingleby Greenhow', 2166: 'RAF Leeming', 2014: 'Thirsk', 3614: 'Richmond', 2015: 'Scarborough', 2042: 'Lealholm',
+    2250: 'Brompton-by-Sawdon',
 }
 # School websites the council has wrong or missing, each checked by opening it (9 November 2026): old council
 # addresses that no longer answer, trust sites that moved, and Burneston's old domain, which now belongs to a
@@ -106,6 +110,8 @@ WEB = {
     3247: 'https://stpeters.ycst.co.uk/', 2011: 'https://www.starbeckprimaryacademy.org.uk/', 2151: 'https://welburnprimary.academy/',
     2364: 'https://www.willowtreeprimary.org.uk/',
     2027: 'https://luttons.ebor.academy/', 2028: 'https://sherburn.ebor.academy/', 2132: 'http://slingsby.n-yorks.sch.uk/',
+    2117: 'https://gladstoneroadschool.co.uk/', 2170: 'https://overdalecps.co.uk/', 3035: 'https://sleights.n-yorks.sch.uk/',
+    3602: 'https://stheddas.npcat.org.uk/',
 }
 METHOD = {'shortest walking distance': 'walking', 'straight line': 'straight_line'}
 
@@ -133,10 +139,14 @@ def sim(a, b):
     return len(A & B) / len(A | B) if A | B else 0
 
 
-def part_sim(part, name, cut=False):
+def part_sim(part, name, cut=False, place=''):
     """sim() for one school's part of a shared catchment's name. When the name was cut off at 60 characters, its last
-    word may be cut too: "... & Pickering Community Infa" still means the Infant school."""
+    word may be cut too: "... & Pickering Community Infa" still means the Infant school. "CP" (community primary)
+    and a town written before a comma don't count: "Scarborough, Northstead CP School" is Northstead Community Primary."""
     A, B = tokens(part), tokens(name)
+    town = tokens(part.split(',')[0]) if ',' in part else set()   # "Scarborough, Northstead CP School"
+    town = town if len(town) == 1 else set()   # a one-word town, not "Barwic Parade CP School, Selb"
+    A = (A - {'cp'} - town) or A
     if cut:
         last = re.findall(r"[a-z0-9]+", norm(part).replace("'", ''))[-1:]
         whole = [b for b in B if last and b.startswith(last[0])]
@@ -209,8 +219,11 @@ def parse_cutoff(v):
         return {'s': 'all_offered'}
     if 'contact' in tl:
         return {'s': 'not_published'}
-    if re.fullmatch(r'\d+(?:\.\d+)?', t):   # a bare distance (Sinnington, 2023): which group it went to isn't said, so don't guess
-        return {'s': 'not_published', 'n': f"The council gave a distance ({float(t):g} miles) but not who the last place went to"}
+    # a distance with no group, bare (Sinnington, 2023) or "Distance - 0.314 miles" (Stakesby, 2026): who the last place
+    # went to isn't said, and guessing could tell a family outside the catchment they'd have got in, so don't
+    bare = re.fullmatch(r'(?:distance\s*-?\s*)?(\d+(?:\.\d+)?)(?:\s*miles?)?', tl)
+    if bare:
+        return {'s': 'not_published', 'n': f"The council gave a distance ({float(bare.group(1)):g} miles) but not who the last place went to"}
     m = re.search(r'(\d+(?:\.\d+)?)', t)
     if not m:
         raise ValueError('unparsed cut-off: ' + t)
@@ -278,9 +291,35 @@ base = [r for r in rows26 if r[c26['district']] == 'Harrogate' and not junior(r)
 unknown = [r[0] for r in base if r[0] not in KEYS]
 assert not unknown, f'add keys for {unknown}'
 
+
+def reception_rows(rows):
+    """One row per school. A few Dales schools have two rows under one code in the 2026 sheet as their federations
+    become infant/junior pairs (Bainbridge, Reeth, Spennithorne): the row with places for 2027 is the school, and the
+    other row's name is what it was called before. A school whose only places are on a "Junior" row (Askrigg) has no
+    Reception class from 2027, so it's left out like the other junior schools."""
+    by = {}
+    for r in rows:
+        by.setdefault(r[0], []).append(r)
+    out = []
+    for dfe, rs in by.items():
+        if len(rs) == 1:
+            out.append(rs[0])
+            continue
+        keep = [r for r in rs if num(r[c26['pan']]) is not None]
+        if len(keep) != 1:
+            raise ValueError(f'{dfe}: can\'t tell which row is the school: {[r[c26["name"]] for r in rs]}')
+        keep = keep[0]
+        if 'junior' in keep[c26['name']].lower():
+            print(f'  {keep[c26["name"]].strip()}: only junior places from 2027, left out')
+            continue
+        FORMERLY.setdefault(dfe, next(r for r in rs if r is not keep)[c26['name']].strip())
+        out.append(keep)
+    return out
+
+
 # The other districts: Ofsted's LAESTAB is 815 plus the council's code, which gives the postcode to find the council's point
 POINT = {}
-for r in rows26:
+for r in reception_rows([r for r in rows26 if r[c26['district']] != 'Harrogate']):
     name = r[c26['name']]
     if r[c26['district']] == 'Harrogate' or r[c26['district']] not in FULL + NEAR_YORK or junior(r):
         continue
@@ -319,6 +358,8 @@ def find_row(y, dfe, name_keys, name=None, district=None):
             hit = [r for r in rows if has_keys(r[c['name']], ['masham']) and r[c['district']] == 'Harrogate']
         else:
             hit = [r for r in rows if r[c['dfe']] == dfe and 'junior' not in r[c['name']].lower()]
+        if len(hit) > 1:   # two rows under one code (see reception_rows): the one with places
+            hit = [r for r in hit if num(r[c['pan']]) is not None] or hit
         if not hit and dfe not in KEYS and name:   # a new number, e.g. on becoming an academy: the same name in the same district
             hit = by_name([r for r in rows if r[c['district']] == district], c, name)
     elif name_keys:
@@ -442,7 +483,7 @@ for s in schools:
         for i, f in enumerate(feats):
             cat = f['properties']['School']
             parts = cat.split(' & ')
-            if len(parts) > 1 and near(i, s) and any(part_sim(part, n, cut=len(cat) >= 60 and j == len(parts) - 1) >= 0.6
+            if len(parts) > 1 and near(i, s) and any(part_sim(part, n, cut=len(cat) >= 60 and j == len(parts) - 1, place=s['place']) >= 0.6
                                                      for j, part in enumerate(parts) for n in (s['name'], FORMERLY.get(s['dfe'], ''))):
                 AUTO_CATCH.setdefault(s['dfe'], set()).add(i)
 

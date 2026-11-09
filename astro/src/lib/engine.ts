@@ -91,23 +91,54 @@ export function haversine(a: LatLng, b: LatLng) {
 let dataPromise: Promise<{ schools: School[]; catch: Area[] }> | null = null;
 const getJSON = <T>(file: string) => fetch(import.meta.env.BASE_URL.replace(/\/?$/, '/') + 'data/' + file)
   .then((r) => { if (!r.ok) throw new Error(String(r.status)); return r.json() as Promise<T>; });
-// One file per council, listed in areas.json. Each file's catchment numbers are shifted so they
-// still point at the right catchment once the files are joined.
+type Box = [number, number, number, number];   // south, west, north, east
+interface CouncilFile { file: string; catchCount: number; catch: { file: string; box: Box }[] }
+// The catchment shape files and where each council's numbers start in the joined list, filled in by loadData
+let shapeFiles: { file: string; box: Box; shift: number }[] = [];
+const shapeLoads = new Map<string, Promise<void>>();
+// One file of schools per council, listed in areas.json. Each council's catchment numbers are shifted so they still
+// point at the right catchment once the councils are joined. The catchment shapes themselves aren't in it: the
+// list has a gap for each until loadCatchments fetches the file it's in.
 // A failed load isn't kept, so the next search tries again instead of failing until the page is reloaded
 export function loadData() {
-  dataPromise ??= getJSON<{ file: string }[]>('areas.json')
-    .then((areas) => Promise.all(areas.map((a) => getJSON<Data>(a.file))))
-    .then((files) => {
+  dataPromise ??= getJSON<CouncilFile[]>('areas.json')
+    .then(async (councils) => {
+      const files = await Promise.all(councils.map((c) => getJSON<{ schools: RawSchool[] }>(c.file)));
       const out: { schools: School[]; catch: Area[] } = { schools: [], catch: [] };
-      for (const d of files) {
+      shapeFiles = [];
+      councils.forEach((c, k) => {
         const shift = out.catch.length;
-        out.catch.push(...d.catch);
-        for (const s of d.schools) out.schools.push({ ...s, cz: s.cz?.map((i) => i + shift), id: out.schools.length, inC: null } as School);
-      }
+        out.catch.length += c.catchCount;
+        shapeFiles.push(...c.catch.map((f) => ({ ...f, shift })));
+        for (const s of files[k].schools) out.schools.push({ ...s, cz: s.cz?.map((i) => i + shift), id: out.schools.length, inC: null } as School);
+      });
       return out;
     })
     .catch(() => { dataPromise = null; throw new Error('We couldn’t load the school details. Check your connection and try again.'); });
   return dataPromise;
+}
+
+// Whether a shape file's box comes within `mi` miles of a point
+function boxNear([s, w, n, e]: Box, [lat, lng]: LatLng, mi: number) {
+  const dLat = mi / 69, dLng = mi / (69 * Math.cos((lat * Math.PI) / 180));
+  return lat >= s - dLat && lat <= n + dLat && lng >= w - dLng && lng <= e + dLng;
+}
+// Fetches the catchment shapes within reach of a search: every file whose shapes come within the search radius
+// (plus a mile) of the home. Any catchment the home is in has the home inside its box, so it's always fetched, and
+// so are the catchments of every school in range. With no point given, it fetches them all (the admin's map).
+export async function loadCatchments(ll?: LatLng | null, radiusMi = 0) {
+  const { catch: list } = await loadData();
+  const want = shapeFiles.filter((f) => !ll || boxNear(f.box, ll, radiusMi + 1));
+  await Promise.all(want.map((f) => {
+    let p = shapeLoads.get(f.file);
+    if (!p) {
+      p = getJSON<{ c: { i: number; name: string; p: LatLng[][][] }[] }>(f.file)
+        .then((d) => { for (const c of d.c) list[c.i + f.shift] = { name: c.name, p: c.p }; })
+        .catch(() => { shapeLoads.delete(f.file); throw new Error('We couldn’t load the catchment areas. Check your connection and try again.'); });
+      shapeLoads.set(f.file, p);
+    }
+    return p;
+  }));
 }
 
 // ---------- catchments ----------
@@ -389,7 +420,9 @@ export interface SearchResult {
 }
 export function prepareSearch(all: School[], catches: Area[], place: Place, radiusMi: number): SearchResult {
   const ll = place.ll;
-  const areas = new Set(catches.map((a, i) => (inArea(ll, a) ? i : -1)).filter((i) => i >= 0));
+  // catchments not fetched yet are gaps in the list (loadCatchments fetches every one the home could be in)
+  const areas = new Set<number>();
+  catches.forEach((a, i) => { if (a && inArea(ll, a)) areas.add(i); });
   all.forEach((s) => { s.inC = s.cz ? s.cz.some((i) => areas.has(i)) : null; s.result = null; s.walk = null; s.walkErr = false; s.straight = haversine(ll, s.ll); });
   const R = radiusMi * MI;
   const near = all.filter((s) => s.ll && s.straight! <= R);

@@ -1,7 +1,7 @@
 // The map view: sticker pins numbered by list order, plain dots for the rest, the search ring and the open school's catchment.
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { chipText, esc, MI, type Area, type LatLng, type Mode, type School } from './engine';
+import { chipText, esc, loadCatchments, MI, type Area, type LatLng, type Mode, type School } from './engine';
 import { addedText, addLabel, addSchool, backupOf, ordinal, rankOf } from './store';
 import { distTxt, toast, vOf } from './ui';
 
@@ -90,9 +90,16 @@ export class SchoolMap {
     const s = this.shown.find((x) => x.id === id);
     if (!s) return;
     this.selected = id;
-    this.catchLayer.clearLayers();
-    for (const i of s.cz || [])
-      L.polygon(this.catches[i].p as unknown as L.LatLngExpression[][][], { pane: 'catch', color: '#2747D8', weight: 3, fillColor: '#2747D8', fillOpacity: .09, interactive: false }).addTo(this.catchLayer);
+    const outline = () => {
+      this.catchLayer.clearLayers();
+      for (const i of s.cz || []) {
+        const c = this.catches[i];
+        if (c) L.polygon(c.p as unknown as L.LatLngExpression[][][], { pane: 'catch', color: '#2747D8', weight: 3, fillColor: '#2747D8', fillOpacity: .09, interactive: false }).addTo(this.catchLayer);
+      }
+    };
+    outline();
+    // a listed school far from home may have its catchment in a file not fetched yet: fetch it, then draw it
+    if ((s.cz || []).some((i) => !this.catches[i])) loadCatchments(s.ll).then(() => { if (this.selected === id) outline(); }).catch(() => {});
     this.draw();
     const rank = rankOf(s.urn), mode = this.ctx.mode();
     const why = s.result ? s.result.label + '.' : '';

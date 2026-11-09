@@ -1,146 +1,204 @@
 # Covering the rest of North Yorkshire
 
-Plan, 9 November 2026.
-
-**Ryedale, 9 November 2026:** built on the `ryedale` branch: 22 more schools (29 in all; Pickering's junior school is left out), a Malton area page at `/malton-primary-schools/`, and its sitemap. Sinnington's unlabelled 2023 distance is shown as not published rather than guessed. Pickering Infant's shared catchment needed the cut-off-name fix. Every Ryedale postcode checked against the council's map agrees.
-
-**Status, 9 November 2026:** groundwork and Selby and Hambleton are built on the `selby-hambleton` branch, not yet live. Still to do for this phase: deploy, then the Search Console steps below. Changes from the plan:
-- The data download split is held back until Scarborough. With Selby and Hambleton in, it went from about 170 KB to 270 KB compressed, which is fine, and splitting it means changing how the list, map and shortlist find schools.
-- Building it turned up three wrong catchment answers on the live site, now fixed: central Selby postcodes in Selby Abbey's own catchment showed no catchment school, Selby Community Primary was missing from the shared Selby Community/Selby Abbey catchment, and Topcliffe was missing from the catchment it shares with Dishforth.
-- A "children of staff" cut-off (Pickhill, 2026) is now its own case, worded like the brothers and sisters one.
-- Every school's website link was checked by opening it. 33 were broken or missing (old council addresses, trust sites that moved, and Burneston's old domain, now a cashback site); each now has its school's working address. `build/check_websites.py` repeats the check.
-- 28 random postcodes across both districts were checked against the council's own catchment map: all agree.
+Plan, updated 9 November 2026.
 
 ## Where we are
 
-The checker has every primary school in the Harrogate district and City of York, plus the North Yorkshire schools within 15 miles of York Minster. The counts come from the council's 2026 admissions sheet:
+| Old district | Area page | Schools | Status |
+| --- | --- | --- | --- |
+| Harrogate | `/harrogate-primary-schools/` | 67 | Live |
+| Hambleton | `/northallerton-primary-schools/` | 51 | Live 9 Nov |
+| Selby | `/selby-primary-schools/` | 40 | Live 9 Nov |
+| Ryedale | `/malton-primary-schools/` | 29 | Live 9 Nov |
+| City of York | `/york-primary-schools/` | 48 | Live |
+| Scarborough | `/scarborough-primary-schools/` | 40 | Built 9 Nov, not yet live |
+| **Richmondshire** | to do | **25** | Phase B |
+| **Craven** | to do | **31** | Phase C |
 
-| Old district | Schools on the council sheet | In the checker | Left to add | Status |
-| --- | --- | --- | --- | --- |
-| Harrogate | 69 | 67 | 0 (2 are junior schools) | Full |
-| Selby | 40 | 29 | **11** | Partial |
-| Hambleton | 51 | 8 | **43** | Partial |
-| Ryedale | 30 | 7 | 23 | Partial |
-| Scarborough | 41 | 0 | 41 | Not started |
-| Richmondshire | 34 | 0 | 34 | Not started |
-| Craven | 31 | 0 | 31 | Not started |
+When all three are done the checker covers every Reception place in North Yorkshire and York: about 330 schools.
 
-All seven districts are one council (North Yorkshire). They use the same admissions sheets, the same catchment map and the same Ofsted file, so each new district is mostly configuration rather than a new data source.
+These figures come from a trial build of all three districts (9 November, in a scratch folder, nothing changed). It ran, with the problems listed under each phase below. Richmondshire is 25, not the 34 rows on the council's sheet: four small Dales schools appear twice, and three of its schools (Askrigg, Gunnerside, Middleham) are, or are becoming, junior schools with no Reception class.
 
-**Timing:** Reception applications close on **15 January 2027**. Parents search the most between now and then, so Selby and Hambleton should go live and be submitted to Google before mid-December.
+**Timing:** applications close on **15 January 2027**. Aim to have all three live and submitted to Google by early December, so they have a chance to be indexed before the January rush.
 
 ## The order
 
-1. **Groundwork** (once, makes every later district quick)
-2. **Selby and Hambleton** (54 schools, two area pages)
-3. **Ryedale** (finish it: Malton, Norton, Pickering, Helmsley)
-4. **Scarborough** (Scarborough, Whitby, Filey: the biggest one left)
-5. **Richmondshire and Craven** (Richmond, Catterick Garrison, Leyburn; Skipton, Settle)
+1. **Groundwork** (once, before Scarborough). Fixes all three districts need, and the data split.
+2. **Phase A: Scarborough, Whitby and Filey** (40 schools)
+3. **Phase B: Richmond, Catterick and Leyburn** (25 schools)
+4. **Phase C: Skipton, Settle and the Dales** (31 schools)
 
-When step 5 is done, all of North Yorkshire is covered. Steps 3 to 5 each repeat the step 2 checklist.
-
----
-
-## 1. Groundwork
-
-### Data build (`build/build_data.py`, `build/fetch.sh`)
-- **Choose districts by name.** Swap the "within 15 miles of York" rule for a `FULL = ('Harrogate', 'Selby', 'Hambleton')` list, and keep the 15-mile rule only for districts still partly covered (Ryedale). Each later phase then adds one word to `FULL`.
-- **Fetch the whole county's catchments.** `fetch.sh` currently asks only for a box round Harrogate and York (latitude 53.65 to 54.35). Hambleton reaches up to Stokesley at about 54.5 and Selby goes down to Kirk Smeaton at about 53.64. Drop the box and download every catchment in North Yorkshire.
-- **New cut-off wording.** In 2026, Pickhill's last place is listed as "Staff - 10.003 miles", which `parse_cutoff` can't read, so the build would stop. Treat it like "Criteria" (the school's own rules). Ryedale will need the same fix for Sinnington's 2023 figure, which is a bare "3.03" with no label.
-- **Clean up names.** Remove "(formerly …)" from names, which affects Leeming St John's. Schools called just "… Academy" (Alanbrooke, Roseberry, Keeble Gateway) shouldn't be renamed "… Primary School" on their pages.
-- **Junior and infant schools.** Junior schools are spotted by name at the moment. Use the national schools register's (GIAS) lowest age instead, so a junior school without "Junior" in its name is still left out. Check Roseberry Academy in Great Ayton, which sits beside Marwood Infant School.
-
-### One list of areas (`astro/src/lib`)
-Area details are spread across five files today, each assuming there are two areas, "harrogate" or "york": `specs.ts` (AREAS, AREA_HOME), `sponsors.ts` (areaOf), `schoolpages.ts` (areaOf, area page links), `copy-data.mjs` and the Footer. Replace them with one table, where each area has a key, name, page address, its districts, ONS code and an example postcode. A new area then needs one new line.
-
-### Split the data so the checker stays fast
-The checker downloads every school before a search: about 170 KB compressed now, rising to about 500 KB once the whole county is in. Split the North Yorkshire file by area, list each area's bounding box in `areas.json`, and download only the areas near the postcode. The York and Harrogate pages stay the same size.
-
-### Protect existing page addresses
-School page addresses are worked out from school names, so a new school with the same short name could quietly change an existing school's address. I checked Selby and Hambleton and no existing address changes, but later districts might. Add a `slugs.json` lock file: the build fails if any published address would change, and any planned change gets a 301 redirect.
-
-### Search Console groundwork
-- **One sitemap per area.** Split `sitemap.xml` into an index with one sitemap per area. Search Console's Pages report can be filtered by sitemap, which shows how many Selby or Hambleton pages Google has indexed.
-- **Honest last-updated dates.** Every page currently says it changed on the day of the build. Use the data refresh date for school and area pages, so Google keeps trusting the dates.
+Each phase ships on its own, so each can go live as soon as it's checked.
 
 ---
 
-## 2. Selby and Hambleton
+## 1. Groundwork (before Scarborough)
 
-### Schools to add
+### Load catchment shapes only near the postcode
+With all three districts in, the North Yorkshire file grows from 1.26 MB to 1.96 MB (312 KB to 492 KB with gzip; Cloudflare serves it with brotli, about 290 KB). Nearly all of it, 458 KB of the 492, is catchment shapes. The school details themselves are only 33 KB.
 
-**Selby (11):** Brotherton and Byram, Burton Salmon, Camblesforth, Carlton, Chapel Haddlesey, Fairburn, Hensall, Kellington, Kirk Smeaton, Monk Fryston, Whitley and Eggborough.
+So the split is:
+- **Schools:** stay in one file, so the list, map, shortlist and school numbers work exactly as now.
+- **Catchment shapes:** go into one file per area. `areas.json` gives each file's bounding box.
+- **Loading:** the checker downloads only the areas within reach of the postcode (the search radius plus a margin), before it works out catchments. A Harrogate search then never downloads Scarborough's shapes.
+- **My plan page:** loads the shapes round the saved postcode in the same way.
+- **Admin coverage map:** still loads everything.
 
-**Hambleton (43):** Ainderby Steeple, Alanbrooke Academy, All Saints Catholic (Thirsk), Alverton, Applegarth, Appleton Wiske, Bedale, Bilsdale Midcable Chop Gate, Brompton, Broomfield, Burneston, Carlton and Faceby, Carlton Miniott, Crakehall, East Cowton, Great Smeaton, Husthwaite, Hutton Rudby, Ingleby Greenhow, Keeble Gateway, Kirkby and Great Broughton, Knayton, Leeming RAF, Leeming St John's, Marwood Infant, Mill Hill, Oakbridge, Osmotherley, Pickhill, Romanby, Roseberry, Sacred Heart (Northallerton), Sessay, Snape, South Kilvington, South Otterington, Sowerby, St Nicholas (West Tanfield), St Peter's Brafferton, Stokesley, Thirsk, Thornton Watlass, Topcliffe.
+**Check:** the same results as before for test postcodes in every area, a smaller download for each search, and nothing broken on My plan or the admin.
 
-### For each school
-Built the same way as today's schools, with automatic matching by council code, postcode and name:
-- Four years of figures (2023 to 2026): places, applications, first choices and how far the last place went
-- Map point, address and website (council school points)
-- Catchment area (council catchment map). The Catholic academies, All Saints and Sacred Heart, have no catchment area, which is expected.
-- Ofsted outcome
-- Phone and email (`fetch_contacts.py`)
+### Build fixes all three districts need (`build/build_data.py`)
+- **Duplicate school codes.** Bainbridge, Reeth and Spennithorne have a "Primary" row and an "Infant" row under one code in the 2026 sheet. Their federations are moving to infant/junior pairs: Bainbridge with Askrigg, Reeth with Gunnerside, Spennithorne with Middleham. The fix:
+  - keep one school per code, the row with Reception places;
+  - name it after that row (for example "Reeth Community Infant School");
+  - show the earlier years with a note: "as Reeth Community Primary School".
+- **Schools becoming junior schools.** Askrigg's only row with places in 2026 is "Askrigg Junior School", so it has no Reception intake from 2027, even though the national register still lists it from age 4. Leave it out, like the other junior schools: a school whose places in the latest sheet are only on a "Junior" row isn't a Reception school.
+- **Shared infant/junior catchments.** For example "Reeth Community Infant School & Gunnerside Methodist (VC) Junior School" goes to the infant school, which the existing shared-catchment matching already does.
+- **"Cof E" spelling.** Carleton Endowed is spelt "Cof E" in the sheet and "CofE" on the map, so its catchment doesn't match. Treat "Cof E" as "CE" when comparing names.
+- **Cut-off with no group.** Stakesby (Whitby) 2026 reads "Distance - 0.314 miles" and doesn't say who the last place went to. Show it as not published, with a note, as for Sinnington 2023 (decision 2).
+- **2023 names to match by hand,** because their 2023 names differ too much to match automatically:
+  - the two Sutton-in-Craven schools ("Sutton in Craven C of E (VC)" and "Sutton in Craven Comm.");
+  - Filey Infants ("Filey C of E (VC) Infant and Nursery School (N)");
+  - St Peter's Catholic, Scarborough ("St Peters Roman Catholic Primary School, Scarborough").
+- **Places:** St Mary's Catholic, Richmond comes out as "Cross Lanes" from its address. Set it to Richmond.
 
-The build prints any school it couldn't match. The phase isn't finished until that list is empty or every school on it is explained.
+### Naming rules (`astro/src/lib/schoolpages.ts`)
+- **Drop more abbreviations.** "VA" and "VC" (Austwick, Burnsall, Cracoe and Rylstone), "Cof E" (Carleton Endowed) and "Primary & Nursery Academy" (Braeburn).
+- **Set two addresses by hand** in `slugs.json` before their first build, so they're clear from day one:
+  - `sutton-in-craven-ce-primary-school` and `sutton-in-craven-community-primary-school`, since otherwise the two get the same name;
+  - `richmond-methodist-primary-school`, because people search "methodist primary school richmond north yorkshire".
+- **Check before building:** none of the 235 live addresses change (the lock file guarantees it), and existing schools' displayed names don't change.
 
-### Pages
-- **Two new area pages:**
-  - `/selby-primary-schools/`: Selby, Tadcaster, Sherburn in Elmet, Brayton, Barlby, Riccall
-  - `/northallerton-primary-schools/`: titled "Northallerton, Thirsk and Bedale primary schools", also covering Stokesley, Great Ayton, Easingwold and the villages. People search for those towns, not "Hambleton". This is your call (decision 1 below).
-
-  Each page gets the usual sections (hardest to get into, took everyone, Outstanding, every school by town) and FAQs based on Google's suggestions, as with Harrogate and York. Local questions to cover: for Selby, families near Leeds and Wakefield and which council to apply to; for Hambleton, forces families at Leeming, Topcliffe and Dishforth, and Stokesley and Hutton Rudby families who look at Teesside schools.
-- **54 new school pages,** made automatically. That takes the site from 159 to 213 school pages.
-- **The 37 near-York Selby and Hambleton schools already on the site** move their home to their own district page. Their addresses don't change. Only the breadcrumb and the "every school nearby" link change. The York page keeps its "Just outside York" list, chosen by distance instead of "not Harrogate".
-- **Copy that names the areas:** the home page title, description and coverage line, the "no schools in range" message, the example postcode buttons (add Northallerton and Selby), the home FAQ about catchment maps, the footer's "Areas we cover", How places work, Privacy and Advertise.
-
-### Map
-- **Checker map:** needs no changes. It centres on the postcode, and the new catchments and pins come from the data.
-- **Admin coverage map:** add Selby (E07000169) and Hambleton (E07000164) to the area table so they show as fully covered. Ryedale stays partly covered. "Plan the next area" then shows Ryedale and the four untouched districts.
-
-### Ads and admin
-- **New ad areas.** Add `selby` and `hambleton` as ad areas. The admin form, the Worker's checks and the dashboard all read the same list, so they pick these up.
-- **Schools near York.** Schools within 15 miles of York stay in the `york` ad area as well as their district's, so any ad already sold for "York and villages" keeps showing on them.
-- **Search stats.** The stats key each search by area, so Selby and Hambleton get their own counts instead of falling under "york".
-- **Pricing.** Add both areas to the price table in MONETISATION.md.
-
-### Checks before going live
-1. The build reports no unexplained gaps.
-2. Ten test postcodes give the same catchment school as the council's map: DL7 Northallerton, YO7 Thirsk, DL8 Bedale, TS9 Stokesley, DL6 Osmotherley, YO61 Easingwold, YO8 Selby, LS24 Tadcaster, WF11 Brotherton and DN14 Whitley.
-3. The figures and wording look right for the odd cases: Pickhill (staff), Burneston and Oakbridge ("criteria"), East Cowton (7.9 miles), and the forces schools.
-4. Postcodes just over the border (Leeds, Wakefield, Doncaster, Middlesbrough, Stockton) show "not covered yet" and don't break anything.
-5. The data download size and Lighthouse score on a phone haven't got noticeably worse.
-6. Check everything on the branch's Cloudflare preview, then merge to `main`.
-
-### Google Search Console (on launch day, then two weeks later)
-I'll check the exact menu names against Google's current help pages before you do these.
-
-**On launch day:**
-1. **Add the sitemap.** In Search Console go to Sitemaps, add `sitemap.xml` (the new index file) and check it reads "Success" with the right page count.
-2. **Request indexing.** In URL inspection, paste each new area page address, then Request indexing. Also request the home page and the York page, since both changed. Google only lets you do a handful a day, so school pages are left to the sitemap and the internal links.
-3. **Optional: Bing.** In Bing Webmaster Tools, import the site from Search Console, and switch on Crawler Hints in Cloudflare so Bing hears about changes straight away.
-
-**Two weeks later:** open Pages, filter by the Selby and Hambleton sitemaps, and note:
-- **Indexed vs. not indexed:** aim for the area pages within a week and most school pages within four to six weeks.
-- **"Crawled, currently not indexed":** if many school pages land here, Google sees them as too alike. Many Hambleton village schools took everyone every year, so their pages are similar. The fix is giving each one more of its own content (applications trend, Ofsted detail, nearby schools), not asking Google again.
-- **Search results:** impressions for "Northallerton primary schools", "Selby catchment area" and the school names.
+### Area wording from the area table
+Each new area has meant hand-editing the area list in eight places: the home page title, description, coverage line, heading and "no schools" message, How places work, My plan, Advertise and the share image text. Generate those lists from `AREA_INFO` instead, so a new area is one line in `specs.ts` plus its page.
 
 ---
 
-## 3 to 5. The rest of the county
+## The checklist for each phase
 
-Each one follows the step 2 checklist: add the district to `FULL`, add a line to the area table, write the area page's FAQs, check the build's gaps and test postcodes, then do the Search Console steps.
+The same steps for every district. Phase A, B and C below only list what's specific to each.
 
-| Phase | Area page | Schools to add | Known quirks |
-| --- | --- | --- | --- |
-| 3 | Malton and Pickering (Ryedale) | 22 (done) | Sinnington's unlabelled 2023 cut-off |
-| 4 | Scarborough, Whitby and Filey | 41 | Biggest page; Whitby may want its own section |
-| 5a | Richmond and Catterick | 34 | Big forces population at Catterick Garrison |
-| 5b | Skipton and Settle (Craven) | 31 | Borders Lancashire and Bradford |
+1. **Data:** add the district to `FULL`, run the build, and explain or fix every gap it prints:
+   - a school without a map point, Ofsted record or catchment;
+   - a missing year;
+   - new cut-off wording.
+2. **Review every new school:**
+   - four years of figures;
+   - a matched 2023 row that is really that school;
+   - catchment, town or village, and type.
+3. **Contacts and websites:**
+   - `fetch_contacts.py`, which looks up only the new schools;
+   - `check_websites.py`;
+   - every broken or hijacked link replaced with the school's real site (add to `WEB`), checked in a browser where a site blocks automated checks;
+   - web host emails kept out.
+4. **Area:** one line in `AREA_INFO`: key, label, short name, page name, address, district, ONS code and example postcode. Then the area page, using `AreaPage`, with questions from Google's suggestions and that area's local mix-ups.
+5. **Build and check:**
+   - `npm run build`, then `npm run lock-slugs`;
+   - every live address still works (compare with the live sitemaps);
+   - new addresses read cleanly;
+   - at least 15 random postcodes across the district match the council's own catchment map;
+   - pages checked in the browser on desktop and phone;
+   - the admin coverage map shows the district as fully covered.
+6. **Ship:** commit, merge to `main`, push, then check the live pages and sitemaps.
+7. **Search Console:**
+   - add `sitemap-<area>.xml` with its full address;
+   - request indexing for the area page;
+   - two weeks later, check the Pages report filtered by that sitemap.
+
+   Google's daily limit on indexing requests is small, so one area page a day.
+8. **Ads:** the new ad area appears in the admin automatically. Add it to the price table in MONETISATION.md.
+
+---
+
+## Phase A: Scarborough, Whitby and Filey (40 schools)
+
+**Area page:** `/scarborough-primary-schools/`, titled "Scarborough, Whitby and Filey primary schools". The district code is E07000168. Possible groups on the page: Scarborough and Eastfield, Whitby and the moors villages, Filey and Hunmanby, the villages inland.
+
+**Schools:** 40 primary and infant schools. These include the Scarborough town schools (Friarage, Gladstone Road, Northstead, Overdale, Seamer and Irton, Thomas Hinderwell, Wheatcroft, Braeburn, Barrowcliff, Lindhead, Newby and Scalby, West Cliff), Whitby (East Whitby, Stakesby, Airy Hill, Ruswarp, Sleights), Filey Infants, Hunmanby, and the moors villages.
+
+**Specific to Scarborough:**
+- **Filey:** Filey Junior School starts at Year 3 and stays out; Filey Infants is in. The page should explain the infant-to-junior move, as the Malton page does for Pickering.
+- **Stakesby (Whitby):** its 2026 figure has no group (see groundwork).
+- **No council catchment, as expected:** St George's (Eastfield), St Hedda's (Egton Bridge), St Peter's (Scarborough), St Martin's CE (voluntary aided).
+- **Town schools are likely to fill.** The "hardest to get into" table will have rows here, unlike Ryedale.
+- **Search mix-ups (Google suggestions):**
+  - "Scarborough primary school" also brings up Scarborough in Western Australia.
+  - "Whitby primary school" brings up Whitby in Ellesmere Port, Cheshire.
+  - Parents search "Scarborough school catchment areas".
+  - Answer each on the page.
+- **Borders:** East Riding (Bridlington) and Redcar and Cleveland (Loftus). Those postcodes should show "not covered", and the page should say which council to apply to.
+- **This is the biggest phase.** It's the one that needs the catchment loading from the groundwork.
+
+## Phase B: Richmond, Catterick and Leyburn (25 schools)
+
+**Area page:** `/richmond-primary-schools/`, titled "Richmond, Catterick and Leyburn primary schools, North Yorkshire" (decision 1). The district code is E07000166.
+
+**Schools:** 25, including:
+- Richmond (Richmond Methodist, St Mary's Catholic, Trinity Academy);
+- the Catterick Garrison schools (Cambrai, Carnagill, Le Cateau, Wavell, Hipswell, Colburn);
+- Leyburn, Hawes, Middleton Tyas, Barton, Melsonby;
+- the Dales schools (Bainbridge, Reeth, Spennithorne, Hunton and Arrathorne).
+
+**Specific to Richmondshire:**
+- **Dales schools:** the duplicate rows and Askrigg's move to a junior school (see groundwork). The page explains the three infant/junior pairs: Bainbridge and Askrigg, Reeth and Gunnerside, Spennithorne and Middleham.
+- **Forces families:** Catterick Garrison is the biggest army garrison in the country.
+  - The page answers applying before a posting under the School Admissions Code, as the Northallerton page does for RAF Leeming.
+  - Cambrai is a free school with no catchment.
+  - Garrison schools have many in-year moves, but the checker only covers Reception entry.
+- **Names:** keep "Methodist" in Richmond Methodist's name and address. St Mary's place becomes Richmond.
+- **Shared catchment with Hambleton.** One catchment is shared by Hunton and Arrathorne and Michael Syddall (both Richmondshire) with Crakehall and Leeming St John's (Hambleton). It's already on the site for the two Hambleton schools. This phase adds the two Richmondshire schools to it. Check Crakehall's and Leeming St John's answers don't change.
+- **Search mix-ups:** "Richmond primary school" searches are dominated by Richmond in London, which is why the title and page say North Yorkshire. Parents also search "methodist primary school richmond north yorkshire" and "st mary's primary school richmond north yorkshire".
+- **Borders:** Darlington, County Durham (Barnard Castle) and Westmorland and Furness (Kirkby Stephen).
+
+## Phase C: Skipton, Settle and the Dales (31 schools)
+
+**Area page:** `/skipton-primary-schools/`, titled "Skipton, Settle and the Dales primary schools". The district code is E07000163.
+
+**Schools:** 31, including:
+- Skipton (Water Street, Greatwood, Skipton Parish, Christ Church, St Stephen's Catholic);
+- Settle, Giggleswick, Ingleton, Bentham, Grassington, Gargrave, Embsay;
+- Cononley, Cowling, Glusburn, Sutton-in-Craven (two schools), Kildwick, Bradleys Both, Carleton Endowed;
+- the Dales villages.
+
+**Specific to Craven:**
+- **Sutton-in-Craven:** two schools with near-identical names, so hand-matched 2023 rows and hand-set addresses (see groundwork).
+- **Carleton Endowed:** the "Cof E" catchment fix.
+- **"VA" and "VC" in names:** Austwick, Burnsall, Cracoe and Rylstone.
+- **No council catchment, as expected:** St Stephen's Catholic.
+- **Secondary and grammar schools.** Parents search "Skipton Academy / Skipton Grammar / Skipton Girls' High catchment area". The page should say the checker covers primary schools only, and that Ermysted's and Skipton Girls' High are grammar schools with their own tests.
+- **Borders:** Bradford (Keighley, Silsden, Steeton), Lancashire (Barnoldswick and Earby are Lancashire, not North Yorkshire, which trips people up) and Westmorland and Furness (Sedbergh). The page should say which council to apply to.
+
+---
+
+## What's already done (9 November 2026)
+
+- **Selby and Hambleton:**
+  - 54 schools, the Northallerton and Selby pages, a sitemap per area and locked page addresses.
+  - Three catchment errors on the live site fixed: Selby Abbey's own catchment, Selby Community's shared one, and Topcliffe/Dishforth.
+  - A "children of staff" cut-off case.
+  - 33 broken or hijacked school website links replaced.
+- **Ryedale:**
+  - 22 schools and the Malton page.
+  - Sinnington 2023 shown as not published rather than guessed.
+  - Cut-off shared catchment names matched (Pickering Infant).
+  - Clearer names for the Catholic academies.
+  - Area pages say when no school stands out as hard to get into.
+- **Groundwork:** done (see section 1). Catchment shapes now load per district, only near the postcode searched.
+- **Scarborough:**
+  - 40 schools and the Scarborough page, with Scarborough and Filey, and Whitby and the Esk Valley, listed separately.
+  - Northstead gets its two shared catchments, with Gladstone Road and with Friarage.
+  - Four website links fixed: Gladstone Road, Overdale, Sleights and St Hedda's. Hackness and Wykeham's shared site blocks automated checks.
+  - 36 random postcodes match the council's map. The check script now sends the council's map grid references, because latitude and longitude come out about 70 m off near boundaries.
+- **Search Console:** sitemaps submitted on 9 November. Scheduled tasks on 10 and 11 November add the Ryedale sitemap and request indexing for the Selby, Northallerton, Malton, home and York pages. Check the Pages report around 23 November.
 
 ---
 
 ## Decisions for you
 
-1. **Hambleton's page:** `/northallerton-primary-schools/` ("Northallerton, Thirsk and Bedale"), which I recommend, or `/hambleton-primary-schools/`?
-2. **Schools near York in Selby and Hambleton:** make their home page their own district's page while they stay listed on the York page (recommended), or leave them under York?
-3. **Ads:** should Selby and Hambleton be sold as two separate ad areas from launch?
+1. **Richmondshire's page address:**
+   - `/richmond-primary-schools/`, titled "… North Yorkshire" (recommended: short, and the title tells it apart from Richmond in London);
+   - or `/richmond-north-yorkshire-primary-schools/`;
+   - or `/catterick-and-richmond-primary-schools/`.
+2. **Stakesby's 2026 figure** ("Distance - 0.314 miles", no group):
+   - show 2026 as not published, with a note (recommended);
+   - or you email the council to ask who the last place went to, and we use their answer.
+3. **Askrigg:** leave it out, as it has no Reception class from 2027 (recommended), or show it with a note saying Reception is now at Bainbridge?

@@ -17,9 +17,11 @@ const DROP: RegExp[] = [
   /,.*$/,                                                    // ", Harrogate", ", A Voluntary Academy"
   /\s+-\s+.*$/,                                              // " - a Catholic voluntary academy"
   /\(.*?\)/g,                                               // "(VC)"
-  /\b(Primary|Infant) (&|and) Nursery School\b/gi,          // "Pickering Community Infant and Nursery School"
+  /\b(Primary|Infant) (&|and) Nursery (School|Academy)\b/gi, // "Pickering Community Infant and Nursery School", "Braeburn Primary & Nursery Academy"
   /\bCP\b/g,                                                // "Helmsley CP School"
-  /\b(Church of England|C of E|CofE|CE)\b/gi, /\b(Roman )?Catholic\b/gi, /\bMethodist\b/gi, /\bAnglican\b/gi,
+  /\bNursery (&|and) (?=Infants?\b)/gi,                      // "Filey CE Nursery & Infants Academy"
+  /\bV[AC]\b/g,                                             // "Austwick CofE VA Primary School"
+  /\b(Church of England|C of E|Cof E|CofE|CE)\b/gi, /\b(Roman )?Catholic\b/gi, /\bMethodist\b/gi, /\bAnglican\b/gi,
   /\bVoluntary (Controlled|Aided)\b/gi, /\bControlled\b/gi, /\bCommunity\b/gi, /\bCounty\b/gi, /\band Nursery\b/gi,
   /\b(Primary|Infant|Infants|Junior) (Foundation )?(School|Academy)\b/gi, /\bSchool\b/gi, /\bAcademy\b/gi,
   /\s+Primary\s*$/i,                                         // "Westfield Primary Community School"
