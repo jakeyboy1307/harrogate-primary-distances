@@ -7,8 +7,9 @@ import bodyFont from '../assets/fonts/instrument-sans-latin.woff2?url';
 import '../styles/fonts.css';
 import '../styles/global.css';
 // index: false keeps a page out of search results (the 404 page)
-interface Props { title: string; description: string; active?: 'plan' | 'find' | 'how'; index?: boolean }
-const { title, description, active, index = true } = Astro.props;
+// track: the name the visitor counts use for this page, when it isn't the address (the 404 page)
+interface Props { title: string; description: string; active?: 'plan' | 'find' | 'how'; index?: boolean; track?: string }
+const { title, description, active, index = true, track } = Astro.props;
 // the one address search engines should list, whichever host served the page (www, workers.dev)
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 // the picture card shown when a link is shared on WhatsApp, Facebook and the like
@@ -41,11 +42,16 @@ const shareImage = new URL(url('share.png'), Astro.site).href;
     <link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin />
     <slot name="head" />
   </head>
-  <body>
+  <body data-page={track}>
     <a class="skip" href="#main">Skip to content</a>
     <Header active={active} />
     <main id="main"><slot /></main>
     <Footer />
     <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+    <script>
+      // daily visitor counts for the admin dashboard (no cookies, nothing that identifies anyone)
+      import { startTracking } from '../lib/track';
+      startTracking(document.body.dataset.page || location.pathname.toLowerCase().replace(/\/?$/, '/'));
+    </script>
   </body>
 </html>

@@ -99,6 +99,7 @@ const short = (n: string) => n.replace(/,.*$/, '').replace(/ (Church of England|
     const page = sponsorsFor('pagesponsor', area)[0];
     if (page) {
       strip.innerHTML = `${adLabel('Page sponsor', page.demo)}<span>${esc(name)} school guide supported by <a href="${esc(link(page, 'pagesponsor'))}" target="_blank" rel="sponsored noopener"><b>${esc(page.name)}</b></a>, ${esc(page.blurb.charAt(0).toLowerCase() + page.blurb.slice(1))}</span>`;
+      strip.dataset.adId = page.id; strip.dataset.adSlot = 'pagesponsor';
       strip.hidden = false;
     }
     document.getElementById('adLocalGrid')!.innerHTML = local.map((s) => adCard(s, 'area', 'Sponsored')).join('');

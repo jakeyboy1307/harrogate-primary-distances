@@ -37,6 +37,35 @@ async function sponsors(env) {
   return json(out, 200, { 'Cache-Control': 'public, max-age=60' });
 }
 
+// POST /api/hit: counts from the site's pages (src/lib/track.ts), added to daily totals. No cookies, no IP
+// addresses, nothing about a person: just "this page was viewed n times today".
+const SPOT_KEYS = 'uniform|profile|nearby|results|plan|area|pagesponsor';
+const HIT_KEYS = {
+  page: /^(404|\/[a-z0-9\-\/]{0,80})$/,
+  search: /^(harrogate|york|outside)$/,
+  panel: /^\d{5,7}$/,
+  ad_view: new RegExp(`^\\d{1,9}:(${SPOT_KEYS})$`),
+  ad_click: new RegExp(`^\\d{1,9}:(${SPOT_KEYS})$`),
+};
+const BOT = /bot|crawl|spider|slurp|headless|lighthouse|pingdom|preview|curl|wget|python|httpclient|monitor/i;
+
+async function hit(request, env) {
+  if (request.method !== 'POST') return new Response(null, { status: 405 });
+  // only this site's own pages, and not robots
+  const origin = request.headers.get('Origin');
+  const same = origin ? origin === new URL(request.url).origin : request.headers.get('Sec-Fetch-Site') === 'same-origin';
+  if (!same || BOT.test(request.headers.get('User-Agent') ?? '') || !env.DB) return new Response(null, { status: 204 });
+  let body;
+  try { body = JSON.parse((await request.text()).slice(0, 8000)); } catch { return new Response(null, { status: 400 }); }
+  const events = (Array.isArray(body?.e) ? body.e : []).slice(0, 40).filter((x) =>
+    Array.isArray(x) && HIT_KEYS[x[0]]?.test(String(x[1])) && Number.isInteger(x[2]) && x[2] > 0 && x[2] <= 20);
+  if (!events.length) return new Response(null, { status: 204 });
+  const day = today();
+  const add = env.DB.prepare('INSERT INTO daily_counts (day, kind, key, n) VALUES (?, ?, ?, ?) ON CONFLICT (day, kind, key) DO UPDATE SET n = n + excluded.n');
+  await env.DB.batch(events.map(([kind, key, n]) => add.bind(day, kind, String(key), n)));
+  return new Response(null, { status: 204 });
+}
+
 async function enquiry(request, env) {
   if (request.method !== 'POST') return json({ error: 'method' }, 405);
   // only this site's own pages may post here
@@ -128,6 +157,7 @@ export default {
       if (pathname === '/admin' || pathname.startsWith('/admin/') || pathname.startsWith('/api/admin/')) return await admin(request, env, ctx, pathname);
       if (pathname === '/api/sponsors' && request.method === 'GET') return await sponsors(env);
       if (pathname === '/api/enquiry') return await enquiry(request, env);
+      if (pathname === '/api/hit') return await hit(request, env);
     } catch (e) {
       console.error(pathname, e);
       return json({ error: 'server' }, 500);

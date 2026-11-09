@@ -164,6 +164,7 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
   import { initPanel, openPanel, refreshPanel } from '../lib/panel';
   import { initPList, renderPList } from '../lib/plist';
   import { adCard, areaOf, loadSponsors, sponsorsFor } from '../lib/sponsors';
+  import { track } from '../lib/track';
   import type { SchoolMap } from '../lib/map';
 
   // The form works straight away; a search waits for the school data, so an early click can't reload the page
@@ -214,6 +215,7 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
   loadSponsors().then(() => { if (place) render(); });
 
   // ---------- search ----------
+  let lastCounted = '';   // a new place counts as a search; changing the distance or years doesn't
   async function run(p: Place, save = true) {
     await ready();
     const my = ++seq;
@@ -222,6 +224,9 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
     if (p.isPostcode) history.replaceState(null, '', '#pc=' + p.label.replace(/\s+/g, ''));
     const res = prepareSearch(schools, catches, p, radius());
     near = res.near; outside = res.outside; filter = null; showAll = false;
+    // count the search by area (only the area, never the postcode)
+    const nearestSchool = [...res.near].sort((a, b) => a.straight! - b.straight!)[0];
+    if (p.label !== lastCounted) { lastCounted = p.label; track('search', res.outside || !nearestSchool ? 'outside' : areaOf(nearestSchool)); }
     scoreAll(scored(), mode());
     $('#onboard').hidden = true; $('#results').hidden = false;
     const m = mode();

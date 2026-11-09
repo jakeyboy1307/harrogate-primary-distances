@@ -252,6 +252,46 @@ async function spots(env) {
   }));
 }
 
+// GET /api/admin/stats?days=30: totals, a day-by-day series, top pages and schools, and ad performance
+async function stats(env, url) {
+  const days = Math.min(365, Math.max(1, Number(url.searchParams.get('days')) || 30));
+  const end = today();
+  const from = new Date(Date.parse(end + 'T12:00:00Z') - (days - 1) * 864e5).toISOString().slice(0, 10);
+  const q = (sql, ...args) => env.DB.prepare(sql).bind(from, end, ...args).all().then((r) => r.results);
+  const [totals, series, pages, searches, schools, adRows, ads] = await Promise.all([
+    q('SELECT kind, sum(n) AS n FROM daily_counts WHERE day BETWEEN ? AND ? GROUP BY kind'),
+    q(`SELECT day, sum(CASE WHEN kind = 'page' THEN n ELSE 0 END) AS pages, sum(CASE WHEN kind = 'search' THEN n ELSE 0 END) AS searches
+       FROM daily_counts WHERE day BETWEEN ? AND ? AND kind IN ('page', 'search') GROUP BY day`),
+    q(`SELECT key, sum(n) AS n FROM daily_counts WHERE day BETWEEN ? AND ? AND kind = 'page' GROUP BY key ORDER BY n DESC LIMIT 15`),
+    q(`SELECT key, sum(n) AS n FROM daily_counts WHERE day BETWEEN ? AND ? AND kind = 'search' GROUP BY key ORDER BY n DESC`),
+    q(`SELECT key, sum(n) AS n FROM daily_counts WHERE day BETWEEN ? AND ? AND kind = 'panel' GROUP BY key ORDER BY n DESC LIMIT 20`),
+    q(`SELECT kind, key, sum(n) AS n FROM daily_counts WHERE day BETWEEN ? AND ? AND kind IN ('ad_view', 'ad_click') GROUP BY kind, key`),
+    env.DB.prepare('SELECT ads.id, ads.name, ads.status, ads.advertiser_id, ads.demo, advertisers.name AS advertiser FROM ads LEFT JOIN advertisers ON advertisers.id = ads.advertiser_id').all().then((r) => r.results),
+  ]);
+  // every day in the range, including ones with nothing, so the chart has no gaps
+  const byDay = new Map(series.map((r) => [r.day, r]));
+  const daily = Array.from({ length: days }, (_, i) => {
+    const d = new Date(Date.parse(from + 'T12:00:00Z') + i * 864e5).toISOString().slice(0, 10);
+    return { day: d, pages: byDay.get(d)?.pages ?? 0, searches: byDay.get(d)?.searches ?? 0 };
+  });
+  // ad views and clicks, per ad and per spot
+  const perAd = new Map();
+  for (const r of adRows) {
+    const [id, slot] = r.key.split(':');
+    const a = perAd.get(id) ?? { id: Number(id), views: 0, clicks: 0, slots: {} };
+    const s = (a.slots[slot] ??= { views: 0, clicks: 0 });
+    if (r.kind === 'ad_view') { a.views += r.n; s.views += r.n; } else { a.clicks += r.n; s.clicks += r.n; }
+    perAd.set(id, a);
+  }
+  const names = new Map(ads.map((a) => [String(a.id), a]));
+  const adStats = [...perAd.values()].map((a) => {
+    const info = names.get(String(a.id));
+    return { ...a, name: info?.name ?? `Deleted ad ${a.id}`, advertiser: info?.advertiser ?? null, advertiserId: info?.advertiser_id ?? null, status: info?.status ?? 'deleted', demo: !!info?.demo };
+  }).sort((x, y) => y.views - x.views);
+  const total = Object.fromEntries(totals.map((r) => [r.kind, r.n]));
+  return { from, to: end, days, total, daily, pages, searches, schools, ads: adStats };
+}
+
 export async function adminApi(request, env, pathname) {
   if (!env.DB) throw new Bad('The admin database isn’t connected.', 500);
   const [section, ...parts] = pathname.replace(/^\/api\/admin\//, '').split('/').filter(Boolean);
@@ -260,6 +300,7 @@ export async function adminApi(request, env, pathname) {
     if (section === 'advertisers') return { body: await advertisers(request, env, parts) };
     if (section === 'enquiries') return { body: await enquiries(request, env, parts) };
     if (section === 'spots' && request.method === 'GET') return { body: await spots(env) };
+    if (section === 'stats' && request.method === 'GET') return { body: await stats(env, new URL(request.url)) };
     return { status: 404, body: { error: 'Not found' } };
   } catch (e) {
     if (e instanceof Bad) return { status: e.status, body: { error: e.message } };

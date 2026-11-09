@@ -83,7 +83,7 @@ const go = (s: Sponsor, slot: Placement, cls = 'btn btn-sm') =>
 
 // A sponsor card in the HTML the browser builds (results, panel, plan page)
 export function adCard(s: Sponsor, slot: Placement, label = 'Sponsored') {
-  return `<aside class="ad-card" aria-label="${esc(label)}: ${esc(s.name)}">
+  return `<aside class="ad-card" aria-label="${esc(label)}: ${esc(s.name)}" data-ad-id="${esc(s.id)}" data-ad-slot="${slot}">
     <div class="ad-top">${adLabel(label, s.demo)}</div>
     <div class="ad-body">${logo(s)}<div><span class="ad-cat">${esc(s.category)}</span><h3 class="ad-name">${esc(s.name)}</h3>
       <p class="ad-blurb">${esc(s.blurb)}</p>${s.offer ? `<p class="ad-offer">${esc(s.offer)}</p>` : ''}</div></div>
@@ -93,7 +93,7 @@ export function adCard(s: Sponsor, slot: Placement, label = 'Sponsored') {
 
 // The school's own box in its panel: open days and a note. Paid for, so labelled.
 export function profileBlock(s: Sponsor) {
-  return `<section class="p-sec ad-profile" aria-label="Open days, from the school">
+  return `<section class="p-sec ad-profile" aria-label="Open days, from the school" data-ad-id="${esc(s.id)}" data-ad-slot="profile">
     <div class="p-sec-head"><h3>Open days</h3><span>${adLabel('Sponsored · From the school', s.demo)}</span></div>
     <p class="p-note" style="padding:0 0 12px">${esc(s.blurb)}</p>
     <ul class="ad-dates">${(s.openDays ?? []).map((d) => `<li>${esc(d)}</li>`).join('')}</ul>

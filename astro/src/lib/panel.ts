@@ -6,6 +6,7 @@ import {
 import { addedText, addSchool, backupOf, getList, onListChange, ordinal, promoteBackup, rankOf, removeBackup, removeFromList } from './store';
 import { $, chip, toast } from './ui';
 import { areaOf, panelSponsors, profileBlock, sponsorsFor } from './sponsors';
+import { track } from './track';
 
 interface Ctx { order: () => number[]; byId: (id: number) => School | undefined; mode: () => Mode; home: () => LatLng | null; onChangeOrder?: () => void }
 let ctx: Ctx;
@@ -51,6 +52,7 @@ export function openPanel(id: number) {
   const s = ctx.byId(id);
   if (!s) return;
   if (current == null) lastFocus = document.activeElement as HTMLElement;
+  if (current !== id) track('panel', String(s.urn));
   current = id;
   $('#pBody').innerHTML = body(s, ctx.mode(), ctx.home());
   $('#pBody').scrollTop = 0;

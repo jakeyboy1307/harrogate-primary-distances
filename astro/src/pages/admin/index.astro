@@ -1,34 +1,177 @@
 ---
-// Admin dashboard. Stage 2: who's signed in and quick counts from the admin database.
-// Visits, ad views and clicks come in stage 4.
+// Admin dashboard: what's running, then visits, searches, schools and ad performance over a chosen range.
+// Counts are daily totals from /api/hit (no cookies, nothing about a person), so there are no "unique visitors".
 import Admin from '../../layouts/Admin.astro';
-const stats = [
+const now = [
   ['showing', 'Ads showing today'],
-  ['ads', 'Ads in total'],
   ['advertisers', 'Advertisers'],
   ['new_enquiries', 'New enquiries'],
-  ['ending_soon', 'Ending in 14 days'],
+  ['ending_soon', 'Ads ending in 14 days'],
+];
+const tiles = [
+  ['page', 'Page views'],
+  ['search', 'Postcode searches'],
+  ['panel', 'Schools opened'],
+  ['ad_view', 'Ad views'],
+  ['ad_click', 'Ad clicks'],
+  ['ctr', 'Ad click rate'],
 ];
 ---
 <Admin title="Dashboard" active="dashboard">
-  <section class="adm-stats" aria-label="At a glance">
-    {stats.map(([key, label]) => <div class="adm-card adm-stat"><span>{label}</span><b data-stat={key}>–</b></div>)}
+  <section class="adm-stats" aria-label="Right now">
+    {now.map(([key, label]) => <a class="adm-card adm-stat" href={key === 'new_enquiries' ? '/admin/enquiries/' : key === 'advertisers' ? '/admin/advertisers/' : '/admin/ads/'}><span>{label}</span><b data-now={key}>–</b></a>)}
   </section>
+
+  <div class="adm-bar dash-range">
+    <h2 class="adm-h2" style="margin:0">Visitors and ads</h2>
+    <span class="grow"></span>
+    <div class="seg" role="group" aria-label="Date range">
+      {[7, 30, 90].map((d) => <button type="button" data-days={d} aria-pressed={d === 30 ? 'true' : 'false'}>Last {d} days</button>)}
+    </div>
+  </div>
+  <p class="adm-note" id="rangeNote"></p>
+
+  <section class="adm-stats" aria-label="Totals for the range">
+    {tiles.map(([key, label]) => <div class="adm-card adm-stat"><span>{label}</span><b data-total={key}>–</b></div>)}
+  </section>
+
+  <div class="dash-two">
+    <section class="adm-card"><h3 class="dash-h3">Page views per day</h3><div class="bars" id="chartPages"></div></section>
+    <section class="adm-card"><h3 class="dash-h3">Postcode searches per day</h3><div class="bars" id="chartSearches"></div></section>
+  </div>
+
   <section class="adm-card">
-    <h2 class="adm-h2">Coming next</h2>
-    <p class="adm-note">Visits, ad views and clicks come in stage 4. The schools table and ad specs in stage 5.</p>
+    <h3 class="dash-h3">Ads</h3>
+    <p class="adm-note">A view counts when at least half the ad is on screen, once per page. Use these numbers in sponsor reports.</p>
+    <div class="adm-table-wrap flat"><table class="adm-table"><thead><tr><th>Ad</th><th>Where it was seen</th><th class="r">Views</th><th class="r">Clicks</th><th class="r">Click rate</th></tr></thead><tbody id="adRows"></tbody></table></div>
   </section>
+
+  <div class="dash-two">
+    <section class="adm-card"><h3 class="dash-h3">By advertiser</h3>
+      <div class="adm-table-wrap flat"><table class="adm-table"><thead><tr><th>Advertiser</th><th class="r">Views</th><th class="r">Clicks</th><th class="r">Click rate</th></tr></thead><tbody id="advRows"></tbody></table></div></section>
+    <section class="adm-card"><h3 class="dash-h3">Searches by area</h3>
+      <div class="adm-table-wrap flat"><table class="adm-table"><thead><tr><th>Area</th><th class="r">Searches</th><th class="r">Share</th></tr></thead><tbody id="areaRows"></tbody></table></div></section>
+  </div>
+
+  <div class="dash-two">
+    <section class="adm-card"><h3 class="dash-h3">Most viewed pages</h3>
+      <div class="adm-table-wrap flat"><table class="adm-table"><thead><tr><th>Page</th><th class="r">Views</th></tr></thead><tbody id="pageRows"></tbody></table></div></section>
+    <section class="adm-card"><h3 class="dash-h3">Schools opened most</h3>
+      <div class="adm-table-wrap flat"><table class="adm-table"><thead><tr><th>School</th><th class="r">Opened</th></tr></thead><tbody id="schoolRows"></tbody></table></div></section>
+  </div>
 </Admin>
 
 <script>
-  fetch('/api/admin/summary').then((r) => (r.ok ? r.json() : {})).then((s: Record<string, number>) => {
-    document.querySelectorAll<HTMLElement>('[data-stat]').forEach((el) => { el.textContent = String(s[el.dataset.stat!] ?? 0); });
-  });
+  import { api, day, esc, toast } from '../../lib/admin';
+  import { loadData } from '../../lib/engine';
+  import { AREAS, SPOTS } from '../../lib/specs';
+
+  interface AdStat { id: number; name: string; advertiser: string | null; advertiserId: number | null; status: string; demo: boolean; views: number; clicks: number; slots: Record<string, { views: number; clicks: number }> }
+  interface Stats { from: string; to: string; days: number; total: Record<string, number>; daily: { day: string; pages: number; searches: number }[];
+    pages: { key: string; n: number }[]; searches: { key: string; n: number }[]; schools: { key: string; n: number }[]; ads: AdStat[] }
+
+  const num = (n: number) => n.toLocaleString('en-GB');
+  const PAGE_NAMES: Record<string, string> = {
+    '/': 'Find schools (home)', '/plan/': 'My plan', '/how-places-work/': 'How places work', '/privacy/': 'Privacy',
+    '/advertise/': 'Advertise with us', '/harrogate-primary-schools/': 'Harrogate area page', '/york-primary-schools/': 'York area page',
+  };
+  const rate = (c: number, v: number) => (v ? `${((c / v) * 100).toFixed(1)}%` : '–');
+  const none = (cols: number, text = 'Nothing counted yet.') => `<tr><td colspan="${cols}" class="adm-empty">${text}</td></tr>`;
+  let names = new Map<string, string>();
+
+  // A single-series bar chart: one bar per day, value on hover, the peak and the dates labelled.
+  function bars(el: HTMLElement, rows: { day: string; v: number }[], unit: string) {
+    const max = Math.max(...rows.map((r) => r.v), 0);
+    const total = rows.reduce((s, r) => s + r.v, 0);
+    el.setAttribute('role', 'img');
+    el.setAttribute('aria-label', `${num(total)} ${unit} from ${day(rows[0].day)} to ${day(rows[rows.length - 1].day)}, highest ${num(max)} in a day.`);
+    el.innerHTML = `<div class="bars-plot">${max ? `<span class="bars-max">${num(max)}</span>` : '<span class="bars-max">0</span>'}
+      ${rows.map((r) => `<div class="bar-col" data-tip="${esc(day(r.day))}: ${num(r.v)} ${unit}"><i style="height:${max ? Math.max(r.v ? 2 : 0, (r.v / max) * 100) : 0}%"></i></div>`).join('')}</div>
+      <div class="bars-axis"><span>${day(rows[0].day)}</span><span>${day(rows[rows.length - 1].day)}</span></div>
+      <div class="bars-tip" hidden></div>`;
+    const tip = el.querySelector<HTMLElement>('.bars-tip')!;
+    el.querySelector('.bars-plot')!.addEventListener('pointermove', (e) => {
+      const col = (e.target as HTMLElement).closest<HTMLElement>('.bar-col');
+      if (!col) return (tip.hidden = true);
+      tip.textContent = col.dataset.tip!;
+      tip.hidden = false;
+      const box = el.getBoundingClientRect(), c = col.getBoundingClientRect();
+      tip.style.left = `${Math.min(box.width - tip.offsetWidth, Math.max(0, c.left - box.left + c.width / 2 - tip.offsetWidth / 2))}px`;
+    });
+    el.querySelector('.bars-plot')!.addEventListener('pointerleave', () => (tip.hidden = true));
+  }
+
+  async function load(days: number) {
+    const s = await api<Stats>(`stats?days=${days}`);
+    const t = s.total;
+    const vals: Record<string, string> = {
+      page: num(t.page ?? 0), search: num(t.search ?? 0), panel: num(t.panel ?? 0),
+      ad_view: num(t.ad_view ?? 0), ad_click: num(t.ad_click ?? 0), ctr: rate(t.ad_click ?? 0, t.ad_view ?? 0),
+    };
+    document.querySelectorAll<HTMLElement>('[data-total]').forEach((el) => (el.textContent = vals[el.dataset.total!]));
+    document.getElementById('rangeNote')!.textContent = `${day(s.from)} to ${day(s.to)}. Counting started when this version went live, so earlier days show nothing.`;
+    bars(document.getElementById('chartPages')!, s.daily.map((d) => ({ day: d.day, v: d.pages })), 'page views');
+    bars(document.getElementById('chartSearches')!, s.daily.map((d) => ({ day: d.day, v: d.searches })), 'searches');
+
+    document.getElementById('adRows')!.innerHTML = s.ads.length ? s.ads.map((a) => `<tr>
+      <td><a class="name" href="/admin/ads/edit/?id=${a.id}">${esc(a.name)}</a>${a.demo ? ' <span class="pill-s demo">Demo</span>' : ''}${a.advertiser && a.advertiser !== a.name ? `<div class="sub">${esc(a.advertiser)}</div>` : ''}</td>
+      <td class="sub">${Object.entries(a.slots).map(([k, v]) => `${esc(SPOTS[k as keyof typeof SPOTS]?.label ?? k)} ${num(v.views)}`).join(' · ')}</td>
+      <td class="r">${num(a.views)}</td><td class="r">${num(a.clicks)}</td><td class="r">${rate(a.clicks, a.views)}</td></tr>`).join('') : none(5);
+
+    const adv = new Map<string, { name: string; id: number | null; views: number; clicks: number }>();
+    for (const a of s.ads) {
+      const k = a.advertiser ?? a.name, x = adv.get(k) ?? { name: k, id: a.advertiserId, views: 0, clicks: 0 };
+      x.views += a.views; x.clicks += a.clicks; adv.set(k, x);
+    }
+    document.getElementById('advRows')!.innerHTML = adv.size ? [...adv.values()].sort((a, b) => b.views - a.views).map((a) => `<tr>
+      <td>${a.id ? `<a class="name" href="/admin/advertisers/?id=${a.id}">${esc(a.name)}</a>` : esc(a.name)}</td>
+      <td class="r">${num(a.views)}</td><td class="r">${num(a.clicks)}</td><td class="r">${rate(a.clicks, a.views)}</td></tr>`).join('') : none(4);
+
+    const searches = s.searches.reduce((n, r) => n + r.n, 0);
+    const AREA_NAMES: Record<string, string> = { ...AREAS, outside: 'Outside the areas covered' };
+    document.getElementById('areaRows')!.innerHTML = s.searches.length ? s.searches.map((r) => `<tr><td>${esc(AREA_NAMES[r.key] ?? r.key)}</td><td class="r">${num(r.n)}</td><td class="r">${((r.n / searches) * 100).toFixed(0)}%</td></tr>`).join('') : none(3);
+    document.getElementById('pageRows')!.innerHTML = s.pages.length ? s.pages.map((r) => `<tr><td>${r.key === '404' ? 'Page not found' : `<a href="${esc(r.key)}" target="_blank" rel="noopener">${esc(PAGE_NAMES[r.key] ?? r.key)}</a>`}</td><td class="r">${num(r.n)}</td></tr>`).join('') : none(2);
+    document.getElementById('schoolRows')!.innerHTML = s.schools.length ? s.schools.map((r) => `<tr><td>${esc(names.get(r.key) ?? `URN ${r.key}`)}</td><td class="r">${num(r.n)}</td></tr>`).join('') : none(2);
+  }
+
+  // range buttons
+  document.querySelectorAll<HTMLButtonElement>('[data-days]').forEach((b) => b.addEventListener('click', () => {
+    document.querySelectorAll('[data-days]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    load(+b.dataset.days!).catch((e) => toast(e.message, true));
+  }));
+
+  api<Record<string, number>>('summary').then((n) => {
+    document.querySelectorAll<HTMLElement>('[data-now]').forEach((el) => (el.textContent = String(n[el.dataset.now!] ?? 0)));
+  }).catch(() => {});
+  loadData().then((d) => { names = new Map(d.schools.map((s) => [String(s.urn), s.name.replace(/,.*$/, '')])); }).catch(() => {})
+    .finally(() => load(30).catch((e) => toast(e.message, true)));
 </script>
 
-<style>
-  .adm-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
-  .adm-stat { display: grid; gap: 6px; }
+<!-- global: the script draws the charts and tables after load, which page-scoped styles don't reach -->
+<style is:global>
+  .adm-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; }
+  .adm-stat { display: grid; gap: 6px; text-decoration: none; color: inherit; }
+  a.adm-stat:hover { border-color: var(--line-2); }
   .adm-stat span { font-size: 14px; font-weight: 600; color: var(--muted); }
-  .adm-stat b { font: 700 36px/1 var(--display); color: var(--ink); }
+  .adm-stat b { font: 700 32px/1 var(--display); color: var(--ink); }
+  .dash-range { margin-top: 12px; }
+  .dash-h3 { font: 700 16px var(--body); letter-spacing: 0; margin-bottom: 12px; }
+  .dash-two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .seg { display: inline-flex; border: 1.5px solid var(--line-2); border-radius: 10px; overflow: hidden; background: #fff; }
+  .seg button { border: 0; background: none; padding: 7px 12px; font: 600 13px var(--body); color: var(--muted); }
+  .seg button + button { border-left: 1.5px solid var(--line-2); }
+  .seg button[aria-pressed='true'] { background: var(--ink); color: #fff; }
+  .adm-table-wrap.flat { border: 0; border-radius: 0; }
+  .adm-table .r { text-align: right; font-variant-numeric: tabular-nums; }
+  .adm-table th.r { text-align: right; }
+  /* bar chart: thin bars, 2px gaps, rounded tops on the baseline */
+  .bars { position: relative; }
+  .bars-plot { position: relative; display: flex; align-items: flex-end; gap: 2px; height: 160px; padding-top: 18px; border-bottom: 1px solid var(--line-2); }
+  .bars-max { position: absolute; top: 0; left: 0; font-size: 12px; color: var(--muted-2); font-variant-numeric: tabular-nums; }
+  .bar-col { flex: 1; height: 100%; display: flex; align-items: flex-end; cursor: default; min-width: 2px; }
+  .bar-col i { display: block; width: 100%; background: var(--cobalt); border-radius: 4px 4px 0 0; max-width: 28px; margin: 0 auto; }
+  .bar-col:hover i { background: var(--ink); }
+  .bars-axis { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted-2); margin-top: 6px; }
+  .bars-tip { position: absolute; top: -6px; padding: 4px 9px; border-radius: 8px; background: var(--ink); color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; pointer-events: none; }
+  @media (max-width: 960px) { .dash-two { grid-template-columns: 1fr; } }
 </style>
