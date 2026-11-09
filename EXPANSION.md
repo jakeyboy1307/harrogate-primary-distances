@@ -1,5 +1,7 @@
 # Covering the rest of North Yorkshire
 
+Next after North Yorkshire: the Humber councils, planned in [HUMBER.md](HUMBER.md).
+
 Plan, updated 9 November 2026.
 
 ## Where we are

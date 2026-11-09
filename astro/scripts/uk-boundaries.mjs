@@ -1,6 +1,6 @@
 // Downloads the UK boundaries for the admin's coverage map (/admin/coverage/) and saves slimmed copies:
 //   public/geo/uk-districts.json  every local authority district (December 2022), with the county it sits in, and
-//                                 for England its region and, for metropolitan districts, its metropolitan county
+//                                 for England its region and its county (the ceremonial one: scripts/ceremonial.mjs)
 //   public/geo/uk-counties.json   every county and unitary council (December 2024): the councils that run school
 //                                 admissions, so each one is a separate data source for the checker
 // Run it by hand when the boundaries need refreshing:  node scripts/uk-boundaries.mjs
@@ -10,6 +10,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { CEREMONIAL } from './ceremonial.mjs';
 
 const ONS = 'https://services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services';
 const query = (service, fields) => `${ONS}/${service}/FeatureServer/0/query?where=1%3D1&outFields=${fields}`
@@ -62,7 +63,10 @@ const districts = lads.map((f) => {
   return {
     code, name: f.properties.LAD22NM, county: c?.code ?? null,
     region: rgn.get(code)?.RGN22NM ?? null,
-    metro: metro?.CTY22CD.startsWith('E11') ? metro.CTY22NM : null,
+    // the county people know it by: its metropolitan county, Greater London, a unitary council's ceremonial county,
+    // or the county council it sits in
+    shire: metro?.CTY22CD.startsWith('E11') ? metro.CTY22NM : code.startsWith('E09') ? 'Greater London'
+      : CEREMONIAL[code] ?? (code.startsWith('E07') ? counties.find((x) => x.code === c?.code)?.name ?? null : null),
     pt, p: polys(f.geometry),
   };
 }).sort((a, b) => a.code.localeCompare(b.code));

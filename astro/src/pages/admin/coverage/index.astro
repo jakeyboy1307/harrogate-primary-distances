@@ -119,7 +119,7 @@ import Admin from '../../../layouts/Admin.astro';
   import { AREA_HOME, AREAS, type Area } from '../../../lib/specs';
 
   type Box = [number, number, number, number];
-  interface District { code: string; name: string; county: string | null; region: string | null; metro: string | null; pt: LatLng; p: LatLng[][][]; box?: Box }
+  interface District { code: string; name: string; county: string | null; region: string | null; shire: string | null; pt: LatLng; p: LatLng[][][]; box?: Box }
   interface County { code: string; name: string; p: LatLng[][][] }
   interface Reach { schools: School[]; areas: Set<Area>; full: boolean }
   interface Info { d: District; r?: Reach; status: 'full' | 'part' | 'none'; total: number | null; pupils: number | null; ours: number }
@@ -200,7 +200,6 @@ import Admin from '../../../layouts/Admin.astro';
       attribution: 'Tiles © Esri · Boundaries: ONS, contains OS data © Crown copyright · Schools: DfE GIAS · Catchments: North Yorkshire Council, City of York Council',
     }).addTo(map);
 
-    const ctyName = (code: string | null) => (code ? ctyByCode.get(code)?.c.name ?? '' : '');
     let shade: 'coverage' | 'grow' = 'coverage';
     const styleOf = (i: Info): L.PathOptions => {
       if (i.status === 'full') return { color: COBALT, weight: 1.6, dashArray: undefined, fillColor: COBALT, fillOpacity: 0.45 };
@@ -210,14 +209,9 @@ import Admin from '../../../layouts/Admin.astro';
       return { color: FAINT, weight: 0.6, dashArray: undefined, fillColor: '#fff', fillOpacity: 0.01 };
     };
     const NATION: Record<string, string> = { S: 'Scotland', W: 'Wales', N: 'Northern Ireland' };
-    // where a district is: its county (or metropolitan county) and region in England, its nation elsewhere.
-    // Unitary councils and London boroughs aren't in a county, so they get the region alone.
-    const whereOf = (d: District) => {
-      if (NATION[d.code[0]]) return NATION[d.code[0]];
-      if (d.code.startsWith('E09')) return 'London';
-      const county = d.metro ?? (d.county && ctyName(d.county) !== d.name ? ctyName(d.county) : '');
-      return [county, d.region].filter(Boolean).join(', ');
-    };
+    // where a district is: its county in England (the ceremonial one, so North Lincolnshire says Lincolnshire), its
+    // nation elsewhere. A council that is its own county (Cornwall, Rutland) gets its region instead.
+    const whereOf = (d: District) => NATION[d.code[0]] ?? (d.shire && d.shire !== d.name ? d.shire : d.region ?? '');
     const tipOf = (i: Info) => {
       const where = whereOf(i.d);
       const lines = [`<b>${esc(i.d.name)}</b>${where ? ` · ${esc(where)}` : ''}`];
