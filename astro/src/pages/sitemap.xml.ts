@@ -1,12 +1,14 @@
 // The list of pages for search engines (robots.txt points here). New pages are picked up automatically; 404 and advertise (not for search) are left out.
 import type { APIRoute } from 'astro';
 import { url } from '../lib/url';
+import { schoolPages } from '../lib/schoolpages';
 
 const pages = Object.keys(import.meta.glob('./*.astro'))
   .map((f) => f.slice(2, -'.astro'.length))
   .filter((p) => p !== '404' && p !== 'advertise')   // pages marked index={false}
   .map((p) => (p === 'index' ? '' : `${p}/`))
-  .sort();
+  .sort()
+  .concat(schoolPages().map((p) => `schools/${p.slug}/`).sort());   // one page per school
 
 export const GET: APIRoute = ({ site }) => {
   const urls = pages.map((p) => `  <url><loc>${new URL(url(p), site).href}</loc></url>`).join('\n');
