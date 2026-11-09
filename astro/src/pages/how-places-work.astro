@@ -9,7 +9,7 @@ const faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEn
   ['How do school catchment areas work?', 'A catchment area is the patch of streets a council links to a school. Children who live inside it get priority for its Reception places, ahead of most children from outside it. Children in care always come first, and inside each group brothers and sisters of pupils go first, then whoever lives nearest.'],
   ['What is my catchment school?', 'It’s the school whose catchment area your home is in. The council draws the lines, so your catchment school isn’t always the nearest one. A few homes sit in two catchments, and a few in none.'],
   ['What is my school catchment area?', 'Put your postcode into the Yorkshire School Checker. It tells you which catchment you’re in and your chances at every primary school nearby, using the councils’ own catchment maps.'],
-  ['Is there a school catchment area map?', 'Yes. North Yorkshire Council publishes a school catchment area map covering every school in the county, including Harrogate, Northallerton and Selby, and City of York Council publishes a primary schools map for York.'],
+  ['Is there a school catchment area map?', 'Yes. North Yorkshire Council publishes a school catchment area map covering every school in the county, including Harrogate, Northallerton, Malton and Selby, and City of York Council publishes a primary schools map for York.'],
   ['Does living in the catchment guarantee a place?', 'No. It puts you near the front of the queue, but a popular school can fill up with catchment children alone.'],
 ].map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) };
 // Coppice Valley's real last-place distances (miles) from the council's figures, against a home 0.75 miles away
@@ -30,7 +30,7 @@ const phrases = [
   ['“By the school’s own rules”', 'Academies, voluntary aided and foundation schools decide their own order. Faith schools may put church members first.'],
 ];
 ---
-<Base title="How do school catchment areas work? · Yorkshire School Checker" description="How school catchment areas work in Harrogate, York, Northallerton and Selby: what your catchment school is, where to find the catchment area map, who gets a Reception place first, and what “last place” means." active="how">
+<Base title="How do school catchment areas work? · Yorkshire School Checker" description="How school catchment areas work in Harrogate, York, Northallerton, Malton and Selby: what your catchment school is, where to find the catchment area map, who gets a Reception place first, and what “last place” means." active="how">
   <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <section class="how-hero wrap">
     <div>
@@ -54,7 +54,7 @@ const phrases = [
     <div class="sources">
       <div><h3>What is my catchment school?</h3><p>It’s the school whose catchment area your home is in. The council draws the lines, not the map distance, so your catchment school isn’t always the nearest one. A few homes sit in two catchments, and a few in none.</p></div>
       <div><h3>What is my school catchment area?</h3><p>Put your postcode into the <a href={url('')}>school catchment checker</a>. It tells you which catchment you’re in and your chances at every primary school nearby, using the councils’ own catchment maps.</p></div>
-      <div><h3>Is there a school catchment area map?</h3><p>Yes, from each council: <a href={ny.catchMap} target="_blank" rel="noopener">North Yorkshire Council’s map</a> for Harrogate, Northallerton, Selby and the rest of the county, and <a href={cyc.catchMap} target="_blank" rel="noopener">City of York Council’s primary schools map</a> for York. Use them to check your exact address if you’re near a boundary.</p></div>
+      <div><h3>Is there a school catchment area map?</h3><p>Yes, from each council: <a href={ny.catchMap} target="_blank" rel="noopener">North Yorkshire Council’s map</a> for Harrogate, Northallerton, Malton, Selby and the rest of the county, and <a href={cyc.catchMap} target="_blank" rel="noopener">City of York Council’s primary schools map</a> for York. Use them to check your exact address if you’re near a boundary.</p></div>
       <div><h3>Does living in the catchment guarantee a place?</h3><p>No. It puts you near the front of the queue, but a popular school can fill up with catchment children alone. The year by year figures on each school’s page show whether that has happened.</p></div>
     </div>
     <p class="intro" style="margin-top:28px">See every school’s catchment and figures: primary school catchment areas for {Object.values(AREA_INFO).map((a, i, all) => <>{i ? (i === all.length - 1 ? ' and ' : ', ') : ''}<a href={url(a.page)}>{a.short}</a></>)}.</p>
@@ -121,7 +121,7 @@ const phrases = [
   <section class="how-sec wrap" id="sources" style="border-top:1px solid var(--line)">
     <h2>6. Where our numbers come from</h2>
     <div class="sources">
-      <div><h3>Offers and last places</h3><p>For Harrogate, Northallerton, Selby and the villages round York, North Yorkshire Council admissions statistics for 2023 to 2026 entry, from <a href="https://hub.datanorthyorkshire.org/dataset/school-admissions-2026-2027-yearly-statistics-primary-and-secondary-school" target="_blank" rel="noopener">Data North Yorkshire</a>.</p></div>
+      <div><h3>Offers and last places</h3><p>For Harrogate, Northallerton, Malton, Selby and the villages round York, North Yorkshire Council admissions statistics for 2023 to 2026 entry, from <a href="https://hub.datanorthyorkshire.org/dataset/school-admissions-2026-2027-yearly-statistics-primary-and-secondary-school" target="_blank" rel="noopener">Data North Yorkshire</a>.</p></div>
       <div><h3>York offers</h3><p>City of York Council’s anonymised list of every Reception applicant for 2022, 2023, 2025 and 2026 entry, from <a href="https://data.yorkopendata.org/dataset/pupil-level-outcome-summary-primary" target="_blank" rel="noopener">York Open Data</a>. Its 2024 list is incomplete, so we leave that year out.</p></div>
       <div><h3>York catchments</h3><p>The council’s <a href="https://www.york.gov.uk/schools/PrimaryMap" target="_blank" rel="noopener">primary schools map</a>, which shows each school’s catchment. Check your exact address there if you’re near a boundary.</p></div>
       <div><h3>Catchments</h3><p>North Yorkshire Council’s school maps, updated September 2025. The council publishes them for reference only, so <a href="https://experience.arcgis.com/experience/4dd5b97eae514b31a067137ebf7cdd6a" target="_blank" rel="noopener">check your exact address</a> if you’re near a boundary.</p></div>

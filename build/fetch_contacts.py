@@ -25,9 +25,9 @@ UA = {'User-Agent': 'Mozilla/5.0 (compatible; YorkshireSchoolChecker/2.0; +https
 MAILTO = re.compile(r'mailto:([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})', re.I)
 # words that mark the school office rather than a named member of staff
 OFFICE = ('admin', 'office', 'enquir', 'admission', 'head', 'info', 'school', 'reception')
-# helpdesk and webanywhere are web hosts; carltonprimary@setschools is a sister school, listed on Selby Community Primary's site;
+# helpdesk, webanywhere and nyes.digital (cirrus@) are web hosts; carltonprimary@setschools is a sister school, listed on Selby Community Primary's site;
 # jcollins@stocktonprimary is a named member of staff, not the office
-SKIP = ('example.', 'helpdesk', 'webanywhere', 'carltonprimary@setschools', 'jcollins@stocktonprimary', 'sentry', 'wixpress', 'webmaster', 'safeguard', 'dpo', 'governor', 'gdpr', 'data', 'pta', 'friends')
+SKIP = ('example.', 'helpdesk', 'webanywhere', 'nyes.digital', 'carltonprimary@setschools', 'jcollins@stocktonprimary', 'sentry', 'wixpress', 'webmaster', 'safeguard', 'dpo', 'governor', 'gdpr', 'data', 'pta', 'friends')
 
 
 # Emails set by hand, by council code, where a school's own site can't give the right one: North Rigton and All Saints,

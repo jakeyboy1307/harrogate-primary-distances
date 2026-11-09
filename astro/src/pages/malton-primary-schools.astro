@@ -1,0 +1,48 @@
+---
+// Area page: the old Ryedale district (Malton, Norton, Pickering, Helmsley, Kirkbymoorside and the villages).
+// Named after its towns, which is what people search for. Questions follow Google's suggestions (November 2026):
+// "Malton School" and "Ryedale School" are secondary schools, and "Pickering Primary School" is also a school in Hull.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { COUNCILS } from '../lib/engine';
+import { NY_TERM_DATES } from '../lib/specs';
+import { url } from '../lib/url';
+const ny = COUNCILS['North Yorkshire'];
+const schools = loadArea('north-yorkshire.json').filter((s) => s.district === 'Ryedale');
+const faqs: [string, string][] = [
+  ['What is my catchment school in Malton?',
+    `Put your postcode into the <a href="${url('')}">school catchment checker</a>. It tells you which primary school catchment area you’re in, and your chances at every primary school nearby, in Malton, Norton, Pickering, Helmsley, Kirkbymoorside and the villages. Most schools here have a catchment. The three Catholic schools don’t, and set their own rules.`],
+  ['Is there a school catchment area map for Malton and Pickering?',
+    `Yes. North Yorkshire Council publishes a <a href="${ny.catchMap}" target="_blank" rel="noopener">school catchment area map</a> covering every school in the county. The checker uses the same map, so your postcode gives you the answer. Several villages share a catchment between two schools, and the checker shows both. Near a boundary? Check your exact address on the council’s map.`],
+  ['How do school catchment areas work in Ryedale?',
+    `North Yorkshire Council fills each school’s places in order: children in care, then approved medical or social need, then children in the catchment, then children of staff, then everyone else. Brothers and sisters, then distance, decide who goes first inside each group. <a href="${url('how-places-work/')}">How school catchment areas work</a> explains the queue.`],
+  ['When do I apply for a Reception place for September 2027?',
+    `Apply online to <a href="${ny.apply}" target="_blank" rel="noopener">North Yorkshire Council</a> by Friday 15 January 2027. You can name up to five primary schools, in the order you want them.`],
+  ['When are primary school places announced?',
+    'Offers go out on national offer day, Friday 16 April 2027, by email from the council.'],
+  ['Can my child get into a school outside our catchment?',
+    `Often. In the latest year each school published, ${openLatest(schools).length} of the ${schools.length} schools here took everyone who applied. Where a school was full, the council publishes how far the last place went, and the checker compares that with your distance.`],
+  ['Which are the best primary schools in Malton and Pickering?',
+    'There’s no official ranking, so be wary of league tables. Ofsted is the fairest guide, alongside a visit. The checker shows each school’s latest Ofsted outcome, and each school’s own page explains it.'],
+  ['How do Pickering’s infant and junior schools work?',
+    'Pickering Community Infant School takes children from Reception to Year 2. They then move to Pickering Community Junior School for Year 3, and you apply again for that place while your child is in Year 2. The checker covers the Reception place at the infant school.'],
+  ['Is Malton School or Ryedale School on here?',
+    'No. Malton School and Ryedale School, at Nawton, are secondary schools, and the checker covers primary schools and Reception places only. Nawton Community Primary School is in the list above.'],
+  ['Looking for Pickering Primary School in Hull?',
+    'That’s a different school, in Hull. This page covers Pickering in North Yorkshire, where the infant school, Pickering Community Infant and Nursery School, takes Reception children.'],
+  ['When are the school term dates and holidays?',
+    `Community and voluntary controlled schools follow <a href="${NY_TERM_DATES}" target="_blank" rel="noopener">North Yorkshire Council’s term and holiday dates</a>. Academies can set their own, so check with the school.`],
+  ['How do I find open days?',
+    'Ask the school. Open the school in the checker for its phone number, email and website.'],
+];
+---
+<AreaPage areaKey="ryedale"
+  title="Malton primary school catchment areas, map and Ofsted · Yorkshire School Checker"
+  description="Malton, Norton, Pickering, Helmsley and Kirkbymoorside primary school catchment areas: find your catchment school, which schools are hardest to get into, Ofsted ratings and the 2027 Reception dates."
+  h1="Malton, Norton and Pickering primary schools and catchment areas"
+  lede="Primary school catchment areas for every school in Malton, Norton, Pickering, Helmsley and Kirkbymoorside, and the villages from the Howardian Hills to the Wolds and the North York Moors."
+  area="Malton and Pickering"
+  schools={schools}
+  groups={[{ label: 'In the old Ryedale district', note: `${schools.length} North Yorkshire Council primary and infant schools. Pickering’s junior school, which starts at Year 3, isn’t included.`, schools }]}
+  faqs={faqs}
+/>

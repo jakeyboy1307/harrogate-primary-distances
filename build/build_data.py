@@ -22,8 +22,8 @@ MI = 1609.344
 # Every school in the FULL districts is in. Harrogate district schools are matched with the hand-written keys below;
 # the rest are matched automatically, by council code, postcode and name. In the NEAR_YORK districts, only schools
 # within NEAR_YORK_MI of York Minster are in. To cover a new district, move it from NEAR_YORK to FULL.
-FULL = ('Harrogate', 'Selby', 'Hambleton')
-NEAR_YORK = ('Ryedale',)
+FULL = ('Harrogate', 'Selby', 'Hambleton', 'Ryedale')
+NEAR_YORK = ()
 YORK = (53.9622, -1.0819)
 NEAR_YORK_MI = 15
 
@@ -105,6 +105,7 @@ WEB = {
     2331: 'https://www.oatlandsinf.ycst.co.uk/', 3902: 'https://shn.npcat.org.uk/', 3225: 'https://uppernidderdalefed.school/',
     3247: 'https://stpeters.ycst.co.uk/', 2011: 'https://www.starbeckprimaryacademy.org.uk/', 2151: 'https://welburnprimary.academy/',
     2364: 'https://www.willowtreeprimary.org.uk/',
+    2027: 'https://luttons.ebor.academy/', 2028: 'https://sherburn.ebor.academy/', 2132: 'http://slingsby.n-yorks.sch.uk/',
 }
 METHOD = {'shortest walking distance': 'walking', 'straight line': 'straight_line'}
 
@@ -129,6 +130,18 @@ def tokens(name):
 def sim(a, b):
     """How alike two school names are, 0 to 1, ignoring words every school name has."""
     A, B = tokens(a), tokens(b)
+    return len(A & B) / len(A | B) if A | B else 0
+
+
+def part_sim(part, name, cut=False):
+    """sim() for one school's part of a shared catchment's name. When the name was cut off at 60 characters, its last
+    word may be cut too: "... & Pickering Community Infa" still means the Infant school."""
+    A, B = tokens(part), tokens(name)
+    if cut:
+        last = re.findall(r"[a-z0-9]+", norm(part).replace("'", ''))[-1:]
+        whole = [b for b in B if last and b.startswith(last[0])]
+        if whole:
+            A = (A - set(last)) | {whole[0]}
     return len(A & B) / len(A | B) if A | B else 0
 
 
@@ -196,6 +209,8 @@ def parse_cutoff(v):
         return {'s': 'all_offered'}
     if 'contact' in tl:
         return {'s': 'not_published'}
+    if re.fullmatch(r'\d+(?:\.\d+)?', t):   # a bare distance (Sinnington, 2023): which group it went to isn't said, so don't guess
+        return {'s': 'not_published', 'n': f"The council gave a distance ({float(t):g} miles) but not who the last place went to"}
     m = re.search(r'(\d+(?:\.\d+)?)', t)
     if not m:
         raise ValueError('unparsed cut-off: ' + t)
@@ -319,6 +334,7 @@ schools = []
 for r in base:
     dfe, name = r[0], r[c26['name']]
     name = re.sub(r'\s*\(formerly.*$', '', name).strip()   # "Leeming St. John's ... (formerly Aiskew, ...)"
+    name = re.sub(r'\s+-\s+an? [^,]*', '', name)   # "St Mary's Catholic Primary School - a Catholic Voluntary Academy, Malton"
     s = {'dfe': dfe, 'name': name, 'district': r[c26['district']], 'place': PLACE.get(dfe) or place_of(POINT[dfe]['properties']), 'kind': r[c26['type']],
          'method': METHOD.get(str(r[c26['method']]).strip().lower(), 'unknown'),
          'pan': num(r[c26['pan']]), 'd': []}
@@ -424,8 +440,10 @@ for s in schools:
             AUTO_CATCH[s['dfe']] = {max(good)[1]}
         # a catchment two schools share is named after both: "Roseberry Academy & Marwood CE VC Infant School"
         for i, f in enumerate(feats):
-            if ' & ' in f['properties']['School'] and near(i, s) and any(sim(part, n) >= 0.6 for part in f['properties']['School'].split(' & ')
-                                                                for n in (s['name'], FORMERLY.get(s['dfe'], ''))):
+            cat = f['properties']['School']
+            parts = cat.split(' & ')
+            if len(parts) > 1 and near(i, s) and any(part_sim(part, n, cut=len(cat) >= 60 and j == len(parts) - 1) >= 0.6
+                                                     for j, part in enumerate(parts) for n in (s['name'], FORMERLY.get(s['dfe'], ''))):
                 AUTO_CATCH.setdefault(s['dfe'], set()).add(i)
 
 catch, used = [], {}

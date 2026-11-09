@@ -2,6 +2,8 @@
 
 Plan, 9 November 2026.
 
+**Ryedale, 9 November 2026:** built on the `ryedale` branch: 22 more schools (29 in all; Pickering's junior school is left out), a Malton area page at `/malton-primary-schools/`, and its sitemap. Sinnington's unlabelled 2023 distance is shown as not published rather than guessed. Pickering Infant's shared catchment needed the cut-off-name fix. Every Ryedale postcode checked against the council's map agrees.
+
 **Status, 9 November 2026:** groundwork and Selby and Hambleton are built on the `selby-hambleton` branch, not yet live. Still to do for this phase: deploy, then the Search Console steps below. Changes from the plan:
 - The data download split is held back until Scarborough. With Selby and Hambleton in, it went from about 170 KB to 270 KB compressed, which is fine, and splitting it means changing how the list, map and shortlist find schools.
 - Building it turned up three wrong catchment answers on the live site, now fixed: central Selby postcodes in Selby Abbey's own catchment showed no catchment school, Selby Community Primary was missing from the shared Selby Community/Selby Abbey catchment, and Topcliffe was missing from the catchment it shares with Dishforth.
@@ -130,7 +132,7 @@ Each one follows the step 2 checklist: add the district to `FULL`, add a line to
 
 | Phase | Area page | Schools to add | Known quirks |
 | --- | --- | --- | --- |
-| 3 | Malton and Pickering (Ryedale) | 23 | Sinnington's unlabelled 2023 cut-off |
+| 3 | Malton and Pickering (Ryedale) | 22 (done) | Sinnington's unlabelled 2023 cut-off |
 | 4 | Scarborough, Whitby and Filey | 41 | Biggest page; Whitby may want its own section |
 | 5a | Richmond and Catterick | 34 | Big forces population at Catterick Garrison |
 | 5b | Skipton and Settle (Craven) | 31 | Borders Lancashire and Bradford |

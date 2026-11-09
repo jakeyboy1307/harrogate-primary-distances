@@ -36,6 +36,9 @@ export function hardest(schools: AreaSchool[], n = 8) {
     .map(({ s, r }) => ({ urn: s.urn, name: s.name, place: s.place, year: r.y, who: whoGotIn(r), applied: r.a, places: r.p }));
 }
 
+// Schools where everyone who applied got a place in the latest year published
+export const openLatest = (schools: AreaSchool[]) => schools.filter((s) => latest(s)?.s === 'all_offered');
+
 // Schools where everyone who applied got a place in every year published
 export const openToAll = (schools: AreaSchool[]) =>
   schools.filter((s) => s.d.length && s.d.every((r) => r.s === 'all_offered'));

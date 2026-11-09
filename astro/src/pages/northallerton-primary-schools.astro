@@ -3,7 +3,7 @@
 // Named after its towns, which is what people search for: "Hambleton primary school" is a village school near Selby.
 // Questions follow Google's suggestions (November 2026).
 import AreaPage from '../components/AreaPage.astro';
-import { loadArea } from '../lib/areas';
+import { loadArea, openLatest } from '../lib/areas';
 import { COUNCILS } from '../lib/engine';
 import { pageOf } from '../lib/schoolpages';
 import { NY_TERM_DATES } from '../lib/specs';
@@ -25,7 +25,7 @@ const faqs: [string, string][] = [
   ['When are primary school places announced?',
     'Offers go out on national offer day, Friday 16 April 2027, by email from the council.'],
   ['Can my child get into a school outside our catchment?',
-    'Often. Most schools round Northallerton, Thirsk and Bedale took everyone who applied in recent years. Where a school was full, the council publishes how far the last place went, and the checker compares that with your distance.'],
+    `Often. In the latest year each school published, ${openLatest(schools).length} of the ${schools.length} schools here took everyone who applied. Where a school was full, the council publishes how far the last place went, and the checker compares that with your distance.`],
   ['Which are the best primary schools in Northallerton and Thirsk?',
     'There’s no official ranking, so be wary of league tables. Ofsted is the fairest guide, alongside a visit. The checker shows each school’s latest Ofsted outcome, and the Outstanding schools are listed above.'],
   ['We’re a forces family moving to RAF Leeming or Topcliffe. Can we apply before we arrive?',

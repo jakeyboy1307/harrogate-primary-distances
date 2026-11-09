@@ -1,7 +1,7 @@
 // The ad spots and the rules for what goes in them. One list, used by the admin form, the admin API
 // (worker/admin.js, which enforces it) and the ad specs page, so they can't disagree.
 
-export type Area = 'harrogate' | 'york' | 'selby' | 'hambleton';
+export type Area = 'harrogate' | 'york' | 'selby' | 'hambleton' | 'ryedale';
 export type Placement = 'uniform' | 'profile' | 'nearby' | 'results' | 'plan' | 'area' | 'pagesponsor';
 
 // Every area the checker covers, in one place: the area pages, the school pages' breadcrumbs, the ad areas, the
@@ -21,6 +21,7 @@ export const AREA_INFO: Record<Area, AreaInfo> = {
   harrogate: { label: 'Harrogate and Knaresborough', short: 'Harrogate', name: 'Harrogate and Knaresborough', page: 'harrogate-primary-schools/', council: 'North Yorkshire', district: 'Harrogate', home: ['E07000165'], example: ['HG2 0NA', 'Harrogate'] },
   york: { label: 'York and villages', short: 'York', name: 'York', page: 'york-primary-schools/', council: 'York', home: ['E06000014'], example: ['YO24 1HW', 'York'] },
   hambleton: { label: 'Northallerton, Thirsk and Bedale', short: 'Northallerton', name: 'Northallerton, Thirsk and Bedale', page: 'northallerton-primary-schools/', council: 'North Yorkshire', district: 'Hambleton', home: ['E07000164'], example: ['DL6 1QE', 'Northallerton'] },
+  ryedale: { label: 'Malton, Pickering and Ryedale', short: 'Malton', name: 'Malton, Norton and Pickering', page: 'malton-primary-schools/', council: 'North Yorkshire', district: 'Ryedale', home: ['E07000167'], example: ['YO17 7XJ', 'Malton'] },
   selby: { label: 'Selby and Tadcaster', short: 'Selby', name: 'Selby and Tadcaster', page: 'selby-primary-schools/', council: 'North Yorkshire', district: 'Selby', home: ['E07000169'], example: ['YO8 4QB', 'Selby'] },
 };
 // North Yorkshire Council's term and holiday dates, for the area pages' term dates question
@@ -31,8 +32,8 @@ export const AREA_SHORT = Object.fromEntries(Object.entries(AREA_INFO).map(([k, 
 export const AREA_HOME = Object.fromEntries(Object.entries(AREA_INFO).map(([k, a]) => [k, a.home])) as Record<Area, string[]>;
 
 type Placed = { council: string; district?: string; ll?: [number, number] };
-// A school's own area: its North Yorkshire district's, or York for York schools and the North Yorkshire schools
-// near York in districts we don't cover in full yet (Ryedale)
+// A school's own area: its North Yorkshire district's, or York for York schools (and for the North Yorkshire schools
+// near York in any district we don't cover in full yet)
 export function areaOf(s: Placed): Area {
   if (s.council === 'North Yorkshire') {
     const hit = (Object.keys(AREA_INFO) as Area[]).find((a) => AREA_INFO[a].district === s.district);

@@ -3,9 +3,10 @@
 // every school by town or village, and answers to what people search for. Facts come from lib/areas.ts.
 import Base from '../layouts/Base.astro';
 import { url } from '../lib/url';
-import { byPlace, hardest, openToAll, outstanding, type AreaSchool } from '../lib/areas';
+import { byPlace, hardest, openLatest, openToAll, outstanding, type AreaSchool } from '../lib/areas';
 import type { Area } from '../lib/sponsors';
 import { pageOf, shortOf } from '../lib/schoolpages';
+import { MI } from '../lib/engine';
 interface Props {
   title: string; description: string; h1: string; lede: string; area: string; areaKey: Area;
   schools: AreaSchool[];
@@ -16,6 +17,12 @@ const { title, description, h1, lede, area, areaKey, schools, groups, faqs } = A
 
 const hard = hardest(schools);
 const open = openToAll(schools);
+const openNow = openLatest(schools);
+// when no school is hard to get into: whether every school that was full still took children from over two miles away
+const farOnly = schools.every((s) => {
+  const r = s.d.find((y) => y.s !== 'not_published');
+  return !r || r.s === 'all_offered' || (r.s === 'distance' && r.m != null && r.m >= 2 * MI);
+});
 const top = outstanding(schools);
 // each school's own page, for the links in the lists
 const href = (urn: number) => url(`schools/${pageOf(urn)!.slug}/`);
@@ -42,11 +49,12 @@ const short = shortOf;   // "Marwood", as parents search for it (lib/schoolpages
 
   <section class="how-sec sec-pale wrap">
     <h2>The hardest {area} primary schools to get into</h2>
-    <p class="intro">Based on the latest year each council published: who got a place when there were more applicants than places. Use the checker to see whether you’d have got in from your address.</p>
-    <div class="tbl-wrap"><table class="tbl area-tbl">
+    {hard.length ? <p class="intro">Based on the latest year each council published: who got a place when there were more applicants than places. Use the checker to see whether you’d have got in from your address.</p>
+      : <p class="intro">None stands out. In the latest year each school published, {openNow.length} of {schools.length} took everyone who applied{farOnly ? ', and at the rest the last place went to a child more than two miles away' : ''}. Use the checker to see your own chances from your address.</p>}
+    {hard.length > 0 && <div class="tbl-wrap"><table class="tbl area-tbl">
       <thead><tr><th>School</th><th>Area</th><th>Who got a place</th></tr></thead>
       <tbody>{hard.map((h) => <tr><td><a class="sch-link" href={href(h.urn)}><b>{h.name.replace(/,.*$/, "")}</b></a></td><td>{h.place}</td><td>{h.who} <span class="muted">({h.year}{h.applied && h.places ? `, ${h.applied} applied for ${h.places} places` : ''})</span></td></tr>)}</tbody>
-    </table></div>
+    </table></div>}
   </section>
 
   <section class="how-sec wrap split-2">

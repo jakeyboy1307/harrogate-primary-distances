@@ -49,6 +49,18 @@
   "checked": "2026-11-06",
   "tel": "01757 704308"
  },
+ "2018": {
+  "checked": "2026-11-09",
+  "email": "admin@rillingtonprimaryschool.org",
+  "emailSrc": "https://www.rillingtonprimaryschool.org/",
+  "tel": "01944 758402"
+ },
+ "2019": {
+  "checked": "2026-11-09",
+  "email": "admin@thorntondaleprimaryschool.org",
+  "emailSrc": "https://www.thorntondaleprimaryschool.org",
+  "tel": "01751 474345"
+ },
  "2021": {
   "checked": "2026-11-09",
   "email": "admin@alanbrookeacademy.org",
@@ -64,6 +76,14 @@
  "2025": {
   "checked": "2026-11-09",
   "tel": "01609 561020"
+ },
+ "2027": {
+  "checked": "2026-11-09",
+  "tel": "01944 738232"
+ },
+ "2028": {
+  "checked": "2026-11-09",
+  "tel": "01944 710282"
  },
  "2030": {
   "checked": "2026-11-09",
@@ -81,6 +101,24 @@
   "checked": "2026-11-09",
   "tel": "01609 881349"
  },
+ "2064": {
+  "checked": "2026-11-09",
+  "email": "office@kirkbymoorside-alt.uk",
+  "emailSrc": "https://www.kirkbymoorside-alt.uk/",
+  "tel": "01751 431517"
+ },
+ "2074": {
+  "checked": "2026-11-09",
+  "email": "info-malton@hcat.org.uk",
+  "emailSrc": "https://www.maltonprimary.org",
+  "tel": "01653 692582"
+ },
+ "2075": {
+  "checked": "2026-11-09",
+  "email": "admin@nawton.n-yorks.sch.uk",
+  "emailSrc": "http://nawton.n-yorks.sch.uk/home/contact-us/",
+  "tel": "01439 771245"
+ },
  "2080": {
   "checked": "2026-11-09",
   "email": "admin@applegarth.n-yorks.sch.uk",
@@ -96,6 +134,18 @@
   "email": "admin@romanby.n-yorks.sch.uk",
   "emailSrc": "http://romanby.n-yorks.sch.uk/",
   "tel": "01609 781178"
+ },
+ "2098": {
+  "checked": "2026-11-09",
+  "email": "admin@rosedaleabbey.n-yorks.sch.uk",
+  "emailSrc": "http://rosedaleabbey.n-yorks.sch.uk/home/contact-us/",
+  "tel": "01751 417278"
+ },
+ "2132": {
+  "checked": "2026-11-09",
+  "email": "admin@slingsby.n-yorks.sch.uk",
+  "emailSrc": "http://slingsby.n-yorks.sch.uk/",
+  "tel": "01653 628370"
  },
  "2133": {
   "checked": "2026-11-09",
@@ -155,6 +205,12 @@
   "emailSrc": "https://sheriffhuttonschool.org/contact-us/",
   "tel": "01347 878441"
  },
+ "2221": {
+  "checked": "2026-11-09",
+  "email": "office@sinnington-alt.uk",
+  "emailSrc": "https://www.sinnington-alt.uk/",
+  "tel": "01751 431725"
+ },
  "2225": {
   "checked": "2026-11-09",
   "email": "office@broomfield-alt.uk",
@@ -167,6 +223,18 @@
   "emailSrc": "https://www.huttonrudbyprimary.co.uk/",
   "tel": "01642 700203"
  },
+ "2235": {
+  "checked": "2026-11-09",
+  "email": "admin@pickering-inf.n-yorks.sch.uk",
+  "emailSrc": "https://pickering-inf.n-yorks.sch.uk/",
+  "tel": "01751 472620"
+ },
+ "2236": {
+  "checked": "2026-11-09",
+  "email": "office@helmsley-alt.uk",
+  "emailSrc": "https://www.helmsley-alt.uk/",
+  "tel": "01439 770783"
+ },
  "2237": {
   "checked": "2026-11-09",
   "email": "admin@thirsk-pri.n-yorks.sch.uk",
@@ -178,6 +246,12 @@
   "email": "admin@alverton.n-yorks.sch.uk",
   "emailSrc": "https://alverton.n-yorks.sch.uk/contact-us/",
   "tel": "01609 773524"
+ },
+ "2246": {
+  "checked": "2026-11-09",
+  "email": "admin@amotherby.n-yorks.sch.uk",
+  "emailSrc": "https://www.amotherby.n-yorks.sch.uk/",
+  "tel": "01653 693675"
  },
  "2247": {
   "checked": "2026-11-09",
@@ -407,6 +481,10 @@
   "checked": "2026-11-06",
   "tel": "01757 638266"
  },
+ "2404": {
+  "checked": "2026-11-09",
+  "tel": "01653 658236"
+ },
  "2405": {
   "checked": "2026-11-06",
   "email": "admin@leavening.n-yorks.sch.uk",
@@ -418,6 +496,10 @@
   "email": "admin@northduffield.n-yorks.sch.uk",
   "emailSrc": "http://www.northduffield.n-yorks.sch.uk/",
   "tel": "01757 288487"
+ },
+ "2408": {
+  "checked": "2026-11-09",
+  "tel": "01653 692104"
  },
  "2410": {
   "checked": "2026-11-06",
@@ -504,6 +586,12 @@
   "email": "fostonoffice@foston.n-yorks.sch.uk",
   "emailSrc": "https://www.fostonschool.org/page/?pid=6",
   "tel": "01653 618265"
+ },
+ "3040": {
+  "checked": "2026-11-09",
+  "email": "admin@gillamoor.n-yorks.sch.uk",
+  "emailSrc": "https://gillamoor.n-yorks.sch.uk/contact-us/",
+  "tel": "01751 431643"
  },
  "3042": {
   "checked": "2026-11-09",
@@ -594,6 +682,20 @@
  "3153": {
   "checked": "2026-11-06",
   "tel": "01904 728570"
+ },
+ "3155": {
+  "checked": "2026-11-09",
+  "email": "admin@hertford-vale.n-yorks.sch.uk",
+  "emailSrc": "https://www.hertfordvale.co.uk/",
+  "tel": "01944 710273"
+ },
+ "3160": {
+  "checked": "2026-11-09",
+  "tel": "01944 768238"
+ },
+ "3165": {
+  "checked": "2026-11-09",
+  "tel": "01944 728286"
  },
  "3223": {
   "checked": "2026-11-06",
@@ -892,6 +994,18 @@
   "email": "admin@stjosephsharrogate.org",
   "emailSrc": "https://www.stjosephsharrogate.org/",
   "tel": "01423 562650"
+ },
+ "3600": {
+  "checked": "2026-11-09",
+  "tel": "01439 788340"
+ },
+ "3609": {
+  "checked": "2026-11-09",
+  "tel": "01653 692274"
+ },
+ "3610": {
+  "checked": "2026-11-09",
+  "tel": "01751 473102"
  },
  "3902": {
   "checked": "2026-11-09",

@@ -1,6 +1,6 @@
 # Yorkshire school checker
 
-A map tool for parents choosing a Reception place in the Harrogate, Northallerton (old Hambleton district) and Selby areas of North Yorkshire, and in York. Enter a postcode and every primary school nearby is shown with your walking or straight-line distance, whether you're in its catchment, and how far the last place went on national offer day in 2023, 2024, 2025 and 2026. Modelled on [SW London primary school distances](https://peterstuart3-arch.github.io/sw-primary-distances/), reworked for North Yorkshire's catchment-first admissions.
+A map tool for parents choosing a Reception place in the Harrogate, Northallerton (old Hambleton district), Malton (old Ryedale district) and Selby areas of North Yorkshire, and in York. Enter a postcode and every primary school nearby is shown with your walking or straight-line distance, whether you're in its catchment, and how far the last place went on national offer day in 2023, 2024, 2025 and 2026. Modelled on [SW London primary school distances](https://peterstuart3-arch.github.io/sw-primary-distances/), reworked for North Yorkshire's catchment-first admissions.
 
 Live at **https://yorkshireschoolchecker.co.uk**. The site is built from `astro/` (see `astro/README.md`) and needs a connection for the map tiles, postcode lookups (postcodes.io) and walking routes (FOSSGIS OSRM). The `index.html` at the top of this folder is the earlier single-page version.
 
@@ -30,7 +30,7 @@ Without `--all` it only looks up schools that aren't in `contacts.json` yet, whi
 
 Phone numbers come from Get Information about Schools. GIAS doesn't publish emails, so they're read from each school's own website, and the page each was found on is saved in `contacts.json`. Some school sites block automated visits, so expect a few gaps; those schools show their phone number and a pointer to their website.
 
-The build prints any school it can't match to a map point, Ofsted record or catchment. Eleven schools, all faith academies or free schools, have no council catchment, which is expected: the build lists them. Oakbridge opened in 2024, so it has no 2023 figures.
+The build prints any school it can't match to a map point, Ofsted record or catchment. Faith academies and free schools (14 at the last build) have no council catchment, which is expected: the build lists them. Oakbridge opened in 2024, so it has no 2023 figures.
 
 ## Adding a North Yorkshire district
 

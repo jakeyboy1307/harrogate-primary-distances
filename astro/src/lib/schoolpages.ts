@@ -15,8 +15,10 @@ export type Kind = 'primary school' | 'infant school' | 'junior school';
 // Words parents leave out when they search: the faith, the legal status and the type of school
 const DROP: RegExp[] = [
   /,.*$/,                                                    // ", Harrogate", ", A Voluntary Academy"
+  /\s+-\s+.*$/,                                              // " - a Catholic voluntary academy"
   /\(.*?\)/g,                                               // "(VC)"
-  /\bPrimary (&|and) Nursery School\b/gi,
+  /\b(Primary|Infant) (&|and) Nursery School\b/gi,          // "Pickering Community Infant and Nursery School"
+  /\bCP\b/g,                                                // "Helmsley CP School"
   /\b(Church of England|C of E|CofE|CE)\b/gi, /\b(Roman )?Catholic\b/gi, /\bMethodist\b/gi, /\bAnglican\b/gi,
   /\bVoluntary (Controlled|Aided)\b/gi, /\bControlled\b/gi, /\bCommunity\b/gi, /\bCounty\b/gi, /\band Nursery\b/gi,
   /\b(Primary|Infant|Infants|Junior) (Foundation )?(School|Academy)\b/gi, /\bSchool\b/gi, /\bAcademy\b/gi,
