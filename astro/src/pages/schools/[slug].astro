@@ -1,0 +1,274 @@
+---
+// One page per school, written for the searches parents make: "<short name> catchment area", "<short name>
+// primary school Ofsted", "<short name> term dates" and the like (see src/lib/schoolpages.ts). The facts come
+// from the same council figures as the checker, and the postcode box hands over to the checker with this
+// school's details open.
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+import { mon, whoGotIn } from '../../lib/engine';
+import { miles, nearby, published, schoolPages, summary, yearLine, type SchoolPage } from '../../lib/schoolpages';
+
+export function getStaticPaths() {
+  return schoolPages().map((p) => ({ params: { slug: p.slug }, props: { p } }));
+}
+const { p } = Astro.props as { p: SchoolPage };
+const s = p.s, sm = summary(p), council = sm.council, latest = sm.latest;
+const site = Astro.site!;
+const pageUrl = new URL(url(`schools/${p.slug}/`), site).href;
+const strip = (h: string) => h.replace(/<[^>]+>/g, '');
+const typeText = s.type.toLowerCase();
+// "in Knaresborough", or, when the school is named after its village, "near Otley" from the post town
+const town = s.addr?.split(',').map((x) => x.trim()).filter((x) => x && x !== s.postcode && !x.includes(s.postcode)).pop();
+const placeFull = s.council === 'York' && s.place !== 'York' ? `${s.place}, York` : s.place;   // York schools' places are wards
+// nothing when the name already says where it is ("St Peter's Primary School, Harrogate", "St Mary's Knaresborough")
+const where = p.name.includes(`, ${s.place}`) || (p.withPlace && p.short.includes(s.place)) ? ''
+  : !p.short.includes(s.place) ? `in ${placeFull}` : town && town !== s.place ? `near ${town}` : '';
+const article = /^[aeiou]/.test(typeText) ? 'an' : 'a';
+const hasCatchment = !!s.cz?.length;
+const years = published(s);
+const dists = s.d.filter((y) => y.s === 'distance' && y.g !== 'sib' && y.m != null);
+const ratio = sm.perPlace ? (sm.perPlace >= 1.05 ? `${sm.perPlace.toFixed(1)} children for every place` : 'fewer children than places') : null;
+const near = nearby(p);
+
+// a name with a town on the end reads better with a colon: "St Peter's Primary School, Harrogate: catchment area..."
+const joiner = p.name.includes(',') ? ': ' : ' ';
+const title = `${p.name}${joiner}catchment area, Ofsted and admissions · Yorkshire School Checker`;
+const description = `Is your home in the ${p.short} catchment area? See who got a place at ${p.name}${where ? ` ${where}` : ''} each year, its Ofsted rating, and check your chances by postcode.`;
+
+// how far from the school children got in, for the page and the questions
+const reach = dists.length
+  ? `The last place went ${miles(dists[0].m)} from the school in ${dists[0].y}${dists.length > 1 && sm.furthest && sm.closest && sm.furthest !== sm.closest ? `. Over the years published it has ranged from ${miles(sm.closest.m)} (${sm.closest.y}) to ${miles(sm.furthest.m)} (${sm.furthest.y})` : ''}.`
+  : s.council === 'York'
+    ? `City of York Council doesn’t publish how far the last place went, but it does publish how many children from outside the catchment got in. ${latest ? yearLine(latest) : ''}`
+    : sm.allIn ? 'In the years published, everyone who applied got a place, so there was no cut-off distance.' : 'The council hasn’t published a cut-off distance for this school.';
+
+const faqs: [string, string][] = [
+  [`Is my home in the ${p.name} catchment area?`,
+    hasCatchment
+      ? `Put your postcode into the <a href="#check">box at the top of this page</a> and the checker tells you whether you’re in the ${p.short} catchment, and your chances at every school nearby. Near the boundary? Check your exact address on <a href="${council.catchMap}" target="_blank" rel="noopener">${council.name}’s catchment map</a>.`
+      : `${p.name} doesn’t have a catchment area, so places don’t depend on being inside one. Put your postcode into the <a href="#check">box at the top of this page</a> to see your chances, based on who got a place in past years.`],
+  [`How far away can you live and still get into ${p.name}?`, reach],
+  [`How many Reception places does ${p.name} have?`,
+    `${s.pan ? `${p.name} has ${s.pan} Reception places a year.` : 'The council hasn’t published its number of places.'}${latest?.a ? ` In ${latest.y}, ${latest.a} children applied${latest.f ? ` and ${latest.f} families put it as their first choice` : ''}.` : ''}`],
+  [`What is ${p.name}’s Ofsted rating?`,
+    s.of?.kind === 'none' || sm.of.tone === 'na'
+      ? `${p.name} hasn’t had an Ofsted inspection published yet.`
+      : `${sm.of.head}. ${sm.of.sub}. <a href="${s.of!.link}" target="_blank" rel="noopener">Read the Ofsted reports</a>.`],
+  [`When do I apply for a Reception place at ${p.short} for September 2027?`,
+    `Apply online to <a href="${council.apply}" target="_blank" rel="noopener">${council.name}</a> by Friday 15 January 2027. You can name up to five schools in the order you want them. Offers go out on Friday 16 April 2027.`],
+  [`Where can I find ${p.short} term dates, open days and uniform?`,
+    `${p.name} publishes its term dates, open days and uniform details itself.${s.web ? ` See <a href="${s.web}" target="_blank" rel="noopener">the school’s website</a>` : ''}${s.tel ? `${s.web ? ', or' : ''} call the office on <a href="tel:${s.tel.replace(/\s/g, '')}">${s.tel}</a>` : ''}.`],
+];
+
+const schema = [
+  {
+    '@context': 'https://schema.org', '@type': 'ElementarySchool', name: s.name, alternateName: p.name, url: pageUrl,
+    ...(s.web ? { sameAs: [s.web] } : {}), ...(s.tel ? { telephone: s.tel } : {}),
+    address: { '@type': 'PostalAddress', streetAddress: s.addr?.replace(new RegExp(`,?\\s*${s.postcode}$`), ''), postalCode: s.postcode, addressCountry: 'GB' },
+    geo: { '@type': 'GeoCoordinates', latitude: s.ll[0], longitude: s.ll[1] },
+    identifier: { '@type': 'PropertyValue', propertyID: 'URN', value: String(s.urn) },
+  },
+  {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'School checker', item: new URL(url(''), site).href },
+      { '@type': 'ListItem', position: 2, name: `${p.areaName} primary schools`, item: new URL(url(p.areaPage), site).href },
+      { '@type': 'ListItem', position: 3, name: p.name, item: pageUrl },
+    ],
+  },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: strip(a) } })) },
+];
+---
+<Base title={title} description={description}>
+  <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+  <section class="sp-hero wrap">
+    <div>
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href={url('')}>School checker</a><span aria-hidden="true">›</span><a href={url(p.areaPage)}>{p.areaName} primary schools</a><span aria-hidden="true">›</span><span aria-current="page">{p.short}</span>
+      </nav>
+      <h1>{p.name}{joiner}catchment area and admissions</h1>
+      <p class="lede">Thinking about {p.name}{where ? ` ${where}` : ''}? Here’s who got a place each year, {hasCatchment ? `how far the ${p.short} catchment area reaches` : 'how far away children got in'}, and its latest Ofsted rating. Put in your postcode to see your own chances.</p>
+      {s.name !== p.name && <p class="sp-full">Full name: {s.name}</p>}
+    </div>
+    <form class="sp-check" id="check" action={url('')} method="get" data-urn={s.urn}>
+      <h2>Could your child get a place at {p.short}?</h2>
+      <label class="label" for="spPc">Your postcode</label>
+      <div class="sp-row">
+        <input class="pc-input sp-input" id="spPc" name="pc" autocomplete="postal-code" placeholder={`For example ${s.postcode}`} spellcheck="false" required />
+        <input type="hidden" name="school" value={s.urn} />
+        <button class="btn btn-primary" type="submit">Check my chances</button>
+      </div>
+      <p class="sp-check-note">Free, no sign-up. We’ll show your chances at {p.short} and every school near you, so you can build your list of five.</p>
+    </form>
+  </section>
+
+  <section class="wrap">
+    <dl class="sp-facts">
+      <div><dt>Places a year</dt><dd>{s.pan ?? 'n/a'}</dd></div>
+      <div><dt>Ofsted</dt><dd>{sm.of.short}</dd><span>{s.of?.date ? mon(s.of.date) : ''}</span></div>
+      <div><dt>Catchment area</dt><dd>{hasCatchment ? 'Yes' : 'None'}</dd></div>
+      <div><dt>Applied per place{latest ? `, ${latest.y}` : ''}</dt><dd>{sm.perPlace ? sm.perPlace.toFixed(1) : 'n/a'}</dd></div>
+      <div class="wide"><dt>Who got a place{latest ? `, ${latest.y}` : ''}</dt><dd class="small">{latest ? whoGotIn(latest).replace(/ mi\b/, ' miles') : 'Not published'}</dd></div>
+    </dl>
+  </section>
+
+  <section class="how-sec sec-pale wrap sp-sec">
+    <h2>The {p.short} catchment area</h2>
+    <div class="sp-cols">
+      <div class="sp-text">
+        {hasCatchment
+          ? <p>{p.name} has a catchment area, set by {council.name}. {s.own
+              ? `As ${article} ${typeText}, it sets its own admissions rules, so check its policy for any faith, feeder or other priorities.`
+              : `Places go ${council.policy}.`}</p>
+          : <p>{p.name} doesn’t have a catchment area. Places are given {s.own ? 'by the school’s own admissions rules, so check its policy for any faith, feeder or other priorities' : `by ${council.name}’s rules`}.</p>}
+        {years.slice(0, 2).map((y) => <p>{yearLine(y)}</p>)}
+        {dists.length > 1 && sm.furthest !== sm.closest && <p>Over the years published, the last place has gone between {miles(sm.closest!.m)} and {miles(sm.furthest!.m)} from the school.</p>}
+        <p><b>Is your home in the {p.short} catchment?</b> <a href="#check">Put your postcode in</a> and we’ll tell you, along with your chances at every school nearby. Near the boundary? Check your exact address on <a href={council.catchMap} target="_blank" rel="noopener">{council.name}’s catchment map</a>.</p>
+      </div>
+      <div class="sp-table">
+        <h3>Who got a place at {p.short}, year by year</h3>
+        <div class="tbl-wrap"><table class="tbl">
+          <thead><tr><th>Year</th><th class="n">Applied</th><th class="n">Places</th><th class="n">1st choice</th><th>Who got a place</th></tr></thead>
+          <tbody>{s.d.map((y) => <tr><td class="yr">{y.y}</td><td class="n">{y.a ?? '–'}</td><td class="n">{y.p ?? '–'}</td><td class="n">{y.f ?? '–'}</td><td>{whoGotIn(y).replace(/ mi\b/, ' miles')}</td></tr>)}</tbody>
+        </table></div>
+        <p class="sp-src">Source: <a href={s.src} target="_blank" rel="noopener">{council.name} admissions figures</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-sec wrap sp-sec">
+    <div class="sp-two">
+      <div>
+        <h2>How hard is it to get into {p.name}?</h2>
+        {latest?.a && latest?.p && <p class="intro">In {latest.y}, {latest.a} children applied for {latest.p} places: {ratio}.{latest.f ? ` ${latest.f} families put ${p.short} as their first choice.` : ''}</p>}
+        {sm.trend && <p class="intro">{sm.trend}</p>}
+        {years.length > 0 && sm.allIn === years.length && <p class="intro">In every year published, everyone who applied got a place.</p>}
+        <p class="intro">Brothers and sisters of pupils get priority, so if you already have a child there, your chances are better than these figures suggest.</p>
+      </div>
+      <div>
+        <h2>{p.name} Ofsted rating</h2>
+        {s.of?.kind === 'none' || sm.of.tone === 'na'
+          ? <p class="intro">{p.name} hasn’t had an Ofsted inspection published yet.</p>
+          : <p class="intro">{p.name} is rated <b>{sm.of.head}</b> by Ofsted. {sm.of.sub}.</p>}
+        {s.of?.areas?.length ? <ul class="sp-areas">{s.of.areas.map(([k, v]) => <li><span>{k}</span><b>{v}</b></li>)}</ul> : ''}
+        {s.of?.link && <p class="intro"><a href={s.of.link} target="_blank" rel="noopener">Read {p.short}’s Ofsted reports</a></p>}
+      </div>
+    </div>
+  </section>
+
+  <section class="how-sec wrap sp-sec" style="border-top:1px solid var(--line)">
+    <div class="sp-two">
+      <div>
+        <h2>Applying to {p.short} for September 2027</h2>
+        <p class="intro">You apply to the council where you live, not to the school. Apply online to <a href={council.apply} target="_blank" rel="noopener">{council.name}</a> by <b>Friday 15 January 2027</b>, naming up to five schools in the order you want them. Offers go out on <b>Friday 16 April 2027</b>.</p>
+        <p class="intro">Every school on your list is looked at equally, and you’re offered the highest one that has room, so put {p.short} where it truly ranks for you. <a href={url('how-places-work/')}>How places work</a> explains it step by step.</p>
+      </div>
+      <div>
+        <h2>Contact {p.name}</h2>
+        <dl class="sp-contact">
+          {s.addr && <div><dt>Address</dt><dd>{s.addr}</dd></div>}
+          {s.tel && <div><dt>Phone</dt><dd><a href={`tel:${s.tel.replace(/\s/g, '')}`}>{s.tel}</a></dd></div>}
+          {s.email && <div><dt>Email</dt><dd><a href={`mailto:${s.email}`}>{s.email}</a></dd></div>}
+          {s.web && <div><dt>Website</dt><dd><a href={s.web} target="_blank" rel="noopener">{s.web.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}</a></dd></div>}
+        </dl>
+        <p class="intro">Term dates, open days and uniform details come from the school, so ask the office or check its website.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-sec sec-pale wrap sp-sec">
+    <h2>Other primary schools near {p.short}</h2>
+    <div class="sp-near">
+      {near.map((n) => (
+        <a class="sp-near-card" href={url(`schools/${n.slug}/`)}>
+          <b>{n.name}</b><span>{n.s.place} · {n.miles} miles away</span>
+          <span class="sp-near-who">{n.s.d.find((y) => y.s !== 'not_published') ? whoGotIn(n.s.d.find((y) => y.s !== 'not_published')!).replace(/ mi\b/, ' miles') : 'No figures published'}</span>
+        </a>
+      ))}
+    </div>
+    <p class="intro"><a href={url(p.areaPage)}>See every {p.areaName} primary school</a></p>
+  </section>
+
+  <section class="how-sec wrap sp-sec">
+    <h2>Questions parents ask about {p.short}</h2>
+    <div class="sp-faqs">{faqs.map(([q, a]) => <div class="sp-faq"><h3>{q}</h3><p set:html={a} /></div>)}</div>
+  </section>
+
+  <section class="sp-cta wrap">
+    <div>
+      <h2>Build your list of five</h2>
+      <p>See your chances at {p.short} and every school near you, then put them in order, ready for the council form.</p>
+    </div>
+    <a class="btn btn-primary" href="#check">Check my postcode</a>
+  </section>
+</Base>
+
+<script>
+  // send the postcode to the checker, with this school's details opened once the results load
+  const form = document.getElementById('check') as HTMLFormElement;
+  form.addEventListener('submit', (e) => {
+    const pc = (form.elements.namedItem('pc') as HTMLInputElement).value.replace(/\s+/g, '').toUpperCase();
+    if (!/^[A-Z0-9]{5,7}$/.test(pc)) return;   // let the browser's own check, or the checker, explain
+    e.preventDefault();
+    location.href = `${form.getAttribute('action')}#pc=${pc}&school=${form.dataset.urn}`;
+  });
+</script>
+
+<style>
+  .sp-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 460px); gap: 48px; align-items: end; padding-top: 32px; padding-bottom: 48px; }
+  .sp-hero h1 { font-size: 64px; line-height: 1.05; letter-spacing: -0.035em; margin-top: 16px; }
+  .crumbs { display: flex; flex-wrap: wrap; gap: 6px 8px; font-size: 14px; color: var(--muted-2); }
+  .crumbs a { color: var(--muted); }
+  .sp-full { margin-top: 14px; font-size: 15px; color: var(--muted-2); max-width: 640px; line-height: 1.5; }
+  .sp-check { background: var(--sticky-soft); border: 2.5px solid var(--ink); border-radius: 20px; padding: 24px; box-shadow: 6px 6px 0 var(--ink); display: grid; gap: 10px; }
+  .sp-check h2 { font-size: 26px; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 4px; }
+  .sp-row { display: grid; gap: 10px; }
+  .sp-input { height: 60px; box-shadow: none; font-size: 20px; }
+  .sp-row .btn { height: 56px; font-size: 17px; }
+  .sp-check-note { font-size: 14px; color: var(--muted); line-height: 1.45; }
+  .sp-facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 1.6fr); gap: 12px; margin: 0 0 56px; }
+  .sp-facts div { background: var(--pale); border-radius: 14px; padding: 16px 18px; display: grid; gap: 4px; align-content: start; }
+  .sp-facts dt { font-weight: 600; font-size: 14px; color: var(--muted); }
+  .sp-facts dd { margin: 0; font: 700 28px/1.1 var(--display); color: var(--ink); }
+  .sp-facts dd.small { font: 700 18px/1.3 var(--body); }
+  .sp-facts span { font-size: 13px; color: var(--muted-2); }
+  .sp-sec h2 { font-size: 40px; }
+  .sp-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 48px; margin-top: 24px; align-items: start; }
+  .sp-text { display: grid; gap: 14px; font-size: 18px; line-height: 1.6; color: var(--muted); }
+  .sp-text b { color: var(--ink); }
+  .sp-table h3 { font: 700 18px var(--body); margin-bottom: 10px; }
+  .tbl-wrap { background: #fff; border: 2px solid var(--ink); border-radius: 16px; padding: 8px 18px; overflow-x: auto; }
+  .tbl .n { text-align: right; padding-right: 16px; font-variant-numeric: tabular-nums; }
+  .sp-src { font-size: 13px; color: var(--muted-2); margin-top: 8px; }
+  .sp-two { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
+  .sp-two h2 { font-size: 34px; }
+  .sp-areas { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 6px; max-width: 520px; }
+  .sp-areas li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 12px; background: var(--pale); border-radius: 10px; font-size: 15px; }
+  .sp-contact { margin: 16px 0 0; display: grid; gap: 10px; font-size: 17px; }
+  .sp-contact dt { font-size: 13px; font-weight: 700; color: var(--muted-2); text-transform: uppercase; letter-spacing: .05em; }
+  .sp-contact dd { margin: 2px 0 0; overflow-wrap: anywhere; }
+  .sp-near { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 24px 0 8px; }
+  .sp-near-card { display: grid; gap: 4px; background: #fff; border: 1.5px solid var(--line-2); border-radius: 14px; padding: 16px 18px; text-decoration: none; color: var(--ink); }
+  .sp-near-card:hover { border-color: var(--ink); }
+  .sp-near-card b { font-size: 17px; }
+  .sp-near-card span { font-size: 14px; color: var(--muted-2); }
+  .sp-near-card .sp-near-who { color: var(--muted); }
+  .sp-faqs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 40px; margin-top: 28px; }
+  .sp-faq h3 { font: 700 18px/1.35 var(--body); margin-bottom: 6px; }
+  .sp-faq p { color: var(--muted); line-height: 1.55; }
+  .sp-cta { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; padding-top: 40px; padding-bottom: 72px; }
+  .sp-cta > div { max-width: 640px; }
+  .sp-cta h2 { font-size: 36px; }
+  .sp-cta p { color: var(--muted); font-size: 18px; margin-top: 8px; line-height: 1.5; }
+  @media (max-width: 1100px) { .sp-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); } .sp-facts .wide { grid-column: 1 / -1; } }
+  @media (max-width: 960px) {
+    .sp-hero, .sp-cols, .sp-two, .sp-faqs { grid-template-columns: 1fr; }
+    .sp-near { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 760px) {
+    .sp-hero h1 { font-size: 40px; }
+    .sp-sec h2, .sp-two h2, .sp-cta h2 { font-size: 30px; }
+    .sp-near { grid-template-columns: 1fr; }
+    .sp-facts dd { font-size: 24px; }
+  }
+</style>

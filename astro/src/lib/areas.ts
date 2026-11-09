@@ -33,7 +33,7 @@ export function hardest(schools: AreaSchool[], n = 8) {
     .filter((x) => x.score != null)
     .sort((a, b) => b.score! - a.score!)
     .slice(0, n)
-    .map(({ s, r }) => ({ name: s.name, place: s.place, year: r.y, who: whoGotIn(r), applied: r.a, places: r.p }));
+    .map(({ s, r }) => ({ urn: s.urn, name: s.name, place: s.place, year: r.y, who: whoGotIn(r), applied: r.a, places: r.p }));
 }
 
 // Schools where everyone who applied got a place in every year published
