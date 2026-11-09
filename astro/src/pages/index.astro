@@ -1,6 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import SchoolPanel from '../components/SchoolPanel.astro';
+import { COUNCILS } from '../lib/engine';
+import { url } from '../lib/url';
 const keys = [
   ['in', 'Safe bet', 'You’d have got in every year published.'],
   ['all', 'Open to all', 'Everyone who applied got a place.'],
@@ -10,15 +12,28 @@ const keys = [
 ];
 // tells search engines the site's name, shown above the link in results
 const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Yorkshire School Checker', url: new URL(import.meta.env.BASE_URL, Astro.site).href };
+const ny = COUNCILS['North Yorkshire'], cyc = COUNCILS.York;
+// the questions behind the searches parents make before they use the checker
+const about: [string, string][] = [
+  ['What is my catchment school?',
+    `Your catchment school is the school whose catchment area your home is in. Children who live in a school’s catchment come near the front of the queue for its Reception places. Put your postcode in above and the checker tells you your catchment school, or that you’re not in one, then shows your chances at every primary school nearby.`],
+  ['What is my school catchment area?',
+    `A catchment area is the patch of streets a council links to a school. It’s drawn by the council, not by distance, so the nearest school isn’t always your catchment school, and a few homes aren’t in any. Living in a catchment area gives you priority, not a guaranteed place.`],
+  ['How do school catchment areas work?',
+    `Each council fills a school’s places in a set order. Children in care always come first, and children who live in the catchment come before most children from outside it. Inside each group, brothers and sisters of pupils go first, then whoever lives nearest. <a href="${url('how-places-work/')}">How school catchment areas work</a> walks through it.`],
+  ['Is there a school catchment area map?',
+    `Yes. The councils publish them: <a href="${ny.catchMap}" target="_blank" rel="noopener">North Yorkshire Council’s school catchment area map</a> covers Harrogate and the villages round York, and <a href="${cyc.catchMap}" target="_blank" rel="noopener">City of York Council’s primary schools map</a> covers York. The checker uses the same maps, so your postcode tells you the answer without hunting through them.`],
+];
+const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: about.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a.replace(/<[^>]+>/g, '') } })) };
 ---
-<Base title="Harrogate and York primary school catchment checker · Yorkshire School Checker" description="Check your postcode against catchments and four years of Reception offers at primary schools in Harrogate, York and the villages between." active="find">
-  <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(siteSchema)} />
+<Base title="School catchment checker for Harrogate and York primary schools · Yorkshire School Checker" description="Free school catchment checker for Harrogate, York and the villages between. Find your catchment school and your chances at every primary school by postcode, from four years of Reception offers." active="find">
+  <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify([siteSchema, aboutSchema])} />
 
   <!-- ONBOARDING -->
   <section class="onboard wrap" id="onboard">
     <div>
       <h1>First things first, where do you live?</h1>
-      <p class="lede">Pop in your postcode and we’ll show every primary school you could apply for, and how likely you’d be to get a place.</p>
+      <p class="lede">Pop in your postcode and we’ll find your catchment school, show every primary school you could apply for, and how likely you’d be to get a place.</p>
       <form class="pc-form" id="pcForm" novalidate>
         <label class="label" for="pc">Your postcode</label>
         <div class="pc-row">
@@ -65,6 +80,14 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
       {keys.map(([v, t, d]) => <div class="key-row"><span><span class={`chip v-${v}`}>{t}</span></span><span>{d}</span></div>)}
       <p class="key-note">Got an older child at a school already? Brothers and sisters get priority, so your chances there are better than we show.</p>
     </aside>
+  </section>
+
+  <!-- ABOUT: the catchment questions parents search for, hidden once a search runs -->
+  <section class="how-sec sec-pale wrap home-about" id="about">
+    <h2>A school catchment checker for Harrogate and York</h2>
+    <p class="intro">Primary school catchment areas decide a lot about who gets a Reception place. Here’s what they are and how to find yours.</p>
+    <div class="sources home-faqs">{about.map(([q, a]) => <div><h3>{q}</h3><p set:html={a} /></div>)}</div>
+    <p class="intro">Browse <a href={url('harrogate-primary-schools/')}>Harrogate primary school catchment areas</a> or <a href={url('york-primary-schools/')}>York primary school catchment areas</a>, with every school’s own page.</p>
   </section>
 
   <!-- RESULTS -->
@@ -153,6 +176,10 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
 </Base>
 
 <style>
+  .home-about .sources p { font-size: 16px; }
+  .home-about .sources + .intro { margin-top: 32px; }
+  @media (max-width: 1100px) { .home-about .sources { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 760px) { .home-about .sources { grid-template-columns: 1fr; } }
   @media (max-width: 760px) { .desk-only { display: none; } .plist-head p::after { content: 'Press and hold the handle, then drag.'; } }
 </style>
 
@@ -228,7 +255,7 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
     const nearestSchool = [...res.near].sort((a, b) => a.straight! - b.straight!)[0];
     if (p.label !== lastCounted) { lastCounted = p.label; track('search', res.outside || !nearestSchool ? 'outside' : areaOf(nearestSchool)); }
     scoreAll(scored(), mode());
-    $('#onboard').hidden = true; $('#results').hidden = false;
+    $('#onboard').hidden = true; $('#about').hidden = true; $('#results').hidden = false;
     const m = mode();
     $('#resWhere').textContent = `${p.label === 'your location' ? 'Your location' : p.label} · within ${plural(radius(), 'mile')} · ${m === 'trend' ? 'all four years' : m === 'latest' ? 'latest year' : m + ' only'}`;
     syncEdit();

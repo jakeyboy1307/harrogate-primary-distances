@@ -47,6 +47,10 @@ const faqs: [string, string][] = [
     hasCatchment
       ? `Put your postcode into the <a href="#check">box at the top of this page</a> and the checker tells you whether you’re in the ${p.short} catchment, and your chances at every school nearby. Near the boundary? Check your exact address on <a href="${council.catchMap}" target="_blank" rel="noopener">${council.name}’s catchment map</a>.`
       : `${p.name} doesn’t have a catchment area, so places don’t depend on being inside one. Put your postcode into the <a href="#check">box at the top of this page</a> to see your chances, based on who got a place in past years.`],
+  [`Is there a ${p.short} catchment area map?`,
+    hasCatchment
+      ? `Yes. ${council.name} publishes a <a href="${council.catchMap}" target="_blank" rel="noopener">school catchment area map</a> that shows the ${p.short} catchment. Search your address on it, or put your postcode into the <a href="#check">school catchment checker</a> above, which uses the same map.`
+      : `No, because ${p.name} doesn’t have a catchment area. Its places go by ${s.own ? 'the school’s own admissions rules' : `${council.name}’s rules`}. To find your catchment school, put your postcode into the <a href="#check">school catchment checker</a> above.`],
   [`How far away can you live and still get into ${p.name}?`, reach],
   [`How many Reception places does ${p.name} have?`,
     `${s.pan ? `${p.name} has ${s.pan} Reception places a year.` : 'The council hasn’t published its number of places.'}${latest?.a ? ` In ${latest.y}, ${latest.a} children applied${latest.f ? ` and ${latest.f} families put it as their first choice` : ''}.` : ''}`],
@@ -98,7 +102,7 @@ const schema = [
         <input type="hidden" name="school" value={s.urn} />
         <button class="btn btn-primary" type="submit">Check my chances</button>
       </div>
-      <p class="sp-check-note">Free, no sign-up. We’ll show your chances at {p.short} and every school near you, so you can build your list of five.</p>
+      <p class="sp-check-note">Our free school catchment checker shows your catchment school and your chances at {p.short} and every school near you. No sign-up.</p>
     </form>
   </section>
 
@@ -123,7 +127,10 @@ const schema = [
           : <p>{p.name} doesn’t have a catchment area. Places are given {s.own ? 'by the school’s own admissions rules, so check its policy for any faith, feeder or other priorities' : `by ${council.name}’s rules`}.</p>}
         {years.slice(0, 2).map((y) => <p>{yearLine(y)}</p>)}
         {dists.length > 1 && sm.furthest !== sm.closest && <p>Over the years published, the last place has gone between {miles(sm.closest!.m)} and {miles(sm.furthest!.m)} from the school.</p>}
-        <p><b>Is your home in the {p.short} catchment?</b> <a href="#check">Put your postcode in</a> and we’ll tell you, along with your chances at every school nearby. Near the boundary? Check your exact address on <a href={council.catchMap} target="_blank" rel="noopener">{council.name}’s catchment map</a>.</p>
+        {hasCatchment
+          ? <p><b>Is {p.short} your catchment school?</b> <a href="#check">Put your postcode in</a> and we’ll tell you, along with your chances at every school nearby. Near the boundary? Check your exact address on <a href={council.catchMap} target="_blank" rel="noopener">{council.name}’s school catchment area map</a>.</p>
+          : <p><b>What is your catchment school?</b> <a href="#check">Put your postcode in</a> and we’ll tell you, along with your chances at {p.short} and every school nearby.</p>}
+        <p>New to catchments? <a href={url('how-places-work/')}>How school catchment areas work</a> explains who gets a place first, and the <a href={url(p.areaPage)}>{p.areaName} primary school catchment areas</a> page covers every school nearby.</p>
       </div>
       <div class="sp-table">
         <h3>Who got a place at {p.short}, year by year</h3>

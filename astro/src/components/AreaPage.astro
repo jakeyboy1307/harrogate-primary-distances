@@ -19,14 +19,17 @@ const open = openToAll(schools);
 const top = outstanding(schools);
 // each school's own page, for the links in the lists
 const href = (urn: number) => url(`schools/${pageOf(urn)!.slug}/`);
+// the questions, for search engines
+const faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a.replace(/<[^>]+>/g, '') } })) };
 const short = (n: string) => n.replace(/,.*$/, '').replace(/ (Church of England|CE|C of E)? ?(Voluntary (Controlled|Aided) )?(Community )?Primary (School|Academy)$/i, '');
 ---
 <Base title={title} description={description}>
+  <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <section class="how-hero wrap">
     <div>
       <h1>{h1}</h1>
       <p class="lede">{lede}</p>
-      <p class="area-acts"><a class="btn btn-primary" href={url('')}>Check your postcode</a><a class="btn" href={url('how-places-work/')}>How places work</a></p>
+      <p class="area-acts"><a class="btn btn-primary" href={url('')}>Check your postcode</a><a class="btn" href={url('how-places-work/')}>How catchment areas work</a></p>
       <!-- the page sponsor, filled in by the script below from /api/sponsors -->
       <p class="ad-strip" id="adStrip" hidden></p>
     </div>

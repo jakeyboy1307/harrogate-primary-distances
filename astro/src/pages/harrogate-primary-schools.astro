@@ -7,14 +7,18 @@ import { url } from '../lib/url';
 const schools = loadArea('north-yorkshire.json').filter((s) => s.district === 'Harrogate');
 const ny = COUNCILS['North Yorkshire'];
 const faqs: [string, string][] = [
-  ['How do I find out which Harrogate primary school catchment area I’m in?',
-    `Put your postcode into the <a href="${url('')}">school checker</a>. It tells you which catchment you’re in and your chances at every primary school nearby. Near a boundary? Check your exact address on <a href="${ny.catchMap}" target="_blank" rel="noopener">North Yorkshire Council’s school catchment areas map</a>.`],
+  ['What is my catchment school in Harrogate?',
+    `Put your postcode into the <a href="${url('')}">school catchment checker</a>. It tells you which Harrogate primary school catchment area you’re in, and your chances at every primary school nearby. Most Harrogate district primary schools have a catchment, but a few, mostly academies and faith schools, set their own rules.`],
+  ['Is there a Harrogate school catchment area map?',
+    `Yes. North Yorkshire Council publishes a <a href="${ny.catchMap}" target="_blank" rel="noopener">school catchment area map</a> covering every Harrogate district school. The checker uses the same map, so your postcode gives you the answer. Near a boundary? Check your exact address on the council’s map.`],
+  ['How do school catchment areas work in Harrogate?',
+    `North Yorkshire Council fills each school’s places in order: children in care, then approved medical or social need, then children in the catchment, then children of staff, then everyone else. Brothers and sisters, then distance, decide who goes first inside each group. <a href="${url('how-places-work/')}">How school catchment areas work</a> explains the queue.`],
   ['When do I apply for a Reception place for September 2027?',
     `Apply online to <a href="${ny.apply}" target="_blank" rel="noopener">North Yorkshire Council</a> by Friday 15 January 2027. You can name up to five primary schools, in the order you want them.`],
   ['When are primary school places announced?',
     'Offers go out on national offer day, Friday 16 April 2027, by email from the council.'],
   ['Can my child get into a Harrogate school outside our catchment?',
-    `Often, if places are left once children in the catchment have theirs. Each year the council publishes how far the last place went, and the checker compares that with your distance. <a href="${url('how-places-work/')}">How places work</a> explains the queue.`],
+    `Often, if places are left once children in the catchment have theirs. Each year the council publishes how far the last place went, and the checker compares that with your distance.`],
   ['Which are the best primary schools in Harrogate?',
     'There’s no official ranking, so be wary of league tables. Ofsted is the fairest guide, alongside a visit. The checker shows each school’s latest Ofsted outcome, and the Outstanding schools are listed above.'],
   ['Where can I see North Yorkshire school admissions data?',
@@ -26,10 +30,10 @@ const faqs: [string, string][] = [
 ];
 ---
 <AreaPage areaKey="harrogate"
-  title="Harrogate primary schools and catchment areas · Yorkshire School Checker"
-  description="Harrogate, Knaresborough and Ripon primary schools: catchment areas, which schools are hardest to get into, Ofsted ratings and the 2027 Reception dates."
+  title="Harrogate primary school catchment areas, map and Ofsted · Yorkshire School Checker"
+  description="Harrogate, Knaresborough and Ripon primary school catchment areas: find your catchment school, which schools are hardest to get into, Ofsted ratings and the 2027 Reception dates."
   h1="Harrogate primary schools and catchment areas"
-  lede="Every primary school in the Harrogate district, from Harrogate and Knaresborough to Ripon, Boroughbridge, Pateley Bridge and Masham: which are hardest to get into, which took everyone, and how to check your catchment."
+  lede="Primary school catchment areas for every school in the Harrogate district, from Harrogate and Knaresborough to Ripon, Boroughbridge, Pateley Bridge and Masham: which are hardest to get into, which took everyone, and how to find your catchment school."
   area="Harrogate"
   schools={schools}
   groups={[{ label: 'Harrogate district', note: `All ${schools.length} are North Yorkshire Council schools. Junior schools, which start at Year 3, aren’t included.`, schools }]}

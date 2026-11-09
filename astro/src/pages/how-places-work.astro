@@ -1,6 +1,16 @@
 ---
 import Base from '../layouts/Base.astro';
 import { url } from '../lib/url';
+import { COUNCILS } from '../lib/engine';
+const ny = COUNCILS['North Yorkshire'], cyc = COUNCILS.York;
+// the catchment questions in section 1, for search engines
+const faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: [
+  ['How do school catchment areas work?', 'A catchment area is the patch of streets a council links to a school. Children who live inside it get priority for its Reception places, ahead of most children from outside it. Children in care always come first, and inside each group brothers and sisters of pupils go first, then whoever lives nearest.'],
+  ['What is my catchment school?', 'It’s the school whose catchment area your home is in. The council draws the lines, so your catchment school isn’t always the nearest one. A few homes sit in two catchments, and a few in none.'],
+  ['What is my school catchment area?', 'Put your postcode into the Yorkshire School Checker. It tells you which catchment you’re in and your chances at every primary school nearby, using the councils’ own catchment maps.'],
+  ['Is there a school catchment area map?', 'Yes. North Yorkshire Council publishes a school catchment area map covering Harrogate and the villages round York, and City of York Council publishes a primary schools map for York.'],
+  ['Does living in the catchment guarantee a place?', 'No. It puts you near the front of the queue, but a popular school can fill up with catchment children alone.'],
+].map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) };
 // Coppice Valley's real last-place distances (miles) from the council's figures, against a home 0.75 miles away
 const MAXMI = 1.5, YOU = 0.75;
 const bars = [[2026, 1.22], [2025, 0.68], [2024, 0.81], [2023, 0.64]] as const;
@@ -19,24 +29,38 @@ const phrases = [
   ['“By the school’s own rules”', 'Academies, voluntary aided and foundation schools decide their own order. Faith schools may put church members first.'],
 ];
 ---
-<Base title="How places work · Yorkshire School Checker" description="How North Yorkshire and York councils hand out Reception places, what “last place” means, and where our numbers come from." active="how">
+<Base title="How do school catchment areas work? · Yorkshire School Checker" description="How school catchment areas work in Harrogate and York: what your catchment school is, where to find the catchment area map, who gets a Reception place first, and what “last place” means." active="how">
+  <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <section class="how-hero wrap">
     <div>
-      <h1>How school places actually get handed out</h1>
-      <p class="lede">The rules sound complicated, but they boil down to a queue. Here’s who goes first, what “last place” means, and how to read the numbers we show you.</p>
+      <h1>How do school catchment areas work?</h1>
+      <p class="lede">The rules sound complicated, but they boil down to a queue, and your catchment area decides where you stand in it. Here’s what a catchment is, who goes first, what “last place” means, and how to read the numbers we show you.</p>
     </div>
     <nav class="toc" aria-label="On this page">
       <span class="hand">on this page</span>
-      <a href="#queue">1. Who gets a place first</a>
-      <a href="#last-place">2. What “last place” means</a>
-      <a href="#reading">3. Reading the year by year</a>
-      <a href="#five">4. Picking your five</a>
-      <a href="#sources">5. Where our numbers come from</a>
+      <a href="#catchment">1. What is a school catchment area?</a>
+      <a href="#queue">2. Who gets a place first</a>
+      <a href="#last-place">3. What “last place” means</a>
+      <a href="#reading">4. Reading the year by year</a>
+      <a href="#five">5. Picking your five</a>
+      <a href="#sources">6. Where our numbers come from</a>
     </nav>
   </section>
 
+  <section class="how-sec wrap" id="catchment">
+    <h2>1. What is a school catchment area?</h2>
+    <p class="intro">A catchment area is the patch of streets a council links to a school. Most community and voluntary controlled primary schools in North Yorkshire and York have one. Children who live inside it get priority for that school’s Reception places, ahead of most children from outside it.</p>
+    <div class="sources">
+      <div><h3>What is my catchment school?</h3><p>It’s the school whose catchment area your home is in. The council draws the lines, not the map distance, so your catchment school isn’t always the nearest one. A few homes sit in two catchments, and a few in none.</p></div>
+      <div><h3>What is my school catchment area?</h3><p>Put your postcode into the <a href={url('')}>school catchment checker</a>. It tells you which catchment you’re in and your chances at every primary school nearby, using the councils’ own catchment maps.</p></div>
+      <div><h3>Is there a school catchment area map?</h3><p>Yes, from each council: <a href={ny.catchMap} target="_blank" rel="noopener">North Yorkshire Council’s map</a> for Harrogate and the villages round York, and <a href={cyc.catchMap} target="_blank" rel="noopener">City of York Council’s primary schools map</a> for York. Use them to check your exact address if you’re near a boundary.</p></div>
+      <div><h3>Does living in the catchment guarantee a place?</h3><p>No. It puts you near the front of the queue, but a popular school can fill up with catchment children alone. The year by year figures on each school’s page show whether that has happened.</p></div>
+    </div>
+    <p class="intro" style="margin-top:28px">See every school’s catchment and figures: <a href={url('harrogate-primary-schools/')}>Harrogate primary school catchment areas</a> and <a href={url('york-primary-schools/')}>York primary school catchment areas</a>.</p>
+  </section>
+
   <section class="how-sec sec-pale wrap" id="queue">
-    <h2>1. Who gets a place first</h2>
+    <h2>2. Who gets a place first</h2>
     <p class="intro">For community and voluntary controlled schools, North Yorkshire Council works down this list until the places run out.</p>
     <ol class="tickets">
       {tickets.map(([n, h, p]) => <li class={`ticket${n === '3' ? ' hot' : ''}`}><b>{n}</b><h3>{h}</h3><p>{p}</p></li>)}
@@ -53,7 +77,7 @@ const phrases = [
 
   <section class="how-sec wrap split" id="last-place">
     <div>
-      <h2>2. What “last place” means</h2>
+      <h2>3. What “last place” means</h2>
       <p class="intro">It’s how far from the school the last child offered a place on distance lived. It’s measured the way the school measures it, usually the walking route.</p>
       <p class="intro">It is not a fixed boundary. It moves every year depending on how many families apply and where they live.</p>
     </div>
@@ -71,7 +95,7 @@ const phrases = [
   </section>
 
   <section class="how-sec sec-pale wrap" id="reading">
-    <h2>3. Reading the year by year</h2>
+    <h2>4. Reading the year by year</h2>
     <p class="intro">Every school shows a line like these for each year. Here’s what each one means in plain English.</p>
     <div class="phrases">{phrases.map(([h, p]) => <div class="phrase"><h3>{h}</h3><p>{p}</p></div>)}</div>
     <p class="worth"><span class="tag">worth knowing</span><span>Our labels don’t count brothers and sisters. If you already have a child at a school, your chances there are better than we show.</span></p>
@@ -79,7 +103,7 @@ const phrases = [
 
   <section class="how-sec wrap split" id="five">
     <div>
-      <h2>4. Picking your five</h2>
+      <h2>5. Picking your five</h2>
       <p class="intro">The council’s form takes up to five schools. Each one is considered equally, without knowing where you ranked it.</p>
       <p class="intro">If more than one could take you, you’re offered the one highest on your list. So put your real favourite first, and include at least one safe bet.</p>
       <p style="margin-top:24px"><a class="btn btn-primary" href={url('plan/')}>Start my plan</a></p>
@@ -94,7 +118,7 @@ const phrases = [
   </section>
 
   <section class="how-sec wrap" id="sources" style="border-top:1px solid var(--line)">
-    <h2>5. Where our numbers come from</h2>
+    <h2>6. Where our numbers come from</h2>
     <div class="sources">
       <div><h3>Offers and last places</h3><p>For Harrogate and the villages round York, North Yorkshire Council admissions statistics for 2023 to 2026 entry, from <a href="https://hub.datanorthyorkshire.org/dataset/school-admissions-2026-2027-yearly-statistics-primary-and-secondary-school" target="_blank" rel="noopener">Data North Yorkshire</a>.</p></div>
       <div><h3>York offers</h3><p>City of York Council’s anonymised list of every Reception applicant for 2022, 2023, 2025 and 2026 entry, from <a href="https://data.yorkopendata.org/dataset/pupil-level-outcome-summary-primary" target="_blank" rel="noopener">York Open Data</a>. Its 2024 list is incomplete, so we leave that year out.</p></div>

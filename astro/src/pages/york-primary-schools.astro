@@ -10,14 +10,18 @@ const near = loadArea('north-yorkshire.json').filter((s) => s.district !== 'Harr
 const schools = [...york, ...near];
 const cyc = COUNCILS.York, ny = COUNCILS['North Yorkshire'];
 const faqs: [string, string][] = [
-  ['How do I check which York primary school catchment area I’m in?',
-    `Put your postcode into the <a href="${url('')}">school checker</a>. It tells you which catchment you’re in and how many children got a place at each school nearby. Near a boundary? Check your exact address on <a href="${cyc.catchMap}" target="_blank" rel="noopener">City of York Council’s primary schools map</a>.`],
+  ['What is my catchment school in York?',
+    `Put your postcode into the <a href="${url('')}">school catchment checker</a>. It tells you which York primary school catchment area you’re in, and how many children got a place at each school nearby. It covers the villages round York in North Yorkshire too.`],
+  ['Is there a York school catchment area map?',
+    `Yes. City of York Council’s <a href="${cyc.catchMap}" target="_blank" rel="noopener">primary schools map</a> shows each school’s catchment area, and North Yorkshire Council has a <a href="${ny.catchMap}" target="_blank" rel="noopener">school catchment area map</a> for Easingwold, Selby, Tadcaster and the other villages. The checker uses both, so your postcode gives you the answer.`],
   ['When do I apply for a Reception place in York for September 2027?',
     `Apply online to <a href="${cyc.apply}" target="_blank" rel="noopener">City of York Council</a> by Friday 15 January 2027. You can name up to five schools, in the order you want them.`],
   ['When are primary school places announced?',
     'Offers go out on national offer day, Friday 16 April 2027, by email from the council.'],
+  ['How do school catchment areas work in York?',
+    `City of York Council fills each school’s places in order: children in care, then children in the catchment with a brother or sister at the school, then the rest of the catchment, then medical or social need, then brothers and sisters from outside it, then whoever has the shortest safe walk. <a href="${url('how-places-work/#york')}">How school catchment areas work</a> has more.`],
   ['Can my child get into a York school outside our catchment?',
-    `Often. Each York school first takes children in its catchment, then brothers and sisters from outside it, then whoever has the shortest safe walk. York doesn’t publish how far the last place went, so the checker shows how many children from outside the catchment got in each year. <a href="${url('how-places-work/#york')}">How places work</a> has York’s full order.`],
+    `Often, if places are left once the catchment children have theirs. York doesn’t publish how far the last place went, so the checker shows how many children from outside the catchment got in each year.`],
   ['Which are the best primary schools in York?',
     'There’s no official ranking, so be wary of league tables. Ofsted is the fairest guide, alongside a visit. The checker shows each school’s latest Ofsted outcome, and the Outstanding schools are listed above.'],
   ['I live in Haxby, Copmanthorpe or Easingwold. Which council do I apply to?',
@@ -29,10 +33,10 @@ const faqs: [string, string][] = [
 ];
 ---
 <AreaPage areaKey="york"
-  title="York primary schools and catchment areas · Yorkshire School Checker"
-  description="Primary schools in York, Haxby, Selby, Tadcaster and Easingwold: catchment areas, which schools are hardest to get into, Ofsted ratings and the 2027 Reception dates."
+  title="York primary school catchment areas, map and Ofsted · Yorkshire School Checker"
+  description="York primary school catchment areas, plus Haxby, Selby, Tadcaster and Easingwold: find your catchment school, which schools are hardest to get into, Ofsted ratings and the 2027 Reception dates."
   h1="York primary schools and catchment areas"
-  lede="Every primary school in York, from Acomb and Haxby to Fulford and Heslington, plus the North Yorkshire villages round York such as Easingwold, Escrick, Selby and Tadcaster."
+  lede="Primary school catchment areas for every school in York, from Acomb and Haxby to Fulford and Heslington, plus the North Yorkshire villages round York such as Easingwold, Escrick, Selby and Tadcaster."
   area="York"
   schools={schools}
   groups={[
