@@ -1,8 +1,8 @@
 // Fills and drives the school slide-out panel shared by Find schools and My plan.
 import {
   council, esc, fmt, headlineAnswer, mon, noDist, ofsted, plural, whoGotIn, yearVerdict, youText,
-  MAX_SHORT, MI, type LatLng, type Mode, type School, type YearRec, firstsOk } from './engine';
-import { addedText, addSchool, backupOf, getList, onListChange, ordinal, promoteBackup, rankOf, removeBackup, removeFromList } from './store';
+  MI, type LatLng, type Mode, type School, type YearRec, firstsOk } from './engine';
+import { addedText, addSchool, backupOf, getList, onListChange, ordinal, promoteBackup, rankOf, removeBackup, removeFromList, listMax } from './store';
 import { $, chip, toast } from './ui';
 import { adAreasOf, panelSponsors, profileBlock, sponsorsFor } from './sponsors';
 import { track } from './track';
@@ -101,9 +101,9 @@ function renderFoot(s: School) {
        <div class="acts"><button type="button" class="btn btn-sm" data-act="remove">Remove</button><button type="button" class="btn btn-sm btn-dark" data-act="order">Change order</button></div>`
     : backupOf(s.urn)
       ? `<div class="rank"><span>One of your backups</span></div>
-         <div class="acts"><button type="button" class="btn btn-sm" data-act="unbackup">Remove</button><button type="button" class="btn btn-sm btn-dark" data-act="promote">${n >= MAX_SHORT ? `Swap in as ${ordinal(MAX_SHORT)}` : `Move in as ${ordinal(n + 1)}`}</button></div>`
-    : n >= MAX_SHORT
-      ? `<div class="rank"><span>Your list has ${MAX_SHORT} schools</span></div><div class="acts"><button type="button" class="btn btn-sm btn-primary" data-act="add">Add as a backup</button></div>`
+         <div class="acts"><button type="button" class="btn btn-sm" data-act="unbackup">Remove</button><button type="button" class="btn btn-sm btn-dark" data-act="promote">${n >= listMax() ? `Swap in as ${ordinal(listMax())}` : `Move in as ${ordinal(n + 1)}`}</button></div>`
+    : n >= listMax()
+      ? `<div class="rank"><span>Your list has ${listMax()} schools</span></div><div class="acts"><button type="button" class="btn btn-sm btn-primary" data-act="add">Add as a backup</button></div>`
       : `<div class="rank"><span>Not on your list yet</span></div><div class="acts"><button type="button" class="btn btn-sm btn-primary" data-act="add">Add as ${ordinal(n + 1)} choice</button></div>`;
 }
 

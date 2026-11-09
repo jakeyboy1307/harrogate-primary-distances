@@ -1,0 +1,101 @@
+# East Riding of Yorkshire Council, "Summary of primary school allocations" for each year (Reception, national offer
+# day): every oversubscribed school or one with a waiting list. 2024 is from the PDF's text; 2025 and 2026 are typed
+# from the tables, which the PDFs hold only as pictures, and are checked in build_eastriding.py (each row's places by
+# criterion must add up to its places allocated, and its first preferences must match the DfE's).
+# Columns: places available; 1st, 2nd and 3rd preferences; places given to children in care, with an EHC plan or in
+# the catchment (one column); siblings; religion; other criteria; distance; the distance of the last place in miles
+# (blank or N/A when the last place didn't go on distance); total allocated; waiting list (N/A: none kept).
+year,school,places,p1,p2,p3,catch,sib,rel,other,dist,last,total,waiting
+2024,Acre Heads Primary School,60,66,24,12,16,16,N/A,N/A,28,0.928,60,7
+2024,Airmyn Park Primary School,16,15,14,4,6,2,N/A,N/A,8,N/A,16,0
+2024,Barmby Moor CE Primary School,15,21,21,13,3,4,1,0,7,1.406,15,7
+2024,Bilton Community Primary School,30,30,3,4,9,5,N/A,0,16,N/A,30,0
+2024,Boothferry Primary School,50,63,16,7,50,0,N/A,N/A,0,0.738,50,16
+2024,Brandesburton Primary School,20,20,6,0,15,2,N/A,N/A,3,N/A,20,0
+2024,Cowick CE VC Primary School,15,18,11,3,6,4,N/A,N/A,5,4.608,15,5
+2024,Driffield Northfield Infant School,60,59,16,8,46,1,N/A,N/A,13,N/A,60,0
+2024,Eastrington Primary School,15,17,5,6,9,2,N/A,N/A,4,2.806,15,2
+2024,Elloughton Primary School,45,54,22,20,27,7,N/A,N/A,11,1.276,45,11
+2024,Hessle Penshurst Primary School,60,77,28,11,42,18,N/A,N/A,0,1.227,60,20
+2024,Holme on Spalding Moor Primary School,30,29,3,2,27,0,N/A,N/A,3,N/A,30,0
+2024,Hook CE Primary School,30,33,9,5,10,8,N/A,0,12,1.200,30,6
+2024,Hunsley Primary School,30,31,32,13,10,7,N/A,0,13,1.532,30,5
+2024,Kirk Ella St Andrew's Community Primary School,60,60,39,20,41,5,N/A,N/A,14,1.696,60,2
+2024,Marshlands Primary School,30,26,0,1,25,1,N/A,N/A,0,N/A,30,0
+2024,Molescroft Primary School,60,64,26,15,43,3,N/A,N/A,14,1.589,60,7
+2024,North Ferriby CE VC Primary School,40,35,28,8,21,6,N/A,N/A,13,2.839,40,1
+2024,Pollington-Balne CE Primary School,20,27,5,3,13,6,0,0,1,2.609,20,7
+2024,Roos CE VC Primary School,15,14,7,1,7,2,N/A,N/A,6,N/A,15,0
+2024,Skidby CE VC Primary School,15,15,2,10,5,3,N/A,N/A,7,N/A,15,0
+2024,Snaith Primary School,45,47,20,7,29,6,N/A,N/A,10,4.915,45,7
+2024,South Cave CE VC Primary School,30,28,9,4,26,0,N/A,N/A,4,2.976,30,1
+2024,St Joseph's Catholic Primary School,15,17,3,1,1,5,2,N/A,7,0.393,15,2
+2024,St Mary's & St Joseph's Catholic Primary School,15,19,14,8,1,4,6,1,3,0.971,15,5
+2024,Swanland Primary School,60,72,40,16,34,12,N/A,0,14,1.433,60,15
+2024,Walkington Primary School,30,31,10,8,15,5,N/A,N/A,10,2.307,30,2
+2024,Westfield Primary School,60,61,34,11,42,8,N/A,N/A,10,1.587,60,1
+2024,Woodmansey CE VC Primary School,15,17,8,4,9,0,N/A,N/A,6,2.068,15,3
+2025,Acre Heads Primary School,60,58,22,9,10,15,N/A,N/A,35,1.867,60,1
+2025,Bacon Garth Primary School,30,29,35,13,11,7,N/A,N/A,12,1.487,30,3
+2025,Barmby Moor CE Primary School,15,16,28,7,3,6,0,0,6,1.732,15,3
+2025,Bishop Wilton CE VC Primary School,8,8,0,3,3,1,N/A,N/A,4,4.991,8,0
+2025,Bugthorpe Primary School,13,12,5,3,6,2,N/A,N/A,6,5.479,14,0
+2025,Eastrington Primary School,15,20,8,3,12,3,N/A,N/A,0,N/A,15,5
+2025,Elloughton Primary School,45,57,23,13,26,9,N/A,N/A,10,1.045,45,13
+2025,Holme on Spalding Moor Primary School,30,32,5,6,30,0,N/A,N/A,0,N/A,30,5
+2025,Howden CE Infant School,60,61,8,5,55,5,N/A,N/A,0,N/A,60,4
+2025,Keldmarsh Primary School,45,59,29,15,42,3,N/A,N/A,0,N/A,45,16
+2025,Kirk Ella St Andrew's Community Primary School,60,69,37,14,57,3,N/A,N/A,0,N/A,60,15
+2025,Marshlands Primary School,30,32,1,2,27,3,N/A,N/A,0,N/A,30,2
+2025,Molescroft Primary School,60,64,42,8,40,3,N/A,N/A,17,1.673,60,5
+2025,Nafferton Primary School,45,49,10,4,16,11,N/A,N/A,18,2.125,45,4
+2025,Newbald Primary School,15,17,2,3,8,0,N/A,N/A,7,3.947,15,3
+2025,North Ferriby CE VC Primary School,40,42,22,8,30,7,N/A,N/A,3,1.877,40,7
+2025,Pollington-Balne CE Primary School,20,20,9,3,14,2,N/A,N/A,4,6.002,20,0
+2025,Riston Church of England Primary Academy,10,10,1,0,10,0,N/A,N/A,0,N/A,10,0
+2025,Roos CE VC Primary School,15,17,7,4,7,3,N/A,N/A,5,4.392,15,2
+2025,South Cave CE VC Primary School,30,36,10,1,30,0,N/A,N/A,0,N/A,30,7
+2025,Springhead Primary School,30,35,24,22,10,9,N/A,N/A,11,0.590,30,10
+2025,St Martin's CE VA Primary School,15,13,11,8,0,3,6,0,6,4.020,15,0
+2025,St Mary's Catholic Primary School,15,15,12,3,0,3,5,0,7,0.738,15,1
+2025,Stamford Bridge Primary School,45,47,6,3,40,3,N/A,N/A,2,0.306,45,3
+2025,Sutton Upon Derwent CE VC Primary School,15,17,10,3,13,4,N/A,N/A,0,N/A,17,0
+2025,Swanland Primary School,60,68,49,24,38,7,N/A,0,15,1.473,60,13
+2025,Warter CE VC Primary School,20,20,4,6,4,8,0,6,2,4.313,20,0
+2025,Westfield Primary School,60,68,32,7,48,11,N/A,N/A,1,0.206,60,8
+2025,Wilberfoss CE VC Primary School,30,33,11,6,23,2,N/A,N/A,5,4.308,30,3
+2025,Willerby Carr Lane Primary School,60,50,29,21,37,6,N/A,N/A,17,2.910,60,0
+2025,Woodmansey CE VC Primary School,15,14,6,5,13,2,N/A,N/A,0,N/A,15,2
+2026,Acre Heads Primary School,60,79,14,16,24,24,N/A,N/A,12,0.338,60,22
+2026,Airmyn Park Primary School,16,17,15,13,9,1,N/A,2,4,1.792,16,1
+2026,Barmby Moor CE Primary School,15,24,22,15,8,7,0,0,0,1.929,15,13
+2026,Beeford CE VC Primary School,15,15,0,1,13,1,N/A,N/A,1,130.234,15,N/A
+2026,Beverley St Nicholas Primary School,30,23,10,8,22,4,N/A,0,4,1.379,30,N/A
+2026,Boothferry Primary School,50,52,17,5,48,1,N/A,N/A,1,0.685,50,3
+2026,Cowick CE VC Primary School,15,21,8,7,8,5,N/A,N/A,5,3.252,18,3
+2026,Elloughton Primary School,45,58,25,18,27,8,N/A,N/A,10,1.086,45,13
+2026,Howden CE Infant School,60,61,6,5,55,2,N/A,0,3,3.226,60,1
+2026,Keldmarsh Primary School,45,66,24,17,54,4,N/A,N/A,0,1.487,58,13
+2026,Kirk Ella St Andrew's Community Primary School,60,62,42,24,49,6,N/A,N/A,5,1.091,60,8
+2026,Lockington CE VC Primary School,8,9,3,2,5,1,N/A,N/A,3,3.590,9,N/A
+2026,Molescroft Primary School,60,80,34,10,47,10,N/A,N/A,3,0.764,60,20
+2026,Nafferton Primary School,45,58,9,5,26,9,N/A,N/A,10,1.762,45,14
+2026,Newbald Primary School,15,22,6,3,9,5,N/A,N/A,1,1.701,15,8
+2026,North Cave CE VC Primary School,20,17,15,4,9,5,N/A,0,6,2.892,20,1
+2026,North Ferriby CE VC Primary School,40,35,26,9,21,6,N/A,N/A,13,2.456,40,4
+2026,Rawcliffe Primary School,17,16,3,2,12,1,N/A,N/A,4,7.525,17,N/A
+2026,Roos CE VC Primary School,15,20,6,3,6,8,N/A,N/A,1,2.599,15,5
+2026,Skipsea Primary School,10,11,2,0,8,0,N/A,N/A,3,8.013,11,N/A
+2026,South Cave CE VC Primary School,30,31,9,2,25,5,N/A,N/A,0,3.467,30,3
+2026,Springhead Primary School,30,31,28,11,17,7,N/A,N/A,6,0.662,30,5
+2026,St Joseph's Catholic Primary School,15,18,7,1,2,6,2,0,5,0.300,15,3
+2026,St Martin's CE VA Primary School,15,21,25,6,2,6,1,0,6,2.915,15,12
+2026,St Mary's & St Joseph's Catholic Primary School,15,17,18,4,1,5,8,0,1,0.966,15,4
+2026,"St Mary's Catholic Primary School, Market Weighton",15,16,10,5,0,5,6,0,4,0.525,15,2
+2026,Swanland Primary School,60,73,45,21,43,10,N/A,0,7,1.294,60,19
+2026,Walkington Primary School,30,28,16,4,13,7,N/A,N/A,10,2.990,30,3
+2026,Warter CE VC Primary School,20,19,9,3,2,9,0,6,3,3.782,20,5
+2026,Wawne Primary School,15,14,2,1,8,3,N/A,N/A,4,1.430,15,N/A
+2026,Westfield Primary School,60,64,32,11,47,9,N/A,N/A,4,0.575,60,4
+2026,Willerby Carr Lane Primary School,60,64,24,19,47,4,N/A,N/A,9,0.936,60,12
+2026,Woodmansey CE VC Primary School,15,15,9,10,9,5,N/A,N/A,1,1.286,15,3

@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import SchoolPanel from '../components/SchoolPanel.astro';
 import { COUNCILS } from '../lib/engine';
 import { url } from '../lib/url';
-import { AREA_INFO, NY_PLACES, PLACES } from '../lib/specs';
+import { AREA_INFO, COVERED, PLACES } from '../lib/specs';
 const keys = [
   ['in', 'Safe bet', 'You’d have got in every year published.'],
   ['all', 'Open to all', 'Everyone who applied got a place.'],
@@ -23,11 +23,11 @@ const about: [string, string][] = [
   ['How do school catchment areas work?',
     `Each council fills a school’s places in a set order. Children in care always come first, and children who live in the catchment come before most children from outside it. Inside each group, brothers and sisters of pupils go first, then whoever lives nearest. <a href="${url('how-places-work/')}">How school catchment areas work</a> walks through it.`],
   ['Is there a school catchment area map?',
-    `Yes. The councils publish them: <a href="${ny.catchMap}" target="_blank" rel="noopener">North Yorkshire Council’s school catchment area map</a> covers ${NY_PLACES} and the rest of the county, and <a href="${cyc.catchMap}" target="_blank" rel="noopener">City of York Council’s primary schools map</a> covers York. The checker uses the same maps, so your postcode tells you the answer without hunting through them.`],
+    `Yes. The councils publish them: <a href="${ny.catchMap}" target="_blank" rel="noopener">North Yorkshire Council’s school catchment area map</a> covers the whole county, <a href="${cyc.catchMap}" target="_blank" rel="noopener">City of York Council’s primary schools map</a> covers York, and <a href="${COUNCILS['East Riding of Yorkshire'].catchMap}" target="_blank" rel="noopener">East Riding of Yorkshire Council’s catchment finder</a> covers the East Riding. The checker uses the same maps, so your postcode tells you the answer without hunting through them.`],
 ];
 const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: about.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a.replace(/<[^>]+>/g, '') } })) };
 ---
-<Base title="School catchment checker for Harrogate and York primary schools · Yorkshire School Checker" description={`Free school catchment checker for primary schools in ${PLACES}. Find your catchment school and your chances at every primary school by postcode, from four years of Reception offers.`} active="find">
+<Base title="School catchment checker for Harrogate and York primary schools · Yorkshire School Checker" description={`Free school catchment checker for primary schools in ${PLACES}. Find your catchment school and your chances at every primary school by postcode, from up to four years of Reception offers.`} active="find">
   <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify([siteSchema, aboutSchema])} />
 
   <!-- ONBOARDING -->
@@ -56,7 +56,7 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
           <fieldset class="opt">
             <legend>Judge my chances on</legend>
             <div class="pills">
-              <label class="pill"><input type="radio" name="mode" value="trend" checked />All four years</label>
+              <label class="pill"><input type="radio" name="mode" value="trend" checked />Every year</label>
               <label class="pill"><input type="radio" name="mode" value="latest" />Latest year</label>
               <label class="pill"><input type="radio" name="mode" value="pick" />One year:
                 <select id="oneYear" aria-label="Which year" style="border:0;background:transparent;font:inherit;font-weight:700;color:inherit">
@@ -70,7 +70,7 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
         <span>Just having a look? Try</span>
         {Object.values(AREA_INFO).map(({ example: [pc, place] }) => <button class="example" type="button" data-pc={pc}>{place} · {pc}</button>)}
       </div>
-      <p class="coverage">Covers York and the {NY_PLACES} areas of North Yorkshire. Nothing to sign up for.</p>
+      <p class="coverage">Covers every primary school in {COVERED}. Nothing to sign up for.</p>
     </div>
     <aside class="key-card" aria-label="What the labels mean">
       <span class="hand" style="font-size:26px">what you’ll see next</span>
@@ -107,7 +107,7 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
               <label class="edit-sel"><span>How far</span>
                 <select id="r2">{[1, 2, 3, 5].map((r) => <option value={r}>Within {r} mile{r > 1 ? 's' : ''}</option>)}</select></label>
               <label class="edit-sel"><span>Judge my chances on</span>
-                <select id="m2"><option value="trend">All four years</option><option value="latest">Latest year</option>{[2026, 2025, 2024, 2023].map((y) => <option value={y}>{y} only</option>)}</select></label>
+                <select id="m2"><option value="trend">Every year</option><option value="latest">Latest year</option>{[2026, 2025, 2024, 2023].map((y) => <option value={y}>{y} only</option>)}</select></label>
             </div>
           </div>
         </div>
@@ -182,14 +182,13 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
 </style>
 
 <script>
-  import { addWalking, esc, lookupPostcode, loadCatchments, loadData, ORDER, plural, prepareSearch, scoreAll, MAX_SHORT,
-    type Area, type Mode, type Place, type School, type V, council } from '../lib/engine';
-  import { addedText, addLabel, addSchool, backupOf, getList, getSearch, onListChange, ordinal, rankOf, setSearch } from '../lib/store';
+  import { addWalking, esc, lookupPostcode, loadCatchments, loadData, ORDER, plural, prepareSearch, scoreAll, type Area, type Mode, type Place, type School, type V, council, NUM } from '../lib/engine';
+  import { addedText, addLabel, addSchool, backupOf, getList, getSearch, onListChange, ordinal, rankOf, setSearch, listMax } from '../lib/store';
   import { $, $$, chip, distTxt, ICON, toast, vOf } from '../lib/ui';
   import { initPanel, openPanel, refreshPanel } from '../lib/panel';
   import { initPList, renderPList } from '../lib/plist';
   import { adAreasOf, adCard, areaOf, loadSponsors, sponsorsFor } from '../lib/sponsors';
-  import { NY_PLACES } from '../lib/specs';
+  import { COVERED } from '../lib/specs';
   import { track } from '../lib/track';
   import type { SchoolMap } from '../lib/map';
 
@@ -257,7 +256,7 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
     scoreAll(scored(), mode());
     $('#onboard').hidden = true; $('#about').hidden = true; $('#results').hidden = false;
     const m = mode();
-    $('#resWhere').textContent = `${p.label === 'your location' ? 'Your location' : p.label} · within ${plural(radius(), 'mile')} · ${m === 'trend' ? 'all four years' : m === 'latest' ? 'latest year' : m + ' only'}`;
+    $('#resWhere').textContent = `${p.label === 'your location' ? 'Your location' : p.label} · within ${plural(radius(), 'mile')} · ${m === 'trend' ? 'every year' : m === 'latest' ? 'latest year' : m + ' only'}`;
     syncEdit();
     const mine = res.mine;
     $('#catchline').innerHTML = (mine.length
@@ -297,18 +296,18 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
     const rowsHtml = list.slice(0, cap).map((s) => row(s, m));
     if (feat && rowsHtml.length) rowsHtml.splice(Math.min(4, rowsHtml.length), 0, `<div class="ad-row">${adCard(feat, 'results', 'Sponsored')}</div>`);
     $('#rows').innerHTML = list.length ? rowsHtml.join('')
-      : `<div class="no-results"><strong>No schools in range.</strong><br>Try a larger distance. This checker covers York and the ${NY_PLACES} areas of North Yorkshire.</div>`;
+      : `<div class="no-results"><strong>No schools in range.</strong><br>Try a larger distance. This checker covers ${COVERED} primary schools.</div>`;
     const more = $('#more');
     more.hidden = list.length <= cap;
     more.textContent = `Show ${plural(list.length - cap, 'more school')}`;
     // the list
     renderPList(plOpts);
     const n = getList().length;
-    $('#plCount').textContent = `${n} of ${MAX_SHORT}`;
+    $('#plCount').textContent = `${n} of ${listMax()}`;
     $$('[data-list-count-plain]').forEach((e) => (e.textContent = String(n)));
     const listed = getList().map((d) => byUrn.get(d)!).filter(Boolean);
     const safe = listed.some((s) => s.result && (s.result.v === 'in' || s.result.v === 'all'));
-    $('#plFoot').innerHTML = !n ? `<p class="plist-note">Add schools from the list to rank them. You can name up to five on the council’s form.</p>`
+    $('#plFoot').innerHTML = !n ? `<p class="plist-note">Add schools from the list to rank them. You can name up to ${NUM[listMax()]} on the council’s form.</p>`
       : `<div class="check">${safe ? ICON.tick : ICON.warn}<span>${safe ? 'You have a safe bet in your list. Good move.' : 'No safe bet yet. Adding one means you’re not relying on a close call.'}</span></div>
          <p class="plist-note">Saved on this device. On a keyboard, select a school’s handle and use the up and down keys to move it.</p>`;
     if (mapShown()) drawMap();
@@ -346,7 +345,7 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
   }
   function drawDrawer() {
     const listed = getList().map((d) => byUrn.get(d)!).filter(Boolean);
-    $('#drawer').innerHTML = `<div class="drawer-head"><h2>Your list</h2><span class="muted" style="font-size:14px">${listed.length} of ${MAX_SHORT}</span></div>`
+    $('#drawer').innerHTML = `<div class="drawer-head"><h2>Your list</h2><span class="muted" style="font-size:14px">${listed.length} of ${listMax()}</span></div>`
       + (listed.length ? listed.map((s, i) => `<button type="button" class="drawer-row" data-pin="${s.id}"><span class="pin p-${vOf(s)}" style="width:26px;height:26px;font-size:14px;border-width:2px;box-shadow:none">${i + 1}</span>${esc(s.name.replace(/,.*$/, '').replace(/ School$/, ''))}<span class="mi">${esc(distTxt(s).replace(/ (walk|straight line)$/, ''))}</span></button>`).join('')
         : '<p class="muted" style="font-size:15px">Nothing yet. Tap a pin to add a school.</p>')
       + '<span class="hand" style="font-size:22px;padding-top:6px">tap any pin to see it</span>';

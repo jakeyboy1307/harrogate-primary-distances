@@ -1,0 +1,33 @@
+---
+// Area page: the East Riding's Goole, Howden, Pocklington and Brough (its constituencies are in lib/specs.ts AREA_INFO). Questions follow
+// Google's suggestions (November 2026); the ones every East Riding page shares are in lib/eastriding.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { erFaqs, erTail } from '../lib/eastriding';
+import { AREA_INFO, COVERED } from '../lib/specs';
+import { url } from '../lib/url';
+const info = AREA_INFO.goole;
+const schools = loadArea('east-riding.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ['What is my catchment school in Goole?',
+    `Put your postcode into the <a href="${url('')}">school catchment checker</a>. It tells you which primary school catchment area you’re in, and your chances at every primary school nearby, in Goole, Howden, Snaith, Pocklington, Brough and the villages. Every school here has a catchment except the Catholic schools, St Joseph’s in Goole and St Mary and St Joseph in Pocklington, which set their own rules.`],
+  ...erFaqs('Goole', openLatest(schools).length, schools.length),
+  ['How do the infant and junior schools work in Howden and Pocklington?',
+    'Howden CE Infant School and Pocklington CE Infant School take children from Reception to Year 2. They then move to Howden Junior School or Pocklington Junior School for Year 3, and you apply again for that place while your child is in Year 2. The checker covers the Reception place at the infant school.'],
+  ['Is Goole Academy or Woldgate School on here?',
+    'No. Goole Academy, Snaith School, Howden School, Woldgate School in Pocklington and South Hunsley School are secondary schools, and the checker covers primary schools and Reception places only.'],
+  ['We live near Selby, Doncaster or York. Which council do I apply to?',
+    `The council for where you live, even when you want a school in another council’s area: North Yorkshire Council around Selby, City of York Council in York, or Doncaster Council. You can still name East Riding schools on that form. The checker covers ${COVERED} schools, so you can compare schools across those borders, except Doncaster’s.`],
+  ...erTail,
+];
+---
+<AreaPage areaKey="goole"
+  title="Goole, Howden and Pocklington primary school catchment areas, map and Ofsted · Yorkshire School Checker"
+  description="Goole, Howden, Pocklington and Brough primary school catchment areas: find your catchment school, which schools are hardest to get into, Ofsted ratings and the 2027 Reception dates."
+  h1="Goole, Howden and Pocklington primary schools and catchment areas"
+  lede="Primary school catchment areas for every school in Goole, Howden, Snaith, Pocklington, Brough, Elloughton, Swanland and Stamford Bridge, and the villages from the Humber to the edge of York."
+  area="Goole"
+  schools={schools}
+  groups={[{ label: 'Goole, Howden, Pocklington and Brough', note: `${schools.length} East Riding of Yorkshire Council primary and infant schools.`, schools }]}
+  faqs={faqs}
+/>

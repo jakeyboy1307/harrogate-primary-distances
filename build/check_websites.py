@@ -4,7 +4,7 @@ domain someone else has bought (Burneston's became a cashback site) is caught to
     python3 build/check_websites.py            # prints only the links that need a look
 
 Sites behind Cloudflare's bot check answer 403 here but open fine in a browser; open those by hand before
-changing them. Fixes go in WEB in build_data.py (North Yorkshire) or build_york.py (York).
+changing them. Fixes go in WEB in build_data.py (North Yorkshire), build_york.py (York) or build_eastriding.py.
 """
 import json, re, subprocess
 from concurrent.futures import ThreadPoolExecutor
@@ -33,7 +33,7 @@ def check(s):
     return s, 'ok', final
 
 
-schools = [s for f in ('build/data.json', 'build/york.json') for s in json.load(open(f))['schools']]
+schools = [s for f in ('build/data.json', 'build/york.json', 'build/east-riding.json') for s in json.load(open(f))['schools']]
 with ThreadPoolExecutor(12) as ex:
     res = list(ex.map(check, schools))
 bad = [r for r in res if r[1] != 'ok']

@@ -18,6 +18,7 @@ const readIf = (p) => (existsSync(resolve(here, p)) ? read(p) : {});
 const areas = [
   { id: 'north-yorkshire', name: 'North Yorkshire', data: read('../../build/data.json'), contacts: readIf('../../build/contacts.json') },
   { id: 'york', name: 'York', data: read('../../build/york.json'), contacts: readIf('../../build/york-contacts.json') },
+  { id: 'east-riding', name: 'East Riding of Yorkshire', data: read('../../build/east-riding.json'), contacts: readIf('../../build/east-riding-contacts.json') },
 ];
 
 const out = resolve(here, '../public/data');

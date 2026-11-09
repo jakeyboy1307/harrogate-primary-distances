@@ -1,7 +1,8 @@
 // The ad spots and the rules for what goes in them. One list, used by the admin form, the admin API
 // (worker/admin.js, which enforces it) and the ad specs page, so they can't disagree.
 
-export type Area = 'harrogate' | 'york' | 'craven' | 'selby' | 'hambleton' | 'richmondshire' | 'ryedale' | 'scarborough';
+export type Area = 'harrogate' | 'york' | 'craven' | 'selby' | 'hambleton' | 'richmondshire' | 'ryedale' | 'scarborough'
+  | 'bridlington' | 'beverley' | 'goole' | 'cottingham';
 export type Placement = 'uniform' | 'profile' | 'nearby' | 'results' | 'plan' | 'area' | 'pagesponsor';
 
 // Every area the checker covers, in one place: the area pages, the school pages' breadcrumbs, the ad areas, the
@@ -29,6 +30,11 @@ export const AREA_INFO: Record<Area, AreaInfo> = {
   ryedale: { label: 'Malton, Pickering and Ryedale', short: 'Malton', name: 'Malton, Norton and Pickering', page: 'malton-primary-schools/', council: 'North Yorkshire', district: 'Ryedale', home: ['E07000167'], example: ['YO17 7XJ', 'Malton'] },
   scarborough: { label: 'Scarborough, Whitby and Filey', short: 'Scarborough', name: 'Scarborough, Whitby and Filey', page: 'scarborough-primary-schools/', council: 'North Yorkshire', district: 'Scarborough', home: ['E07000168'], example: ['YO12 7HU', 'Scarborough'] },
   selby: { label: 'Selby and Tadcaster', short: 'Selby', name: 'Selby and Tadcaster', page: 'selby-primary-schools/', council: 'North Yorkshire', district: 'Selby', home: ['E07000169'], example: ['YO8 4QB', 'Selby'] },
+  // East Riding has no districts: its areas are its parliamentary constituencies, as the DfE names them (cut at 30 letters)
+  bridlington: { label: 'Bridlington, Driffield and the Wolds', short: 'Bridlington', name: 'Bridlington, Driffield and Hornsea', page: 'bridlington-primary-schools/', council: 'East Riding of Yorkshire', constituencies: ['Bridlington and The Wolds'], home: ['E06000011'], example: ['YO16 7AQ', 'Bridlington'] },
+  beverley: { label: 'Beverley and Holderness', short: 'Beverley', name: 'Beverley, Hedon and Withernsea', page: 'beverley-primary-schools/', council: 'East Riding of Yorkshire', constituencies: ['Beverley and Holderness'], home: ['E06000011'], example: ['HU17 9LW', 'Beverley'] },
+  goole: { label: 'Goole, Howden and Pocklington', short: 'Goole', name: 'Goole, Howden and Pocklington', page: 'goole-primary-schools/', council: 'East Riding of Yorkshire', constituencies: ['Goole and Pocklington'], home: ['E06000011'], example: ['DN14 6TL', 'Goole'] },
+  cottingham: { label: 'Cottingham, Hessle and Willerby', short: 'Cottingham', name: 'Cottingham, Hessle and Willerby', page: 'cottingham-primary-schools/', council: 'East Riding of Yorkshire', constituencies: ['Kingston upon Hull North and C', 'Kingston upon Hull West and Ha'], home: ['E06000011'], example: ['HU16 5BP', 'Cottingham'] },
 };
 // The areas' names for the site's wording, so a new area appears everywhere from its line above:
 // PLACES "Harrogate, York, Skipton, Northallerton, Richmond, Malton, Scarborough and Selby"; NY_PLACES the same without York
@@ -42,6 +48,8 @@ export const COVERED = listOf([...new Set(Object.values(AREA_INFO).map((a) => CO
 
 // North Yorkshire Council's term and holiday dates, for the area pages' term dates question
 export const NY_TERM_DATES = 'https://www.northyorks.gov.uk/education-and-learning/education-and-learning/school-term-and-holiday-dates';
+// and East Riding of Yorkshire Council's
+export const ER_TERM_DATES = 'https://www.eastriding.gov.uk/learning/schools-colleges-and-academies/school-term-dates/';
 export const AREAS = Object.fromEntries(Object.entries(AREA_INFO).map(([k, a]) => [k, a.label])) as Record<Area, string>;
 export const AREA_SHORT = Object.fromEntries(Object.entries(AREA_INFO).map(([k, a]) => [k, a.short])) as Record<Area, string>;
 // Used by the admin's coverage map: these districts show as fully covered, others with some of our schools as partly

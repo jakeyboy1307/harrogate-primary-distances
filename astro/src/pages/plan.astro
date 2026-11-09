@@ -49,8 +49,8 @@ import { PLACES } from '../lib/specs';
 </Base>
 
 <script>
-  import { addWalking, council, dateState, esc, fmt, loadCatchments, loadData, MAX_SHORT, ORDER, prepareSearch, scoreAll, type Mode, type School } from '../lib/engine';
-  import { addedText, addLabel, addSchool, backupOf, getList, getSearch, onListChange, ordinal, rankOf } from '../lib/store';
+  import { addWalking, council, dateState, esc, fmt, loadCatchments, loadData, ORDER, prepareSearch, scoreAll, type Mode, type School, NUM } from '../lib/engine';
+  import { addedText, addLabel, addSchool, backupOf, getList, getSearch, onListChange, ordinal, rankOf, listMax } from '../lib/store';
   import { $, chip, ICON, shortName, toast, vOf } from '../lib/ui';
   import { initPanel, openPanel, refreshPanel } from '../lib/panel';
   import { initPList, renderPList } from '../lib/plist';
@@ -58,6 +58,7 @@ import { PLACES } from '../lib/specs';
   import { adAreasOf, adCard, loadSponsors, sponsorsFor } from '../lib/sponsors';
 
   const saved = getSearch();
+  $('#plTitle').textContent = `Your ${NUM[listMax()]}, in order`;   // the council's form: five, or three in the East Riding
   const cn = council(saved?.place.district);   // the council you apply to, from your postcode
   const mode = (): Mode => saved?.mode ?? 'trend';
   let near: School[] = [];
@@ -71,7 +72,7 @@ import { PLACES } from '../lib/specs';
   const step = !saved ? 0 : ds.phase === 'open' ? 1 : ds.phase === 'closed' ? 2 : 3;
   const steps = [
     ['Check your postcode', saved ? `We found schools near ${saved.place.label === 'your location' ? 'you' : saved.place.label}.` : 'See every school you could apply for.', saved ? 'Done' : 'Start here'],
-    ['Visit and pick five', 'Book a look round, then rank what you liked below.', 'You’re here'],
+    [`Visit and pick ${NUM[listMax()]}`, 'Book a look round, then rank what you liked below.', 'You’re here'],
     ['Send the council form', `Apply online with <a href="${cn.apply}" target="_blank" rel="noopener">${cn.name}</a>, putting your schools in your order.`, 'Fri 15 January'],
     ['Offer day', 'You’ll hear which school has a place for your child.', 'Fri 16 April'],
   ];
@@ -102,7 +103,7 @@ import { PLACES } from '../lib/specs';
     renderPList(plOpts);
     refreshPanel();
     const listed = getList().map((d) => byUrn.get(d)!).filter(Boolean);
-    $('#plCount').textContent = `${listed.length} of ${MAX_SHORT}`;
+    $('#plCount').textContent = `${listed.length} of ${listMax()}`;
     // plan check
     const m = mode();
     const safe = listed.filter((s) => s.result && (s.result.v === 'in' || s.result.v === 'all'));
@@ -110,12 +111,12 @@ import { PLACES } from '../lib/specs';
     const unlikely = listed.filter((s) => s.result?.v === 'out');
     const checks: string[] = [];
     if (!saved) checks.push(`${ICON.warnY}<span>Check your postcode first so we can tell you your chances at each school.</span>`);
-    else if (!listed.length) checks.push(`${ICON.warnY}<span>Your list is empty. Add the schools you like, up to five.</span>`);
+    else if (!listed.length) checks.push(`${ICON.warnY}<span>Your list is empty. Add the schools you like, up to ${NUM[listMax()]}.</span>`);
     else {
       checks.push(safe.length ? `${ICON.tickY}<span>You have a safe bet in your list, so you’re not relying on a close call.</span>`
         : `${ICON.warnY}<span>There’s no safe bet in your list yet. Adding one means you’re not relying on a close call.</span>`);
       own.forEach((s) => checks.push(`${ICON.warnY}<span>${esc(shortName(s.name))} sets its own rules. Read its admissions policy before you keep it at number ${rankOf(s.urn)}.</span>`));
-      if (unlikely.length && listed.length < MAX_SHORT) checks.push(`${ICON.warnY}<span>${esc(shortName(unlikely[0].name))} looks unlikely. It’s fine to keep it, but add another school you’d be happy with too.</span>`);
+      if (unlikely.length && listed.length < listMax()) checks.push(`${ICON.warnY}<span>${esc(shortName(unlikely[0].name))} looks unlikely. It’s fine to keep it, but add another school you’d be happy with too.</span>`);
     }
     const good = saved && listed.length && safe.length;
     $('#planCheck').innerHTML = `<h2>${good ? 'Your plan looks good' : !saved ? 'Let’s get started' : 'A few things to check'}</h2>`

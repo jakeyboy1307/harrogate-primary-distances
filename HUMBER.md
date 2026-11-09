@@ -139,6 +139,14 @@ To Hull City Council (LSadmissions@hullcc.gov.uk):
 
 - **Groundwork (H0), 9 November:** done on the `humber-groundwork` branch. The "firsts" year record and its verdicts, the DfE reader in `common.py` and `fetch.sh`, areas by council and constituency, every council's data file read from `areas.json`, and generated coverage wording. The footer now says "not run by any council or school". Every North Yorkshire and York page is otherwise unchanged.
 
+- **East Riding (H1), 9 November:** built on the `east-riding` branch, not yet live.
+  - 118 schools (the register's open primary and infant schools with a 2026 Reception intake, matching the DfE's count), 113 catchments, and four area pages: `/bridlington-primary-schools/`, `/beverley-primary-schools/`, `/goole-primary-schools/` and `/cottingham-primary-schools/`.
+  - Who got in, 2024 to 2026, is in `build/east-riding/allocations.csv`: 2024 from the PDF's text, 2025 and 2026 typed from the tables' pictures. Every row's places by criterion add up to its places allocated (Marshlands 2024 also placed four children who hadn't named it). First preferences match the DfE's within one to three for about 20 school-years, about as often for the 2024 rows (read from the PDF's text) as for the typed ones, so this is a difference in how the two count, not typing.
+  - A school with no waiting list took everyone (East Riding puts every refused applicant on one). Croxby, Bubwith and New Pasture Lane aren't in the council's tables, but the DfE's figures show first choices refused, so those years show as oversubscribed.
+  - Distances are straight lines, as the council measures. The catchment layer still uses old school numbers for 17 schools; `CATCH_CODE` maps them (merged primaries take their infant school's catchment). The five Catholic academies have no catchment.
+  - The family's list now follows their council: three schools in the East Riding, five elsewhere. A longer list moves its extra schools to the backups.
+  - 30 random postcodes match the council's catchment layer. Five websites fixed (Kirk Ella's old domain is now a gambling site), five emails left out.
+
 ## Decisions (9 November 2026)
 
 1. **No Lincolnshire for now.** North and North East Lincolnshire are left out. The admin coverage map now names their county as Lincolnshire rather than "Yorkshire and The Humber".

@@ -1,0 +1,33 @@
+---
+// Area page: the East Riding's Cottingham, Hessle, Willerby and Anlaby (its constituencies are in lib/specs.ts AREA_INFO). Questions follow
+// Google's suggestions (November 2026); the ones every East Riding page shares are in lib/eastriding.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { erFaqs, erTail } from '../lib/eastriding';
+import { AREA_INFO, COVERED } from '../lib/specs';
+import { url } from '../lib/url';
+const info = AREA_INFO.cottingham;
+const schools = loadArea('east-riding.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ['What is my catchment school in Cottingham?',
+    `Put your postcode into the <a href="${url('')}">school catchment checker</a>. It tells you which primary school catchment area you’re in, and your chances at every primary school nearby, in Cottingham, Hessle, Willerby, Anlaby, Kirk Ella and Dunswell. Near a boundary? Check your exact address on the council’s map.`],
+  ...erFaqs('Cottingham', openLatest(schools).length, schools.length),
+  ['How do Hessle’s infant and junior schools work?',
+    'All Saints CE Infant Academy in Hessle takes children from Reception to Year 2. They then move to All Saints CE Junior Academy for Year 3, and you apply again for that place while your child is in Year 2. The checker covers the Reception place at the infant school.'],
+  ['Looking for Cottingham Primary School in Corby, or Willerby Road in Scunthorpe?',
+    'Those are different schools. This page covers Cottingham and Willerby in the East Riding, next to Hull. Cottingham’s primary schools are Bacon Garth, Hallgate, Westfield and Croxby.'],
+  ['We live in Hull. Which council do I apply to?',
+    'Hull City Council, as the council where you live, even when you want a school in Cottingham, Hessle or Willerby. You can name East Riding schools on that form. The checker doesn’t cover Hull’s own schools yet.'],
+  ...erTail,
+];
+---
+<AreaPage areaKey="cottingham"
+  title="Cottingham, Hessle and Willerby primary school catchment areas, map and Ofsted · Yorkshire School Checker"
+  description="Cottingham, Hessle, Willerby, Anlaby and Kirk Ella primary school catchment areas: find your catchment school, which schools are hardest to get into, Ofsted ratings and the 2027 Reception dates."
+  h1="Cottingham, Hessle and Willerby primary schools and catchment areas"
+  lede="Primary school catchment areas for every East Riding school on Hull’s doorstep: Cottingham, Hessle, Willerby, Anlaby, Kirk Ella and Dunswell."
+  area="Cottingham and Hessle"
+  schools={schools}
+  groups={[{ label: 'Cottingham, Hessle, Willerby and Anlaby', note: `${schools.length} East Riding of Yorkshire Council primary and infant schools.`, schools }]}
+  faqs={faqs}
+/>

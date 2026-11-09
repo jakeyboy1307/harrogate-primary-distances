@@ -21,6 +21,7 @@ const DROP: RegExp[] = [
   /\bCP\b/g,                                                // "Helmsley CP School"
   /\bNursery (&|and) (?=Infants?\b)/gi,                      // "Filey CE Nursery & Infants Academy"
   /\bV[AC]\b/g,                                             // "Austwick CofE VA Primary School"
+  /\bFoundation (?=School\b)/g,                            // "Wold Newton Foundation School"
   /\b(Church of England|C of E|Cof E|CofE|CE)\b/gi, /\b(Roman )?Catholic\b/gi, /\bMethodist\b/gi, /\bAnglican\b/gi,
   /\bVoluntary (Controlled|Aided)\b/gi, /\bControlled\b/gi, /\bCommunity\b/gi, /\bCounty\b/gi, /\band Nursery\b/gi,
   /\b(Primary|Infant|Infants|Junior) (Foundation )?(School|Academy)\b/gi, /\bSchool\b/gi, /\bAcademy\b/gi,
@@ -78,6 +79,12 @@ export function schoolPages(): SchoolPage[] {
   const locked = LOCKED as Record<string, string>, taken = new Set(Object.values(locked));
   for (const p of pages) {
     const keep = locked[p.s.urn];
+    // a published page keeps its name too: one that went out without its town ("Westfield Primary School" in York)
+    // doesn't gain one when a school of the same name joins elsewhere (Westfield, Cottingham)
+    if (keep && p.withPlace && !GENERIC.test(p.short) && !keep.endsWith(kebab(p.s.place))) {
+      p.withPlace = false;
+      p.name = p.name.replace(/, [^,]+$/, '');
+    }
     if (keep) p.slug = keep;
     else if (taken.has(p.slug)) p.slug = `${p.slug}-${p.s.urn}`;   // a published page already has this address
   }

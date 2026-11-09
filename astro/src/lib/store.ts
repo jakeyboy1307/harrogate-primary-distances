@@ -1,5 +1,5 @@
 // What the site remembers on this device: the ranked list (of school URNs) and the last search.
-import { MAX_SHORT, type Mode, type Place } from './engine';
+import { council, type Mode, type Place } from './engine';
 import legacyIds from './legacy-ids.json';
 
 const get = <T>(k: string, d: T): T => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } };
@@ -23,8 +23,10 @@ const listeners = new Set<Listener>();
 export const onListChange = (f: Listener) => { listeners.add(f); return () => listeners.delete(f); };
 const emit = () => listeners.forEach((f) => f());
 
-export function getList(): number[] { return get<number[]>(KEY, []).slice(0, MAX_SHORT); }
-export function setList(list: number[]) { set(KEY, list.slice(0, MAX_SHORT)); emit(); }
+// How many schools the family can name: their council's form takes five (North Yorkshire, York) or three (East Riding)
+export const listMax = () => council(getSearch()?.place.district).prefs;
+export function getList(): number[] { return get<number[]>(KEY, []).slice(0, listMax()); }
+export function setList(list: number[]) { set(KEY, list.slice(0, listMax())); emit(); }
 export function inList(urn: number) { return getList().includes(urn); }
 export function rankOf(urn: number) { const i = getList().indexOf(urn); return i < 0 ? null : i + 1; }
 export function removeFromList(urn: number) { setList(getList().filter((d) => d !== urn)); }
@@ -34,8 +36,8 @@ export function moveInList(urn: number, to: number) {
   setList(l);
 }
 
-// Backups: schools a parent likes but can't fit in their five. They never go on the council form, and can be
-// moved into the list at any time (the school in 5th place swaps down when the list is full).
+// Backups: schools a parent likes but can't fit in their list. They never go on the council form, and can be
+// moved into the list at any time (the last school swaps down when the list is full).
 const BACKUP_KEY = 'ysc-backups';
 export const MAX_BACKUPS = 10;
 export function getBackups(): number[] {
@@ -44,24 +46,24 @@ export function getBackups(): number[] {
 }
 export const backupOf = (urn: number) => getBackups().includes(urn);
 export function removeBackup(urn: number) { set(BACKUP_KEY, getBackups().filter((u) => u !== urn)); emit(); }
-// Save the list and the backups together, after a drag between them. If the list is over five, the last school
+// Save the list and the backups together, after a drag between them. If the list is over its length, the last school
 // other than `keep` (the one just moved in) drops to the top of the backups. Returns that school, if any.
 export function setListAndBackups(list: number[], backups: number[], keep?: number) {
   list = [...list];
   let down: number | null = null;
-  if (list.length > MAX_SHORT) {
+  if (list.length > listMax()) {
     const i = list.map((u) => u !== keep).lastIndexOf(true);
     down = list.splice(i, 1)[0];
   }
-  set(KEY, list.slice(0, MAX_SHORT));
+  set(KEY, list.slice(0, listMax()));
   set(BACKUP_KEY, [...(down != null ? [down] : []), ...backups.filter((u) => !list.includes(u) && u !== down)].slice(0, MAX_BACKUPS));
   emit();
   return down;
 }
-// Move a backup into the list: last if there's room, else into 5th place, swapping the 5th school down
+// Move a backup into the list: last if there's room, else into the last place, swapping that school down
 export function promoteBackup(urn: number) {
   const list = getList().filter((u) => u !== urn);
-  list.splice(Math.min(list.length, MAX_SHORT - 1), 0, urn);
+  list.splice(Math.min(list.length, listMax() - 1), 0, urn);
   return setListAndBackups(list, getBackups().filter((u) => u !== urn), urn);
 }
 
@@ -70,7 +72,7 @@ export type AddResult = 'added' | 'backup' | 'already' | 'full';
 export function addSchool(urn: number): AddResult {
   const list = getList();
   if (list.includes(urn) || backupOf(urn)) return 'already';
-  if (list.length < MAX_SHORT) {
+  if (list.length < listMax()) {
     setList([...list, urn]);
     set(BACKUP_KEY, getBackups().filter((u) => u !== urn));
     return 'added';
@@ -87,10 +89,19 @@ export function addedText(urn: number, r: AddResult) {
   return rankOf(urn) ? `Already your ${ordinal(rankOf(urn)!)} choice` : 'Already one of your backups';
 }
 // The label for an "add" button: what pressing it will do
-export const addLabel = () => (getList().length < MAX_SHORT ? `Add as ${ordinal(getList().length + 1)}` : 'Add as a backup');
+export const addLabel = () => (getList().length < listMax() ? `Add as ${ordinal(getList().length + 1)}` : 'Add as a backup');
 
 export function getSearch(): SavedSearch | null { return get<SavedSearch | null>('ysc-search', null); }
-export function setSearch(s: SavedSearch | null) { set('ysc-search', s); }
+// A new search in a council with a shorter form (East Riding's three) moves the extra schools to the top of the backups
+export function setSearch(s: SavedSearch | null) {
+  set('ysc-search', s);
+  const all = get<number[]>(KEY, []), n = listMax();
+  if (all.length > n) {
+    set(KEY, all.slice(0, n));
+    set(BACKUP_KEY, [...all.slice(n), ...get<number[]>(BACKUP_KEY, []).filter((u) => !all.includes(u))].slice(0, MAX_BACKUPS));
+    emit();
+  }
+}
 
 const SUFFIX: Record<number, string> = { 1: 'st', 2: 'nd', 3: 'rd' };
 export const ordinal = (n: number) => n + (SUFFIX[n] ?? 'th');   // the list never goes past 5th

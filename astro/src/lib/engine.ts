@@ -3,22 +3,32 @@
 export const MI = 1609.344;
 export const EDGE_M = 0.1 * MI;     // borderline band: a tenth of a mile
 export const UNDERSUB_M = 2 * MI;   // an out-of-catchment cut-off this long means nobody local missed out
-export const MAX_SHORT = 5;         // North Yorkshire's application form takes five preferences
+export const MAX_SHORT = 5;         // the most choices any council's form takes; each council's own is COUNCILS[...].prefs
+export const NUM = ['none', 'one', 'two', 'three', 'four', 'five'];
 export const ROUTER = 'https://routing.openstreetmap.de/routed-foot/table/v1/foot/';
 // Each council's own catchment map and Reception application page, by the district postcodes.io gives a postcode
-export interface Council { name: string; catchMap: string; apply: string; policy: string }
+export interface Council { name: string; catchMap: string; apply: string; policy: string; prefs: number }   // prefs: schools the form takes
 export const COUNCILS: Record<string, Council> = {
   'North Yorkshire': {
     name: 'North Yorkshire Council',
     catchMap: 'https://experience.arcgis.com/experience/4dd5b97eae514b31a067137ebf7cdd6a',
     apply: 'https://www.northyorks.gov.uk/education-and-learning/education-and-learning/school-admissions/starting-primary-school-and-junior-school',
     policy: 'catchment first, then brothers and sisters, then distance',
+    prefs: 5,
+  },
+  'East Riding of Yorkshire': {
+    name: 'East Riding of Yorkshire Council',
+    catchMap: 'https://eastriding.maps.arcgis.com/apps/webappviewer/index.html?id=244a8443912c427e9bef37461ee1942e',
+    apply: 'https://www.eastriding.gov.uk/learning/schools-colleges-and-academies/school-admissions/apply-for-a-school-place/how-to-apply-for-a-school-place/',
+    policy: 'catchment first, then brothers and sisters, then distance in a straight line',
+    prefs: 3,
   },
   York: {
     name: 'City of York Council',
     catchMap: 'https://www.york.gov.uk/schools/PrimaryMap',
     apply: 'https://www.york.gov.uk/PrimaryAdmissions',
     policy: 'catchment first, brothers and sisters ahead of others, then brothers and sisters from outside it, then the shortest walk',
+    prefs: 5,
   },
 };
 export const council = (district?: string | null) => COUNCILS[district ?? ''] ?? COUNCILS['North Yorkshire'];

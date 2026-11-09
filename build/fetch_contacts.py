@@ -30,18 +30,22 @@ OFFICE = ('admin', 'office', 'enquir', 'admission', 'head', 'info', 'school', 'r
 SKIP = ('example.', 'helpdesk', 'webanywhere', 'nyes.digital', 'carltonprimary@setschools', 'jcollins@stocktonprimary', 'sentry', 'wixpress', 'webmaster', 'safeguard', 'dpo', 'governor', 'gdpr', 'data', 'pta', 'friends')
 
 
-# Emails set by hand, by council code, where a school's own site can't give the right one: North Rigton and All Saints,
+# Emails set by hand, by URN (council codes repeat between councils), where a school's own site can't give the right one: North Rigton and All Saints,
 # Kirkby Overblow share one site, which lists both offices, as do North and South Cowton and Melsonby, and the Ribblesdale schools; Barton's site
 # also lists its trust's office, which isn't the school's
-FIXED = {'3260': ('admin@northrigton.ycway.uk', 'https://asnrfellowship.ycst.co.uk/contact/'),
-         '3361': ('admin@allsaints.ycway.uk', 'https://asnrfellowship.ycst.co.uk/contact/'),
-         '2081': ('admin@northsouthcowton.n-yorks.sch.uk', 'https://www.fednscmms.co.uk/'),
-         '3208': ('admin@melsonby.n-yorks.sch.uk', 'https://www.fednscmms.co.uk/'),
-         '3133': ('admin@barton.dalesmat.org', 'https://www.barton.dalesmat.org/contact-us/'),
+FIXED = {'142851': ('admin@northrigton.ycway.uk', 'https://asnrfellowship.ycst.co.uk/contact/'),
+         '142138': ('admin@allsaints.ycway.uk', 'https://asnrfellowship.ycst.co.uk/contact/'),
+         '121309': ('admin@northsouthcowton.n-yorks.sch.uk', 'https://www.fednscmms.co.uk/'),
+         '121543': ('admin@melsonby.n-yorks.sch.uk', 'https://www.fednscmms.co.uk/'),
+         '144155': ('admin@barton.dalesmat.org', 'https://www.barton.dalesmat.org/contact-us/'),
          # the Ribblesdale Federation's site lists all three offices
-         '2324': ('office@giggleswick-pri.n-yorks.sch.uk', 'https://ribblesdalefed.n-yorks.sch.uk/contact-us/'),
-         '2336': ('office@hellifield.n-yorks.sch.uk', 'https://ribblesdalefed.n-yorks.sch.uk/contact-us/'),
-         '3362': ('office@longpreston.n-yorks.sch.uk', 'https://ribblesdalefed.n-yorks.sch.uk/contact-us/')}
+         '121392': ('office@giggleswick-pri.n-yorks.sch.uk', 'https://ribblesdalefed.n-yorks.sch.uk/contact-us/'),
+         '121402': ('office@hellifield.n-yorks.sch.uk', 'https://ribblesdalefed.n-yorks.sch.uk/contact-us/'),
+         '121631': ('office@longpreston.n-yorks.sch.uk', 'https://ribblesdalefed.n-yorks.sch.uk/contact-us/')}
+# Emails the school's site gives that aren't its office, by URN, left out: a named teacher (Molescroft), the SENCo
+# (Swinefleet), a typo (North Frodingham), and a federation partner's (Hornsea Burton has Skipsea's, Sutton upon
+# Derwent has Bugthorpe's)
+NO_EMAIL = {'117861', '117889', '117942', '118026', '133519'}
 
 
 def get(url, timeout=20, hops=3):
@@ -130,8 +134,11 @@ def main(data_path, out_path, everything=False):
                 rec['email'], rec['emailSrc'] = email, src
         except Exception as e:
             print(f"  website failed for {s['name']}: {e}", file=sys.stderr)
-        if str(s['dfe']) in FIXED:
-            rec['email'], rec['emailSrc'] = FIXED[str(s['dfe'])]
+        u = str(s.get('urn') or (s.get('of') or {}).get('urn'))
+        if u in FIXED:
+            rec['email'], rec['emailSrc'] = FIXED[u]
+        if u in NO_EMAIL:
+            rec.pop('email', None); rec.pop('emailSrc', None)
         out[str(s['dfe'])] = {k: v for k, v in rec.items() if v}
         print(f"{s['name'][:45]:45}  {rec.get('tel') or '-':13}  {rec.get('email') or '-'}")
         time.sleep(0.5)   # be gentle with GIAS and the schools' sites

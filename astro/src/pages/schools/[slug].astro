@@ -5,7 +5,7 @@
 // school's details open.
 import Base from '../../layouts/Base.astro';
 import { url } from '../../lib/url';
-import { mon, noDist, whoGotIn } from '../../lib/engine';
+import { mon, noDist, whoGotIn, NUM } from '../../lib/engine';
 import { miles, nearby, published, schoolPages, summary, yearLine, type SchoolPage } from '../../lib/schoolpages';
 
 export function getStaticPaths() {
@@ -61,7 +61,7 @@ const faqs: [string, string][] = [
       ? `${p.name} hasn’t had an Ofsted inspection published yet.`
       : `${sm.of.head}. ${sm.of.sub}. <a href="${s.of!.link}" target="_blank" rel="noopener">Read the Ofsted reports</a>.`],
   [`When do I apply for a Reception place at ${p.short} for September 2027?`,
-    `Apply online to <a href="${council.apply}" target="_blank" rel="noopener">${council.name}</a> by Friday 15 January 2027. You can name up to five schools in the order you want them. Offers go out on Friday 16 April 2027.`],
+    `Apply online to <a href="${council.apply}" target="_blank" rel="noopener">${council.name}</a> by Friday 15 January 2027. You can name up to ${NUM[council.prefs]} schools in the order you want them. Offers go out on Friday 16 April 2027.`],
   [`Where can I find ${p.short} term dates, open days and uniform?`,
     `${p.name} publishes its term dates, open days and uniform details itself.${s.web ? ` See <a href="${s.web}" target="_blank" rel="noopener">the school’s website</a>` : ''}${s.tel ? `${s.web ? ', or' : ''} call the office on <a href="tel:${s.tel.replace(/\s/g, '')}">${s.tel}</a>` : ''}.`],
 ];
@@ -206,7 +206,7 @@ const schema = [
 
   <section class="sp-cta wrap">
     <div>
-      <h2>Build your list of five</h2>
+      <h2>Build your list of {NUM[council.prefs]}</h2>
       <p>See your chances at {p.short} and every school near you, then put them in order, ready for the council form.</p>
     </div>
     <a class="btn btn-primary" href="#check">Check my postcode</a>

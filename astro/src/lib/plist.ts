@@ -1,8 +1,8 @@
-// The ranked list of up to five schools: drag by the handle (mouse or touch), or focus a handle and use the arrow keys.
+// The ranked list of schools (as many as the family’s council form takes: five, or three in the East Riding): drag by the handle (mouse or touch), or focus a handle and use the arrow keys.
 // Below it sit the backups, which can be dragged into the list (the 5th school swaps down) or moved in with a button.
 import Sortable from 'sortablejs';
-import { esc, MAX_SHORT, type Mode, type School } from './engine';
-import { getBackups, getList, moveInList, ordinal, promoteBackup, setListAndBackups } from './store';
+import { esc, type Mode, type School } from './engine';
+import { getBackups, getList, moveInList, ordinal, promoteBackup, setListAndBackups, listMax } from './store';
 import { chip, distTxt, ICON, shortName, toast } from './ui';
 
 export interface PListOpts {
@@ -42,7 +42,7 @@ export function renderPList(o: PListOpts) {
     if (!s) return '';
     return `<li class="slot" data-urn="${urn}">${card(o, s, `${ordinal(i + 1)} choice, ${s.name}. Drag, or use the up and down arrow keys, to move it`, s.result ? chip(s, mode, true) : '')}</li>`;
   });
-  const empties = Array.from({ length: list.length < MAX_SHORT ? 1 : 0 }, () =>
+  const empties = Array.from({ length: list.length < listMax() ? 1 : 0 }, () =>
     `<li class="slot empty" aria-hidden="true"><span class="slot-n"></span><div class="slot-empty">${esc(o.emptyText)}</div></li>`);
   o.el.innerHTML = rows.join('') + empties.join('');
   renumber(o.el);
@@ -64,7 +64,7 @@ function renumber(el: HTMLElement) {
   }
 }
 
-const swapped = (down: number | null) => { if (down != null) toast(`Swapped in. Your old ${ordinal(MAX_SHORT)} choice is now a backup.`); };
+const swapped = (down: number | null) => { if (down != null) toast(`Swapped in. Your old ${ordinal(listMax())} choice is now a backup.`); };
 
 export function initPList(o: PListOpts) {
   const urns = (el: HTMLElement) => [...el.querySelectorAll<HTMLElement>('.slot:not(.empty)')].map((li) => +li.dataset.urn!);
@@ -89,7 +89,7 @@ export function initPList(o: PListOpts) {
     const promote = t.closest<HTMLElement>('[data-promote]');
     if (promote) {
       const urn = +promote.dataset.promote!, down = promoteBackup(urn);
-      toast(`Moved into your list as ${ordinal(getList().indexOf(urn) + 1)} choice` + (down != null ? `. Your old ${ordinal(MAX_SHORT)} choice is now a backup` : ''));
+      toast(`Moved into your list as ${ordinal(getList().indexOf(urn) + 1)} choice` + (down != null ? `. Your old ${ordinal(listMax())} choice is now a backup` : ''));
       return;
     }
     const b = t.closest<HTMLElement>('[data-open]');
