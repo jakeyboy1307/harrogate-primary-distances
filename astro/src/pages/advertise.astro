@@ -12,6 +12,16 @@ const slots = [
   { id: 'plan', alt: 'The My plan page, with the Get ready for September business cards highlighted', h: 'Get ready for September', p: 'On every parent’s plan page, alongside their list of schools.', price: 'From £50 a month per area', who: 'Uniform, shoes, care, tutoring' },
   { id: 'area', alt: 'The Harrogate area page, with the page sponsor line highlighted under the heading', h: 'Area page sponsor', p: 'Your name under the heading of an area page, such as Harrogate or Selby, one business per page.', price: 'From £100 a month', who: 'Estate agents, mortgage brokers' },
 ];
+// Who the placements suit: the moment in a family's year that brings them to each kind of business, and the
+// placements that meet it (the names match slots above, so "See what suits you" ticks them in the form)
+const audiences = [
+  { tag: 'Moving house', h: 'Estate agents and mortgage brokers', p: 'Families move for schools. A parent checking catchments is often deciding which street to buy on. Put your name in front of them on the page for the town they’re looking at.', slots: ['Area page sponsor', 'Near this school'] },
+  { tag: 'First day', h: 'School uniform suppliers', p: 'Every new starter needs a uniform, a PE kit and a book bag. Sit right beside the schools you supply, while parents are looking at them.', slots: ['School uniform', 'Get ready for September'] },
+  { tag: 'After 3.15', h: 'Kids’ clubs and activities', p: 'Swimming, dance, football, Brownies, holiday clubs. A new school means new routines, and parents are filling the week around it.', slots: ['Near this school', 'Get ready for September'] },
+  { tag: 'Working parents', h: 'Wraparound care and childminders', p: 'Breakfast club and after-school care are often the first thing working parents ask about. Be the answer next to the school they choose.', slots: ['Near this school', 'Featured in results'] },
+  { tag: 'Still choosing', h: 'Independent schools and nurseries', p: 'Reach families while they’re still weighing up their options, not after the form has gone in.', slots: ['Featured in results'] },
+  { tag: 'Getting ready', h: 'Shoes, tutors and everything else', p: 'School shoes, name labels, lunchboxes, reading tutors, family photographers. If it helps a four-year-old start school, there’s a parent here looking for it.', slots: ['Get ready for September'] },
+];
 const season = [
   ['September to January', 'Peak', 'Parents compare schools and apply. Forms close on 15 January.'],
   ['February to April', 'Steady', 'Waiting for offer day on 16 April. Parents look at backups and moves.'],
@@ -26,6 +36,22 @@ const types = ['School uniform shop', 'Independent school or nursery', 'State sc
       <p class="lede">Parents across {PLACES} use the checker to choose a Reception place. Be there when they’re planning for September.</p>
       <p class="area-acts"><a class="btn btn-primary" href="#enquire">Get in touch</a><a class="btn" href="#options">See the options</a></p>
     </div>
+  </section>
+
+  <section class="how-sec wrap aud" aria-labelledby="audTitle">
+    <h2 id="audTitle">Who it’s for</h2>
+    <p class="intro">Everyone here is a parent with a child about to start school, looking at a particular town. That’s the audience local family businesses spend all year trying to find.</p>
+    <div class="aud-grid">
+      {audiences.map((a) => (
+        <div class="aud-card">
+          <span class="aud-tag">{a.tag}</span>
+          <h3>{a.h}</h3>
+          <p>{a.p}</p>
+          <a class="aud-try" href="#enquire" data-slots={a.slots.join('|')}>Best fit: {a.slots.join(' or ')} <span aria-hidden="true">→</span></a>
+        </div>
+      ))}
+    </div>
+    <p class="aud-more"><span class="hand">and anyone else</span> who helps families start school. <a href="#enquire">Tell us what you do</a> and we’ll suggest the best fit.</p>
   </section>
 
   <section class="how-sec sec-pale wrap" id="options">
@@ -134,10 +160,12 @@ const types = ['School uniform shop', 'Independent school or nursery', 'State sc
   const done = document.getElementById('enqDone')!;
   const say = (t: string, err = false) => { status.textContent = t; status.classList.toggle('err', err); };
 
-  // "Ask about this" ticks that option in the form
-  document.querySelectorAll<HTMLAnchorElement>('.adv-ask').forEach((a) => a.addEventListener('click', () => {
-    const box = form.querySelector<HTMLInputElement>(`input[name=slots][value="${CSS.escape(a.dataset.slot!)}"]`);
-    if (box) box.checked = true;
+  // "Ask about this" and the "Best fit" links tick those options in the form
+  document.querySelectorAll<HTMLAnchorElement>('[data-slot], [data-slots]').forEach((a) => a.addEventListener('click', () => {
+    for (const slot of (a.dataset.slot ?? a.dataset.slots!).split('|')) {
+      const box = form.querySelector<HTMLInputElement>(`input[name=slots][value="${CSS.escape(slot)}"]`);
+      if (box) box.checked = true;
+    }
   }));
 
   form.addEventListener('input', () => say(''));
@@ -176,6 +204,22 @@ const types = ['School uniform shop', 'Independent school or nursery', 'State sc
   .adv-who { font-size: 14px; }
   .adv-price { font-weight: 700; color: var(--ink) !important; margin-top: 4px; }
   .adv-ask { justify-self: start; margin-top: 8px; }
+  .aud-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 36px; max-width: 1280px; }
+  .aud-card { position: relative; display: grid; grid-template-rows: auto auto 1fr auto; gap: 10px; padding: 26px 24px 22px; background: #fff; border: 2px solid var(--ink); border-radius: 16px; box-shadow: 5px 5px 0 var(--ink); transition: transform .15s, box-shadow .15s; }
+  .aud-card:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--cobalt); }
+  .aud-tag { justify-self: start; padding: 3px 10px; border-radius: 6px; background: var(--sticky); color: var(--ink); font: 700 12px/1.5 var(--body); letter-spacing: .04em; text-transform: uppercase; transform: rotate(-2deg); }
+  .aud-card h3 { font: 700 22px/1.2 var(--body); letter-spacing: -0.01em; margin-top: 4px; }
+  .aud-card p { color: var(--muted); line-height: 1.55; }
+  .aud-try { justify-self: start; margin-top: 6px; font-weight: 700; font-size: 15px; color: var(--cobalt); text-decoration: none; }
+  .aud-try:hover { text-decoration: underline; }
+  .aud-try span { display: inline-block; transition: transform .15s; }
+  .aud-try:hover span { transform: translateX(3px); }
+  .aud-more { margin-top: 32px; font-size: 18px; color: var(--muted); }
+  .aud-more .hand { font-size: 28px; margin-right: 4px; }
+  .aud-more a { color: var(--ink); font-weight: 700; }
+  @media (max-width: 1100px) { .aud-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .aud-grid { grid-template-columns: 1fr; gap: 18px; } .aud-card { box-shadow: 4px 4px 0 var(--ink); } }
+  @media (prefers-reduced-motion: reduce) { .aud-card, .aud-try span { transition: none; } .aud-card:hover { transform: none; } }
   .adv-season { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 28px; }
   .adv-season h3 { font: 700 20px var(--body); margin: 10px 0 6px; }
   .adv-season p { color: var(--muted); line-height: 1.5; }
