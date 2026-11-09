@@ -6,15 +6,14 @@ import '../styles/global.css';
 import Rose from '../components/Rose.astro';
 interface Props { title: string; active: string }
 const { title, active } = Astro.props;
-// later stages fill in the pages marked soon
 const menu = [
   ['dashboard', 'Dashboard', '/admin/', false],
   ['ads', 'Ads', '/admin/ads/', false],
   ['advertisers', 'Advertisers', '/admin/advertisers/', false],
   ['spots', 'Ad spots', '/admin/spots/', false],
   ['enquiries', 'Enquiries', '/admin/enquiries/', false],
-  ['schools', 'Schools', '/admin/schools/', true],
-  ['specs', 'Ad specs', '/admin/specs/', true],
+  ['schools', 'Schools', '/admin/schools/', false],
+  ['specs', 'Ad specs', '/admin/specs/', false],
 ] as const;
 ---
 <!doctype html>

@@ -1,5 +1,6 @@
 ---
-// Create or edit one ad: /admin/ads/edit/ for a new one, ?id=N to edit, ?advertiser=N to start one for an advertiser.
+// Create or edit one ad: /admin/ads/edit/ for a new one, ?id=N to edit, ?advertiser=N to start one for an
+// advertiser, ?school=URN to start one for a school.
 // The preview on the right is drawn with the same code the site uses, so it's exactly what parents see.
 import Admin from '../../../../layouts/Admin.astro';
 import { AREAS, LIMITS, SPOTS } from '../../../../lib/specs';
@@ -258,6 +259,14 @@ const categories = ['School uniform', 'Independent school', 'Wraparound care', '
     f('advertiserId').append(...advs.map((a) => new Option(a.name, String(a.id))));
     schools = data.schools.map((s: any) => ({ urn: s.urn, name: s.name, place: s.place, area: areaOf(s) })).sort((a: any, b: any) => a.name.localeCompare(b.name));
     if (id) { current = await api<Ad>(`ads/${id}`); fill(current); }
+    else if (params.get('school')) {
+      // started from a school in the schools table: that school, its area, and the school panel spots ticked
+      const sc = schools.find((x) => x.urn === +params.get('school')!);
+      if (sc) {
+        urns = [sc.urn];
+        form.querySelectorAll<HTMLInputElement>('input[name=areas]').forEach((i) => (i.checked = i.value === sc.area));
+      }
+    }
     else if (params.get('advertiser')) {
       f('advertiserId').value = params.get('advertiser')!;
       const a = advs.find((x) => x.id === +params.get('advertiser')!);

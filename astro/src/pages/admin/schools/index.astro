@@ -1,0 +1,187 @@
+---
+// Every school the checker covers, from the same data files the site uses (public/data/), with how often
+// parents opened it and which ads show on it. Read-only: the figures come from the councils' data.
+import Admin from '../../../layouts/Admin.astro';
+import { AREAS } from '../../../lib/specs';
+---
+<Admin title="Schools" active="schools">
+  <div class="adm-bar">
+    <input type="search" id="q" placeholder="Search school, town or URN" aria-label="Search schools" />
+    <select id="fArea" aria-label="Area"><option value="">Both areas</option>{Object.entries(AREAS).map(([k, a]) => <option value={k}>{a}</option>)}</select>
+    <select id="fOfsted" aria-label="Ofsted"><option value="">Any Ofsted</option><option value="good">Good or better</option><option value="bad">Below Good</option><option value="na">No Ofsted match</option></select>
+    <select id="fAds" aria-label="Ads"><option value="">With or without ads</option><option value="yes">Has an ad in its panel</option><option value="no">No ad in its panel</option></select>
+    <span class="grow"></span>
+    <span class="sub" id="count"></span>
+    <button class="btn btn-sm" id="csv">Download CSV</button>
+  </div>
+  <div class="adm-table-wrap">
+    <table class="adm-table sch-table">
+      <thead><tr>
+        <th><button data-sort="name">School</button></th>
+        <th><button data-sort="area">Area</button></th>
+        <th class="r"><button data-sort="pan">Places</button></th>
+        <th><button data-sort="ofsted">Ofsted</button></th>
+        <th><button data-sort="latest">Latest year</button></th>
+        <th class="r"><button data-sort="ratio">Applied per place</button></th>
+        <th class="r"><button data-sort="opens">Opened, 30 days</button></th>
+        <th class="r"><button data-sort="ads">Ads</button></th>
+      </tr></thead>
+      <tbody id="rows"><tr><td colspan="8" class="adm-empty">Loading…</td></tr></tbody>
+    </table>
+  </div>
+
+  <dialog class="adm-dialog sch-dlg" id="dlg">
+    <div class="sch-head"><div><h2 class="adm-h2" id="dName"></h2><p class="sub" id="dSub"></p></div>
+      <button class="btn btn-xs" id="dClose">Close</button></div>
+    <div id="dBody"></div>
+  </dialog>
+</Admin>
+
+<script>
+  import { api, esc, money, spotNames, statePill, toast, type Ad } from '../../../lib/admin';
+  import { council, loadData, ofsted, whoGotIn, type School } from '../../../lib/engine';
+  import { areaOf } from '../../../lib/sponsors';
+  import { AREAS } from '../../../lib/specs';
+
+  interface Row { s: School; area: 'harrogate' | 'york'; of: ReturnType<typeof ofsted>; latest: School['d'][number] | undefined; opens: number; ads: Ad[] }
+  let rows: Row[] = [];
+  let sortKey = 'name', sortDir = 1;
+  const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
+  const num = (n: number) => n.toLocaleString('en-GB');
+  // the ads that appear in a school's own panel: uniform, school profile and "near this school"
+  const PANEL_SPOTS = ['uniform', 'profile', 'nearby'];
+  const ofRank = (r: Row) => ({ top: 4, ok: 3, warn: 2, bad: 1, na: 0 } as Record<string, number>)[r.of.tone] ?? 0;
+  const ratio = (r: Row) => (r.latest?.a && r.latest?.p ? r.latest.a / r.latest.p : 0);
+
+  function sortVal(r: Row): string | number {
+    switch (sortKey) {
+      case 'area': return r.area; case 'pan': return r.s.pan ?? 0; case 'ofsted': return ofRank(r);
+      case 'latest': return r.latest?.y ?? 0; case 'ratio': return ratio(r); case 'opens': return r.opens; case 'ads': return r.ads.length;
+      default: return r.s.name;
+    }
+  }
+
+  function visible() {
+    const q = $('q').value.trim().toLowerCase(), area = $('fArea').value, of = $('fOfsted').value, ads = $('fAds').value;
+    return rows.filter((r) => (!q || `${r.s.name} ${r.s.place} ${r.s.urn}`.toLowerCase().includes(q))
+      && (!area || r.area === area)
+      && (!of || (of === 'good' ? r.of.tone === 'top' || r.of.tone === 'ok' : of === 'bad' ? r.of.tone === 'warn' || r.of.tone === 'bad' : r.of.tone === 'na'))
+      && (!ads || (ads === 'yes') === r.ads.length > 0))
+      .sort((a, b) => { const x = sortVal(a), y = sortVal(b); return (typeof x === 'string' ? x.localeCompare(y as string) : x - (y as number)) * sortDir; });
+  }
+
+  function render() {
+    const list = visible();
+    $('count').textContent = `${list.length} of ${rows.length} schools`;
+    document.querySelectorAll<HTMLElement>('[data-sort]').forEach((b) => b.dataset.dir = b.dataset.sort === sortKey ? (sortDir > 0 ? 'up' : 'down') : '');
+    document.getElementById('rows')!.innerHTML = list.length ? list.map((r) => `<tr data-urn="${r.s.urn}">
+      <td><button class="sch-name" data-open="${r.s.urn}">${esc(r.s.name.replace(/,.*$/, ''))}</button><div class="sub">${esc(r.s.place)} · URN ${r.s.urn}${r.s.own ? ' · own admissions' : ''}</div></td>
+      <td>${esc(AREAS[r.area].split(' ')[0])}<div class="sub">${esc(council(r.s.council).name)}</div></td>
+      <td class="r">${r.s.pan ?? '–'}</td>
+      <td><span class="of of-${r.of.tone}">${esc(r.of.short)}</span></td>
+      <td>${r.latest ? `${r.latest.y}: ${esc(whoGotIn(r.latest))}` : '<span class="sub">Not published</span>'}</td>
+      <td class="r">${ratio(r) ? ratio(r).toFixed(1) : '–'}</td>
+      <td class="r">${num(r.opens)}</td>
+      <td class="r">${r.ads.length || '<span class="sub">0</span>'}</td>
+    </tr>`).join('') : '<tr><td colspan="8" class="adm-empty">No school matches.</td></tr>';
+  }
+
+  function detail(urn: number) {
+    const r = rows.find((x) => x.s.urn === urn);
+    if (!r) return;
+    const s = r.s;
+    document.getElementById('dName')!.textContent = s.name;
+    document.getElementById('dSub')!.textContent = `${s.place} · ${AREAS[r.area]} · ${council(s.council).name} · URN ${s.urn}`;
+    const yrs = s.d.map((y) => `<tr><td>${y.y}</td><td class="r">${y.a ?? '–'}</td><td class="r">${y.p ?? '–'}</td><td class="r">${y.o ?? '–'}</td><td class="r">${y.f ?? '–'}</td><td>${esc(whoGotIn(y))}</td></tr>`).join('');
+    document.getElementById('dBody')!.innerHTML = `
+      <dl class="sch-facts">
+        <div><dt>Type</dt><dd>${esc(s.type.charAt(0).toUpperCase() + s.type.slice(1))}</dd></div>
+        <div><dt>Places a year</dt><dd>${s.pan ?? '–'}</dd></div>
+        <div><dt>Admissions</dt><dd>${s.own ? 'Sets its own policy' : 'Council policy'}</dd></div>
+        <div><dt>Ofsted</dt><dd><span class="of of-${r.of.tone}">${esc(r.of.head)}</span> <span class="sub">${esc(r.of.sub)}</span></dd></div>
+        <div><dt>Catchment</dt><dd>${s.cz?.length ? 'Has a catchment area' : 'No catchment'}</dd></div>
+        <div><dt>Opened by parents</dt><dd>${num(r.opens)} times in 30 days</dd></div>
+      </dl>
+      <h3 class="dash-h3">Year by year</h3>
+      <div class="adm-table-wrap flat"><table class="adm-table"><thead><tr><th>Year</th><th class="r">Applied</th><th class="r">Places</th><th class="r">Offered</th><th class="r">First choice</th><th>Who got a place</th></tr></thead><tbody>${yrs}</tbody></table></div>
+      ${s.note ? `<p class="adm-note" style="margin-top:8px">${esc(s.note)}</p>` : ''}
+      <h3 class="dash-h3">Contact</h3>
+      <p class="sch-contact">${[s.tel && `<a href="tel:${esc(s.tel.replace(/\s/g, ''))}">${esc(s.tel)}</a>`, s.email && `<a href="mailto:${esc(s.email)}">${esc(s.email)}</a>`,
+        s.web && `<a href="${esc(s.web)}" target="_blank" rel="noopener">Website</a>`, s.of?.link && `<a href="${esc(s.of.link)}" target="_blank" rel="noopener">Ofsted reports</a>`,
+        `<a href="${esc(s.src)}" target="_blank" rel="noopener">Council figures</a>`].filter(Boolean).join(' · ')}</p>
+      ${s.addr ? `<p class="sub">${esc(s.addr)}</p>` : ''}
+      <h3 class="dash-h3">Ads in this school’s panel</h3>
+      ${r.ads.length ? `<ul class="their">${r.ads.map((a) => `<li><a href="/admin/ads/edit/?id=${a.id}">${esc(a.name)}</a> ${statePill(a.state)}<span>${esc(spotNames(a.placements.filter((p) => PANEL_SPOTS.includes(p))))}${a.urns ? ' · this school' : ' · every school in the area'}${a.pricePence != null ? ` · ${esc(money(a.pricePence, a.pricePeriod))}` : ''}</span></li>`).join('')}</ul>` : '<p class="sub">None.</p>'}
+      <div class="adm-actions" style="margin-top:14px"><a class="btn btn-sm btn-dark" href="/admin/ads/edit/?school=${s.urn}">New ad for this school</a></div>`;
+    (document.getElementById('dlg') as HTMLDialogElement).showModal();
+  }
+
+  // a spreadsheet of everything in the table, plus contacts
+  function csv() {
+    const head = ['URN', 'School', 'Town or village', 'Area', 'Council', 'Type', 'Own admissions', 'Places a year', 'Ofsted', 'Latest year', 'Who got a place',
+      'Applied', 'Places', 'Offered', 'First choice', 'Opened in 30 days', 'Ads in panel', 'Phone', 'Email', 'Website', 'Address', 'Postcode'];
+    const cell = (v: unknown) => { const t = String(v ?? ''); return /[",\n]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t; };
+    const lines = visible().map((r) => [r.s.urn, r.s.name, r.s.place, AREAS[r.area], council(r.s.council).name, r.s.type, r.s.own ? 'Yes' : 'No', r.s.pan, r.of.short,
+      r.latest?.y, r.latest ? whoGotIn(r.latest) : '', r.latest?.a, r.latest?.p, r.latest?.o, r.latest?.f, r.opens, r.ads.map((a) => a.name).join('; '),
+      r.s.tel, r.s.email, r.s.web, r.s.addr, r.s.postcode].map(cell).join(','));
+    const blob = new Blob(['﻿' + [head.join(','), ...lines].join('\n')], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `schools-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
+
+  ['q', 'fArea', 'fOfsted', 'fAds'].forEach((id) => $(id).addEventListener('input', render));
+  document.querySelectorAll<HTMLButtonElement>('[data-sort]').forEach((b) => b.addEventListener('click', () => {
+    if (sortKey === b.dataset.sort) sortDir = -sortDir; else { sortKey = b.dataset.sort!; sortDir = b.dataset.sort === 'name' || b.dataset.sort === 'area' ? 1 : -1; }
+    render();
+  }));
+  document.getElementById('rows')!.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLElement>('[data-open]');
+    if (b) detail(+b.dataset.open!);
+  });
+  document.getElementById('dClose')!.addEventListener('click', () => (document.getElementById('dlg') as HTMLDialogElement).close());
+  document.getElementById('csv')!.addEventListener('click', csv);
+
+  Promise.all([loadData(), api<Record<string, number>>('school-opens?days=30'), api<Ad[]>('ads')]).then(([data, opens, ads]) => {
+    const running = ads.filter((a) => a.state === 'showing' && a.placements.some((p) => PANEL_SPOTS.includes(p)));
+    rows = data.schools.map((s) => {
+      const area = areaOf(s);
+      return {
+        s, area, of: ofsted(s.of), latest: s.d.find((y) => y.s !== 'not_published'), opens: opens[String(s.urn)] ?? 0,
+        ads: running.filter((a) => a.areas.includes(area) && (!a.urns || a.urns.includes(s.urn))),
+      };
+    });
+    render();
+  }).catch((e) => toast(e.message, true));
+</script>
+
+<!-- global: the script draws the rows and the detail after load, which page-scoped styles don't reach -->
+<style is:global>
+  .sch-table th button { border: 0; background: none; padding: 0; font: inherit; color: inherit; text-transform: inherit; letter-spacing: inherit; cursor: pointer; }
+  .sch-table th button[data-dir='up']::after { content: ' ▲'; }
+  .sch-table th button[data-dir='down']::after { content: ' ▼'; }
+  .sch-table .r, .sch-dlg .r { text-align: right; font-variant-numeric: tabular-nums; }
+  .sch-name { border: 0; background: none; padding: 0; font: 700 14px var(--body); color: var(--ink); text-align: left; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .sub { color: var(--muted-2); font-size: 13px; }
+  .of { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+  .of-top, .of-ok { background: var(--good-bg); color: var(--good); }
+  .of-warn { background: var(--close-bg); color: var(--close); }
+  .of-bad { background: var(--bad-bg); color: var(--bad); }
+  .of-na { background: var(--none-bg); color: var(--none); }
+  .sch-dlg { width: min(820px, calc(100% - 32px)); }
+  .sch-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+  .sch-head .adm-h2 { margin: 0; }
+  .sch-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 20px; margin: 0 0 18px; font-size: 14px; }
+  .sch-facts dt { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted-2); }
+  .sch-facts dd { margin: 3px 0 0; }
+  .sch-dlg .dash-h3 { font: 700 16px var(--body); letter-spacing: 0; margin: 18px 0 8px; }
+  .sch-contact { font-size: 14px; }
+  .sch-dlg .adm-table-wrap.flat { border: 0; }
+  .sch-dlg .their { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 14px; }
+  .sch-dlg .their li { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+  .sch-dlg .their a { font-weight: 700; color: var(--ink); }
+  .sch-dlg .their span:last-child { width: 100%; color: var(--muted-2); font-size: 13px; }
+  @media (max-width: 760px) { .sch-facts { grid-template-columns: 1fr 1fr; } }
+</style>

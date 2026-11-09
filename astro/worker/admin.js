@@ -9,6 +9,8 @@
 //   GET/POST /api/admin/advertisers, GET/PUT/DELETE /api/admin/advertisers/:id
 //   GET    /api/admin/enquiries, PUT /api/admin/enquiries/:id { status }, POST /api/admin/enquiries/:id/convert
 //   GET    /api/admin/spots              how full each ad spot is, per area
+//   GET    /api/admin/stats?days=N       visitor and ad counts for the dashboard
+//   GET    /api/admin/school-opens?days=N  how often each school's details were opened
 // An ad can only be live if it fits its spot: SPOTS[placement].limit ads at once per area (or per school),
 // counting only live ads whose dates overlap.
 import { AREAS, LIMITS, SPOTS } from '../src/lib/specs.ts';
@@ -301,6 +303,13 @@ export async function adminApi(request, env, pathname) {
     if (section === 'enquiries') return { body: await enquiries(request, env, parts) };
     if (section === 'spots' && request.method === 'GET') return { body: await spots(env) };
     if (section === 'stats' && request.method === 'GET') return { body: await stats(env, new URL(request.url)) };
+    if (section === 'school-opens' && request.method === 'GET') {
+      // every school's panel opens over the last N days, for the schools table: { urn: count }
+      const days = Math.min(365, Math.max(1, Number(new URL(request.url).searchParams.get('days')) || 30));
+      const from = new Date(Date.parse(today() + 'T12:00:00Z') - (days - 1) * 864e5).toISOString().slice(0, 10);
+      const { results } = await env.DB.prepare(`SELECT key, sum(n) AS n FROM daily_counts WHERE kind = 'panel' AND day >= ? GROUP BY key`).bind(from).all();
+      return { body: Object.fromEntries(results.map((r) => [r.key, r.n])) };
+    }
     return { status: 404, body: { error: 'Not found' } };
   } catch (e) {
     if (e instanceof Bad) return { status: e.status, body: { error: e.message } };
