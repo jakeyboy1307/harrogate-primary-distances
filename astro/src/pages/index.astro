@@ -435,18 +435,27 @@ const siteSchema = { '@context': 'https://schema.org', '@type': 'WebSite', name:
 
   // ---------- start: a shared link, then the last search on this device ----------
   async function start() {
-    const m = /^#pc=([A-Za-z0-9]{5,8})$/.exec(location.hash);
+    // #pc=HG20NA, or #pc=HG20NA&school=142189 from a school page, which also opens that school's details
+    const m = /^#pc=([A-Za-z0-9]{5,8})(?:&school=(\d{5,7}))?$/.exec(location.hash);
     const saved = getSearch();
     if (saved) {
       setRadius(saved.radius);
       setMode(saved.mode);
     }
     // a form sent before the page's script had loaded arrives as ?pc=
-    const early = new URLSearchParams(location.search).get('pc');
+    const qs = new URLSearchParams(location.search);
+    const early = qs.get('pc');
     if (early) history.replaceState(null, '', location.pathname);
     const pc = m?.[1] ?? early;
+    const school = Number(m?.[2] ?? qs.get('school')) || null;
     if (pc) {
-      try { const p = await lookupPostcode(pc); $<HTMLInputElement>('#pc').value = p.label; return await run(p); }
+      try {
+        const p = await lookupPostcode(pc); $<HTMLInputElement>('#pc').value = p.label;
+        await run(p);
+        const s = school ? byUrn.get(school) : undefined;
+        if (s) openPanel(s.id);
+        return;
+      }
       catch (err) { setStatus('#status', (err as Error).message, true); return; }
     }
     if (saved) { $<HTMLInputElement>('#pc').value = saved.place.isPostcode ? saved.place.label : ''; run(saved.place, false).catch((err) => setStatus('#status', (err as Error).message, true)); }

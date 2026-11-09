@@ -4,6 +4,7 @@
 import Base from '../layouts/Base.astro';
 import { url } from '../lib/url';
 import { byPlace, hardest, openToAll, outstanding, type AreaSchool } from '../lib/areas';
+import { pageOf } from '../lib/schoolpages';
 import type { Area } from '../lib/sponsors';
 interface Props {
   title: string; description: string; h1: string; lede: string; area: string; areaKey: Area;
@@ -16,6 +17,8 @@ const { title, description, h1, lede, area, areaKey, schools, groups, faqs } = A
 const hard = hardest(schools);
 const open = openToAll(schools);
 const top = outstanding(schools);
+// each school's own page, for the links in the lists
+const href = (urn: number) => url(`schools/${pageOf(urn)!.slug}/`);
 const short = (n: string) => n.replace(/,.*$/, '').replace(/ (Church of England|CE|C of E)? ?(Voluntary (Controlled|Aided) )?(Community )?Primary (School|Academy)$/i, '');
 ---
 <Base title={title} description={description}>
@@ -39,7 +42,7 @@ const short = (n: string) => n.replace(/,.*$/, '').replace(/ (Church of England|
     <p class="intro">Based on the latest year each council published: who got a place when there were more applicants than places. Use the checker to see whether you’d have got in from your address.</p>
     <div class="tbl-wrap"><table class="tbl area-tbl">
       <thead><tr><th>School</th><th>Area</th><th>Who got a place</th></tr></thead>
-      <tbody>{hard.map((h) => <tr><td><b>{h.name.replace(/,.*$/, "")}</b></td><td>{h.place}</td><td>{h.who} <span class="muted">({h.year}{h.applied && h.places ? `, ${h.applied} applied for ${h.places} places` : ''})</span></td></tr>)}</tbody>
+      <tbody>{hard.map((h) => <tr><td><a class="sch-link" href={href(h.urn)}><b>{h.name.replace(/,.*$/, "")}</b></a></td><td>{h.place}</td><td>{h.who} <span class="muted">({h.year}{h.applied && h.places ? `, ${h.applied} applied for ${h.places} places` : ''})</span></td></tr>)}</tbody>
     </table></div>
   </section>
 
@@ -47,12 +50,12 @@ const short = (n: string) => n.replace(/,.*$/, '').replace(/ (Church of England|
     <div>
       <h2>Took everyone who applied</h2>
       <p class="intro">{open.length} of {schools.length} {area} primary schools offered a place to every child who applied, in every year published.</p>
-      <p class="name-list">{open.map((s) => short(s.name)).join(' · ')}</p>
+      <p class="name-list">{open.map((s, i) => <>{i > 0 && ' · '}<a class="sch-link" href={href(s.urn)}>{short(s.name)}</a></>)}</p>
     </div>
     <div>
       <h2>Rated Outstanding by Ofsted</h2>
       <p class="intro">There’s no official ranking of the best primary schools in {area}. Ofsted is the fairest guide, alongside a visit. These were rated Outstanding at their latest graded inspection.</p>
-      <p class="name-list">{top.length ? top.map((s) => short(s.name)).join(' · ') : 'None at their latest graded inspection.'}</p>
+      <p class="name-list">{top.length ? top.map((s, i) => <>{i > 0 && ' · '}<a class="sch-link" href={href(s.urn)}>{short(s.name)}</a></>) : 'None at their latest graded inspection.'}</p>
     </div>
   </section>
 
@@ -64,7 +67,7 @@ const short = (n: string) => n.replace(/,.*$/, '').replace(/ (Church of England|
         <p class="intro">{g.note}</p>
         <div class="places">
           {byPlace(g.schools).map(([place, list]) => (
-            <div class="place"><h4>{place}</h4><ul>{list.map((s) => <li>{s.name}{s.pan ? <span class="muted"> · <strong class="pan">{s.pan} places</strong> a year</span> : ''}</li>)}</ul></div>
+            <div class="place"><h4>{place}</h4><ul>{list.map((s) => <li><a class="sch-link" href={href(s.urn)}>{s.name}</a>{s.pan ? <span class="muted"> · <strong class="pan">{s.pan} places</strong> a year</span> : ''}</li>)}</ul></div>
           ))}
         </div>
       </div>
@@ -116,6 +119,8 @@ const short = (n: string) => n.replace(/,.*$/, '').replace(/ (Church of England|
   .tbl-wrap { margin-top: 28px; background: #fff; border: 2px solid var(--ink); border-radius: 16px; padding: 8px 20px; overflow-x: auto; }
   .area-tbl td { font-size: 15px; }
   .muted { color: var(--muted-2); }
+  .sch-link { color: inherit; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
+  .sch-link:hover { text-decoration-color: var(--ink); }
   .pan { font-weight: 700; color: var(--ink); }
   .split-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
   .split-2 h2 { font-size: 36px; }
