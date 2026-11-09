@@ -1,15 +1,18 @@
 ---
-// Where the checker covers, on a map of the UK: every council district outlined, the ones with our schools shaded
-// (fully where every primary school is in, partly where only some are), our catchment areas and schools on top.
-// Below the map, each area's schools, searches and live ads. Districts come from public/geo/uk-districts.json
-// (scripts/uk-districts.mjs); which district each area is built around is AREA_HOME in lib/specs.ts.
+// Where the checker covers, and where to go next, on a map of the UK. Every council district is outlined, with the
+// ones holding our schools shaded (fully where every primary school is in, partly where only some are), county and
+// unitary council borders on top, and our catchment areas and schools. "Where to grow" shades the rest of England by
+// how many state primary schools each district has. Below the map: each live area's figures, a planner for one
+// council's districts, and every council in England ranked by size.
+// Data: public/geo/uk-districts.json and uk-counties.json (scripts/uk-boundaries.mjs), district-schools.json
+// (scripts/district-schools.mjs). Which district each area is built around is AREA_HOME in lib/specs.ts.
 import Admin from '../../../layouts/Admin.astro';
 ---
 <Admin title="Coverage" active="coverage">
   <section class="adm-stats" aria-label="Coverage totals">
     <div class="adm-card adm-stat"><span>Areas live</span><b data-t="areas">–</b></div>
     <div class="adm-card adm-stat"><span>Districts reached</span><b data-t="districts">–</b><small data-t="districtsSub"></small></div>
-    <div class="adm-card adm-stat"><span>Primary schools</span><b data-t="schools">–</b></div>
+    <div class="adm-card adm-stat"><span>Our primary schools</span><b data-t="schools">–</b><small data-t="schoolsSub"></small></div>
     <div class="adm-card adm-stat"><span>Catchment areas</span><b data-t="catch">–</b></div>
     <div class="adm-card adm-stat"><span>Searches outside our areas</span><b data-t="outside">–</b><small>last 30 days</small></div>
   </section>
@@ -21,16 +24,31 @@ import Admin from '../../../layouts/Admin.astro';
           <button type="button" data-view="uk" aria-pressed="true">Whole UK</button>
           <button type="button" data-view="ours" aria-pressed="false">Our coverage</button>
         </div>
+        <div class="seg" role="group" aria-label="Shade districts by">
+          <button type="button" data-shade="coverage" aria-pressed="true">Coverage</button>
+          <button type="button" data-shade="grow" aria-pressed="false">Where to grow</button>
+        </div>
         <span class="grow"></span>
-        <label class="cov-toggle"><input type="checkbox" id="showCatch" checked /> Catchment areas</label>
+        <label class="cov-toggle"><input type="checkbox" id="showCounties" checked /> County borders</label>
+        <label class="cov-toggle"><input type="checkbox" id="showCatch" checked /> Catchments</label>
         <label class="cov-toggle"><input type="checkbox" id="showSchools" checked /> Schools</label>
       </div>
       <div class="cov-map" id="map" role="img" aria-label="Map of the UK showing the council districts the checker covers"></div>
       <div class="cov-key" aria-label="Key">
-        <span><i class="sw full"></i>Fully covered district</span>
-        <span><i class="sw part"></i>Partly covered district</span>
+        <span><i class="sw full"></i>Fully covered</span>
+        <span><i class="sw part"></i>Partly covered</span>
+        <span><i class="sw county"></i>County or unitary council border</span>
         <span><i class="sw catch"></i>Catchment area</span>
         <span><i class="sw dot"></i>School</span>
+      </div>
+      <div class="cov-key cov-grow-key" id="growKey" hidden aria-label="Where to grow key">
+        <span class="lbl">State primary schools in the district</span>
+        <span><i class="sw" style="background:#FFF4CC"></i>under 25</span>
+        <span><i class="sw" style="background:#FCDD7E"></i>25 to 49</span>
+        <span><i class="sw" style="background:#F2B705"></i>50 to 99</span>
+        <span><i class="sw" style="background:#C98A00"></i>100 to 199</span>
+        <span><i class="sw" style="background:#8A5300"></i>200 or more</span>
+        <span><i class="sw none"></i>No figures (outside England)</span>
       </div>
     </div>
     <aside class="cov-side">
@@ -40,15 +58,35 @@ import Admin from '../../../layouts/Admin.astro';
     </aside>
   </section>
 
-  <section>
-    <h2 class="adm-h2">Districts with our schools</h2>
+  <section class="adm-card cov-plan">
+    <div class="adm-bar">
+      <h2 class="adm-h2" style="margin:0">Plan the next area</h2>
+      <span class="grow"></span>
+      <label class="cov-pick">Council <select id="county" aria-label="Council"></select></label>
+    </div>
+    <p class="adm-note" id="countyNote"></p>
     <div class="adm-table-wrap">
       <table class="adm-table">
-        <thead><tr><th>District</th><th>Area</th><th>Coverage</th><th class="r">Schools</th><th class="r">With a catchment</th></tr></thead>
-        <tbody id="rows"><tr><td colspan="5" class="adm-empty">Loading…</td></tr></tbody>
+        <thead><tr><th>District</th><th>Coverage</th><th class="r">State primary schools</th><th class="r">Pupils</th><th class="r">In the checker</th><th class="r">Left to add</th></tr></thead>
+        <tbody id="planRows"><tr><td colspan="6" class="adm-empty">Loading…</td></tr></tbody>
       </table>
     </div>
-    <p class="adm-note cov-src">District outlines: ONS Local Authority Districts, December 2022 (before North Yorkshire’s districts merged), so Harrogate still shows as its own district. Contains OS data © Crown copyright and database right 2022.</p>
+    <p class="adm-note cov-src">Each council runs its own admissions. A district inside a council we already cover reuses the same admissions figures and catchment map; a new council needs its own.</p>
+  </section>
+
+  <section>
+    <div class="adm-bar">
+      <h2 class="adm-h2" style="margin:0">Every council in England</h2>
+      <span class="grow"></span>
+      <input type="search" id="cq" placeholder="Search councils" aria-label="Search councils" />
+    </div>
+    <div class="adm-table-wrap" style="margin-top:12px">
+      <table class="adm-table cov-ctys">
+        <thead><tr><th>Council</th><th class="r">Districts</th><th class="r">State primary schools</th><th class="r">Pupils</th><th class="r">In the checker</th><th class="r">Covered</th></tr></thead>
+        <tbody id="ctyRows"><tr><td colspan="6" class="adm-empty">Loading…</td></tr></tbody>
+      </table>
+    </div>
+    <p class="adm-note cov-src" id="sources">Boundaries: ONS Local Authority Districts (December 2022, before North Yorkshire’s districts merged, so Harrogate still shows on its own) and Counties and Unitary Authorities (December 2024). Contains OS data © Crown copyright and database right. School counts: Get Information About Schools (DfE), open state primary and all-through schools that take Reception.</p>
   </section>
 </Admin>
 
@@ -60,54 +98,78 @@ import Admin from '../../../layouts/Admin.astro';
   import { areaOf } from '../../../lib/sponsors';
   import { AREA_HOME, AREAS, type Area } from '../../../lib/specs';
 
-  interface District { code: string; name: string; p: LatLng[][][]; box?: [number, number, number, number] }
-  interface Reach { d: District; schools: School[]; areas: Set<Area>; full: boolean }
+  type Box = [number, number, number, number];
+  interface District { code: string; name: string; county: string | null; pt: LatLng; p: LatLng[][][]; box?: Box }
+  interface County { code: string; name: string; p: LatLng[][][] }
+  interface Reach { schools: School[]; areas: Set<Area>; full: boolean }
+  interface Info { d: District; r?: Reach; status: 'full' | 'part' | 'none'; total: number | null; pupils: number | null; ours: number }
+  interface Cty { c: County; ds: Info[]; total: number; pupils: number; ours: number }
 
   const COBALT = '#2747D8', INK = '#14182B', FAINT = '#9AA3C7';
   const UK: L.LatLngBoundsExpression = [[49.9, -8.2], [60.9, 1.8]];
-  const num = (n: number) => n.toLocaleString('en-GB');
+  const GROW_BINS = [25, 50, 100, 200], GROW = ['#FFF4CC', '#FCDD7E', '#F2B705', '#C98A00', '#8A5300'];
+  const growColour = (n: number) => GROW[GROW_BINS.filter((b) => n >= b).length];
+  const num = (n: number | null | undefined) => (n == null ? '–' : n.toLocaleString('en-GB'));
+  const pct = (a: number, b: number) => (b ? `${Math.min(100, Math.round((a / b) * 100))}%` : '–');
   const set = (k: string, v: string) => document.querySelectorAll<HTMLElement>(`[data-t="${k}"]`).forEach((el) => (el.textContent = v));
   const homes = new Set(Object.values(AREA_HOME).flat());
+  const STATUS = { full: '<span class="pill-s good">Full</span>', part: '<span class="pill-s open">Part</span>', none: '<span class="pill-s none">Not yet</span>' };
 
-  // the bounding box of a district, so most point checks are a quick rejection
-  function boxOf(d: District) {
+  function boxOf(p: LatLng[][][]): Box {
     let a = 90, b = 180, c = -90, e = -180;
-    for (const poly of d.p) for (const [y, x] of poly[0]) { a = Math.min(a, y); b = Math.min(b, x); c = Math.max(c, y); e = Math.max(e, x); }
-    return (d.box = [a, b, c, e]);
+    for (const poly of p) for (const [y, x] of poly[0]) { a = Math.min(a, y); b = Math.min(b, x); c = Math.max(c, y); e = Math.max(e, x); }
+    return [a, b, c, e];
   }
-  const inBox = ([y, x]: LatLng, [a, b, c, e]: [number, number, number, number]) => y >= a && y <= c && x >= b && x <= e;
+  const inBox = ([y, x]: LatLng, [a, b, c, e]: Box) => y >= a && y <= c && x >= b && x <= e;
 
   async function main() {
-    const [data, geo, ads, stats, opens] = await Promise.all([
+    const [data, dGeo, cGeo, counts, ads, stats, opens] = await Promise.all([
       loadData(),
       fetch('/geo/uk-districts.json').then((r) => r.json() as Promise<{ districts: District[] }>),
+      fetch('/geo/uk-counties.json').then((r) => r.json() as Promise<{ counties: County[] }>),
+      fetch('/geo/district-schools.json').then((r) => r.json() as Promise<{ date: string; districts: Record<string, [number, number]> }>),
       api<Ad[]>('ads').catch(() => [] as Ad[]),
       api<{ searches: { key: string; n: number }[] }>('stats?days=30').catch(() => null),
       api<Record<string, number>>('school-opens?days=30').catch(() => ({} as Record<string, number>)),
     ]);
     const { schools, catch: catches } = data;
-    const districts = geo.districts;
-    districts.forEach(boxOf);
+    const districts = dGeo.districts, counties = cGeo.counties;
+    for (const d of districts) d.box = boxOf(d.p);
 
-    // which district each school is in
+    // ---------- which district each of our schools is in ----------
     const reach = new Map<string, Reach>();
     const districtOf = new Map<number, District>();
     for (const s of schools) {
       const d = districts.find((x) => inBox(s.ll, x.box!) && inArea(s.ll, x as unknown as Shape));
       if (!d) continue;
       districtOf.set(s.urn, d);
-      const r = reach.get(d.code) ?? { d, schools: [], areas: new Set<Area>(), full: homes.has(d.code) };
+      const r = reach.get(d.code) ?? { schools: [], areas: new Set<Area>(), full: homes.has(d.code) };
       r.schools.push(s); r.areas.add(areaOf(s));
       reach.set(d.code, r);
     }
-    const covered = [...reach.values()].sort((a, b) => Number(b.full) - Number(a.full) || b.schools.length - a.schools.length);
+    const info = new Map<string, Info>(districts.map((d) => {
+      const r = reach.get(d.code), c = counts.districts[d.code];
+      return [d.code, { d, r, status: r?.full ? 'full' : r ? 'part' : 'none', total: c?.[0] ?? null, pupils: c?.[1] ?? null, ours: r?.schools.length ?? 0 }];
+    }));
+    const covered = [...info.values()].filter((i) => i.r).sort((a, b) => Number(b.status === 'full') - Number(a.status === 'full') || b.ours - a.ours);
+
+    // ---------- councils, from their districts ----------
+    const ctyByCode = new Map<string, Cty>(counties.map((c) => [c.code, { c, ds: [], total: 0, pupils: 0, ours: 0 }]));
+    for (const i of info.values()) {
+      const c = i.d.county ? ctyByCode.get(i.d.county) : null;
+      if (!c) continue;
+      c.ds.push(i); c.total += i.total ?? 0; c.pupils += i.pupils ?? 0; c.ours += i.ours;
+    }
+    const england = [...ctyByCode.values()].filter((c) => c.c.code.startsWith('E') && c.total > 0);
     const searches = Object.fromEntries((stats?.searches ?? []).map((r) => [r.key, r.n]));
+    const englandTotal = england.reduce((n, c) => n + c.total, 0);
 
     // ---------- totals ----------
     set('areas', num(Object.keys(AREAS).length));
     set('districts', num(covered.length));
-    set('districtsSub', `${covered.filter((r) => r.full).length} fully, ${covered.filter((r) => !r.full).length} partly`);
+    set('districtsSub', `${covered.filter((i) => i.status === 'full').length} fully, ${covered.filter((i) => i.status === 'part').length} partly`);
     set('schools', num(schools.length));
+    set('schoolsSub', `${pct(schools.length, englandTotal)} of England’s ${num(englandTotal)}`);
     set('catch', num(catches.length));
     set('outside', stats ? num(searches.outside ?? 0) : 'n/a');
 
@@ -115,40 +177,60 @@ import Admin from '../../../layouts/Admin.astro';
     const map = L.map('map', { preferCanvas: true, zoomSnap: 0.25, minZoom: 5, maxZoom: 15 });
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
       maxZoom: 16,
-      attribution: 'Tiles © Esri · Districts: ONS, contains OS data © Crown copyright 2022 · Catchments: North Yorkshire Council, City of York Council',
+      attribution: 'Tiles © Esri · Boundaries: ONS, contains OS data © Crown copyright · Schools: DfE GIAS · Catchments: North Yorkshire Council, City of York Council',
     }).addTo(map);
 
+    const ctyName = (code: string | null) => (code ? ctyByCode.get(code)?.c.name ?? '' : '');
+    let shade: 'coverage' | 'grow' = 'coverage';
+    const styleOf = (i: Info): L.PathOptions => {
+      if (i.status === 'full') return { color: COBALT, weight: 1.6, dashArray: undefined, fillColor: COBALT, fillOpacity: 0.45 };
+      if (i.status === 'part') return { color: COBALT, weight: 1.2, dashArray: '4 3', fillColor: COBALT, fillOpacity: shade === 'grow' ? 0.3 : 0.16 };
+      if (shade === 'grow') return i.total ? { color: '#fff', weight: 0.6, dashArray: undefined, fillColor: growColour(i.total), fillOpacity: 0.78 }
+        : { color: FAINT, weight: 0.5, dashArray: undefined, fillColor: '#D9DCE6', fillOpacity: 0.35 };
+      return { color: FAINT, weight: 0.6, dashArray: undefined, fillColor: '#fff', fillOpacity: 0.01 };
+    };
+    const tipOf = (i: Info) => {
+      const lines = [`<b>${esc(i.d.name)}</b>${i.d.county && ctyName(i.d.county) !== i.d.name ? ` · ${esc(ctyName(i.d.county))}` : ''}`];
+      lines.push(i.status === 'full' ? 'Fully covered' : i.status === 'part' ? 'Partly covered' : 'Not covered yet');
+      if (i.total != null) lines.push(`${num(i.total)} state primary schools · ${num(i.pupils)} pupils`);
+      else lines.push('No school figures (outside England)');
+      if (i.ours) lines.push(`${num(i.ours)} in the checker`);
+      return lines.join('<br>');
+    };
+    const shapes = new Map<string, L.Polygon>();
     const districtLayer = L.layerGroup().addTo(map);
-    for (const d of districts) {
-      const r = reach.get(d.code);
-      const style: L.PathOptions = r?.full ? { color: COBALT, weight: 1.6, fillColor: COBALT, fillOpacity: 0.42 }
-        : r ? { color: COBALT, weight: 1.2, dashArray: '4 3', fillColor: COBALT, fillOpacity: 0.16 }
-        : { color: FAINT, weight: 0.6, fillColor: '#fff', fillOpacity: 0.01 };
-      const tip = r ? `<b>${esc(d.name)}</b><br>${r.full ? 'Fully covered' : 'Partly covered'} · ${r.schools.length} school${r.schools.length === 1 ? '' : 's'}`
-        : `<b>${esc(d.name)}</b><br>Not covered yet`;
-      L.polygon(d.p, style).bindTooltip(tip, { sticky: true }).addTo(districtLayer);
+    for (const i of info.values()) {
+      const poly = L.polygon(i.d.p, styleOf(i)).bindTooltip(() => tipOf(i), { sticky: true });
+      poly.on('click', () => pickCounty(i.d.county, false));
+      shapes.set(i.d.code, poly.addTo(districtLayer));
     }
-
+    const countyLayer = L.layerGroup(counties.map((c) => L.polygon(c.p, { color: '#4A5170', weight: 1.4, opacity: 0.75, fill: false, interactive: false }))).addTo(map);
+    const picked = L.layerGroup().addTo(map);
     const catchLayer = L.layerGroup(catches.map((c) => L.polygon(c.p, { color: COBALT, weight: 0.7, fillColor: COBALT, fillOpacity: 0.14, interactive: false }))).addTo(map);
     const schoolLayer = L.layerGroup(schools.map((s) => L.circleMarker(s.ll, { radius: 3.5, color: '#fff', weight: 1, fillColor: INK, fillOpacity: 1 })
-      .bindTooltip(`<b>${esc(s.name)}</b><br>${esc(s.place)} · ${esc(districtOf.get(s.urn)?.name ?? '')}`))).addTo(map);
+      .bindTooltip(`<b>${esc(s.name)}</b><br>${esc(s.place)} · ${esc(districtOf.get(s.urn)?.name ?? '')}`)));
 
-    const ours = L.latLngBounds(covered.flatMap((r) => r.d.p.flatMap((poly) => poly[0])));
+    const ours = L.latLngBounds(covered.flatMap((i) => i.d.p.flatMap((poly) => poly[0])));
     map.fitBounds(UK);
-    const view = (v: string) => {
-      document.querySelectorAll<HTMLButtonElement>('[data-view]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.view === v)));
-      if (v === 'uk') map.flyToBounds(UK, { duration: 0.6 }); else map.flyToBounds(ours, { padding: [24, 24], duration: 0.6 });
-    };
-    document.querySelectorAll<HTMLButtonElement>('[data-view]').forEach((b) => b.addEventListener('click', () => view(b.dataset.view!)));
+    const pressed = (attr: string, v: string) => document.querySelectorAll<HTMLButtonElement>(`[data-${attr}]`).forEach((b) => b.setAttribute('aria-pressed', String(b.dataset[attr] === v)));
+    document.querySelectorAll<HTMLButtonElement>('[data-view]').forEach((b) => b.addEventListener('click', () => {
+      pressed('view', b.dataset.view!);
+      if (b.dataset.view === 'uk') map.flyToBounds(UK, { duration: 0.6 }); else map.flyToBounds(ours, { padding: [24, 24], duration: 0.6 });
+    }));
+    document.querySelectorAll<HTMLButtonElement>('[data-shade]').forEach((b) => b.addEventListener('click', () => {
+      shade = b.dataset.shade as typeof shade;
+      pressed('shade', shade);
+      for (const i of info.values()) shapes.get(i.d.code)!.setStyle(styleOf(i));
+      document.getElementById('growKey')!.hidden = shade !== 'grow';
+    }));
     const toggle = (id: string, layer: L.LayerGroup) => document.getElementById(id)!.addEventListener('change', (e) => {
       if ((e.target as HTMLInputElement).checked) layer.addTo(map); else layer.remove();
     });
+    toggle('showCounties', countyLayer);
     toggle('showCatch', catchLayer);
-    toggle('showSchools', schoolLayer);
     // school dots only once zoomed in to a region: across the whole UK they merge into one blob
-    const SCHOOL_ZOOM = 8;
     const fitDots = () => {
-      const want = (document.getElementById('showSchools') as HTMLInputElement).checked && map.getZoom() >= SCHOOL_ZOOM;
+      const want = (document.getElementById('showSchools') as HTMLInputElement).checked && map.getZoom() >= 8;
       if (want && !map.hasLayer(schoolLayer)) schoolLayer.addTo(map); else if (!want && map.hasLayer(schoolLayer)) schoolLayer.remove();
     };
     map.on('zoomend', fitDots);
@@ -159,7 +241,7 @@ import Admin from '../../../layouts/Admin.astro';
     const showing = ads.filter((a) => a.state === 'showing');
     document.getElementById('areas')!.innerHTML = (Object.entries(AREAS) as [Area, string][]).map(([key, label]) => {
       const mine = schools.filter((s) => areaOf(s) === key);
-      const dists = covered.filter((r) => r.areas.has(key)).map((r) => r.d.name);
+      const dists = covered.filter((i) => i.r!.areas.has(key)).map((i) => i.d.name);
       const live = showing.filter((a) => a.areas.includes(key));
       const advertisers = new Set(live.map((a) => a.advertiserId).filter(Boolean)).size;
       const opened = mine.reduce((n, s) => n + (opens[String(s.urn)] ?? 0), 0);
@@ -179,18 +261,68 @@ import Admin from '../../../layouts/Admin.astro';
     }).join('');
     document.querySelectorAll<HTMLButtonElement>('.cov-area').forEach((b) => b.addEventListener('click', () => {
       const pts = schools.filter((s) => areaOf(s) === b.dataset.area).map((s) => s.ll);
-      document.querySelectorAll<HTMLButtonElement>('[data-view]').forEach((x) => x.setAttribute('aria-pressed', 'false'));
+      pressed('view', '');
       map.flyToBounds(L.latLngBounds(pts), { padding: [30, 30], duration: 0.6 });
     }));
 
-    // ---------- the districts table ----------
-    document.getElementById('rows')!.innerHTML = covered.map((r) => `<tr>
-      <td class="name">${esc(r.d.name)}<div class="sub">${esc(r.d.code)}</div></td>
-      <td>${[...r.areas].map((a) => esc(AREAS[a])).join(', ')}</td>
-      <td>${r.full ? '<span class="pill-s good">Full</span>' : '<span class="pill-s open">Part</span>'}</td>
-      <td class="r">${num(r.schools.length)}</td>
-      <td class="r">${num(r.schools.filter((s) => s.cz?.length).length)}</td>
-    </tr>`).join('');
+    // ---------- plan the next area: one council's districts ----------
+    const sel = document.getElementById('county') as HTMLSelectElement;
+    const byName = (a: Cty, b: Cty) => a.c.name.localeCompare(b.c.name);
+    const opt = (c: Cty) => `<option value="${c.c.code}">${esc(c.c.name)}</option>`;
+    sel.innerHTML = `<optgroup label="Where we are">${england.filter((c) => c.ours).sort(byName).map(opt).join('')}</optgroup>`
+      + `<optgroup label="Not yet">${england.filter((c) => !c.ours).sort(byName).map(opt).join('')}</optgroup>`;
+
+    function pickCounty(code: string | null, fly = true) {
+      const c = code ? ctyByCode.get(code) : null;
+      if (!c || !c.c.code.startsWith('E')) return;
+      sel.value = c.c.code;
+      picked.clearLayers();
+      L.polygon(c.c.p, { color: INK, weight: 3.2, fill: false, interactive: false }).addTo(picked);
+      if (fly) { pressed('view', ''); map.flyToBounds(L.latLngBounds(c.c.p.flatMap((poly) => poly[0])), { padding: [30, 30], duration: 0.6 }); }
+      const left = Math.max(0, c.total - c.ours);
+      document.getElementById('countyNote')!.innerHTML = `<b>${esc(c.c.name)}</b>: ${num(c.total)} state primary schools across ${c.ds.length} district${c.ds.length === 1 ? '' : 's'}, ${num(c.pupils)} pupils. `
+        + (c.ours ? `${num(c.ours)} are in the checker (${pct(c.ours, c.total)}), ${num(left)} left to add.` : 'None in the checker yet.');
+      const rows = [...c.ds].sort((a, b) => Math.max(0, (b.total ?? 0) - b.ours) - Math.max(0, (a.total ?? 0) - a.ours));
+      document.getElementById('planRows')!.innerHTML = rows.map((i) => `<tr data-d="${i.d.code}">
+        <td class="name">${esc(i.d.name)}</td>
+        <td>${STATUS[i.status]}</td>
+        <td class="r">${num(i.total)}</td>
+        <td class="r">${num(i.pupils)}</td>
+        <td class="r">${num(i.ours)}</td>
+        <td class="r"><b>${num(Math.max(0, (i.total ?? 0) - i.ours))}</b></td>
+      </tr>`).join('');
+      document.querySelectorAll<HTMLTableRowElement>('#planRows tr').forEach((tr) => tr.addEventListener('click', () => {
+        const d = info.get(tr.dataset.d!)!.d;
+        pressed('view', '');
+        map.flyToBounds(L.latLngBounds(d.p.flatMap((poly) => poly[0])), { padding: [40, 40], duration: 0.6 });
+        shapes.get(d.code)!.openTooltip(L.latLng(d.pt[0], d.pt[1]));
+      }));
+    }
+    sel.addEventListener('change', () => pickCounty(sel.value));
+    const ny = england.find((c) => c.c.name === 'North Yorkshire') ?? england[0];
+    pickCounty(ny.c.code, false);
+
+    // ---------- every council in England ----------
+    const ranked = [...england].sort((a, b) => b.total - a.total);
+    const drawCounties = () => {
+      const q = (document.getElementById('cq') as HTMLInputElement).value.trim().toLowerCase();
+      const list = ranked.filter((c) => !q || c.c.name.toLowerCase().includes(q));
+      document.getElementById('ctyRows')!.innerHTML = list.length ? list.map((c) => `<tr data-c="${c.c.code}">
+        <td class="name">${esc(c.c.name)}</td>
+        <td class="r">${num(c.ds.length)}</td>
+        <td class="r">${num(c.total)}</td>
+        <td class="r">${num(c.pupils)}</td>
+        <td class="r">${num(c.ours)}</td>
+        <td class="r">${c.ours ? `<span class="pill-s ${c.ours >= c.total * 0.95 ? 'good' : 'open'}">${pct(c.ours, c.total)}</span>` : '–'}</td>
+      </tr>`).join('') : '<tr><td colspan="6" class="adm-empty">No council matches that.</td></tr>';
+      document.querySelectorAll<HTMLTableRowElement>('#ctyRows tr[data-c]').forEach((tr) => tr.addEventListener('click', () => {
+        pickCounty(tr.dataset.c!);
+        document.querySelector('.cov-plan')!.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }));
+    };
+    document.getElementById('cq')!.addEventListener('input', drawCounties);
+    drawCounties();
+    document.getElementById('sources')!.textContent += ` School counts as at ${new Date(counts.date + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}.`;
   }
 
   main().catch((e) => {
@@ -215,14 +347,17 @@ import Admin from '../../../layouts/Admin.astro';
   .cov-tools .grow { flex: 1; }
   .cov-toggle { display: inline-flex; align-items: center; gap: 6px; font: 600 14px var(--body); cursor: pointer; }
   .cov-toggle input { accent-color: var(--ink); }
-  .cov-map { height: 680px; border-radius: 12px; border: 1px solid var(--line); background: #F4F4F2; }
-  .cov-map .leaflet-tooltip { font: 500 13px/1.4 var(--body); }
+  .cov-map { height: 720px; border-radius: 12px; border: 1px solid var(--line); background: #F4F4F2; }
+  .cov-map .leaflet-tooltip { font: 500 13px/1.45 var(--body); }
   .cov-key { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13px; color: var(--muted); }
   .cov-key span { display: inline-flex; align-items: center; gap: 7px; }
+  .cov-key .lbl { font-weight: 700; color: var(--ink); }
   .sw { display: inline-block; width: 16px; height: 12px; border-radius: 3px; }
-  .sw.full { background: rgba(39, 71, 216, .42); border: 1.5px solid var(--cobalt); }
+  .sw.full { background: rgba(39, 71, 216, .45); border: 1.5px solid var(--cobalt); }
   .sw.part { background: rgba(39, 71, 216, .16); border: 1.5px dashed var(--cobalt); }
+  .sw.county { background: none; border: 2px solid #4A5170; }
   .sw.catch { background: rgba(39, 71, 216, .14); border: 1px solid var(--cobalt); }
+  .sw.none { background: #E8EAF0; border: 1px solid var(--faint); }
   .sw.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 1.5px #fff, 0 0 0 2.5px var(--line-2); }
 
   .cov-side { display: grid; gap: 12px; }
@@ -236,8 +371,12 @@ import Admin from '../../../layouts/Admin.astro';
   .cov-area dd { font: 700 20px var(--display); margin: 0; }
   .cov-explain, .cov-src { font-size: 13px; }
   .cov-src { margin-top: 10px; }
-  .adm-table .r { text-align: right; }
 
-  @media (max-width: 1180px) { .cov-wrap { grid-template-columns: 1fr; } .cov-map { height: 520px; } }
-  @media (max-width: 600px) { .cov-map { height: 420px; } }
+  .cov-plan { display: grid; gap: 14px; }
+  .cov-pick { display: inline-flex; align-items: center; gap: 10px; font: 700 14px var(--body); }
+  .cov-pick select { font: 600 15px var(--body); padding: 8px 12px; border: 1.5px solid var(--line-2); border-radius: 10px; background: #fff; color: var(--ink); min-width: 240px; }
+  #planRows tr, #ctyRows tr[data-c] { cursor: pointer; }
+  .adm-table .r { text-align: right; }
+  .cov-ctys tbody { display: table-row-group; }
+  #cq { font: 500 15px var(--body); padding: 8px 12px; border: 1.5px solid var(--line-2); border-radius: 10px; background: #fff; min-width: 240px; }
 </style>
