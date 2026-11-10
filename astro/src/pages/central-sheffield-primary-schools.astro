@@ -1,0 +1,23 @@
+---
+// Area page: Sheffield's sheffcentral area (lib/specs.ts AREA_INFO). The questions every Sheffield page shares are in lib/sheffield.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { shFaqs, shTail } from '../lib/sheffield';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.sheffcentral;
+const schools = loadArea('sheffield.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...shFaqs('Central Sheffield', openLatest(schools).length, schools.length),
+  ...shTail,
+];
+---
+<AreaPage areaKey="sheffcentral"
+  title="Central Sheffield primary school catchment areas, map and Ofsted · Yorkshire School Checker"
+  description="Central Sheffield primary school catchment areas: Walkley, Broomhill, Sharrow and Nether Edge. Find your catchment school, how far places went, Ofsted ratings and the 2027 Reception dates."
+  h1="Central Sheffield primary schools and catchment areas"
+  lede="Primary school catchment areas for every school in central Sheffield: the city centre, Walkley, Upperthorpe, Broomhill, Hunters Bar, Sharrow and Nether Edge."
+  area="Central Sheffield"
+  schools={schools}
+  groups={[{ label: 'Central Sheffield', note: `${schools.length} primary and infant schools.`, schools }]}
+  faqs={faqs}
+/>

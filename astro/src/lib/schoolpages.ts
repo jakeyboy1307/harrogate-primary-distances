@@ -40,6 +40,10 @@ const SPELL: [RegExp, string][] = [
   [/\bFirst (&|and) Nursery School\b/, 'First School'], [/\bPrimary (School )?(&|and) Nursery$/, 'Primary School'], [/(?<!Voluntary )\bAided (?=Primary\b)/, ''], [/\s*(&|and)\s+Pre[- ]School\b/gi, ''], [/\bSchool In ([A-Z]\w+)$/, 'School, $1'],
   // Wakefield's "Moorthorpe Primary School With Inclusion Resource", "…Nursery School: With Communication Resource", "…School 3-11yrs"
   [/:?\s*With (Communication|Inclusion) Resource\b/gi, ''], [/\s+\d+-\d+\s*yrs\b/gi, ''],
+  // Sheffield's "Hallam Nursery & Primary School", "Dobcroft Nursery Infant School", "Sharrow Nursery, Infant and Junior
+  // School" (a primary) and "Emmaus Catholic and CofE Primary School" (both faiths, so neither is the name)
+  [/\bNursery, Infant and Junior School\b/, 'Primary School'], [/\bNursery\s+(&|and)\s+(?=Primary\b)/g, ''], [/\bNursery\s+(?=Infants?\b)/g, ''],
+  [/\bCatholic and CofE\b/g, ''],
 ];
 const spell = (name: string) => SPELL.reduce((n, [r, w]) => n.replace(r, w), name);
 // names so common that the town has to go with them

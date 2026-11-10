@@ -157,7 +157,7 @@ alternative to reading them from the map (decision 2).
   - Websites fixed for five schools. 160 phone numbers and 117 emails; ten left out (nine give their trust's inbox, one a named member of staff).
   - Sources download with `build/fetch_bradford.sh`.
 
-- **Wakefield (W5), 10 November:** built on the `wakefield` branch, not yet live. That completes West Yorkshire.
+- **Wakefield (W5), 10 November:** live (deployed with `wrangler deploy`, as Cloudflare's own build for it never started). That completes West Yorkshire.
   - 105 schools on four pages: `/wakefield-`, `/ossett-`, `/pontefract-` and `/hemsworth-primary-schools/`, one a constituency.
   - Every year, 2023 to 2026, is the DfE's first choices: the council publishes no cut-off distances.
   - 2026 also carries a note from the council's Primary Guide for Parents (a Word file, read by `build/wakefield_guide.py`) on how places went: to children in the catchment, to brothers and sisters outside it, to others nearest first, and to children in care. 81 schools have one. The other 24 list their places by their own rules' letters, so they have no note. Every listed school's categories add up to its total.

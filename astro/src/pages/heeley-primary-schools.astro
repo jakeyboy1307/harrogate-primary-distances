@@ -1,0 +1,24 @@
+---
+// Area page: Sheffield's heeley area (lib/specs.ts AREA_INFO). The questions every Sheffield page shares are in lib/sheffield.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { shBorder, shFaqs, shTail } from '../lib/sheffield';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.heeley;
+const schools = loadArea('sheffield.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...shFaqs('Heeley', openLatest(schools).length, schools.length),
+  shBorder('Heeley', 'From Coal Aston or Dronfield, that’s Derbyshire County Council'),
+  ...shTail,
+];
+---
+<AreaPage areaKey="heeley"
+  title="Heeley, Gleadless and Norton primary school catchment areas, map and Ofsted · Yorkshire School Checker"
+  description="Heeley, Gleadless, Manor, Woodseats and Norton primary school catchment areas: find your catchment school, how far places went, Ofsted ratings and the 2027 Reception dates."
+  h1="Heeley, Gleadless and Norton primary schools"
+  lede="Primary school catchment areas for every school in south Sheffield: Heeley, Meersbrook, Woodseats, Norton, Lowedges, Gleadless, Arbourthorne, Norfolk Park and Manor."
+  area="Heeley"
+  schools={schools}
+  groups={[{ label: 'Heeley, Gleadless and Norton', note: `${schools.length} primary and infant schools.`, schools }]}
+  faqs={faqs}
+/>

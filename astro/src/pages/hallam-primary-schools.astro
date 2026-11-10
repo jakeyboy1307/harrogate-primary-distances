@@ -1,0 +1,24 @@
+---
+// Area page: Sheffield's hallam area (lib/specs.ts AREA_INFO). The questions every Sheffield page shares are in lib/sheffield.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { shBorder, shFaqs, shTail } from '../lib/sheffield';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.hallam;
+const schools = loadArea('sheffield.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...shFaqs('Hallam', openLatest(schools).length, schools.length),
+  shBorder('Hallam', 'From Dronfield or Holmesfield, that’s Derbyshire County Council'),
+  ...shTail,
+];
+---
+<AreaPage areaKey="hallam"
+  title="Hallam primary school catchment areas: Crookes, Ecclesall and Dore · Yorkshire School Checker"
+  description="Sheffield Hallam primary school catchment areas: Crookes, Fulwood, Ecclesall, Greystones, Dore, Totley and Stannington. Find your catchment school, how far places went and Ofsted ratings."
+  h1="Hallam primary schools: Crookes, Ecclesall and Dore"
+  lede="Primary school catchment areas for every school in south west Sheffield: Crookes, Crosspool, Fulwood, Ecclesall, Greystones, Bradway, Dore, Totley, Stannington, Loxley and Bradfield."
+  area="Hallam"
+  schools={schools}
+  groups={[{ label: 'Hallam: Crookes, Ecclesall and Dore', note: `${schools.length} primary and infant schools.`, schools }]}
+  faqs={faqs}
+/>

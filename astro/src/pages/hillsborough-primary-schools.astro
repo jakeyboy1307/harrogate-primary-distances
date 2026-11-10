@@ -1,0 +1,24 @@
+---
+// Area page: Sheffield's hillsborough area (lib/specs.ts AREA_INFO). The questions every Sheffield page shares are in lib/sheffield.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { shBorder, shFaqs, shTail } from '../lib/sheffield';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.hillsborough;
+const schools = loadArea('sheffield.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...shFaqs('Hillsborough', openLatest(schools).length, schools.length),
+  shBorder('Hillsborough', 'From Kimberworth or Thorpe Hesley, that’s Rotherham Council'),
+  ...shTail,
+];
+---
+<AreaPage areaKey="hillsborough"
+  title="Hillsborough and Brightside primary school catchment areas, map and Ofsted · Yorkshire School Checker"
+  description="Hillsborough, Brightside, Firth Park and Burngreave primary school catchment areas: find your catchment school, how far places went, Ofsted ratings and the 2027 Reception dates."
+  h1="Hillsborough, Brightside and Firth Park primary schools"
+  lede="Primary school catchment areas for every school in north Sheffield: Hillsborough, Wadsley Bridge, Southey, Parson Cross, Firth Park, Shiregreen, Brightside, Fir Vale and Burngreave."
+  area="Hillsborough"
+  schools={schools}
+  groups={[{ label: 'Hillsborough, Brightside and Firth Park', note: `${schools.length} primary and infant schools.`, schools }]}
+  faqs={faqs}
+/>

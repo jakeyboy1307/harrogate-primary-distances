@@ -68,7 +68,9 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
       </form>
       <div class="examples">
         <span>Just having a look? Try</span>
-        {Object.values(AREA_INFO).map(({ example: [pc, place] }) => <button class="example" type="button" data-pc={pc}>{place} · {pc}</button>)}
+        {/* one place per council: the first of its areas */}
+        {Object.values(AREA_INFO).filter((a, i, all) => all.findIndex((b) => b.council === a.council) === i)
+          .map(({ short, example: [pc] }) => <button class="example" type="button" data-pc={pc}>{short} · {pc}</button>)}
       </div>
       <p class="coverage">Covers every primary school in {COVERED}. Nothing to sign up for.</p>
     </div>

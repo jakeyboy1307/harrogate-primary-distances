@@ -1,0 +1,24 @@
+---
+// Area page: Sheffield's stocksbridge area (lib/specs.ts AREA_INFO). The questions every Sheffield page shares are in lib/sheffield.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { shBorder, shFaqs, shTail } from '../lib/sheffield';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.stocksbridge;
+const schools = loadArea('sheffield.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...shFaqs('Stocksbridge', openLatest(schools).length, schools.length),
+  shBorder('Stocksbridge', 'From Penistone or Hoyland, that’s Barnsley Council'),
+  ...shTail,
+];
+---
+<AreaPage areaKey="stocksbridge"
+  title="Stocksbridge, Chapeltown and High Green primary school catchment areas, map and Ofsted · Yorkshire School Checker"
+  description="Stocksbridge, Deepcar, Oughtibridge, Grenoside, Ecclesfield, Chapeltown and High Green primary school catchment areas, how far places went, Ofsted ratings and the 2027 Reception dates."
+  h1="Stocksbridge, Chapeltown and High Green primary schools"
+  lede="Primary school catchment areas for every Sheffield school in the north of the city: Stocksbridge, Deepcar, Oughtibridge, Grenoside, Ecclesfield, Chapeltown and High Green."
+  area="Stocksbridge"
+  schools={schools}
+  groups={[{ label: 'Stocksbridge, Chapeltown and High Green', note: `${schools.length} primary and infant schools.`, schools }]}
+  faqs={faqs}
+/>

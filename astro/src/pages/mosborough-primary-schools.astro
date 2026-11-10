@@ -1,0 +1,24 @@
+---
+// Area page: Sheffield's mosborough area (lib/specs.ts AREA_INFO). The questions every Sheffield page shares are in lib/sheffield.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { shBorder, shFaqs, shTail } from '../lib/sheffield';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.mosborough;
+const schools = loadArea('sheffield.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...shFaqs('Mosborough', openLatest(schools).length, schools.length),
+  shBorder('Mosborough', 'From Eckington or Killamarsh, that’s Derbyshire County Council, and from Swallownest or Aston it’s Rotherham Council'),
+  ...shTail,
+];
+---
+<AreaPage areaKey="mosborough"
+  title="Mosborough, Handsworth and Darnall primary school catchment areas, map and Ofsted · Yorkshire School Checker"
+  description="Mosborough, Handsworth, Woodhouse, Beighton and Darnall primary school catchment areas: find your catchment school, how far places went, Ofsted ratings and the 2027 Reception dates."
+  h1="Mosborough, Handsworth and Darnall primary schools"
+  lede="Primary school catchment areas for every school in south east Sheffield: Darnall, Tinsley, Handsworth, Richmond, Woodhouse, Hackenthorpe, Beighton, Mosborough, Halfway and Waterthorpe."
+  area="Mosborough"
+  schools={schools}
+  groups={[{ label: 'Mosborough, Handsworth and Darnall', note: `${schools.length} primary and infant schools.`, schools }]}
+  faqs={faqs}
+/>

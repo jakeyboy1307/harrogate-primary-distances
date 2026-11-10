@@ -27,7 +27,7 @@ export const kFaqs = (town: string, open: number, total: number): [string, strin
 // near: an example from just over the border, "From Ossett, that’s Wakefield Council"
 export const kBorder = (town: string, near: string): [string, string] => [
   'We live just over the council border. Which council do I apply to?',
-  `The council for where you live, even when you want a school in another council’s area. ${near}, and you can still name ${town} schools on that form. The checker covers ${COVERED} schools; the rest of West Yorkshire is coming.`,
+  `The council for where you live, even when you want a school in another council’s area. ${near}, and you can still name ${town} schools on that form. The checker covers ${COVERED} schools.`,
 ];
 export const kTail: [string, string][] = [
   ['When are the school term dates and holidays?',
