@@ -2,12 +2,16 @@
 // Every school the checker covers, from the same data files the site uses (public/data/), with how often
 // parents opened it and which ads show on it. Read-only: the figures come from the councils' data.
 import Admin from '../../../layouts/Admin.astro';
-import { AREAS } from '../../../lib/specs';
+import { AREA_INFO, councilLabel } from '../../../lib/specs';
+const byCouncil: Record<string, [string, string][]> = {};
+for (const [k, a] of Object.entries(AREA_INFO)) (byCouncil[a.council] ??= []).push([k, a.label]);
 ---
 <Admin title="Schools" active="schools">
   <div class="adm-bar">
     <input type="search" id="q" placeholder="Search school, town or URN" aria-label="Search schools" />
-    <select id="fArea" aria-label="Area"><option value="">All areas</option>{Object.entries(AREAS).map(([k, a]) => <option value={k}>{a}</option>)}</select>
+    <select id="fArea" aria-label="Area"><option value="">All areas</option>
+      {Object.entries(byCouncil).map(([c, list]) => <optgroup label={councilLabel(c)}>{list.map(([k, label]) => <option value={k}>{label}</option>)}</optgroup>)}
+    </select>
     <select id="fOfsted" aria-label="Ofsted"><option value="">Any Ofsted</option><option value="good">Good or better</option><option value="bad">Below Good</option><option value="na">No Ofsted match</option></select>
     <select id="fAds" aria-label="Ads"><option value="">With or without ads</option><option value="yes">Has an ad in its panel</option><option value="no">No ad in its panel</option></select>
     <span class="grow"></span>
@@ -41,7 +45,7 @@ import { AREAS } from '../../../lib/specs';
   import { api, esc, money, spotNames, statePill, toast, type Ad } from '../../../lib/admin';
   import { council, loadData, ofsted, whoGotIn, type School } from '../../../lib/engine';
   import { adAreasOf, areaOf } from '../../../lib/sponsors';
-  import { AREA_SHORT, AREAS, type Area } from '../../../lib/specs';
+  import { AREA_SHORT, AREAS, councilLabel, type Area } from '../../../lib/specs';
 
   interface Row { s: School; area: Area; of: ReturnType<typeof ofsted>; latest: School['d'][number] | undefined; opens: number; ads: Ad[] }
   let rows: Row[] = [];
@@ -75,11 +79,11 @@ import { AREAS } from '../../../lib/specs';
     $('count').textContent = `${list.length} of ${rows.length} schools`;
     document.querySelectorAll<HTMLElement>('[data-sort]').forEach((b) => b.dataset.dir = b.dataset.sort === sortKey ? (sortDir > 0 ? 'up' : 'down') : '');
     document.getElementById('rows')!.innerHTML = list.length ? list.map((r) => `<tr data-urn="${r.s.urn}">
-      <td><button class="sch-name" data-open="${r.s.urn}">${esc(r.s.name.replace(/,.*$/, ''))}</button><div class="sub">${esc(r.s.place)} · URN ${r.s.urn}${r.s.own ? ' · own admissions' : ''}</div></td>
-      <td>${esc(AREA_SHORT[r.area])}<div class="sub">${esc(council(r.s.council).name)}</div></td>
+      <td class="sch-school"><button class="adm-namebtn" data-open="${r.s.urn}">${esc(r.s.name.replace(/,.*$/, ''))}</button><div class="sub">${esc(r.s.place)} · URN ${r.s.urn}${r.s.own ? ' · own admissions' : ''}</div></td>
+      <td>${esc(AREA_SHORT[r.area])}<div class="sub">${esc(councilLabel(r.s.council))}</div></td>
       <td class="r">${r.s.pan ?? '–'}</td>
       <td><span class="of of-${r.of.tone}">${esc(r.of.short)}</span></td>
-      <td>${r.latest ? `${r.latest.y}: ${esc(whoGotIn(r.latest))}` : '<span class="sub">Not published</span>'}</td>
+      <td class="sch-latest">${r.latest ? `<b>${r.latest.y}</b> ${esc(whoGotIn(r.latest))}` : '<span class="sub">Not published</span>'}</td>
       <td class="r">${ratio(r) ? ratio(r).toFixed(1) : '–'}</td>
       <td class="r">${num(r.opens)}</td>
       <td class="r">${r.ads.length || '<span class="sub">0</span>'}</td>
@@ -160,10 +164,18 @@ import { AREAS } from '../../../lib/specs';
 <!-- global: the script draws the rows and the detail after load, which page-scoped styles don't reach -->
 <style is:global>
   .sch-table th button { border: 0; background: none; padding: 0; font: inherit; color: inherit; text-transform: inherit; letter-spacing: inherit; cursor: pointer; }
+  .sch-table th button:hover, .sch-table th button:focus-visible { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
   .sch-table th button[data-dir='up']::after { content: ' ▲'; }
   .sch-table th button[data-dir='down']::after { content: ' ▼'; }
   .sch-table .r, .sch-dlg .r { text-align: right; font-variant-numeric: tabular-nums; }
-  .sch-name { border: 0; background: none; padding: 0; font: 700 14px var(--body); color: var(--ink); text-align: left; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  /* the school's name gets room, the latest year doesn't take over, the Ofsted pill stays on one line */
+  .sch-table .sch-school { min-width: 190px; }
+  .sch-table .sch-latest { min-width: 150px; max-width: 220px; font-size: 13px; line-height: 1.45; color: var(--muted); }
+  /* the Ofsted pill and the number columns take only the room they need; long number headings wrap */
+  .sch-table td:nth-child(4) { width: 1%; white-space: nowrap; }
+  .sch-table th.r { white-space: normal; min-width: 64px; }
+  .adm-table.sch-table th, .adm-table.sch-table td { padding-left: 10px; padding-right: 10px; }
+  .sch-table .sch-latest b { color: var(--ink); }
   .sub { color: var(--muted-2); font-size: 13px; }
   .of { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; }
   .of-top, .of-ok { background: var(--good-bg); color: var(--good); }

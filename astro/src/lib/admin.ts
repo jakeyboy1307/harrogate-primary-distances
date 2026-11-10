@@ -1,6 +1,6 @@
 // Small helpers shared by the admin pages: calling the admin API, messages, and formatting.
 import { esc } from './engine';
-import { AREA_SHORT, SPOTS, type Area, type Placement } from './specs';
+import { AREA_INFO, AREA_SHORT, SPOTS, councilLabel, type Area, type Placement } from './specs';
 export { esc };
 
 export class ApiError extends Error {}
@@ -51,7 +51,18 @@ export const dates = (a: { start: string | null; end: string | null }) =>
 export const money = (p: number | null | undefined, period?: string | null) =>
   p == null ? '' : `£${(p / 100).toLocaleString('en-GB', { minimumFractionDigits: p % 100 ? 2 : 0 })}${period && period !== 'once' ? ` a ${period}` : ''}`;
 export const spotNames = (ps: Placement[]) => ps.map((p) => SPOTS[p]?.label ?? p).join(', ');
-export const areaNames = (as: Area[]) => as.map((a) => AREA_SHORT[a] ?? a).join(', ');
+// An ad's areas, with a council it covers in full named once ("Leeds" for all eight Leeds areas)
+export function areaNames(as: Area[]) {
+  const out: string[] = [], done = new Set<Area>();
+  for (const a of as) {
+    if (done.has(a)) continue;
+    const c = AREA_INFO[a]?.council;
+    const all = (Object.keys(AREA_INFO) as Area[]).filter((k) => AREA_INFO[k].council === c);
+    if (c && all.length > 1 && all.every((k) => as.includes(k))) { out.push(`all of ${councilLabel(c)}`); all.forEach((k) => done.add(k)); }
+    else { out.push(AREA_SHORT[a] ?? a); done.add(a); }
+  }
+  return out.join(', ').replace(/^all/, 'All');
+}
 
 const STATE: Record<Ad['state'], [string, string]> = {
   showing: ['Showing', 'good'], scheduled: ['Scheduled', 'open'], finished: ['Dates passed', 'none'],

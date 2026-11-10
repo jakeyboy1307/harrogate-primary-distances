@@ -24,7 +24,7 @@ import Admin from '../../../layouts/Admin.astro';
         <label class="adm-field">Phone <input name="phone" type="tel" /></label>
       </div>
       <label class="adm-field">Email <input name="email" type="email" /></label>
-      <label class="adm-field">Notes <em>(only you see these)</em><textarea name="notes" rows="4"></textarea></label>
+      <label class="adm-field"><span>Notes <em>(only you see these)</em></span><textarea name="notes" rows="4"></textarea></label>
       <div id="theirAds"></div>
       <p class="adm-error" id="err"></p>
       <div class="adm-actions">
@@ -48,9 +48,11 @@ import Admin from '../../../layouts/Admin.astro';
     const s = q.value.trim().toLowerCase();
     const list = all.filter((a) => !s || `${a.name} ${a.contactName ?? ''} ${a.email ?? ''}`.toLowerCase().includes(s));
     document.getElementById('rows')!.innerHTML = list.length ? list.map((a) => `<tr>
-      <td><button class="btn-link name" data-open="${a.id}" style="padding:0;color:var(--ink);text-decoration:none">${esc(a.name)}</button>${a.demo ? ' <span class="pill-s demo">Demo</span>' : ''}</td>
-      <td>${esc(a.contactName ?? '')}<div class="sub">${a.email ? `<a href="mailto:${esc(a.email)}">${esc(a.email)}</a>` : ''}${a.phone ? ` · ${esc(a.phone)}` : ''}</div></td>
-      <td>${a.ads}${a.live ? ` <span class="pill-s good">${a.live} live</span>` : ''}</td>
+      <td><button class="adm-namebtn" data-open="${a.id}">${esc(a.name)}</button>${a.demo ? ' <span class="pill-s demo">Demo</span>' : ''}</td>
+      <td>${a.contactName || a.email || a.phone
+        ? `${esc(a.contactName ?? '')}<div class="sub">${[a.email ? `<a href="mailto:${esc(a.email)}">${esc(a.email)}</a>` : '', esc(a.phone ?? '')].filter(Boolean).join(' · ')}</div>`
+        : '<span class="sub">No contact yet. Open to add one</span>'}</td>
+      <td class="nowrap">${a.live ? `<span class="pill-s good">${a.live} live</span>` : ''}${a.ads > a.live ? ` <span class="sub">${a.ads - a.live} not showing</span>` : ''}${a.ads ? '' : '<span class="sub">None yet</span>'}</td>
       <td>${esc(money(a.bookedPence)) || '<span class="sub">£0</span>'}</td>
       <td class="acts"><a class="btn btn-xs" href="/admin/ads/edit/?advertiser=${a.id}">New ad</a> <button class="btn btn-xs" data-open="${a.id}">Open</button></td>
     </tr>`).join('') : `<tr><td colspan="5" class="adm-empty">${all.length ? 'No advertiser matches.' : 'No advertisers yet.'}</td></tr>`;

@@ -1,51 +1,72 @@
 ---
 // How full every ad spot is in each area: what's showing now, what's booked to start, and what's free to sell.
+// Each spot lists only the areas with something booked; the rest are named in one line, so the page stays short
+// however many areas there are. The area filter shows one area's full picture.
 import Admin from '../../../layouts/Admin.astro';
+import { AREA_INFO, councilLabel } from '../../../lib/specs';
+const byCouncil: Record<string, [string, string][]> = {};
+for (const [k, a] of Object.entries(AREA_INFO)) (byCouncil[a.council] ??= []).push([k, a.label]);
 ---
 <Admin title="Ad spots" active="spots">
   <p class="adm-note">Each spot holds a set number of ads at once in each area. Ads ending within 30 days are marked, so you can offer the space again.</p>
+  <div class="adm-bar">
+    <select id="fArea" aria-label="Area"><option value="">All areas</option>
+      {Object.entries(byCouncil).map(([c, list]) => <optgroup label={councilLabel(c)}>{list.map(([k, label]) => <option value={k}>{label}</option>)}</optgroup>)}
+    </select>
+  </div>
   <div class="spots" id="spots"><p class="adm-note">Loading…</p></div>
 </Admin>
 
 <script>
   import { api, day, esc, toast } from '../../../lib/admin';
-  import { AREAS } from '../../../lib/specs';
+  import { AREA_SHORT, AREAS } from '../../../lib/specs';
   interface Spot { placement: string; label: string; where: string; limit: number; perSchool?: boolean;
     areas: { area: keyof typeof AREAS; showing: { id: number; name: string; end: string | null; urns: number[] | null; endingSoon: boolean }[]; scheduled: { id: number; name: string; start: string }[] }[] }
+  let list: Spot[] = [];
+  const fArea = document.getElementById('fArea') as HTMLSelectElement;
 
-  api<Spot[]>('spots').then((list) => {
-    document.getElementById('spots')!.innerHTML = list.map((s) => `<section class="adm-card spot">
-      <div class="spot-head"><h2 class="adm-h2">${esc(s.label)}</h2><span class="sub">${esc(s.where)}. ${s.perSchool ? `${s.limit} per school` : `${s.limit} at once`}</span></div>
-      <div class="spot-areas">${s.areas.map((a) => {
-        const used = s.perSchool ? null : a.showing.length;
-        const free = used == null ? null : Math.max(0, s.limit - used);
-        return `<div class="spot-area">
-          <div class="spot-area-head"><b>${esc(AREAS[a.area])}</b>${free == null ? `<span class="pill-s open">${a.showing.length} running</span>` : free ? `<span class="pill-s good">${free} free</span>` : '<span class="pill-s bad">Full</span>'}</div>
-          ${used != null ? `<div class="meter"><span style="width:${Math.min(100, (used / s.limit) * 100)}%"></span></div>` : ''}
-          <ul>${a.showing.map((x) => `<li><a href="/admin/ads/edit/?id=${x.id}">${esc(x.name)}</a>${x.urns ? ` <span class="sub">${x.urns.length} school${x.urns.length > 1 ? 's' : ''}</span>` : s.perSchool ? ' <span class="sub">every school</span>' : ''}${x.end ? ` <span class="sub${x.endingSoon ? ' soon' : ''}">until ${day(x.end)}</span>` : ''}</li>`).join('')}
-          ${a.scheduled.map((x) => `<li class="sched"><a href="/admin/ads/edit/?id=${x.id}">${esc(x.name)}</a> <span class="sub">starts ${day(x.start)}</span></li>`).join('')}</ul>
-          ${!a.showing.length && !a.scheduled.length ? '<p class="sub">Nothing booked.</p>' : ''}
-        </div>`;
-      }).join('')}</div>
-    </section>`).join('');
-  }).catch((e) => toast(e.message, true));
+  const space = (s: Spot, a: Spot['areas'][number]) => {
+    if (s.perSchool) return `<span class="pill-s open">${a.showing.length} running</span>`;
+    const free = Math.max(0, s.limit - a.showing.length);
+    return `${free ? `<span class="pill-s good">${free} free</span>` : '<span class="pill-s bad">Full</span>'}<div class="meter"><span style="width:${Math.min(100, (a.showing.length / s.limit) * 100)}%"></span></div>`;
+  };
+  const ads = (s: Spot, a: Spot['areas'][number]) => a.showing.map((x) => `<div><a href="/admin/ads/edit/?id=${x.id}">${esc(x.name)}</a>${x.urns ? ` <span class="sub">${x.urns.length} school${x.urns.length > 1 ? 's' : ''}</span>` : s.perSchool ? ' <span class="sub">every school</span>' : ''}${x.end ? ` <span class="sub${x.endingSoon ? ' soon' : ''}">until ${day(x.end)}</span>` : ''}</div>`).join('') || '<span class="sub">None</span>';
+  const starting = (a: Spot['areas'][number]) => a.scheduled.map((x) => `<div><a href="/admin/ads/edit/?id=${x.id}">${esc(x.name)}</a> <span class="sub">starts ${day(x.start)}</span></div>`).join('') || '<span class="sub">–</span>';
+
+  function render() {
+    const only = fArea.value;
+    document.getElementById('spots')!.innerHTML = list.map((s) => {
+      const areas = only ? s.areas.filter((a) => a.area === only) : s.areas;
+      const booked = only ? areas : areas.filter((a) => a.showing.length || a.scheduled.length);
+      const empty = areas.filter((a) => !booked.includes(a));
+      return `<section class="adm-card spot">
+        <div class="spot-head"><h2 class="adm-h2">${esc(s.label)}</h2><span class="sub">${esc(s.where)}. ${s.perSchool ? `${s.limit} per school` : `${s.limit} at once`}</span></div>
+        ${booked.length ? `<div class="adm-table-wrap spot-table"><table class="adm-table">
+          <thead><tr><th>Area</th><th>Showing now</th><th>Starting later</th><th class="r">Space</th></tr></thead>
+          <tbody>${booked.map((a) => `<tr><td class="name">${esc(AREAS[a.area])}</td><td>${ads(s, a)}</td><td>${starting(a)}</td><td class="space">${space(s, a)}</td></tr>`).join('')}</tbody>
+        </table></div>` : ''}
+        ${empty.length ? `<p class="spot-free"><b>${booked.length ? `Nothing booked in the other ${empty.length} areas` : `Nothing booked in any of the ${empty.length} areas`}${s.perSchool ? '' : `, ${s.limit} free in each`}:</b> ${empty.map((a) => `<span title="${esc(AREAS[a.area])}">${esc(AREA_SHORT[a.area])}</span>`).join(', ')}.</p>` : ''}
+      </section>`;
+    }).join('');
+  }
+  fArea.addEventListener('input', render);
+  api<Spot[]>('spots').then((l) => { list = l; render(); }).catch((e) => toast(e.message, true));
 </script>
 
 <!-- global: the script draws this HTML after load, which page-scoped styles don't reach -->
 <style is:global>
   .spots { display: grid; gap: 16px; }
-  .spot { display: grid; gap: 14px; }
+  .spot { display: grid; gap: 12px; }
   .spot-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
   .spot-head .adm-h2 { margin: 0; }
   .sub { color: var(--muted-2); font-size: 13px; }
   .sub.soon { color: var(--close); font-weight: 700; }
-  .spot-areas { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .spot-area { background: var(--pale); border-radius: 12px; padding: 14px 16px; display: grid; gap: 8px; align-content: start; }
-  .spot-area-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-  .meter { height: 6px; border-radius: 3px; background: #fff; overflow: hidden; }
+  .spot-table { border-radius: 12px; }
+  .spot-table td div + div { margin-top: 4px; }
+  .spot-table .space { text-align: right; width: 120px; }
+  .spot-table th.r { text-align: right; }
+  .meter { height: 6px; border-radius: 3px; background: var(--pale); overflow: hidden; margin-top: 6px; }
   .meter span { display: block; height: 100%; background: var(--cobalt); border-radius: 3px; }
-  .spot-area ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 14px; }
-  .spot-area a { font-weight: 600; color: var(--ink); }
-  .sched a { color: var(--muted); }
-  @media (max-width: 760px) { .spot-areas { grid-template-columns: 1fr; } }
+  .spot-free { font-size: 14px; line-height: 1.6; color: var(--muted); }
+  .spot-free b { color: var(--ink); font-weight: 600; }
 </style>

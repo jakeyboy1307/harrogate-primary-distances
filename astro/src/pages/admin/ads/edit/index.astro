@@ -3,10 +3,13 @@
 // advertiser, ?school=URN to start one for a school.
 // The preview on the right is drawn with the same code the site uses, so it's exactly what parents see.
 import Admin from '../../../../layouts/Admin.astro';
-import { AREAS, LIMITS, SPOTS } from '../../../../lib/specs';
+import { AREA_INFO, LIMITS, SPOTS, councilLabel } from '../../../../lib/specs';
+// the areas by council, so a whole council (all eight Leeds areas) can be ticked at once
+const byCouncil: Record<string, [string, string][]> = {};
+for (const [k, a] of Object.entries(AREA_INFO)) (byCouncil[a.council] ??= []).push([k, a.label]);
 const categories = ['School uniform', 'Independent school', 'Wraparound care', 'After-school clubs', 'School shoes', 'Tutoring', 'Moving house', 'Nursery', 'From the school'];
 ---
-<Admin title="Ad" active="ads">
+<Admin title="New ad" active="ads">
   <div class="adm-bar">
     <a class="btn-link" href="/admin/ads/">← All ads</a>
     <span class="grow"></span>
@@ -25,7 +28,16 @@ const categories = ['School uniform', 'Independent school', 'Wraparound care', '
         <div class="adm-checks">{Object.entries(SPOTS).map(([k, s]) => <label title={s.where}><input type="checkbox" name="placements" value={k} />{s.label}</label>)}</div>
       </fieldset>
       <fieldset class="adm-field ed-set"><legend>Areas</legend>
-        <div class="adm-checks">{Object.entries(AREAS).map(([k, a]) => <label><input type="checkbox" name="areas" value={k} />{a}</label>)}</div>
+        <div class="ed-areas">
+          {Object.entries(byCouncil).map(([c, list]) => (
+            <div class="ed-council">
+              {list.length > 1
+                ? <label class="ed-all"><input type="checkbox" data-council={c} />All of {councilLabel(c)} <span>({list.length} areas)</span></label>
+                : <span class="ed-all">{councilLabel(c)}</span>}
+              <div class="adm-checks">{list.map(([k, label]) => <label><input type="checkbox" name="areas" value={k} data-in={c} />{label}</label>)}</div>
+            </div>
+          ))}
+        </div>
       </fieldset>
       <div class="adm-field ed-schools" id="schoolsBox">
         <span>Schools <em id="schoolsHint">(optional: leave empty for every school in the areas)</em></span>
@@ -44,20 +56,20 @@ const categories = ['School uniform', 'Independent school', 'Wraparound care', '
         <label class="adm-field">Button text <input name="cta" data-limit={LIMITS.cta} placeholder="Book a visit" required /><span class="count"></span></label>
         <label class="adm-field">Link <input name="url" type="url" placeholder="https://" required /></label>
       </div>
-      <label class="adm-field">Offer line <em>(optional)</em><input name="offer" data-limit={LIMITS.offer} placeholder="10% off with code YSC10" /><span class="count"></span></label>
+      <label class="adm-field"><span>Offer line <em>(optional)</em></span><input name="offer" data-limit={LIMITS.offer} placeholder="10% off with code YSC10" /><span class="count"></span></label>
       <div class="adm-row2">
-        <label class="adm-field">Logo letters <em>(when there's no logo image)</em><input name="logoText" data-limit={LIMITS.logoText} placeholder="ST" /><span class="count"></span></label>
+        <label class="adm-field"><span>Logo letters <em>(when there's no logo image)</em></span><input name="logoText" data-limit={LIMITS.logoText} placeholder="ST" /><span class="count"></span></label>
         <label class="adm-field">Logo colour <span class="ed-colour"><input type="color" id="colourPick" value="#2747D8" aria-label="Pick a colour" /><input name="colour" placeholder="#2747D8" /></span></label>
       </div>
-      <label class="adm-field">Logo image link <em>(optional, a square image; uploads come later)</em><input name="logoUrl" type="url" placeholder="https://" /></label>
-      <label class="adm-field" id="openDaysBox" hidden>Open days <em>(one per line, up to {LIMITS.openDays})</em><textarea name="openDays" rows="3" placeholder="Tue 18 November, 9:30am"></textarea></label>
+      <label class="adm-field"><span>Logo image link <em>(optional, a square image; uploads come later)</em></span><input name="logoUrl" type="url" placeholder="https://" /></label>
+      <label class="adm-field" id="openDaysBox" hidden><span>Open days <em>(one per line, up to {LIMITS.openDays})</em></span><textarea name="openDays" rows="3" placeholder="Tue 18 November, 9:30am"></textarea></label>
 
       <div class="adm-row2">
-        <label class="adm-field">Starts <em>(optional)</em><input name="start" type="date" /></label>
-        <label class="adm-field">Ends <em>(optional)</em><input name="end" type="date" /></label>
+        <label class="adm-field"><span>Starts <em>(optional)</em></span><input name="start" type="date" /></label>
+        <label class="adm-field"><span>Ends <em>(optional)</em></span><input name="end" type="date" /></label>
       </div>
       <div class="adm-row2">
-        <label class="adm-field">Price <em>(£)</em><input name="price" type="number" min="0" step="0.01" inputmode="decimal" /></label>
+        <label class="adm-field"><span>Price <em>(£)</em></span><input name="price" type="number" min="0" step="0.01" inputmode="decimal" /></label>
         <label class="adm-field">Per <select name="pricePeriod"><option value="month">month</option><option value="year">year</option><option value="once">one-off</option></select></label>
       </div>
       <label class="ed-paid"><input type="checkbox" name="paid" /> Paid</label>
@@ -122,10 +134,19 @@ const categories = ['School uniform', 'Independent school', 'Wraparound care', '
       pricePence: price === '' ? null : Math.round(Number(price) * 100), pricePeriod: f('pricePeriod').value, paid: f('paid').checked,
     };
   }
+  function syncCouncils() {
+    form.querySelectorAll<HTMLInputElement>('input[data-council]').forEach((g) => {
+      const items = [...form.querySelectorAll<HTMLInputElement>(`input[name=areas][data-in="${g.dataset.council}"]`)];
+      const on = items.filter((i) => i.checked).length;
+      g.checked = on === items.length;
+      g.indeterminate = on > 0 && on < items.length;
+    });
+  }
   function fill(a: Ad) {
     f('advertiserId').value = a.advertiserId ? String(a.advertiserId) : '';
     form.querySelectorAll<HTMLInputElement>('input[name=placements]').forEach((i) => (i.checked = a.placements.includes(i.value as any)));
     form.querySelectorAll<HTMLInputElement>('input[name=areas]').forEach((i) => (i.checked = a.areas.includes(i.value as any)));
+    syncCouncils();
     urns = a.urns ?? [];
     for (const k of ['name', 'category', 'blurb', 'cta', 'url', 'offer', 'logoUrl'] as const) f(k).value = (a as any)[k] ?? '';
     f('logoText').value = a.logoText ?? ''; f('colour').value = a.colour ?? '';
@@ -145,6 +166,7 @@ const categories = ['School uniform', 'Independent school', 'Wraparound care', '
     document.getElementById('del')!.hidden = !current;
     document.getElementById('dup')!.hidden = !current;
     document.title = `${current ? current.name : 'New ad'} · Admin · Yorkshire School Checker`;
+    document.querySelector('.adm-top h1')!.textContent = current ? 'Edit ad' : 'New ad';
   }
 
   function preview() {
@@ -236,6 +258,12 @@ const categories = ['School uniform', 'Independent school', 'Wraparound care', '
   const pick = document.getElementById('colourPick') as HTMLInputElement;
   pick.addEventListener('input', () => { f('colour').value = pick.value.toUpperCase(); preview(); });
   f('colour').addEventListener('input', () => { if (/^#[0-9a-f]{6}$/i.test(f('colour').value)) pick.value = f('colour').value; });
+  // ticking "All of Leeds" ticks its areas; ticking areas one by one fills or half-fills it
+  form.addEventListener('input', (e) => {
+    const t = e.target as HTMLInputElement;
+    if (t.dataset.council) form.querySelectorAll<HTMLInputElement>(`input[name=areas][data-in="${t.dataset.council}"]`).forEach((i) => (i.checked = t.checked));
+    if (t.dataset.council || t.name === 'areas') syncCouncils();
+  });
   form.addEventListener('input', preview);
 
   // ---------- new advertiser, without leaving the page ----------
@@ -265,6 +293,7 @@ const categories = ['School uniform', 'Independent school', 'Wraparound care', '
       if (sc) {
         urns = [sc.urn];
         form.querySelectorAll<HTMLInputElement>('input[name=areas]').forEach((i) => (i.checked = i.value === sc.area));
+        syncCouncils();
       }
     }
     else if (params.get('advertiser')) {
@@ -283,6 +312,14 @@ const categories = ['School uniform', 'Independent school', 'Wraparound care', '
   .ed { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr); gap: 24px; align-items: start; }
   .ed-set { border: 0; padding: 0; margin: 0; }
   .ed-set legend { padding: 0; margin-bottom: 6px; font-weight: 700; font-size: 14px; }
+  .ed-areas { display: grid; gap: 12px; }
+  .ed-council { display: grid; gap: 6px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--pale); }
+  .ed-all { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted-2); cursor: pointer; justify-self: start; }
+  span.ed-all { cursor: default; }
+  .ed-all span { text-transform: none; letter-spacing: 0; font-weight: 500; }
+  .ed-all input { accent-color: var(--ink); }
+  /* the preview's column runs the form's full height, so the preview can stay in view while you scroll */
+  .ed-preview { align-self: stretch; }
   .ed-schools { position: relative; }
   .ed-chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .ed-chips:empty { display: none; }
@@ -299,6 +336,8 @@ const categories = ['School uniform', 'Independent school', 'Wraparound care', '
   .ed-actions { align-items: center; padding-top: 6px; border-top: 1px solid var(--line); }
   .ed-actions .grow { flex: 1; }
   .ed-sticky { position: sticky; top: 20px; display: grid; gap: 10px; }
+  .adm-checks label:hover { border-color: var(--faint); }
+  .adm-checks label:has(input:checked):hover { border-color: var(--ink); }
   .ed-preview-box { display: grid; gap: 14px; }
   .panel-like { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 4px 18px 16px; }
   @media (max-width: 1000px) { .ed { grid-template-columns: 1fr; } .ed-sticky { position: static; } }

@@ -72,6 +72,9 @@ const menu = [
       .adm-side nav { display: grid; gap: 2px; }
       .adm-link { display: flex; justify-content: space-between; align-items: center; padding: 9px 12px; border-radius: 10px; font-weight: 600; font-size: 15px; color: var(--ink); text-decoration: none; }
       a.adm-link:hover { background: var(--pale); }
+      a.adm-link.on:hover { background: var(--ink); }
+      .adm-brand:hover span { color: var(--cobalt); }
+      .adm-who a:hover { color: var(--cobalt); }
       .adm-link.on { background: var(--ink); color: #fff; }
       .adm-link.soon { color: var(--faint); cursor: default; }
       .adm-link em { font: 600 11px var(--body); font-style: normal; text-transform: uppercase; letter-spacing: .05em; }
@@ -83,23 +86,35 @@ const menu = [
       .adm-who a { color: var(--ink); font-weight: 600; }
       .adm-env { padding: 3px 10px; border-radius: 999px; background: var(--sticky); color: var(--ink); font-weight: 700; font-size: 12px; }
       .adm-env.live { background: var(--bad-bg); color: var(--bad); }
-      .adm-body { padding: 28px 32px 48px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; }
+      /* align-content: start, or a short page spreads its few blocks down the screen */
+      .adm-body { padding: 28px 32px 48px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; align-content: start; }
       .adm-card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; }
       .adm-h2 { font: 700 20px var(--body); letter-spacing: 0; margin-bottom: 6px; }
       .adm-note { color: var(--muted); line-height: 1.55; max-width: 760px; font-size: 15px; }
       .adm-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
       .adm-bar .grow { flex: 1; }
-      .adm-bar select, .adm-bar input[type=search] { font: 500 15px var(--body); padding: 8px 12px; border: 1.5px solid var(--line-2); border-radius: 10px; background: #fff; color: var(--ink); }
+.adm-bar select, .adm-bar input[type=search] { font: 500 15px var(--body); padding: 8px 12px; border: 1.5px solid var(--line-2); border-radius: 10px; background: #fff; color: var(--ink); }
+      .adm-bar input[type=search] { min-width: 200px; }
+      .adm-bar select { max-width: 210px; }   /* an area dropdown sizes itself to its longest name otherwise */
+      .adm-bar select:hover, .adm-bar input[type=search]:hover, .adm-field input:hover, .adm-field select:hover, .adm-field textarea:hover { border-color: var(--faint); }
+      /* one focus ring for every box: filters and form fields alike */
+      .adm-bar select:focus-visible, .adm-bar input:focus-visible, .adm-field input:focus, .adm-field select:focus, .adm-field textarea:focus { outline: 2px solid var(--cobalt); outline-offset: 1px; border-color: var(--cobalt); border-radius: 10px; }
       /* tables */
       .adm-table-wrap { background: #fff; border: 1px solid var(--line); border-radius: 16px; overflow-x: auto; }
       .adm-table { width: 100%; border-collapse: collapse; font-size: 14px; }
       .adm-table th { text-align: left; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted-2); padding: 12px 14px; border-bottom: 1px solid var(--line); white-space: nowrap; }
       .adm-table td { padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
       .adm-table tr:last-child td { border-bottom: 0; }
-      .adm-table tbody tr:hover { background: #FAFBFF; }
+      .adm-table tbody tr:hover { background: var(--pale); }
       .adm-table .name { font-weight: 700; color: var(--ink); }
+      /* links in tables: ink, underlined lightly, cobalt on hover (a school, an ad, a page) */
+      .adm-table td a, .adm-namebtn { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line-2); text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+      .adm-table td a:hover, .adm-namebtn:hover { color: var(--cobalt); text-decoration-color: currentColor; }
+      .adm-namebtn { background: none; border: 0; padding: 0; font: 700 14px var(--body); text-align: left; cursor: pointer; }
+      .adm-table td a.btn { text-decoration: none; }
       .adm-table .sub { color: var(--muted-2); font-size: 13px; margin-top: 2px; }
       .adm-table .acts { white-space: nowrap; text-align: right; }
+      .adm-table .nowrap { white-space: nowrap; }
       .adm-empty { padding: 40px 20px; text-align: center; color: var(--muted); }
       /* small status pills */
       .pill-s { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; }
@@ -114,11 +129,11 @@ const menu = [
       .adm-field { display: grid; gap: 6px; font-weight: 700; font-size: 14px; }
       .adm-field em { font-style: normal; font-weight: 400; color: var(--muted-2); }
       .adm-field input, .adm-field select, .adm-field textarea { font: 400 15px/1.45 var(--body); color: var(--ink); padding: 9px 12px; border: 1.5px solid var(--line-2); border-radius: 10px; background: #fff; width: 100%; }
-      .adm-field input:focus, .adm-field select:focus, .adm-field textarea:focus { outline: 2px solid var(--cobalt); outline-offset: 1px; border-color: var(--cobalt); }
       .adm-field input[type=checkbox], .adm-field input[type=radio] { width: auto; padding: 0; border: 0; }
       .adm-field .count { font-weight: 500; font-size: 12px; color: var(--muted-2); justify-self: end; margin-top: -2px; }
       .adm-field .count.over { color: var(--bad); font-weight: 700; }
-      .adm-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+      /* align-items: start, or a field without a character count stretches and its box sits lower than its neighbour's */
+      .adm-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
       .adm-checks { display: flex; flex-wrap: wrap; gap: 8px; }
       .adm-checks label { display: inline-flex; align-items: center; gap: 7px; padding: 7px 12px; border: 1.5px solid var(--line-2); border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer; background: #fff; }
       .adm-checks label:has(input:checked) { border-color: var(--ink); background: var(--ink); color: #fff; }
@@ -127,7 +142,15 @@ const menu = [
       .adm-error { color: var(--bad); font-weight: 600; font-size: 14px; }
       .adm-error:empty { display: none; }
       .btn-link { background: none; border: 0; padding: 4px 6px; font: 600 14px var(--body); color: var(--cobalt); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+      .btn-link:hover { color: var(--ink); text-decoration-thickness: 2px; }
       .btn-link.bad { color: var(--bad); }
+      .btn-link.bad:hover { color: #7E1F17; }
+      /* every button reacts: white ones go pale, dark ones lift, all press down */
+      .adm .btn { transition: background-color .12s, border-color .12s, color .12s, transform .12s, box-shadow .12s; }
+      .adm .btn:not(.btn-primary):not(.btn-dark):hover { background: var(--tint); }   /* a shade stronger than a hovered row, so it shows inside one */
+      .adm .btn-dark:hover { background: #2C3352; border-color: #2C3352; }
+      .adm .btn:not(.btn-primary):active { transform: translateY(1px); }
+      .adm .btn:disabled:hover { background: inherit; transform: none; }
       .btn-xs { padding: 5px 10px; font-size: 13px; border-radius: 9px; border-width: 1.5px; }
       /* dialogs and messages */
       .adm-dialog { width: min(560px, calc(100% - 32px)); border: 2px solid var(--ink); border-radius: 18px; padding: 24px; box-shadow: 6px 6px 0 var(--cobalt); color: var(--ink); }
@@ -137,12 +160,24 @@ const menu = [
       .adm-toast.bad { background: var(--bad); }
       @media (max-width: 860px) {
         .adm { grid-template-columns: 1fr; }
-        .adm-side { position: static; height: auto; flex-direction: row; flex-wrap: wrap; align-items: center; padding: 12px 16px; gap: 8px; border-right: 0; border-bottom: 1px solid var(--line); }
-        .adm-side nav { display: flex; flex-wrap: wrap; gap: 4px; }
-        .adm-brand { padding: 0 8px 0 0; }
-        .adm-out { margin-top: 0; margin-left: auto; }
-        .adm-top, .adm-body { padding-left: 16px; padding-right: 16px; }
+        /* the menu becomes one row that scrolls sideways, so it doesn't take the first screen */
+        .adm-side { position: static; height: auto; display: grid; grid-template-columns: 1fr auto; align-items: center; padding: 10px 16px 0; gap: 6px 8px; border-right: 0; border-bottom: 1px solid var(--line); }
+        .adm-side nav { grid-column: 1 / -1; display: flex; flex-wrap: nowrap; gap: 4px; overflow-x: auto; padding-bottom: 10px; margin: 0 -16px; padding-left: 16px; padding-right: 16px; scrollbar-width: none; }
+        .adm-side nav::-webkit-scrollbar { display: none; }
+        .adm-link { white-space: nowrap; padding: 8px 12px; font-size: 14px; }
+        .adm-brand { padding: 0; grid-row: 1; }
+        .adm-out { margin: 0; grid-row: 1; grid-column: 2; font-size: 14px; padding: 6px 4px; }
+        .adm-top { padding: 14px 16px; gap: 6px 12px; }
+        .adm-top h1 { font-size: 24px; }
+        .adm-who { gap: 10px; font-size: 13px; }
+        .adm-body { padding: 18px 16px 40px; gap: 18px; }
         .adm-row2 { grid-template-columns: 1fr; }
+        /* filters full width, one per line; buttons keep their own width */
+        .adm-bar > select, .adm-bar > input[type=search] { flex: 1 1 100%; min-width: 0; max-width: none; }
+        .adm-bar .grow { display: none; }
+        /* a table's actions stay in view at the right edge while the rest scrolls */
+        .adm-table .acts { position: sticky; right: 0; background: #fff; box-shadow: -10px 0 10px -10px rgba(20, 24, 43, .25); }
+        .adm-table tbody tr:hover .acts { background: var(--pale); }
       }
     </style>
   </body>

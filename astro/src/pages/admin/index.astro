@@ -65,6 +65,9 @@ const tiles = [
   import { api, day, esc, toast } from '../../lib/admin';
   import { loadData } from '../../lib/engine';
   import { AREA_INFO, AREAS, SPOTS } from '../../lib/specs';
+  import SLUGS from '../../lib/slugs.json';
+  // every school page's address -> its URN, so "Most viewed pages" can name schools
+  const SLUG_URN = new Map(Object.entries(SLUGS as Record<string, string>).map(([urn, slug]) => [`/schools/${slug}/`, urn]));
 
   interface AdStat { id: number; name: string; advertiser: string | null; advertiserId: number | null; status: string; demo: boolean; views: number; clicks: number; slots: Record<string, { views: number; clicks: number }> }
   interface Stats { from: string; to: string; days: number; total: Record<string, number>; daily: { day: string; pages: number; searches: number }[];
@@ -76,6 +79,8 @@ const tiles = [
     '/advertise/': 'Advertise with us',
     ...Object.fromEntries(Object.values(AREA_INFO).map((a) => [`/${a.page}`, `${a.short} area page`])),
   };
+  const pageName = (path: string) => PAGE_NAMES[path]
+    ?? (SLUG_URN.has(path) ? `${names.get(SLUG_URN.get(path)!) ?? path} (school page)` : path);
   const rate = (c: number, v: number) => (v ? `${((c / v) * 100).toFixed(1)}%` : '–');
   const none = (cols: number, text = 'Nothing counted yet.') => `<tr><td colspan="${cols}" class="adm-empty">${text}</td></tr>`;
   let names = new Map<string, string>();
@@ -131,7 +136,7 @@ const tiles = [
     const searches = s.searches.reduce((n, r) => n + r.n, 0);
     const AREA_NAMES: Record<string, string> = { ...AREAS, outside: 'Outside the areas covered' };
     document.getElementById('areaRows')!.innerHTML = s.searches.length ? s.searches.map((r) => `<tr><td>${esc(AREA_NAMES[r.key] ?? r.key)}</td><td class="r">${num(r.n)}</td><td class="r">${((r.n / searches) * 100).toFixed(0)}%</td></tr>`).join('') : none(3);
-    document.getElementById('pageRows')!.innerHTML = s.pages.length ? s.pages.map((r) => `<tr><td>${r.key === '404' ? 'Page not found' : `<a href="${esc(r.key)}" target="_blank" rel="noopener">${esc(PAGE_NAMES[r.key] ?? r.key)}</a>`}</td><td class="r">${num(r.n)}</td></tr>`).join('') : none(2);
+    document.getElementById('pageRows')!.innerHTML = s.pages.length ? s.pages.map((r) => `<tr><td>${r.key === '404' ? 'Page not found' : `<a href="${esc(r.key)}" target="_blank" rel="noopener">${esc(pageName(r.key))}</a>`}</td><td class="r">${num(r.n)}</td></tr>`).join('') : none(2);
     document.getElementById('schoolRows')!.innerHTML = s.schools.length ? s.schools.map((r) => `<tr><td>${esc(names.get(r.key) ?? `URN ${r.key}`)}</td><td class="r">${num(r.n)}</td></tr>`).join('') : none(2);
   }
 

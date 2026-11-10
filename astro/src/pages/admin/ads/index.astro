@@ -1,7 +1,9 @@
 ---
 // Every ad, newest first, with quick go live / pause. Editing is on /admin/ads/edit/?id=N.
 import Admin from '../../../layouts/Admin.astro';
-import { AREAS, SPOTS } from '../../../lib/specs';
+import { AREA_INFO, SPOTS, councilLabel } from '../../../lib/specs';
+const byCouncil: Record<string, [string, string][]> = {};
+for (const [k, a] of Object.entries(AREA_INFO)) (byCouncil[a.council] ??= []).push([k, a.label]);
 ---
 <Admin title="Ads" active="ads">
   <div class="adm-bar">
@@ -14,8 +16,10 @@ import { AREAS, SPOTS } from '../../../lib/specs';
       <option value="ended">Ended or dates passed</option>
     </select>
     <select id="fSpot" aria-label="Ad spot"><option value="">Every spot</option>{Object.entries(SPOTS).map(([k, s]) => <option value={k}>{s.label}</option>)}</select>
-    <select id="fArea" aria-label="Area"><option value="">All areas</option>{Object.entries(AREAS).map(([k, a]) => <option value={k}>{a}</option>)}</select>
-    <input type="search" id="fText" placeholder="Search name or advertiser" aria-label="Search" />
+    <select id="fArea" aria-label="Area"><option value="">All areas</option>
+      {Object.entries(byCouncil).map(([c, list]) => <optgroup label={councilLabel(c)}>{list.map(([k, label]) => <option value={k}>{label}</option>)}</optgroup>)}
+    </select>
+    <input type="search" id="fText" placeholder="Search ads" aria-label="Search ads and advertisers" />
     <span class="grow"></span>
     <a class="btn btn-sm btn-primary" href="/admin/ads/edit/">New ad</a>
   </div>
@@ -40,8 +44,8 @@ import { AREAS, SPOTS } from '../../../lib/specs';
       <td><a class="name" href="/admin/ads/edit/?id=${a.id}">${esc(a.name)}</a>${a.demo ? ' <span class="pill-s demo">Demo</span>' : ''}
         <div class="sub">${esc(a.category)}${a.advertiser && a.advertiser !== a.name ? ` · ${esc(a.advertiser)}` : ''}</div></td>
       <td>${esc(spotNames(a.placements))}<div class="sub">${esc(areaNames(a.areas))}${a.urns ? ` · ${a.urns.length} school${a.urns.length > 1 ? 's' : ''}` : ''}</div></td>
-      <td>${esc(dates(a))}</td>
-      <td>${esc(money(a.pricePence, a.pricePeriod)) || '<span class="sub">Not set</span>'}${a.pricePence != null ? `<div class="sub">${a.paid ? 'Paid' : 'Not paid'}</div>` : ''}</td>
+      <td class="nowrap">${esc(dates(a))}</td>
+      <td class="nowrap">${esc(money(a.pricePence, a.pricePeriod)) || '<span class="sub">Not set</span>'}${a.pricePence != null ? `<div class="sub">${a.paid ? 'Paid' : 'Not paid'}</div>` : ''}</td>
       <td>${statePill(a.state)}</td>
       <td class="acts">${go} <a class="btn btn-xs" href="/admin/ads/edit/?id=${a.id}">Edit</a></td>
     </tr>`;

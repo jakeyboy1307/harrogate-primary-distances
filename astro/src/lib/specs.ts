@@ -73,7 +73,9 @@ export const PLACES = listOf(Object.values(AREA_INFO).map((a) => a.short));
 export const NY_PLACES = listOf(Object.values(AREA_INFO).filter((a) => a.council === 'North Yorkshire').map((a) => a.short));
 
 // The councils covered, as parents call them, for wording like "The checker covers North Yorkshire and York schools"
-const COUNCIL_SHORT: Record<string, string> = { 'East Riding of Yorkshire': 'East Riding', 'Kingston upon Hull, City of': 'Hull', 'Redcar and Cleveland': 'Redcar' };
+export const COUNCIL_SHORT: Record<string, string> = { 'East Riding of Yorkshire': 'East Riding', 'Kingston upon Hull, City of': 'Hull', 'Redcar and Cleveland': 'Redcar' };
+// A council's name as parents call it ("Hull", "East Riding")
+export const councilLabel = (c: string) => COUNCIL_SHORT[c] ?? c;
 export const COVERED = listOf([...new Set(Object.values(AREA_INFO).map((a) => COUNCIL_SHORT[a.council] ?? a.council))]);
 
 // North Yorkshire Council's term and holiday dates, for the area pages' term dates question
