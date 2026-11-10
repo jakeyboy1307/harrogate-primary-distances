@@ -259,11 +259,14 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
     $('#resWhere').textContent = `${p.label === 'your location' ? 'Your location' : p.label} · within ${plural(radius(), 'mile')} · ${m === 'trend' ? 'every year' : m === 'latest' ? 'latest year' : m + ' only'}`;
     syncEdit();
     const mine = res.mine;
-    $('#catchline').innerHTML = (mine.length
-      ? `You’re in the catchment for <b>${mine.map((s) => esc(s.name)).join('</b> and <b>')}</b>.`
-      : 'You’re not in the catchment of any school this checker covers.')
-      // the catchment map of the council the postcode is in (or, for "your location", the nearest school's council)
-      + ` Near a boundary? <a href="${council(p.district ?? [...near].sort((a, b) => a.straight! - b.straight!)[0]?.council).catchMap}" target="_blank" rel="noopener">Check your exact address</a>.`;
+    // the council the postcode is in (or, for "your location", the nearest school's council), for its catchment map
+    const cn = council(p.district ?? [...near].sort((a, b) => a.straight! - b.straight!)[0]?.council);
+    $('#catchline').innerHTML = cn.mapData === false && !mine.length
+      ? `${esc(cn.name)} publishes its catchments only as a printed map, so we can’t tell you which one you’re in. <a href="${cn.catchMap}" target="_blank" rel="noopener">Check your address on its map</a>.`
+      : (mine.length
+        ? `You’re in the catchment for <b>${mine.map((s) => esc(s.name)).join('</b> and <b>')}</b>.`
+        : 'You’re not in the catchment of any school this checker covers.')
+        + ` Near a boundary? <a href="${cn.catchMap}" target="_blank" rel="noopener">Check your exact address</a>.`;
     setStatus('#resStatus', outside || (near.some((s) => s.method === 'walking') ? 'Working out walking routes…' : ''), !!outside);
     render();
     window.scrollTo({ top: 0 });

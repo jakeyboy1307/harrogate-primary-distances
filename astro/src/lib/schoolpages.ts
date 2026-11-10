@@ -24,6 +24,7 @@ const DROP: RegExp[] = [
   /\bFoundation (?=School\b)/g,                            // "Wold Newton Foundation School"
   /\b(Church of England|C of E|Cof E|CofE|CE)\b/gi, /\b(Roman )?Catholic\b/gi, /\bMethodist\b/gi, /\bAnglican\b/gi,
   /\bVoluntary (Controlled|Aided)\b/gi, /\bControlled\b/gi, /\bCommunity\b/gi, /\bCounty\b/gi, /\band Nursery\b/gi,
+  /\bVoluntary\s+(?=Academy\b)/gi,                           // "St Vincent's Voluntary Catholic Academy" (Catholic is gone by now)
   /\b(Primary|Infant|Infants|Junior) (Foundation )?(School|Academy)\b/gi, /\bSchool\b/gi, /\bAcademy\b/gi,
   /\s+Primary\s*$/i,                                         // "Westfield Primary Community School"
 ];
@@ -117,9 +118,10 @@ export function yearLine(y: YearRec) {
       : `In ${y.y}, only children in the catchment got a place.`;
   }
   if (y.s === 'all_offered') return `In ${y.y}, everyone who applied got a place.`;
-  if (y.s === 'firsts') return firstsOk(y)
+  if (y.s === 'firsts') return (firstsOk(y)
     ? `In ${y.y}, everyone who put it as their first choice got a place (${y.f} families did).`
-    : `In ${y.y}, ${y.f} families put it first and ${y.fo} of them got a place. The council doesn’t publish who got the last place.`;
+    : `In ${y.y}, ${y.f} families put it first and ${y.fo} of them got a place. The council doesn’t publish who got the last place.`)
+    + (y.n ? ` ${y.n.charAt(0).toUpperCase()}${y.n.slice(1)}.` : '');   // Hull: how the places went, from the council's guide
   return `The council didn’t publish who got a place in ${y.y}.`;
 }
 

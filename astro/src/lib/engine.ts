@@ -7,7 +7,9 @@ export const MAX_SHORT = 5;         // the most choices any council's form takes
 export const NUM = ['none', 'one', 'two', 'three', 'four', 'five'];
 export const ROUTER = 'https://routing.openstreetmap.de/routed-foot/table/v1/foot/';
 // Each council's own catchment map and Reception application page, by the district postcodes.io gives a postcode
-export interface Council { name: string; catchMap: string; apply: string; policy: string; prefs: number }   // prefs: schools the form takes
+// prefs: schools the form takes. mapData false: the council publishes its catchments only as a picture (Hull), so the
+// checker can't tell anyone which catchment they're in
+export interface Council { name: string; catchMap: string; apply: string; policy: string; prefs: number; mapData?: false }
 export const COUNCILS: Record<string, Council> = {
   'North Yorkshire': {
     name: 'North Yorkshire Council',
@@ -22,6 +24,14 @@ export const COUNCILS: Record<string, Council> = {
     apply: 'https://www.eastriding.gov.uk/learning/schools-colleges-and-academies/school-admissions/apply-for-a-school-place/how-to-apply-for-a-school-place/',
     policy: 'catchment first, then brothers and sisters, then distance in a straight line',
     prefs: 3,
+  },
+  'Kingston upon Hull, City of': {
+    name: 'Hull City Council',
+    catchMap: 'https://www.hull.gov.uk/downloads/file/4889/primary-school-catchment-map',
+    apply: 'https://www.hull.gov.uk/applications-transfers/primary-school-applications',
+    policy: 'each academy’s own rules, most often catchment first, then brothers and sisters, then the shortest walk',
+    prefs: 3,
+    mapData: false,
   },
   York: {
     name: 'City of York Council',
@@ -67,6 +77,7 @@ export interface RawSchool {
   tel?: string; email?: string;   // the school office, from GIAS and the school's website
   council: string;                // which council's file it came from: a key of COUNCILS
   district?: string;              // North Yorkshire's old district, for the area pages
+  cu?: boolean;                   // has a catchment area, but the council publishes no map data to check it (Hull)
   con?: string;                   // parliamentary constituency, for the area pages of councils with no districts
 }
 export interface Area { name: string; p: LatLng[][][] }
@@ -266,6 +277,11 @@ function trendVerdict(s: School, dist: number | null | undefined): Verdict {
   const recOf = (y: YearVerdict) => s.d.find((r) => r.y === y.y)!;
   // Oversubscribed years with only the DfE's figures (Hull): no cut-off, so no way to judge your chances
   const over = yrs.filter((r) => r.v === 'edge' && recOf(r).s === 'firsts');
+  // a single older year where a first choice or two missed out, with everyone getting in since, still reads as open
+  if (over.length === 1 && over[0] !== yrs[0] && yrs.every((r) => r.v === 'all' || r === over[0])) {
+    const x = recOf(over[0]);
+    return { v: 'all', c, yrs, label: `Everyone who put it first got a place in ${yrsOf(yrs.filter((r) => r !== over[0]))}. In ${x.y}, ${x.f} put it first and ${x.fo} of them got a place` };
+  }
   if (over.length) {
     const x = recOf(over[0]);
     const okFirsts = yrs.filter((r) => r.v === 'all' && recOf(r).s === 'firsts');
@@ -338,6 +354,8 @@ export function headlineAnswer(s: School, mode: Mode) {
     const n = r.yrs.length;
     const ok = r.yrs.filter((y) => y.v === 'in' || y.v === 'all' || (y.v === 'edge' && y.diff! >= 0)).length;
     const who = r.label.startsWith(FIRSTS_ALL) ? 'Everyone who put it first' : 'Everyone who applied';
+    const allN = r.yrs.filter((y) => y.v === 'all').length;
+    if (r.v === 'all' && allN < n) return `${who} got a place in ${allN} of the last ${n} years.`;
     if (r.v === 'all') return n === 1 ? `${who} got a place.` : `${who} got a place, ${n === 2 ? 'both' : 'all ' + n} years.`;
     if (ok === n) return n === 1 ? 'You’d have got in, the only year published.' : `You’d have got in every year, ${n === 2 ? 'both' : 'all ' + n} of them.`;
     const open = r.yrs.filter((y) => y.v === 'edge' && y.diff == null).length;   // York: some got in, some didn't
@@ -472,7 +490,8 @@ export function prepareSearch(all: School[], catches: Area[], place: Place, radi
   const shown = place.label === 'your location' ? 'Your location' : place.label;
   const outside = place.district && !COUNCILS[place.district]
     ? `${place.label} is in ${place.district}, which this checker doesn’t cover yet, so schools there aren’t shown.`
-    : !areas.size ? `${shown} is outside the areas this checker covers, so schools there aren’t shown.` : '';
+    // no catchment around it: outside our areas, unless it's in a council whose catchments can't be checked (Hull)
+    : !areas.size && !(place.district && COUNCILS[place.district]?.mapData === false) ? `${shown} is outside the areas this checker covers, so schools there aren’t shown.` : '';
   return { near, mine: all.filter((s) => s.inC), areas, outside };
 }
 export function scoreAll(list: School[], mode: Mode) {

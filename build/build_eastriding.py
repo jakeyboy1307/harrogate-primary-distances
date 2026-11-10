@@ -60,7 +60,7 @@ def place_of(r):
 # belongs to a gambling site, St Nicholas's is parked, Withernsea's and Aldbrough's have gone
 WEB = {2765: 'https://kirkellaprimaryschool.org.uk/', 2704: 'https://beverleystnicholasprimary.org.uk/',
        5204: 'https://withernsea.greenhousecms.co.uk/', 2700: 'https://aldbrough.e-riding.sch.uk/',
-       2015: 'https://beverleyminsterprimary.co.uk/'}
+       2015: 'https://beverleyminsterprimary.co.uk/', 3040: 'https://skirlaughprimary.com/'}
 
 to_ll = Transformer.from_crs(27700, 4326, always_xy=True)
 mi, mi19 = read_mi(f'{NY}/ofsted.csv'), read_mi(f'{NY}/ofsted2019.csv')

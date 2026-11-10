@@ -2,7 +2,7 @@
 // (worker/admin.js, which enforces it) and the ad specs page, so they can't disagree.
 
 export type Area = 'harrogate' | 'york' | 'craven' | 'selby' | 'hambleton' | 'richmondshire' | 'ryedale' | 'scarborough'
-  | 'bridlington' | 'beverley' | 'goole' | 'cottingham';
+  | 'bridlington' | 'beverley' | 'goole' | 'cottingham' | 'hulleast' | 'hullnorth' | 'hullwest';
 export type Placement = 'uniform' | 'profile' | 'nearby' | 'results' | 'plan' | 'area' | 'pagesponsor';
 
 // Every area the checker covers, in one place: the area pages, the school pages' breadcrumbs, the ad areas, the
@@ -35,6 +35,10 @@ export const AREA_INFO: Record<Area, AreaInfo> = {
   beverley: { label: 'Beverley and Holderness', short: 'Beverley', name: 'Beverley, Hedon and Withernsea', page: 'beverley-primary-schools/', council: 'East Riding of Yorkshire', constituencies: ['Beverley and Holderness'], home: ['E06000011'], example: ['HU17 9LW', 'Beverley'] },
   goole: { label: 'Goole, Howden and Pocklington', short: 'Goole', name: 'Goole, Howden and Pocklington', page: 'goole-primary-schools/', council: 'East Riding of Yorkshire', constituencies: ['Goole and Pocklington'], home: ['E06000011'], example: ['DN14 6TL', 'Goole'] },
   cottingham: { label: 'Cottingham, Hessle and Willerby', short: 'Cottingham', name: 'Cottingham, Hessle and Willerby', page: 'cottingham-primary-schools/', council: 'East Riding of Yorkshire', constituencies: ['Kingston upon Hull North and C', 'Kingston upon Hull West and Ha'], home: ['E06000011'], example: ['HU16 5BP', 'Cottingham'] },
+  // Hull: its three constituencies. Hull publishes its catchments only as a picture, so these pages can't check them
+  hulleast: { label: 'East Hull', short: 'East Hull', name: 'East Hull', page: 'east-hull-primary-schools/', council: 'Kingston upon Hull, City of', constituencies: ['Kingston upon Hull East'], home: ['E06000010'], example: ['HU8 9JH', 'East Hull'] },
+  hullnorth: { label: 'North Hull', short: 'North Hull', name: 'North Hull', page: 'north-hull-primary-schools/', council: 'Kingston upon Hull, City of', constituencies: ['Kingston upon Hull North and C'], home: ['E06000010'], example: ['HU5 4ET', 'North Hull'] },
+  hullwest: { label: 'West Hull', short: 'West Hull', name: 'West Hull', page: 'west-hull-primary-schools/', council: 'Kingston upon Hull, City of', constituencies: ['Kingston upon Hull West and Ha'], home: ['E06000010'], example: ['HU3 2RA', 'West Hull'] },
 };
 // The areas' names for the site's wording, so a new area appears everywhere from its line above:
 // PLACES "Harrogate, York, Skipton, Northallerton, Richmond, Malton, Scarborough and Selby"; NY_PLACES the same without York
@@ -50,6 +54,8 @@ export const COVERED = listOf([...new Set(Object.values(AREA_INFO).map((a) => CO
 export const NY_TERM_DATES = 'https://www.northyorks.gov.uk/education-and-learning/education-and-learning/school-term-and-holiday-dates';
 // and East Riding of Yorkshire Council's
 export const ER_TERM_DATES = 'https://www.eastriding.gov.uk/learning/schools-colleges-and-academies/school-term-dates/';
+// and Hull City Council's (2026 to 2027)
+export const HULL_TERM_DATES = 'https://www.hull.gov.uk/schools-2/school-holidays-term-dates/2';
 export const AREAS = Object.fromEntries(Object.entries(AREA_INFO).map(([k, a]) => [k, a.label])) as Record<Area, string>;
 export const AREA_SHORT = Object.fromEntries(Object.entries(AREA_INFO).map(([k, a]) => [k, a.short])) as Record<Area, string>;
 // Used by the admin's coverage map: these districts show as fully covered, others with some of our schools as partly

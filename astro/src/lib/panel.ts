@@ -142,7 +142,8 @@ function yearChart(s: School) {
   const sr = s.d.map((x) => `${x.y}: ${whoGotIn(x)}. ${youText(yearVerdict(x, s.used, s.inC))}.`).join(' ');
   // only list the colours this chart uses
   const used = new Set(s.d.map((x) => tone(yearVerdict(x, s.used, s.inC).v)));
-  const key = [['', '', 'You’d have got in'], [' close', 'close', 'Too close to call'], [' miss', 'miss', 'You’d have missed out']]
+  const firsts = s.d.some((x) => x.s === 'firsts');
+  const key = [['', '', firsts ? 'Everyone who put it first got in' : 'You’d have got in'], [' close', 'close', firsts ? 'Some first choices missed out' : 'Too close to call'], [' miss', 'miss', 'You’d have missed out']]
     .filter(([t]) => used.has(t)).map(([, c, l]) => `<span><i class="${c}"></i>${l}</span>`).join('');
   const sibs = s.d.some((x) => x.s === 'distance' && x.g === 'sib');
   const inNote = s.inC && dists.length ? 'You’re in the catchment, so the bars only matter for children outside it. ' : '';
@@ -174,7 +175,7 @@ function body(s: School, mode: Mode, home: LatLng | null) {
   const last = s.d.find((x) => x.s === 'distance');
   const outsiders = s.d.find((x) => x.s === 'catchment' || x.s === 'all_offered' || x.s === 'firsts');   // the latest year, where there are no distances
   const yours = s.used ?? s.straight;
-  const cz = !s.cz ? `None${/Catholic/.test(s.type) ? ', faith school' : ''}` : s.inC == null ? 'Not checked' : s.inC ? 'You’re in it' : 'Outside it';
+  const cz = s.cu ? 'Not checked' : !s.cz ? `None${/Catholic/.test(s.type) ? ', faith school' : ''}` : s.inC == null ? 'Not checked' : s.inC ? 'You’re in it' : 'Outside it';
   const first = s.d.find((x) => x.f != null);
   const sg = s.of?.safeguarding;
   const policy = s.own
@@ -185,7 +186,7 @@ function body(s: School, mode: Mode, home: LatLng | null) {
     home ? `<a href="https://www.google.com/maps/dir/?api=1&origin=${home[0].toFixed(5)},${home[1].toFixed(5)}&destination=${s.ll[0]},${s.ll[1]}&travelmode=walking" target="_blank" rel="noopener">Walking directions</a>` : '',
     s.web ? `<a href="${esc(s.web)}" target="_blank" rel="noopener">School website</a>` : '',
     s.of ? `<a href="${esc(s.of.link)}" target="_blank" rel="noopener">Ofsted reports</a>` : '',
-    `<a href="${esc(s.src)}" target="_blank" rel="noopener">Council figures</a>`,
+    `<a href="${esc(s.src)}" target="_blank" rel="noopener">${s.src.includes('explore-education-statistics') ? 'DfE figures' : 'Council figures'}</a>`,
   ].join('');
 
   const ofBlock = s.of?.areas?.length

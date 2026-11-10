@@ -19,6 +19,7 @@ const areas = [
   { id: 'north-yorkshire', name: 'North Yorkshire', data: read('../../build/data.json'), contacts: readIf('../../build/contacts.json') },
   { id: 'york', name: 'York', data: read('../../build/york.json'), contacts: readIf('../../build/york-contacts.json') },
   { id: 'east-riding', name: 'East Riding of Yorkshire', data: read('../../build/east-riding.json'), contacts: readIf('../../build/east-riding-contacts.json') },
+  { id: 'hull', name: 'Kingston upon Hull, City of', data: read('../../build/hull.json'), contacts: readIf('../../build/hull-contacts.json') },
 ];
 
 const out = resolve(here, '../public/data');

@@ -1,0 +1,406 @@
+{
+ "2001": {
+  "checked": "2026-11-10",
+  "tel": "01482 598200"
+ },
+ "2002": {
+  "checked": "2026-11-10",
+  "tel": "01482 343507"
+ },
+ "2004": {
+  "checked": "2026-11-10",
+  "email": "contactus@liftnewington.org",
+  "emailSrc": "https://www.liftnewington.org",
+  "tel": "01482 305630"
+ },
+ "2005": {
+  "checked": "2026-11-10",
+  "email": "admin@adelaide.het.academy",
+  "emailSrc": "https://adelaideprimary.org.uk/",
+  "tel": "01482 223753"
+ },
+ "2006": {
+  "checked": "2026-11-10",
+  "email": "contactus@liftgreenway.org",
+  "emailSrc": "https://www.liftgreenway.org/",
+  "tel": "01482 331378"
+ },
+ "2007": {
+  "checked": "2026-11-10",
+  "email": "contactus@lifthallroad.org",
+  "emailSrc": "https://www.lifthallroad.org/",
+  "tel": "01482 441151"
+ },
+ "2008": {
+  "checked": "2026-11-10",
+  "email": "admin@ainthorpeprimary.co.uk",
+  "emailSrc": "https://www.ainthorpeprimary.co.uk/",
+  "tel": "01482 353963"
+ },
+ "2009": {
+  "checked": "2026-11-10",
+  "email": "admin.wheeler@hcat.org.uk",
+  "emailSrc": "https://wheelerprimary.org.uk/",
+  "tel": "01482 353125"
+ },
+ "2010": {
+  "checked": "2026-11-10",
+  "email": "admin.wansbeck@hcat.org.uk",
+  "emailSrc": "https://wansbeckprimary.org.uk/",
+  "tel": "01482 814171"
+ },
+ "2011": {
+  "checked": "2026-11-10",
+  "email": "info@merseypa.org.uk",
+  "emailSrc": "https://merseypa.org.uk/",
+  "tel": "01482 761320"
+ },
+ "2012": {
+  "checked": "2026-11-10",
+  "email": "info@theparkshull.org.uk",
+  "emailSrc": "https://theparkshull.org.uk/",
+  "tel": "01482 761321"
+ },
+ "2013": {
+  "checked": "2026-11-10",
+  "email": "enquiries@woldacademy.co.uk",
+  "emailSrc": "https://www.woldacademy.co.uk",
+  "tel": "01482 353259"
+ },
+ "2014": {
+  "checked": "2026-11-10",
+  "email": "info@cravenprimaryacademy.org.uk",
+  "emailSrc": "https://cravenprimaryacademy.org.uk/",
+  "tel": "01482 761323"
+ },
+ "2015": {
+  "checked": "2026-11-10",
+  "email": "admin@endikeprimary.co.uk",
+  "emailSrc": "https://www.endikeprimary.co.uk",
+  "tel": "01482 616461"
+ },
+ "2016": {
+  "checked": "2026-11-10",
+  "email": "admin@kingswoodparks.het.academy",
+  "emailSrc": "https://kingswoodparksprimary.org.uk/",
+  "tel": "01482 427870"
+ },
+ "2017": {
+  "checked": "2026-11-10",
+  "email": "admin.westcott@hcat.org.uk",
+  "emailSrc": "https://westcottprimary.org.uk/",
+  "tel": "01482 783576"
+ },
+ "2018": {
+  "checked": "2026-11-10",
+  "email": "admin@buckingham.hull.sch.uk",
+  "emailSrc": "https://www.buckinghamprimaryacademy.net",
+  "tel": "01482 328661"
+ },
+ "2019": {
+  "checked": "2026-11-10",
+  "email": "admin@stvhull.org",
+  "emailSrc": "https://www.stvhull.org",
+  "tel": "01482 342645"
+ },
+ "2020": {
+  "checked": "2026-11-10",
+  "email": "admin@southcoates.hull.sch.uk",
+  "emailSrc": "https://www.southcoatesacademy.co.uk",
+  "tel": "01482 701407"
+ },
+ "2021": {
+  "checked": "2026-11-10",
+  "email": "hello@stj.hlt.academy",
+  "emailSrc": "https://www.stj.hlt.academy/contact-us",
+  "tel": "01482 825091"
+ },
+ "2022": {
+  "checked": "2026-11-10",
+  "email": "griffin.enquiries@vennacademy.org",
+  "emailSrc": "https://griffinprimaryschool.org.uk/",
+  "tel": "01482 794122"
+ },
+ "2023": {
+  "checked": "2026-11-10",
+  "email": "admin@stchull.org",
+  "emailSrc": "https://www.stchull.org",
+  "tel": "01482 326610"
+ },
+ "2039": {
+  "checked": "2026-11-10",
+  "email": "admin.bellfield@hcat.org.uk",
+  "emailSrc": "https://bellfieldprimary.org.uk/",
+  "tel": "01482 374490"
+ },
+ "2040": {
+  "checked": "2026-11-10",
+  "email": "admin.stepney@thrivetrust.uk",
+  "emailSrc": "https://www.stepney.hull.sch.uk/",
+  "tel": "01482 343690"
+ },
+ "2045": {
+  "checked": "2026-11-10",
+  "email": "admin@bricknell.hull.sch.uk",
+  "emailSrc": "https://bricknellschool.co.uk/",
+  "tel": "01482 493208"
+ },
+ "2081": {
+  "checked": "2026-11-10",
+  "tel": "01482 781002"
+ },
+ "2088": {
+  "checked": "2026-11-10",
+  "email": "admin@chiltern.hull.sch.uk",
+  "emailSrc": "https://www.chiltern.hull.sch.uk",
+  "tel": "01482 327315"
+ },
+ "2089": {
+  "checked": "2026-11-10",
+  "email": "admin@clifton.het.academy",
+  "emailSrc": "https://cliftonprimaryschool.co.uk/",
+  "tel": "01482 325913"
+ },
+ "2160": {
+  "checked": "2026-11-10",
+  "email": "admin.eastfield@hcat.org.uk",
+  "emailSrc": "https://www.eastfieldprimary.org.uk/",
+  "tel": "01482 351150"
+ },
+ "2164": {
+  "checked": "2026-11-10",
+  "email": "info@estcourtprimary.org.uk",
+  "emailSrc": "https://estcourtprimary.org.uk/",
+  "tel": "01482 761322"
+ },
+ "2207": {
+  "checked": "2026-11-10",
+  "email": "admin@francisaskewprimary.org",
+  "emailSrc": "https://francisaskewprimary.org/",
+  "tel": "01482 509627"
+ },
+ "2279": {
+  "checked": "2026-11-10",
+  "email": "admin@parkstone.het.academy",
+  "emailSrc": "https://parkstoneprimary.co.uk/",
+  "tel": "01482 854554"
+ },
+ "2285": {
+  "checked": "2026-11-10",
+  "email": "admin@ings.hull.sch.uk",
+  "emailSrc": "https://www.ingsprimaryschool.co.uk/",
+  "tel": "01482 374367"
+ },
+ "2289": {
+  "checked": "2026-11-10",
+  "email": "admin@neasden.hull.sch.uk",
+  "emailSrc": "https://neasdenprimary.org.uk/",
+  "tel": "01482 791169"
+ },
+ "2403": {
+  "checked": "2026-11-10",
+  "email": "admin.longhill@hcat.org.uk",
+  "emailSrc": "https://www.longhillprimary.org.uk/",
+  "tel": "01482 814160"
+ },
+ "2440": {
+  "checked": "2026-11-10",
+  "email": "admin.mar@ebor.academy",
+  "emailSrc": "https://marfleet.ebor.academy",
+  "tel": "01482 781943"
+ },
+ "2441": {
+  "checked": "2026-11-10",
+  "tel": "01482 701387"
+ },
+ "2490": {
+  "checked": "2026-11-10",
+  "email": "oldfleet.admin@thrivetrust.uk",
+  "emailSrc": "https://www.oldfleet.hull.sch.uk/",
+  "tel": "01482 782200"
+ },
+ "2493": {
+  "checked": "2026-11-10",
+  "email": "tp-admin@vennacademy.org",
+  "emailSrc": "https://thorpeparkacademy.org.uk",
+  "tel": "01482 854632"
+ },
+ "2560": {
+  "checked": "2026-11-10",
+  "tel": "01482 355984"
+ },
+ "2566": {
+  "checked": "2026-11-10",
+  "email": "admin@priory.hull.sch.uk",
+  "emailSrc": "https://www.prioryprimaryschool.org.uk/",
+  "tel": "01482 509631"
+ },
+ "2600": {
+  "checked": "2026-11-10",
+  "tel": "01482 508915"
+ },
+ "2610": {
+  "checked": "2026-11-10",
+  "email": "admin@springcottage.hull.sch.uk",
+  "emailSrc": "https://springcottage.hull.sch.uk/",
+  "tel": "01482 794183"
+ },
+ "2642": {
+  "checked": "2026-11-10",
+  "email": "admin@st-georges.hull.sch.uk",
+  "emailSrc": "https://www.st-georges.hull.sch.uk/",
+  "tel": "01482 351013"
+ },
+ "2647": {
+  "checked": "2026-11-10",
+  "email": "spsadmin@thrivetrust.uk",
+  "emailSrc": "https://www.sidmouthprimaryschool.co.uk",
+  "tel": "01482 441152"
+ },
+ "2657": {
+  "checked": "2026-11-10",
+  "tel": "01482 838968"
+ },
+ "2660": {
+  "checked": "2026-11-10",
+  "email": "admin.stockwell@hcat.org.uk",
+  "emailSrc": "https://www.stockwell.hull.sch.uk/",
+  "tel": "01482 782122"
+ },
+ "2670": {
+  "checked": "2026-11-10",
+  "email": "admin@thanet.hull.sch.uk",
+  "emailSrc": "https://www.thanet.hull.sch.uk",
+  "tel": "01482 796193"
+ },
+ "2684": {
+  "checked": "2026-11-10",
+  "email": "admin.thoresby@hcat.org.uk",
+  "emailSrc": "https://www.thoresbyprimaryschool.org.uk/",
+  "tel": "01482 342972"
+ },
+ "2822": {
+  "checked": "2026-11-10",
+  "email": "admin@cleeve.hull.sch.uk",
+  "emailSrc": "https://www.cleeve.hull.sch.uk/",
+  "tel": "01482 825279"
+ },
+ "2825": {
+  "checked": "2026-11-10",
+  "email": "admin.suttonpark@hcat.org.uk",
+  "emailSrc": "https://suttonparkprimary.org.uk/",
+  "tel": "01482 825502"
+ },
+ "2861": {
+  "checked": "2026-11-10",
+  "email": "admin@bigginhill.hull.sch.uk",
+  "emailSrc": "https://www.bigginhill.hull.sch.uk/",
+  "tel": "01482 825377"
+ },
+ "2863": {
+  "checked": "2026-11-10",
+  "email": "admin.dorchester@hcat.org.uk",
+  "emailSrc": "https://www.dorchesterprimary.org.uk",
+  "tel": "01482 825207"
+ },
+ "2868": {
+  "checked": "2026-11-10",
+  "email": "admin@highlands.het.academy",
+  "emailSrc": "https://www.highlandsprimaryschool.org.uk/",
+  "tel": "01482 835609"
+ },
+ "2884": {
+  "checked": "2026-11-10",
+  "email": "admin@broadacre.het.academy",
+  "emailSrc": "https://broadacreprimaryschool.org/",
+  "tel": "01482 833033"
+ },
+ "2891": {
+  "checked": "2026-11-10",
+  "tel": "01482 352245"
+ },
+ "2901": {
+  "checked": "2026-11-10",
+  "email": "admin.collingwood@hcat.org.uk",
+  "emailSrc": "https://www.collingwoodprimaryschool.co.uk",
+  "tel": "01482 331914"
+ },
+ "2902": {
+  "checked": "2026-11-10",
+  "email": "admin@budepark.het.academy",
+  "emailSrc": "https://budeparkprimary.org.uk/",
+  "tel": "01482 825316"
+ },
+ "2904": {
+  "checked": "2026-11-10",
+  "email": "mb-admin@vennacademy.org",
+  "emailSrc": "https://mountbattenprimary.org.uk/",
+  "tel": "01482 375224"
+ },
+ "2905": {
+  "checked": "2026-11-10",
+  "email": "admin.pearson@hcat.org.uk",
+  "emailSrc": "https://www.pearsonprimaryschool.co.uk/",
+  "tel": "01482 328569"
+ },
+ "2906": {
+  "checked": "2026-11-10",
+  "email": "admin@woodland.het.academy",
+  "emailSrc": "https://woodlandprimary.org.uk/",
+  "tel": "01482 787000"
+ },
+ "3302": {
+  "checked": "2026-11-10",
+  "email": "hello@nsj.hlt.academy",
+  "emailSrc": "https://www.nsj.hlt.academy/contact-us",
+  "tel": "01482 305740"
+ },
+ "3400": {
+  "checked": "2026-11-10",
+  "email": "admin@ehchull.org",
+  "emailSrc": "https://www.ehchull.org",
+  "tel": "01482 853203"
+ },
+ "3404": {
+  "checked": "2026-11-10",
+  "email": "admin@stahull.org",
+  "emailSrc": "https://www.stahull.org",
+  "tel": "01482 850286"
+ },
+ "3500": {
+  "checked": "2026-11-10",
+  "email": "admin@stnicholas.het.academy",
+  "emailSrc": "https://saintnicholasprimary.org.uk/",
+  "tel": "01482 444215"
+ },
+ "3506": {
+  "checked": "2026-11-10",
+  "email": "admin@standrews.hull.sch.uk",
+  "emailSrc": "https://standrewsprimaryhull.co.uk",
+  "tel": "01482 825659"
+ },
+ "3508": {
+  "checked": "2026-11-10",
+  "email": "admin@smqhull.org",
+  "emailSrc": "https://www.smqhull.org",
+  "tel": "01482 825625"
+ },
+ "3509": {
+  "checked": "2026-11-10",
+  "email": "admin@ac.ebor.academy",
+  "emailSrc": "https://aldermancogan.ebor.academy/contact-us/",
+  "tel": "01482 376203"
+ },
+ "3510": {
+  "checked": "2026-11-10",
+  "email": "admin@strhull.org",
+  "emailSrc": "https://www.strhull.org",
+  "tel": "01482 781928"
+ },
+ "3511": {
+  "checked": "2026-11-10",
+  "email": "admin@stmhull.org",
+  "emailSrc": "https://www.stmhull.org",
+  "tel": "01482 354093"
+ }
+}

@@ -44,8 +44,8 @@ FIXED = {'142851': ('admin@northrigton.ycway.uk', 'https://asnrfellowship.ycst.c
          '121631': ('office@longpreston.n-yorks.sch.uk', 'https://ribblesdalefed.n-yorks.sch.uk/contact-us/')}
 # Emails the school's site gives that aren't its office, by URN, left out: a named teacher (Molescroft), the SENCo
 # (Swinefleet), a typo (North Frodingham), and a federation partner's (Hornsea Burton has Skipsea's, Sutton upon
-# Derwent has Bugthorpe's)
-NO_EMAIL = {'117861', '117889', '117942', '118026', '133519'}
+# Derwent has Bugthorpe's); and five Hull schools whose shared website template shows Bricknell's
+NO_EMAIL = {'117861', '117889', '117942', '118026', '133519', '140229', '144305', '145611', '145612', '144673'}
 
 
 def get(url, timeout=20, hops=3):

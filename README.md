@@ -1,6 +1,6 @@
 # Yorkshire school checker
 
-A map tool for parents choosing a Reception place anywhere in North Yorkshire (every old district: Harrogate, Craven, Hambleton, Richmondshire, Ryedale, Scarborough and Selby), in York and in the East Riding of Yorkshire. Enter a postcode and every primary school nearby is shown with your walking or straight-line distance, whether you're in its catchment, and how far the last place went on national offer day in 2023, 2024, 2025 and 2026. Modelled on [SW London primary school distances](https://peterstuart3-arch.github.io/sw-primary-distances/), reworked for North Yorkshire's catchment-first admissions.
+A map tool for parents choosing a Reception place anywhere in North Yorkshire (every old district: Harrogate, Craven, Hambleton, Richmondshire, Ryedale, Scarborough and Selby), in York, in the East Riding of Yorkshire and in Hull. Enter a postcode and every primary school nearby is shown with your walking or straight-line distance, whether you're in its catchment, and how far the last place went on national offer day in 2023, 2024, 2025 and 2026. Modelled on [SW London primary school distances](https://peterstuart3-arch.github.io/sw-primary-distances/), reworked for North Yorkshire's catchment-first admissions.
 
 Live at **https://yorkshireschoolchecker.co.uk**. The site is built from `astro/` (see `astro/README.md`) and needs a connection for the map tiles, postcode lookups (postcodes.io) and walking routes (FOSSGIS OSRM). The `index.html` at the top of this folder is the earlier single-page version.
 
@@ -61,6 +61,7 @@ The page has a name, email and comments form that sends to the site owner's inbo
 - Catchment areas and school locations from the layers behind the council's [Finding a school map](https://experience.arcgis.com/experience/4dd5b97eae514b31a067137ebf7cdd6a) (September 2025). The council says the map is for reference only.
 - Ofsted management information, state-funded schools, latest inspections as at 30 September 2026.
 - East Riding of Yorkshire Council's summaries of primary school allocations, 2024 to 2026 (`build/east-riding/allocations.csv`), catchment areas from the layer behind its catchment finder, and admission numbers. School locations, types and websites from Get Information About Schools.
+- Hull City Council's guide to primary admissions (each school's places and how the latest year's places went, `build/hull_guide.py`) and its primary school catchment map, which is a scanned PDF, so Hull's catchments aren't checked.
 - DfE [primary and secondary school applications and offers](https://explore-education-statistics.service.gov.uk/find-statistics/primary-and-secondary-school-applications-and-offers), school level, 2014 to 2026 entry: for councils that publish no cut-offs, and for each school's constituency.
 
 ## Known limits

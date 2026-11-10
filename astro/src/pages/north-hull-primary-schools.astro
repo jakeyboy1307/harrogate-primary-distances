@@ -1,0 +1,21 @@
+---
+// Area page: North Hull, one of Hull's three constituencies (lib/specs.ts AREA_INFO). The questions are shared with the
+// other Hull pages (lib/hull.ts). Hull's catchments can't be checked, so the page leads on how popular schools are.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { hullFaqs } from '../lib/hull';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.hullnorth;
+const schools = loadArea('hull.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs = hullFaqs('North Hull', openLatest(schools).length, schools.length);
+---
+<AreaPage areaKey="hullnorth"
+  title="North Hull primary schools, admissions and Ofsted · Yorkshire School Checker"
+  description="North Hull primary schools: how popular each one is, how places went, Ofsted ratings and the 2027 Reception dates, with Hull’s catchment map."
+  h1="North Hull primary schools and admissions"
+  lede="Every primary school in North Hull, from the Avenues, Newland and Bricknell to Orchard Park, Kingswood and Bransholme West."
+  area="North Hull"
+  schools={schools}
+  groups={[{ label: 'North Hull', note: `${schools.length} primary schools, all academies. Hull publishes its catchments only as a printed map, so the checker shows how popular each school is rather than whether you’re in its catchment.`, schools }]}
+  faqs={faqs}
+/>

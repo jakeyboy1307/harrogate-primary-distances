@@ -1,0 +1,21 @@
+---
+// Area page: West Hull, one of Hull's three constituencies (lib/specs.ts AREA_INFO). The questions are shared with the
+// other Hull pages (lib/hull.ts). Hull's catchments can't be checked, so the page leads on how popular schools are.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { hullFaqs } from '../lib/hull';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.hullwest;
+const schools = loadArea('hull.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs = hullFaqs('West Hull', openLatest(schools).length, schools.length);
+---
+<AreaPage areaKey="hullwest"
+  title="West Hull primary schools, admissions and Ofsted · Yorkshire School Checker"
+  description="West Hull primary schools: how popular each one is, how places went, Ofsted ratings and the 2027 Reception dates, with Hull’s catchment map."
+  h1="West Hull primary schools and admissions"
+  lede="Every primary school in West Hull, from the city centre and Hessle Road to Anlaby Road, Gipsyville and Derringham."
+  area="West Hull"
+  schools={schools}
+  groups={[{ label: 'West Hull', note: `${schools.length} primary schools, all academies. Hull publishes its catchments only as a printed map, so the checker shows how popular each school is rather than whether you’re in its catchment.`, schools }]}
+  faqs={faqs}
+/>

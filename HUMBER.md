@@ -139,13 +139,20 @@ To Hull City Council (LSadmissions@hullcc.gov.uk):
 
 - **Groundwork (H0), 9 November:** done on the `humber-groundwork` branch. The "firsts" year record and its verdicts, the DfE reader in `common.py` and `fetch.sh`, areas by council and constituency, every council's data file read from `areas.json`, and generated coverage wording. The footer now says "not run by any council or school". Every North Yorkshire and York page is otherwise unchanged.
 
-- **East Riding (H1), 9 November:** built on the `east-riding` branch, not yet live.
+- **East Riding (H1), 9 November:** live.
   - 118 schools (the register's open primary and infant schools with a 2026 Reception intake, matching the DfE's count), 113 catchments, and four area pages: `/bridlington-primary-schools/`, `/beverley-primary-schools/`, `/goole-primary-schools/` and `/cottingham-primary-schools/`.
   - Who got in, 2024 to 2026, is in `build/east-riding/allocations.csv`: 2024 from the PDF's text, 2025 and 2026 typed from the tables' pictures. Every row's places by criterion add up to its places allocated (Marshlands 2024 also placed four children who hadn't named it). First preferences match the DfE's within one to three for about 20 school-years, about as often for the 2024 rows (read from the PDF's text) as for the typed ones, so this is a difference in how the two count, not typing.
   - A school with no waiting list took everyone (East Riding puts every refused applicant on one). Croxby, Bubwith and New Pasture Lane aren't in the council's tables, but the DfE's figures show first choices refused, so those years show as oversubscribed.
   - Distances are straight lines, as the council measures. The catchment layer still uses old school numbers for 17 schools; `CATCH_CODE` maps them (merged primaries take their infant school's catchment). The five Catholic academies have no catchment.
   - The family's list now follows their council: three schools in the East Riding, five elsewhere. A longer list moves its extra schools to the backups.
   - 30 random postcodes match the council's catchment layer. Five websites fixed (Kirk Ella's old domain is now a gambling site), five emails left out.
+
+- **Hull (H2), 10 November:** built on the `hull` branch, not yet live.
+  - 70 schools (every school in the DfE's Reception figures; St Andrew's became an academy in August 2026, so its figures are under its old number), on three area pages by constituency: `/east-hull-primary-schools/`, `/north-hull-primary-schools/`, `/west-hull-primary-schools/`.
+  - Every year, 2023 to 2026, is a DfE first-choices record. The council's guide adds each school's places a year and how 2026's places went (catchment, brothers and sisters, distance, other), read by `build/hull_guide.py` into `build/hull/allocations.json` and shown as a note. The guide's own counts run a little higher than the DfE's (they seem to include late and out-of-area applications), so the DfE's are used for every year.
+  - The 56 schools whose places went partly by catchment are marked `cu`: they have a catchment, but Hull publishes it only as a scanned map, so the checker says "Not checked" and points to the map. A Hull postcode no longer says it's outside our areas.
+  - A school where a first choice or two missed out in a single older year, with everyone getting in since, reads as open, with that year explained; Oversubscribed is kept for a miss in the latest year or more than one year.
+  - Websites fixed for seven schools (Alderman Cogan's old domain is now a gambling site); five schools on a shared website template show Bricknell's email, so they're left without one.
 
 ## Decisions (9 November 2026)
 

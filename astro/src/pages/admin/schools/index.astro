@@ -99,7 +99,7 @@ import { AREAS } from '../../../lib/specs';
         <div><dt>Places a year</dt><dd>${s.pan ?? '–'}</dd></div>
         <div><dt>Admissions</dt><dd>${s.own ? 'Sets its own policy' : 'Council policy'}</dd></div>
         <div><dt>Ofsted</dt><dd><span class="of of-${r.of.tone}">${esc(r.of.head)}</span> <span class="sub">${esc(r.of.sub)}</span></dd></div>
-        <div><dt>Catchment</dt><dd>${s.cz?.length ? 'Has a catchment area' : 'No catchment'}</dd></div>
+        <div><dt>Catchment</dt><dd>${s.cz?.length ? 'Has a catchment area' : s.cu ? 'Has one, but no map data' : 'No catchment'}</dd></div>
         <div><dt>Opened by parents</dt><dd>${num(r.opens)} times in 30 days</dd></div>
       </dl>
       <h3 class="dash-h3">Year by year</h3>

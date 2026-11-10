@@ -24,6 +24,10 @@ const farOnly = schools.every((s) => {
   return !r || r.s === 'all_offered' || firstsOk(r) || (r.s === 'distance' && r.m != null && r.m >= 2 * MI);
 });
 const top = outstanding(schools);
+// with only the DfE's figures (Hull), all that's known is that everyone who put a school first got in
+const firstsOnly = schools.length > 0 && schools.every((s) => s.d.every((y) => y.s === 'firsts'));
+const took = firstsOnly ? 'Took everyone who put it first' : 'Took everyone who applied';
+const tookWho = firstsOnly ? 'every family who put it first' : 'every child who applied';
 // each school's own page, for the links in the lists
 const href = (urn: number) => url(`schools/${pageOf(urn)!.slug}/`);
 // the questions, for search engines
@@ -42,7 +46,7 @@ const short = shortOf;   // "Marwood", as parents search for it (lib/schoolpages
     </div>
     <dl class="area-stats">
       <div><dt>Primary schools</dt><dd>{schools.length}</dd></div>
-      <div><dt>Took everyone who applied</dt><dd>{open.length}</dd></div>
+      <div><dt>{took}</dt><dd>{open.length}</dd></div>
       <div><dt>Rated Outstanding</dt><dd>{top.length}</dd></div>
     </dl>
   </section>
@@ -50,7 +54,7 @@ const short = shortOf;   // "Marwood", as parents search for it (lib/schoolpages
   <section class="how-sec sec-pale wrap">
     <h2>The hardest {area} primary schools to get into</h2>
     {hard.length ? <p class="intro">Based on the latest year each council published: who got a place when there were more applicants than places. Use the checker to see whether you’d have got in from your address.</p>
-      : <p class="intro">None stands out. In the latest year each school published, {openNow.length} of {schools.length} took everyone who applied{farOnly ? ', and at the rest the last place went to a child more than two miles away' : ''}. Use the checker to see your own chances from your address.</p>}
+      : <p class="intro">None stands out. In the latest year each school published, {openNow.length} of {schools.length} took {firstsOnly ? 'everyone who put them first' : 'everyone who applied'}{farOnly && openNow.length < schools.length ? ', and at the rest the last place went to a child more than two miles away' : ''}. Use the checker to see your own chances from your address.</p>}
     {hard.length > 0 && <div class="tbl-wrap"><table class="tbl area-tbl">
       <thead><tr><th>School</th><th>Area</th><th>Who got a place</th></tr></thead>
       <tbody>{hard.map((h) => <tr><td><a class="sch-link" href={href(h.urn)}><b>{h.name.replace(/,.*$/, "")}</b></a></td><td>{h.place}</td><td>{h.who} <span class="muted">({h.year}{h.applied && h.places ? `, ${h.applied} applied for ${h.places} places` : ''})</span></td></tr>)}</tbody>
@@ -59,8 +63,8 @@ const short = shortOf;   // "Marwood", as parents search for it (lib/schoolpages
 
   <section class="how-sec wrap split-2">
     <div>
-      <h2>Took everyone who applied</h2>
-      <p class="intro">{open.length} of {schools.length} {area} primary schools offered a place to every child who applied, in every year published.</p>
+      <h2>{took}</h2>
+      <p class="intro">{open.length} of {schools.length} {area} primary schools offered a place to {tookWho}, in every year published.</p>
       <p class="name-list">{open.map((s, i) => <>{i > 0 && ' · '}<a class="sch-link" href={href(s.urn)}>{short(s.name)}</a></>)}</p>
     </div>
     <div>
