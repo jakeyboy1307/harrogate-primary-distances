@@ -37,6 +37,7 @@ import Admin from '../../../layouts/Admin.astro';
       <div class="cov-key" aria-label="Key">
         <span><i class="sw full"></i>Fully covered</span>
         <span><i class="sw part"></i>Partly covered</span>
+        <span><i class="sw ours"></i>Council we cover</span>
         <span><i class="sw county"></i>County or unitary council border</span>
         <span><i class="sw catch"></i>Catchment area</span>
         <span><i class="sw dot"></i>School</span>
@@ -229,7 +230,9 @@ import Admin from '../../../layouts/Admin.astro';
       shapes.set(i.d.code, poly.addTo(districtLayer));
     }
     const countyLayer = L.layerGroup(counties.map((c) => L.polygon(c.p, { color: '#4A5170', weight: 1.4, opacity: 0.75, fill: false, interactive: false }))).addTo(map);
-    const picked = L.layerGroup().addTo(map);
+    // every council with schools in the checker, in black (North Yorkshire, York, East Riding, Hull...)
+    L.layerGroup(england.filter((c) => c.ours).map((c) => L.polygon(c.c.p, { color: INK, weight: 3, fill: false, interactive: false }))).addTo(map);
+    const picked = L.layerGroup().addTo(map);   // the council chosen in "Plan the next area", heavier still
     const catchLayer = L.layerGroup(catches.map((c) => L.polygon(c.p, { color: COBALT, weight: 0.7, fillColor: COBALT, fillOpacity: 0.14, interactive: false }))).addTo(map);
     const schoolLayer = L.layerGroup(schools.map((s) => L.circleMarker(s.ll, { radius: 3.5, color: '#fff', weight: 1, fillColor: INK, fillOpacity: 1 })
       .bindTooltip(`<b>${esc(s.name)}</b><br>${esc(s.place)} · ${esc(districtOf.get(s.urn)?.name ?? '')}`)));
@@ -330,7 +333,7 @@ import Admin from '../../../layouts/Admin.astro';
       if (!c || !c.c.code.startsWith('E')) return;
       sel.value = c.c.code;
       picked.clearLayers();
-      L.polygon(c.c.p, { color: INK, weight: 3.2, fill: false, interactive: false }).addTo(picked);
+      L.polygon(c.c.p, { color: INK, weight: 4.5, fill: false, interactive: false }).addTo(picked);
       if (fly) { pressed('view', ''); map.flyToBounds(L.latLngBounds(c.c.p.flatMap((poly) => poly[0])), { padding: [30, 30], duration: 0.6 }); }
       const left = Math.max(0, c.total - c.ours);
       document.getElementById('countyNote')!.innerHTML = `<b>${esc(c.c.name)}</b>: ${num(c.total)} state primary schools across ${c.ds.length} district${c.ds.length === 1 ? '' : 's'}, ${num(c.pupils)} pupils. `
@@ -409,6 +412,7 @@ import Admin from '../../../layouts/Admin.astro';
   .sw.full { background: rgba(39, 71, 216, .45); border: 1.5px solid var(--cobalt); }
   .sw.part { background: rgba(39, 71, 216, .16); border: 1.5px dashed var(--cobalt); }
   .sw.county { background: none; border: 2px solid #4A5170; }
+  .sw.ours { background: none; border: 3px solid var(--ink); }
   .sw.catch { background: rgba(39, 71, 216, .14); border: 1px solid var(--cobalt); }
   .sw.none { background: #E8EAF0; border: 1px solid var(--faint); }
   .sw.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 1.5px #fff, 0 0 0 2.5px var(--line-2); }
