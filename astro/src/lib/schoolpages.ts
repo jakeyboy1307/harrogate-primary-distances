@@ -37,7 +37,7 @@ const SPELL: [RegExp, string][] = [
   [/\bJ,?\s*I,?\s*(&|and)\s*N\b/g, 'Junior and Infant'], [/\bJ\s*(&|and)\s*I\b/g, 'Junior and Infant'],
   [/\bJunior,?\s+(?=Infant\b)/g, 'Junior and '], [/\bJunior\s*&\s*(?=Infant\b)/g, 'Junior and '], [/\s+and Early Years\b/g, ''],
   [/\bJunior and Infants? (&|and) Nursery\b/gi, 'Junior and Infant'], [/\bPrimary and Foundation Stage School\b/, 'Primary School'],
-  [/\bFirst (&|and) Nursery School\b/, 'First School'], [/\s*(&|and)\s+Pre[- ]School\b/gi, ''], [/\bSchool In ([A-Z]\w+)$/, 'School, $1'],
+  [/\bFirst (&|and) Nursery School\b/, 'First School'], [/\bPrimary (School )?(&|and) Nursery$/, 'Primary School'], [/(?<!Voluntary )\bAided (?=Primary\b)/, ''], [/\s*(&|and)\s+Pre[- ]School\b/gi, ''], [/\bSchool In ([A-Z]\w+)$/, 'School, $1'],
 ];
 const spell = (name: string) => SPELL.reduce((n, [r, w]) => n.replace(r, w), name);
 // names so common that the town has to go with them
@@ -55,7 +55,8 @@ export function shortOf(name: string) {
 }
 const title = (k: Kind) => k.replace(/\b(?!and\b)\w/g, (c) => c.toUpperCase());   // "Junior and Infant School"
 // "Alanbrooke Academy", "Knayton CofE Academy": no primary, infant or junior in the name, so it stays an Academy
-const isAcademy = (name: string) => /\bAcademy\b/i.test(name) && !/\b(Primary|Infants?|Junior)\b/i.test(name);
+// ... and "Barkerend Primary Leadership Academy" (Star Academies' name for its schools) is an academy by name too
+const isAcademy = (name: string) => /\bAcademy\b/i.test(name) && (!/\b(Primary|Infants?|Junior)\b/i.test(name) || /\bPrimary Leadership Academy\b/i.test(name));
 const kebab = (s: string) => s.toLowerCase().replace(/[’']/g, '').replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 export interface SchoolPage {
@@ -139,7 +140,7 @@ export function yearLine(y: YearRec) {
   if (y.s === 'all_offered') return `In ${y.y}, everyone who applied got a place.`;
   if (y.s === 'firsts') return (firstsOk(y)
     ? `In ${y.y}, everyone who put it as their first choice got a place (${y.f} families did).`
-    : `In ${y.y}, ${y.f} families put it first and ${y.fo} of them got a place. The council doesn’t publish who got the last place.`)
+    : `In ${y.y}, ${y.f} families put it first and ${y.fo} of them got a place. The national figures don’t say who got the last place.`)
     + (y.n ? ` ${y.n.charAt(0).toUpperCase()}${y.n.slice(1)}.` : '');   // Hull: how the places went, from the council's guide
   return `The council didn’t publish who got a place in ${y.y}.`;
 }

@@ -5,7 +5,8 @@ export type Area = 'harrogate' | 'york' | 'craven' | 'selby' | 'hambleton' | 'ri
   | 'bridlington' | 'beverley' | 'goole' | 'cottingham' | 'hulleast' | 'hullnorth' | 'hullwest'
   | 'middlesbrough' | 'redcar' | 'halifax' | 'caldervalley'
   | 'huddersfield' | 'dewsbury' | 'spenvalley' | 'colnevalley' | 'denbydale'
-  | 'headingley' | 'eastleeds' | 'neleeds' | 'horsforth' | 'southleeds' | 'morley' | 'pudsey' | 'wetherby';
+  | 'headingley' | 'eastleeds' | 'neleeds' | 'horsforth' | 'southleeds' | 'morley' | 'pudsey' | 'wetherby'
+  | 'bradfordwest' | 'bradfordeast' | 'bradfordsouth' | 'keighley' | 'shipley';
 export type Placement = 'uniform' | 'profile' | 'nearby' | 'results' | 'plan' | 'area' | 'pagesponsor';
 
 // Every area the checker covers, in one place: the area pages, the school pages' breadcrumbs, the ad areas, the
@@ -65,6 +66,12 @@ export const AREA_INFO: Record<Area, AreaInfo> = {
   morley: { label: 'Morley, Farnley and Wortley', short: 'Morley', name: 'Morley, Farnley, Wortley and Gildersome', page: 'morley-primary-schools/', council: 'Leeds', constituencies: ['Leeds South West and Morley'], home: ['E08000035'], example: ['LS27 8LA', 'Morley'] },
   pudsey: { label: 'Pudsey, Bramley and Armley', short: 'Pudsey', name: 'Pudsey, Farsley, Bramley and Armley', page: 'pudsey-primary-schools/', council: 'Leeds', constituencies: ['Leeds West and Pudsey'], home: ['E08000035'], example: ['LS28 5BH', 'Farsley'] },
   wetherby: { label: 'Wetherby, Boston Spa and the villages', short: 'Wetherby', name: 'Wetherby, Boston Spa and the villages', page: 'wetherby-primary-schools/', council: 'Leeds', constituencies: ['Wetherby and Easingwold'], home: ['E08000035'], example: ['LS22 6RT', 'Wetherby'] },
+  // Bradford: its five constituencies. Most schools have no catchment; thirteen have a priority area
+  bradfordwest: { label: 'Bradford West: Manningham, Heaton and Allerton', short: 'Bradford West', name: 'Manningham, Heaton, Allerton and Thornton', page: 'bradford-west-primary-schools/', council: 'Bradford', constituencies: ['Bradford West'], home: ['E08000032'], example: ['BD8 8DL', 'Manningham'] },
+  bradfordeast: { label: 'Bradford East: Idle, Eccleshill and Bradford Moor', short: 'Bradford East', name: 'Idle, Eccleshill, Undercliffe and Bradford Moor', page: 'bradford-east-primary-schools/', council: 'Bradford', constituencies: ['Bradford East'], home: ['E08000032'], example: ['BD10 8QN', 'Idle'] },
+  bradfordsouth: { label: 'Bradford South: Wibsey, Queensbury and Wyke', short: 'Bradford South', name: 'Wibsey, Great Horton, Queensbury and Wyke', page: 'bradford-south-primary-schools/', council: 'Bradford', constituencies: ['Bradford South'], home: ['E08000032'], example: ['BD5 8FG', 'Odsal'] },
+  keighley: { label: 'Keighley, Ilkley and Silsden', short: 'Keighley', name: 'Keighley, Ilkley, Silsden and Haworth', page: 'keighley-primary-schools/', council: 'Bradford', constituencies: ['Keighley and Ilkley'], home: ['E08000032'], example: ['LS29 9BE', 'Ilkley'] },
+  shipley: { label: 'Shipley, Bingley and Baildon', short: 'Shipley', name: 'Shipley, Bingley, Baildon and Saltaire', page: 'shipley-primary-schools/', council: 'Bradford', constituencies: ['Shipley'], home: ['E08000032'], example: ['BD18 2NT', 'Shipley'] },
 };
 // The areas' names for the site's wording, so a new area appears everywhere from its line above:
 // PLACES "Harrogate, York, Skipton, Northallerton, Richmond, Malton, Scarborough and Selby"; NY_PLACES the same without York
@@ -90,6 +97,8 @@ export const CALD_TERM_DATES = 'https://new.calderdale.gov.uk/schools-and-learni
 export const KIRK_TERM_DATES = 'https://www.kirklees.gov.uk/beta/admissions/policies-and-publications.aspx';
 // and Leeds City Council's
 export const LEEDS_TERM_DATES = 'https://www.leeds.gov.uk/schools-and-education/school-holidays-and-term-dates';
+// and Bradford Council's
+export const BRAD_TERM_DATES = 'https://www.bradford.gov.uk/education-and-skills/school-holidays-and-term-dates/school-holidays-and-term-dates/';
 export const AREAS = Object.fromEntries(Object.entries(AREA_INFO).map(([k, a]) => [k, a.label])) as Record<Area, string>;
 export const AREA_SHORT = Object.fromEntries(Object.entries(AREA_INFO).map(([k, a]) => [k, a.short])) as Record<Area, string>;
 // Used by the admin's coverage map: these districts show as fully covered, others with some of our schools as partly

@@ -1,0 +1,876 @@
+{
+ "2000": {
+  "checked": "2026-11-10",
+  "email": "info@rainbow.staracademies.org",
+  "emailSrc": "https://www.rainbowprimary.com/",
+  "tel": "01274 221400"
+ },
+ "2001": {
+  "checked": "2026-11-10",
+  "tel": "01274 541587"
+ },
+ "2002": {
+  "checked": "2026-11-10",
+  "email": "office@cm.catrust.uk",
+  "emailSrc": "https://carltonmillsprimary.org/",
+  "tel": "01274 401060"
+ },
+ "2003": {
+  "checked": "2026-11-10",
+  "email": "info@ryecroft.org.uk",
+  "emailSrc": "https://ryecroftpa.org.uk/",
+  "tel": "01274 422044"
+ },
+ "2007": {
+  "checked": "2026-11-10",
+  "email": "office@liftfeversham.org",
+  "emailSrc": "https://www.liftfeversham.org/",
+  "tel": "01274 721751"
+ },
+ "2008": {
+  "checked": "2026-11-10",
+  "email": "admin@dixonsmp.com",
+  "emailSrc": "https://www.dixonsmp.com",
+  "tel": "01274 089870"
+ },
+ "2010": {
+  "checked": "2026-11-10",
+  "email": "office@stoswalds.bdat-academies.org",
+  "emailSrc": "https://www.stoswalds.bradford.sch.uk/",
+  "tel": "01274 573396"
+ },
+ "2012": {
+  "checked": "2026-11-10",
+  "email": "info@whetleyacademy.org.uk",
+  "emailSrc": "https://whetleyacademy.org.uk/",
+  "tel": "01274 422041"
+ },
+ "2013": {
+  "checked": "2026-11-10",
+  "tel": "01274 410349"
+ },
+ "2014": {
+  "checked": "2026-11-10",
+  "tel": "01535 210028"
+ },
+ "2015": {
+  "checked": "2026-11-10",
+  "tel": "01274 414115"
+ },
+ "2018": {
+  "checked": "2026-11-10",
+  "email": "info@dixonsmb.com",
+  "emailSrc": "https://www.dixonsmb.com",
+  "tel": "01274 089920"
+ },
+ "2020": {
+  "checked": "2026-11-10",
+  "email": "info@barkerend.staracademies.org",
+  "emailSrc": "https://www.barkerendprimary.com/",
+  "tel": "01274 773003"
+ },
+ "2022": {
+  "checked": "2026-11-10",
+  "email": "office@stphilips.bdat-academies.org",
+  "emailSrc": "https://www.stphilipsceacademy.co.uk",
+  "tel": "01274 546496"
+ },
+ "2024": {
+  "checked": "2026-11-10",
+  "tel": "01274 488703"
+ },
+ "2025": {
+  "checked": "2026-11-10",
+  "email": "info@dixonsmn.com",
+  "emailSrc": "https://www.dixonsmn.com/",
+  "tel": "01274 089930"
+ },
+ "2026": {
+  "checked": "2026-11-10",
+  "email": "info@highcrags.staracademies.org",
+  "emailSrc": "https://www.highcragsprimary.com",
+  "tel": "01274 584068"
+ },
+ "2027": {
+  "checked": "2026-11-10",
+  "email": "office@frizinghall.bradford.sch.uk",
+  "emailSrc": "https://www.frizinghall.bradford.sch.uk/",
+  "tel": "01274 543072"
+ },
+ "2028": {
+  "checked": "2026-11-10",
+  "tel": "01274 648490"
+ },
+ "2029": {
+  "checked": "2026-11-10",
+  "email": "office@hortongrangeacademy.co.uk",
+  "emailSrc": "https://www.hortongrangeacademy.co.uk",
+  "tel": "01274 573287"
+ },
+ "2030": {
+  "checked": "2026-11-10",
+  "tel": "01535 604240"
+ },
+ "2031": {
+  "checked": "2026-11-10",
+  "tel": "01274 677549"
+ },
+ "2032": {
+  "checked": "2026-11-10",
+  "email": "office@stjames.bdat-academies.org",
+  "emailSrc": "https://www.academystjames.com",
+  "tel": "01274 777095"
+ },
+ "2033": {
+  "checked": "2026-11-10",
+  "email": "info@ggpa.org.uk",
+  "emailSrc": "https://ggpa.org.uk/",
+  "tel": "01274 422042"
+ },
+ "2034": {
+  "checked": "2026-11-10",
+  "tel": "01274 774644"
+ },
+ "2035": {
+  "checked": "2026-11-10",
+  "tel": "01274 414350"
+ },
+ "2036": {
+  "checked": "2026-11-10",
+  "email": "office@byron.nsat.org.uk",
+  "emailSrc": "https://www.byronprimary.org.uk",
+  "tel": "01274 722981"
+ },
+ "2037": {
+  "checked": "2026-11-10",
+  "email": "office@claytonce.bradford.sch.uk",
+  "emailSrc": "https://www.claytonce.co.uk",
+  "tel": "01274 815862"
+ },
+ "2038": {
+  "checked": "2026-11-10",
+  "tel": "01274 363070"
+ },
+ "2039": {
+  "checked": "2026-11-10",
+  "email": "office@holybrookacademy.co.uk",
+  "emailSrc": "https://www.holybrookacademy.co.uk/",
+  "tel": "01274 611327"
+ },
+ "2041": {
+  "checked": "2026-11-10",
+  "email": "mainoffice@lapage.nsat.org.uk",
+  "emailSrc": "https://www.lapageprimary.org.uk",
+  "tel": "01274 669100"
+ },
+ "2042": {
+  "checked": "2026-11-10",
+  "email": "info@thornbury.staracademies.org",
+  "emailSrc": "https://www.thornburyprimary.com",
+  "tel": "01274 665812"
+ },
+ "2043": {
+  "checked": "2026-11-10",
+  "tel": "01274 579576"
+ },
+ "2044": {
+  "checked": "2026-11-10",
+  "tel": "01274 543357"
+ },
+ "2046": {
+  "checked": "2026-11-10",
+  "tel": "01535 665628"
+ },
+ "2048": {
+  "checked": "2026-11-10",
+  "email": "office@ma.catrust.uk",
+  "emailSrc": "https://www.marshfield-primary.co.uk/",
+  "tel": "01274 573295"
+ },
+ "2050": {
+  "checked": "2026-11-10",
+  "tel": "01274 584779"
+ },
+ "2053": {
+  "checked": "2026-11-10",
+  "email": "office@shipley.bdat-academies.org",
+  "emailSrc": "https://www.shipleyceprimary.org.uk",
+  "tel": "01274 583900"
+ },
+ "2054": {
+  "checked": "2026-11-10",
+  "email": "admin@newby.bradford.sch.uk",
+  "emailSrc": "http://www.newbyprimary.co.uk/bradford/primary/newby/site/pages/contactus",
+  "tel": "01274 772208"
+ },
+ "2055": {
+  "checked": "2026-11-10",
+  "tel": "01274 546493"
+ },
+ "2056": {
+  "checked": "2026-11-10",
+  "email": "park-office@coopacademies.co.uk",
+  "emailSrc": "https://www.parkland.coopacademies.co.uk/",
+  "tel": "01274 611512"
+ },
+ "2057": {
+  "checked": "2026-11-10",
+  "email": "office@swainhouse.bradford.sch.uk",
+  "emailSrc": "https://www.swainhouse.co.uk/web/",
+  "tel": "01274 639049"
+ },
+ "2058": {
+  "checked": "2026-11-10",
+  "email": "admin@thackleyschool.com",
+  "emailSrc": "https://www.thackleyschool.com/web/",
+  "tel": "01274 414437"
+ },
+ "2059": {
+  "checked": "2026-11-10",
+  "email": "info@smpa.org.uk",
+  "emailSrc": "https://smpa.org.uk/",
+  "tel": "01274 422040"
+ },
+ "2061": {
+  "checked": "2026-11-10",
+  "email": "thornton.office@focus-trust.co.uk",
+  "emailSrc": "https://www.thorntonprimary.co.uk",
+  "tel": "01274 833839"
+ },
+ "2062": {
+  "checked": "2026-11-10",
+  "email": "office@blakehill.bradford.sch.uk",
+  "emailSrc": "https://www.blakehillprimary.co.uk/web/",
+  "tel": "01274 414355"
+ },
+ "2063": {
+  "checked": "2026-11-10",
+  "email": "office.oldfield@bronteacademytrust.org.uk",
+  "emailSrc": "https://www.oldfieldprimarykeighley.co.uk",
+  "tel": "01535 642394"
+ },
+ "2069": {
+  "checked": "2026-11-10",
+  "email": "office@baildonglen.co.uk",
+  "emailSrc": "https://www.baildonglenacademy.co.uk/",
+  "tel": "01274 582514"
+ },
+ "2070": {
+  "checked": "2026-11-10",
+  "email": "office@meadowbank.nsat.org.uk",
+  "emailSrc": "https://www.meadowbankcommunityschool.org.uk/",
+  "tel": "01274 664661"
+ },
+ "2071": {
+  "checked": "2026-11-10",
+  "email": "office@wellingtonps.co.uk",
+  "emailSrc": "https://www.wellingtonprimaryschool.co.uk/",
+  "tel": "01274 774446"
+ },
+ "2074": {
+  "checked": "2026-11-10",
+  "tel": "01274 678016"
+ },
+ "2075": {
+  "checked": "2026-11-10",
+  "email": "office@bowlingparkacademy.co.uk",
+  "emailSrc": "https://sites.google.com/bowlingpark.school/bowlingparkprimary/contact-us",
+  "tel": "01274 770270"
+ },
+ "2076": {
+  "checked": "2026-11-10",
+  "email": "office@lrps.bdat-academies.org",
+  "emailSrc": "https://www.ladyroydprimary.com",
+  "tel": "01274 905102"
+ },
+ "2077": {
+  "checked": "2026-11-10",
+  "tel": "01274 679320"
+ },
+ "2081": {
+  "checked": "2026-11-10",
+  "email": "office@stockslane.org",
+  "emailSrc": "https://www.stockslaneprimary.co.uk",
+  "tel": "01274 880569"
+ },
+ "2084": {
+  "checked": "2026-11-10",
+  "email": "office@farfield.bradford.sch.uk",
+  "emailSrc": "https://www.farfieldprimary.co.uk",
+  "tel": "01274 678545"
+ },
+ "2086": {
+  "checked": "2026-11-10",
+  "email": "princeville@coopacademies.co.uk",
+  "emailSrc": "https://www.princeville.coopacademies.co.uk/",
+  "tel": "01274 573298"
+ },
+ "2087": {
+  "checked": "2026-11-10",
+  "email": "office@carrwood.bradford.sch.uk",
+  "emailSrc": "https://www.carrwoodprimaryschool.co.uk",
+  "tel": "01274 664864"
+ },
+ "2090": {
+  "checked": "2026-11-10",
+  "email": "office@leytop.bradford.sch.uk",
+  "emailSrc": "https://www.leytopprimary.co.uk",
+  "tel": "01274 541554"
+ },
+ "2093": {
+  "checked": "2026-11-10",
+  "tel": "01274 636921"
+ },
+ "2094": {
+  "checked": "2026-11-10",
+  "email": "office@cavendishprimaryacademy.co.uk",
+  "emailSrc": "https://www.cavendishprimaryacademy.co.uk",
+  "tel": "01274 772175"
+ },
+ "2100": {
+  "checked": "2026-11-10",
+  "email": "office@worthingheadprimary.com",
+  "emailSrc": "https://www.worthingheadprimary.com/",
+  "tel": "01274 414904"
+ },
+ "2101": {
+  "checked": "2026-11-10",
+  "email": "office@poplarsfarm.bradford.sch.uk",
+  "emailSrc": "https://www.poplarsfarm.bradford.sch.uk/",
+  "tel": "01274 307490"
+ },
+ "2102": {
+  "checked": "2026-11-10",
+  "email": "office@bankfoot.bradford.sch.uk",
+  "emailSrc": "https://www.bankfootprimary.co.uk",
+  "tel": "01274 732068"
+ },
+ "2103": {
+  "checked": "2026-11-10",
+  "email": "office@fagley.bradford.sch.uk",
+  "emailSrc": "https://www.fagley.bradford.sch.uk/contact-us",
+  "tel": "01274 771124"
+ },
+ "2107": {
+  "checked": "2026-11-10",
+  "email": "office@brackenhillprimary.co.uk",
+  "emailSrc": "https://brackenhill.bradford.sch.uk/contact-us/",
+  "tel": "01274 578286"
+ },
+ "2110": {
+  "checked": "2026-11-10",
+  "email": "office@cottingleyvillageacademy.co.uk",
+  "emailSrc": "https://www.cottingleyvillageacademy.co.uk",
+  "tel": "01274 567545"
+ },
+ "2111": {
+  "checked": "2026-11-10",
+  "email": "office@crossflatts.bradford.sch.uk",
+  "emailSrc": "https://www.crossflatts.bradford.sch.uk/",
+  "tel": "01274 782070"
+ },
+ "2112": {
+  "checked": "2026-11-10",
+  "email": "office@cvps.bdat-academies.org",
+  "emailSrc": "https://www.cullingworth.bradford.sch.uk",
+  "tel": "01535 273839"
+ },
+ "2113": {
+  "checked": "2026-11-10",
+  "email": "office@eldwick.bradford.sch.uk",
+  "emailSrc": "https://www.eldwick.bradford.sch.uk/parents/how-and-when-to-contact-us",
+  "tel": "01274 568361"
+ },
+ "2114": {
+  "checked": "2026-11-10",
+  "email": "parents@hardenprimaryacademy.co.uk",
+  "emailSrc": "https://www.hardenprimaryacademy.co.uk/",
+  "tel": "01535 273847"
+ },
+ "2115": {
+  "checked": "2026-11-10",
+  "tel": "01274 564879"
+ },
+ "2117": {
+  "checked": "2026-11-10",
+  "email": "wilsden.office@focus-trust.co.uk",
+  "emailSrc": "https://www.wilsdenprimary.co.uk",
+  "tel": "01535 272263"
+ },
+ "2120": {
+  "checked": "2026-11-10",
+  "email": "office@eastwood.nsat.org.uk",
+  "emailSrc": "https://www.eastwoodcommunityschool.org.uk",
+  "tel": "01535 610212"
+ },
+ "2121": {
+  "checked": "2026-11-10",
+  "email": "office.haworth@bronteacademytrust.org.uk",
+  "emailSrc": "https://www.haworthprimary.co.uk",
+  "tel": "01535 642359"
+ },
+ "2123": {
+  "checked": "2026-11-10",
+  "email": "office@holycroft.nsat.org.uk",
+  "emailSrc": "https://www.holycroftprimary.org.uk/",
+  "tel": "01535 604183"
+ },
+ "2124": {
+  "checked": "2026-11-10",
+  "email": "admin@ingrow.org.uk",
+  "emailSrc": "https://ingrowprimary.co.uk/",
+  "tel": "01535 603868"
+ },
+ "2126": {
+  "checked": "2026-11-10",
+  "tel": "01535 605916"
+ },
+ "2127": {
+  "checked": "2026-11-10",
+  "email": "office.lees@bronteacademytrust.org.uk",
+  "emailSrc": "https://www.leesprimary.co.uk",
+  "tel": "01535 643320"
+ },
+ "2128": {
+  "checked": "2026-11-10",
+  "email": "office@longlee.org.uk",
+  "emailSrc": "https://www.longleeprimary.org.uk/",
+  "tel": "01535 603986"
+ },
+ "2132": {
+  "checked": "2026-11-10",
+  "email": "office@parkwood.bradford.sch.uk",
+  "emailSrc": "https://www.parkwoodprimaryschool.org.uk",
+  "tel": "01535 603832"
+ },
+ "2134": {
+  "checked": "2026-11-10",
+  "email": "office@stanbury.bradford.sch.uk",
+  "emailSrc": "https://stanburyvillageschool.co.uk/contact",
+  "tel": "01535 642270"
+ },
+ "2135": {
+  "checked": "2026-11-10",
+  "email": "admin@victoria.nsat.org.uk",
+  "emailSrc": "https://www.victoriaprimarykeighley.org.uk",
+  "tel": "01535 210110"
+ },
+ "2140": {
+  "checked": "2026-11-10",
+  "email": "office@saltaireps.co.uk",
+  "emailSrc": "https://www.saltaireprimaryschool.co.uk/web/",
+  "tel": "01274 584093"
+ },
+ "2145": {
+  "checked": "2026-11-10",
+  "email": "office@lowash.bradford.sch.uk",
+  "emailSrc": "https://lowash.bradford.sch.uk/",
+  "tel": "01274 582927"
+ },
+ "2146": {
+  "checked": "2026-11-10",
+  "email": "office@silsden.bradford.sch.uk",
+  "emailSrc": "https://www.silsdenprimary.co.uk",
+  "tel": "01535 653290"
+ },
+ "2147": {
+  "checked": "2026-11-10",
+  "email": "office@eastburn.bradford.sch.uk",
+  "emailSrc": "https://www.eastburn.bradford.sch.uk/virtual-office/contact-us",
+  "tel": "01535 653293"
+ },
+ "2148": {
+  "checked": "2026-11-10",
+  "email": "office@steeton.bradford.sch.uk",
+  "emailSrc": "https://www.steeton.bradford.sch.uk/",
+  "tel": "01535 653315"
+ },
+ "2150": {
+  "checked": "2026-11-10",
+  "email": "office@ashlands.mlt.co.uk",
+  "emailSrc": "https://www.ashlandsprimary.org.uk",
+  "tel": "01943 609050"
+ },
+ "2166": {
+  "checked": "2026-11-10",
+  "tel": "01943 431133"
+ },
+ "2167": {
+  "checked": "2026-11-10",
+  "email": "office@denholme.nsat.org.uk",
+  "emailSrc": "https://www.denholmeprimary.org.uk/",
+  "tel": "01274 832123"
+ },
+ "2168": {
+  "checked": "2026-11-10",
+  "tel": "01274 581898"
+ },
+ "2173": {
+  "checked": "2026-11-10",
+  "email": "mail@addingham.bradford.sch.uk",
+  "emailSrc": "https://www.addingham.bradford.sch.uk/contact-us",
+  "tel": "01943 830298"
+ },
+ "2174": {
+  "checked": "2026-11-10",
+  "email": "office@sandalprimaryschool.co.uk",
+  "emailSrc": "https://www.sandalprimaryschool.co.uk/",
+  "tel": "01274 598115"
+ },
+ "2178": {
+  "checked": "2026-11-10",
+  "tel": "01274 882458"
+ },
+ "2179": {
+  "checked": "2026-11-10",
+  "email": "mmps@priestley.academy",
+  "emailSrc": "https://mmps.bradford.sch.uk/contact/",
+  "tel": "01274 495934"
+ },
+ "2180": {
+  "checked": "2026-11-10",
+  "email": "office@hortonparkacademy.co.uk",
+  "emailSrc": "https://www.hortonparkacademy.co.uk",
+  "tel": "01274 574544"
+ },
+ "2182": {
+  "checked": "2026-11-10",
+  "tel": "01274 493543"
+ },
+ "2183": {
+  "checked": "2026-11-10",
+  "tel": "01274 573297"
+ },
+ "2184": {
+  "checked": "2026-11-10",
+  "tel": "01274 495190"
+ },
+ "2185": {
+  "checked": "2026-11-10",
+  "email": "miriamlord@priestley.academy",
+  "emailSrc": "https://www.miriamlord.co.uk",
+  "tel": "0127496611"
+ },
+ "2186": {
+  "checked": "2026-11-10",
+  "email": "office@copthorneacademy.co.uk",
+  "emailSrc": "https://www.copthorneacademy.co.uk/",
+  "tel": "01274 501460"
+ },
+ "2192": {
+  "checked": "2026-11-10",
+  "tel": "01943 873180"
+ },
+ "2193": {
+  "checked": "2026-11-10",
+  "email": "westbourne@priestley.academy",
+  "emailSrc": "https://westbourne.bradford.sch.uk/",
+  "tel": "01274 483138"
+ },
+ "2195": {
+  "checked": "2026-11-10",
+  "tel": "01274 773350"
+ },
+ "2197": {
+  "checked": "2026-11-10",
+  "email": "office@newhallpark.bradford.sch.uk",
+  "emailSrc": "https://newhallparkprimary.net/",
+  "tel": "01274 778577"
+ },
+ "2198": {
+  "checked": "2026-11-10",
+  "email": "office@knowleswoodacademy.co.uk",
+  "emailSrc": "https://www.knowleswoodacademy.co.uk",
+  "tel": "01274 778177"
+ },
+ "2199": {
+  "checked": "2026-11-10",
+  "email": "info@lfpa.org.uk",
+  "emailSrc": "https://lfpa.org.uk/",
+  "tel": "01274 422043"
+ },
+ "2200": {
+  "checked": "2026-11-10",
+  "email": "office@th.catrust.uk",
+  "emailSrc": "https://thorpeprimary.org.uk/",
+  "tel": "01274 414126"
+ },
+ "2203": {
+  "checked": "2026-11-10",
+  "tel": "01943 862642"
+ },
+ "3000": {
+  "checked": "2026-11-10",
+  "tel": "01274 415222"
+ },
+ "3013": {
+  "checked": "2026-11-10",
+  "email": "office@stm.bdat-academies.org",
+  "emailSrc": "https://www.stmatthewsprimary.org.uk/",
+  "tel": "01274 731693"
+ },
+ "3021": {
+  "checked": "2026-11-10",
+  "tel": "01274 639374"
+ },
+ "3023": {
+  "checked": "2026-11-10",
+  "email": "office@lowmoor.ngfl.ac.uk",
+  "emailSrc": "https://www.lowmoor.bradford.sch.uk/contact-us",
+  "tel": "01274 600797"
+ },
+ "3026": {
+  "checked": "2026-11-10",
+  "tel": "01943 607852"
+ },
+ "3028": {
+  "checked": "2026-11-10",
+  "tel": "01274 569447"
+ },
+ "3031": {
+  "checked": "2026-11-10",
+  "email": "office@burleywoodhead.com",
+  "emailSrc": "https://www.burleywoodhead.com",
+  "tel": "01943 862739"
+ },
+ "3035": {
+  "checked": "2026-11-10",
+  "email": "office@woodlands.bdat-academies.org",
+  "emailSrc": "https://www.woodlandsprimary.org.uk/",
+  "tel": "01274 678385"
+ },
+ "3301": {
+  "checked": "2026-11-10",
+  "email": "office@stpauls.bradford.sch.uk",
+  "emailSrc": "https://www.stpaulsceprimary.com/",
+  "tel": "01274 679183"
+ },
+ "3304": {
+  "checked": "2026-11-10",
+  "email": "enquiries@idle.bradford.sch.uk",
+  "emailSrc": "https://www.idleprimaryschool.co.uk/",
+  "tel": "01274 410111"
+ },
+ "3308": {
+  "checked": "2026-11-10",
+  "tel": "01274 545019"
+ },
+ "3313": {
+  "checked": "2026-11-10",
+  "tel": "01274 731698"
+ },
+ "3333": {
+  "checked": "2026-11-10",
+  "email": "office@stac.bcwcat.co.uk",
+  "emailSrc": "https://stac.bcwcat.co.uk/",
+  "tel": "01274 414761"
+ },
+ "3334": {
+  "checked": "2026-11-10",
+  "email": "office@cla.bcwcat.co.uk",
+  "emailSrc": "https://cla.bcwcat.co.uk",
+  "tel": "01274 637841"
+ },
+ "3335": {
+  "checked": "2026-11-10",
+  "email": "office@col.bcwcat.co.uk",
+  "emailSrc": "https://col.bcwcat.co.uk",
+  "tel": "01274 681961"
+ },
+ "3338": {
+  "checked": "2026-11-10",
+  "email": "office@sjbr.bcwcat.co.uk",
+  "emailSrc": "https://sjbr.bcwcat.co.uk",
+  "tel": "01274 727970"
+ },
+ "3347": {
+  "checked": "2026-11-10",
+  "email": "penn-office@coopacademies.co.uk",
+  "emailSrc": "https://www.pennyoaks.coopacademies.co.uk/",
+  "tel": "01274 773977"
+ },
+ "3349": {
+  "checked": "2026-11-10",
+  "email": "office@wil.bcwcat.co.uk",
+  "emailSrc": "https://www.stwilliamsbcw.greenhousecms.co.uk",
+  "tel": "01274 545743"
+ },
+ "3350": {
+  "checked": "2026-11-10",
+  "email": "office@win.bcwcat.co.uk",
+  "emailSrc": "https://win.bcwcat.co.uk",
+  "tel": "01274 677705"
+ },
+ "3351": {
+  "checked": "2026-11-10",
+  "email": "office@fra.bcwcat.co.uk",
+  "emailSrc": "https://fra.bcwcat.co.uk",
+  "tel": "01274 638520"
+ },
+ "3352": {
+  "checked": "2026-11-10",
+  "email": "office@sje.bcwcat.co.uk",
+  "emailSrc": "https://sje.bcwcat.co.uk",
+  "tel": "01274 679030"
+ },
+ "3353": {
+  "checked": "2026-11-10",
+  "email": "office@olsb.bcwcat.co.uk",
+  "emailSrc": "https://olsb.bcwcat.co.uk/",
+  "tel": "01274 611992"
+ },
+ "3354": {
+  "checked": "2026-11-10",
+  "email": "office@scfm.bcwcat.co.uk",
+  "emailSrc": "https://scfm.bcwcat.co.uk",
+  "tel": "01274 543445"
+ },
+ "3355": {
+  "checked": "2026-11-10",
+  "email": "office@stm.bcwcat.co.uk",
+  "emailSrc": "https://stm.bcwcat.co.uk",
+  "tel": "01274 541737"
+ },
+ "3360": {
+  "checked": "2026-11-10",
+  "email": "office@baildon.bdat-academies.org",
+  "emailSrc": "https://baildonce.co.uk/",
+  "tel": "01274 598540"
+ },
+ "3362": {
+  "checked": "2026-11-10",
+  "tel": "01274 564977"
+ },
+ "3363": {
+  "checked": "2026-11-10",
+  "email": "office@standrews-primary.co.uk",
+  "emailSrc": "https://www.standrews-primary.co.uk/",
+  "tel": "01535 604656"
+ },
+ "3365": {
+  "checked": "2026-11-10",
+  "email": "office@rsmps.co.uk",
+  "emailSrc": "https://www.riddlesdenstmarys.net",
+  "tel": "01535 210002"
+ },
+ "3367": {
+  "checked": "2026-11-10",
+  "email": "office@sjb.bcwcat.co.uk",
+  "emailSrc": "https://sjb.bcwcat.co.uk/",
+  "tel": "01274 564883"
+ },
+ "3368": {
+  "checked": "2026-11-10",
+  "email": "office@sacredheart.bradford.sch.uk",
+  "emailSrc": "https://sacredheartilkley.org/",
+  "tel": "01943 609578"
+ },
+ "3369": {
+  "checked": "2026-11-10",
+  "email": "office@sta.bcwcat.co.uk",
+  "emailSrc": "https://sta.bcwcat.co.uk/",
+  "tel": "01535 210600"
+ },
+ "3370": {
+  "checked": "2026-11-10",
+  "email": "office@sjk.bcwcat.co.uk",
+  "emailSrc": "https://sjk.bcwcat.co.uk",
+  "tel": "01535 605880"
+ },
+ "3371": {
+  "checked": "2026-11-10",
+  "email": "office@wal.bcwcat.co.uk",
+  "emailSrc": "https://wal.bcwcat.co.uk",
+  "tel": "01274 531102"
+ },
+ "3372": {
+  "checked": "2026-11-10",
+  "email": "office@olv.bcwcat.co.uk",
+  "emailSrc": "https://www.olv.bcwcat.co.uk",
+  "tel": "01535 607149"
+ },
+ "3373": {
+  "checked": "2026-11-10",
+  "email": "office@sas.bcwcat.co.uk",
+  "emailSrc": "https://sas.bcwcat.co.uk",
+  "tel": "01274 592738"
+ },
+ "3375": {
+  "checked": "2026-11-10",
+  "tel": "01535 642271"
+ },
+ "3377": {
+  "checked": "2026-11-10",
+  "email": "office@peelpark.bradford.sch.uk",
+  "emailSrc": "https://peelpark.eschools.co.uk/web",
+  "tel": "01274 639377"
+ },
+ "3379": {
+  "checked": "2026-11-10",
+  "email": "office@homefarm.bradford.sch.uk",
+  "emailSrc": "https://www.homefarm.bradford.sch.uk/bradford/primary/homefarm",
+  "tel": "01274 777020"
+ },
+ "4061": {
+  "checked": "2026-11-10",
+  "email": "info@appletonacademy.co.uk",
+  "emailSrc": "https://www.appletonacademy.co.uk",
+  "tel": "01274 600550"
+ },
+ "5200": {
+  "checked": "2026-11-10",
+  "tel": "01274 771166"
+ },
+ "5201": {
+  "checked": "2026-11-10",
+  "email": "office@foxhill.bradford.sch.uk",
+  "emailSrc": "https://www.foxhillprimaryschool.co.uk/",
+  "tel": "01274 882426"
+ },
+ "5202": {
+  "checked": "2026-11-10",
+  "email": "office@russellhallprimary.co.uk",
+  "emailSrc": "https://www.russellhallprimary.co.uk/",
+  "tel": "01274 882116"
+ },
+ "5203": {
+  "checked": "2026-11-10",
+  "email": "office@hilltop.bradford.sch.uk",
+  "emailSrc": "https://www.hilltopcofeprimary.co.uk/",
+  "tel": "01274 678386"
+ },
+ "5204": {
+  "checked": "2026-11-10",
+  "tel": "01274 575353"
+ },
+ "5205": {
+  "checked": "2026-11-10",
+  "email": "office.oakworth@bronteacademytrust.org.uk",
+  "emailSrc": "https://www.oakworthprimary.co.uk",
+  "tel": "01535 642309"
+ },
+ "5206": {
+  "checked": "2026-11-10",
+  "tel": "01274 564681"
+ },
+ "5207": {
+  "checked": "2026-11-10",
+  "tel": "01274 832491"
+ },
+ "5208": {
+  "checked": "2026-11-10",
+  "email": "enquiries@stj.bdat-academies.org",
+  "emailSrc": "https://www.stjohnsceprimary.co.uk/",
+  "tel": "01274 681959"
+ },
+ "6906": {
+  "checked": "2026-11-10",
+  "tel": "01274 256789"
+ },
+ "6908": {
+  "checked": "2026-11-10",
+  "email": "admin@dixonsaa.com",
+  "emailSrc": "https://www.dixonsaa.com/",
+  "tel": "01274 089890"
+ }
+}

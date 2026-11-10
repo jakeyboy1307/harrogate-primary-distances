@@ -131,7 +131,9 @@ const schema = [
     <h2>The {p.short} catchment area</h2>
     <div class="sp-cols">
       <div class="sp-text">
-        {hasCatchment
+        {hasCatchment && council.noCatch
+          ? <p>{p.name} has a priority area, which most {council.name.replace(/ Council$/, '')} schools don’t: children living in it get priority for a place, after children in care. {s.own ? `As ${article} ${typeText}, it sets its own admissions rules, so check its policy for the full order.` : 'The council’s admission rules for the school give the full order.'}</p>
+          : hasCatchment
           ? <p>{p.name} has a catchment area, set by {council.name}. {s.own
               ? `As ${article} ${typeText}, it sets its own admissions rules, so check its policy for any faith, feeder or other priorities.`
               : `${placesGo(council)}.`}</p>

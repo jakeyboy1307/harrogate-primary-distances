@@ -25,6 +25,7 @@ const areas = [
   { id: 'calderdale', name: 'Calderdale', data: read('../../build/calderdale.json'), contacts: readIf('../../build/calderdale-contacts.json') },
   { id: 'kirklees', name: 'Kirklees', data: read('../../build/kirklees.json'), contacts: readIf('../../build/kirklees-contacts.json') },
   { id: 'leeds', name: 'Leeds', data: read('../../build/leeds.json'), contacts: readIf('../../build/leeds-contacts.json') },
+  { id: 'bradford', name: 'Bradford', data: read('../../build/bradford.json'), contacts: readIf('../../build/bradford-contacts.json') },
 ];
 
 const out = resolve(here, '../public/data');

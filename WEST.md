@@ -136,7 +136,7 @@ alternative to reading them from the map (decision 2).
   - "Places go …" now reads "to children in care" or "by each academy's own rules" where the council's rules start that way; Middlesbrough's and Hull's pages had "Places go children in care" and "Places go each academy's".
   - Websites fixed for six schools (four moved from kgfl.dbprimary.com; Whitechapel's shows only an error page, so it has none). 132 phone numbers and 102 emails; seven left out (a trust inbox shared by five Enhance schools, a named member of staff, a SENCo).
 
-- **Leeds (W3), 10 November:** built on the `leeds` branch, not yet live.
+- **Leeds (W3), 10 November:** live.
   - 224 schools on eight pages: `/headingley-`, `/east-leeds-`, `/north-east-leeds-`, `/horsforth-`, `/south-leeds-`, `/morley-`, `/pudsey-` and `/wetherby-primary-schools/`. Kippax and Methley's schools (in Selby's constituency) join East Leeds, Rothwell's (Wakefield and Rothwell's) join South Leeds, and one Otley school joins Horsforth.
   - 2024 to 2026 from the council's cut-off PDFs, read by word position (`build/leeds_tables.py`): every school's furthest distance or "All applicants admitted", the last priority and its description. Rows printed above a page's header and names wrapped above their number are handled; All Saints' Richmond Hill's 2026 "314" is read as 0.314 miles. 2023 has no PDF: Data Mill North's file covers the schools on the council's rules (a school counts as full when it gave every place and has a distance, which matches the PDFs about 96% of the time); other schools' 2023 is the DfE's first choices.
   - A refused year reads "everyone in the catchment, plus others within X" when the last place was "any other children" at a school with a catchment, "brothers and sisters, then children within X" at one without, "only children in the catchment" when the last went by catchment, and otherwise "by the school's own rules", with the rule named in a note.
@@ -146,6 +146,16 @@ alternative to reading them from the map (decision 2).
   - Names that differ only by an apostrophe now count as the same, so both Lady Elizabeth Hastings' schools get their village. Every earlier title is unchanged.
   - A postcode in a covered council but in no catchment (much of Leeds: only community schools have one) no longer says it's "outside the areas this checker covers".
   - Websites fixed for eight schools; 223 phone numbers and 168 emails, ten left out (four named staff, a business manager, a bursar, two trust inboxes, another school's and a photographer's).
+
+- **Bradford (W4), 10 November:** built on the `bradford` branch, not yet live.
+  - 160 schools on five pages: `/bradford-west-`, `/bradford-east-`, `/bradford-south-`, `/keighley-` and `/shipley-primary-schools/`, one a constituency.
+  - Who got in comes from the council's primary guides, read by `build/bradford_guide.py`: the September 2027 guide for 2026 and the September 2024 guide for 2023. They give each school's applications considered, places by rule and the furthest distance offered. The guides with 2024's and 2025's figures are no longer online, so those years are the DfE's first choices. Where the national figures show a refusal, the page says they "don't say who got the last one", because the council's own figures for those years are gone, not unpublished.
+  - Reading 2026: 103 schools took everyone. 48 went by distance after brothers and sisters ("near"), 6 priority-area schools also took others by distance ("out"), 2 went by faith ("by the school's own rules"), and 1 has the DfE's figures only.
+  - Priority areas: most schools have none (`noCatch`), and their pages say so. `build/bradford_maps.py` reads 12 of the 13 maps (GeoPDFs in National Grid metres whose outlines don't close, so they're chained into rings). St Joseph's, Bingley's map is a picture, so its area is marked "not checked". Each school sits inside its own area except Victoria, Keighley, which is about 100 m south of it, as the council's own map shows.
+  - Places: where the register gives only "Bradford", the school's ward (`build/bradford/wards.json`), with City as "Bradford city centre".
+  - Page names: "Primary School & Nursery" and "Aided Primary" are shortened, and "Primary Leadership Academy" counts as an academy. Every earlier title is unchanged.
+  - Websites fixed for five schools. 160 phone numbers and 117 emails; ten left out (nine give their trust's inbox, one a named member of staff).
+  - Sources download with `build/fetch_bradford.sh`.
 
 ## Decisions (10 November 2026)
 

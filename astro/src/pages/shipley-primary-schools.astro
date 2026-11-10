@@ -1,0 +1,24 @@
+---
+// Area page: Bradford's shipley area (lib/specs.ts AREA_INFO). The questions every Bradford page shares are in lib/bradford.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { bdBorder, bdFaqs, bdTail } from '../lib/bradford';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.shipley;
+const schools = loadArea('bradford.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...bdFaqs('Shipley', schools, openLatest(schools).length),
+  bdBorder('Shipley', 'From Guiseley, Yeadon or Otley, that’s Leeds City Council'),
+  ...bdTail,
+];
+---
+<AreaPage areaKey="shipley"
+  title="Shipley, Bingley and Baildon primary schools: priority areas and Ofsted · Yorkshire School Checker"
+  description="Shipley, Saltaire, Baildon, Bingley, Cottingley, Wilsden and Menston primary schools: priority areas, how far places went each year, Ofsted ratings and the 2027 Reception dates."
+  h1="Shipley, Bingley and Baildon primary schools"
+  lede="Every primary school in Shipley, Saltaire, Windhill, Baildon, Bingley, Eldwick, Cottingley, Harden, Wilsden, Burley-in-Wharfedale and Menston."
+  area="Shipley"
+  schools={schools}
+  groups={[{ label: 'Shipley, Bingley and Baildon', note: `${schools.length} Bradford primary schools. Most don’t have catchment areas, so the checker shows how far places went at each one.`, schools }]}
+  faqs={faqs}
+/>

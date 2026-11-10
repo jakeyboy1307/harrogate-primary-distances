@@ -1,0 +1,24 @@
+---
+// Area page: Bradford's keighley area (lib/specs.ts AREA_INFO). The questions every Bradford page shares are in lib/bradford.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { bdBorder, bdFaqs, bdTail } from '../lib/bradford';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.keighley;
+const schools = loadArea('bradford.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...bdFaqs('Keighley', schools, openLatest(schools).length),
+  bdBorder('Keighley', 'From Cononley, Sutton-in-Craven or Glusburn, that’s North Yorkshire Council'),
+  ...bdTail,
+];
+---
+<AreaPage areaKey="keighley"
+  title="Keighley and Ilkley primary schools: priority areas and Ofsted · Yorkshire School Checker"
+  description="Keighley, Ilkley, Silsden, Haworth and Addingham primary schools: priority areas, how far places went each year, Ofsted ratings and the 2027 Reception dates."
+  h1="Keighley, Ilkley and Silsden primary schools"
+  lede="Every primary school in Keighley, Ilkley, Ben Rhydding, Addingham, Silsden, Steeton, Haworth, Oxenhope, Oakworth and the villages of the Worth Valley."
+  area="Keighley"
+  schools={schools}
+  groups={[{ label: 'Keighley, Ilkley and Silsden', note: `${schools.length} Bradford primary schools. Most don’t have catchment areas, so the checker shows how far places went at each one.`, schools }]}
+  faqs={faqs}
+/>

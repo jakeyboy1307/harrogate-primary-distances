@@ -85,6 +85,17 @@ export const COUNCILS: Record<string, Council> = {
     policy: 'children in care, then brothers and sisters, then children in the catchment, then everyone else, nearest first in a straight line',
     prefs: 5,
   },
+  Bradford: {
+    name: 'Bradford Council',
+    catchMap: 'https://bso.bradford.gov.uk/content/admissions/priority-areas',
+    apply: 'https://www.bradford.gov.uk/education-and-skills/school-admissions/apply-for-a-place-at-one-of-bradford-districts-schools/',
+    policy: 'children in care, then brothers and sisters, then the children who live nearest, in a straight line',
+    prefs: 5,
+    // most schools have no catchment; thirteen have a priority area, twelve mapped (St Joseph's, Bingley's is a picture)
+    mapNote: 'publishes it only as a picture',
+    mapTip: 'See {map:the council’s priority area maps}',
+    noCatch: 'Most of Bradford’s primary schools don’t have catchment areas. After children in care and brothers and sisters, places go to the children who live nearest',
+  },
   York: {
     name: 'City of York Council',
     catchMap: 'https://www.york.gov.uk/schools/PrimaryMap',
@@ -249,7 +260,7 @@ export const noDist = (r: YearRec) => r.s === 'distance' && (r.g === 'sib' || r.
 // cut-off to judge your chances by
 export const firstsOk = (r: YearRec) => r.s === 'firsts' && r.fo! >= r.f!;
 const FIRSTS_ALL = 'Everyone who put it first got a place';
-const firstsOver = (r: YearRec) => `${r.f} put it first, but only ${r.fo} of them got a place. The council doesn’t publish who got the last one`;
+const firstsOver = (r: YearRec) => `${r.f} put it first, but only ${r.fo} of them got a place. The national figures don’t say who got the last one`;
 const isOver = (r?: YearRec | null) => r?.s === 'firsts' && !firstsOk(r);
 export const WHO_ELSE = { sib: 'brothers and sisters of pupils', staff: 'children of staff' } as const;
 // Whether a year's record can only be judged once your distance is known.

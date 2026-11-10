@@ -1,0 +1,24 @@
+---
+// Area page: Bradford's bradfordeast area (lib/specs.ts AREA_INFO). The questions every Bradford page shares are in lib/bradford.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { bdBorder, bdFaqs, bdTail } from '../lib/bradford';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.bradfordeast;
+const schools = loadArea('bradford.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...bdFaqs('Bradford East', schools, openLatest(schools).length),
+  bdBorder('Bradford', 'From Pudsey, Calverley or Farsley, that’s Leeds City Council'),
+  ...bdTail,
+];
+---
+<AreaPage areaKey="bradfordeast"
+  title="Bradford East primary schools: Idle, Eccleshill, Bradford Moor · Yorkshire School Checker"
+  description="Primary schools in Bradford East, from Bradford Moor, Barkerend and Undercliffe to Eccleshill, Idle and Thackley: how far places went each year, which are hardest to get into, Ofsted ratings and the 2027 Reception dates."
+  h1="Bradford East primary schools"
+  lede="Every primary school in Bradford East: Bradford Moor, Barkerend, Bowling, Undercliffe, Eccleshill, Fagley, Idle, Thackley and Greengates."
+  area="Bradford East"
+  schools={schools}
+  groups={[{ label: 'Bradford East', note: `${schools.length} Bradford primary schools. Most don’t have catchment areas, so the checker shows how far places went at each one.`, schools }]}
+  faqs={faqs}
+/>
