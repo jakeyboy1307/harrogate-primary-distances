@@ -1,0 +1,25 @@
+---
+// Area page: Wakefield's pontefract area (lib/specs.ts AREA_INFO). The questions every Wakefield page shares are in
+// lib/wakefield.ts. Wakefield's catchments can't be checked, so the page leads on how popular schools are.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { AREA_INFO } from '../lib/specs';
+import { wkBorder, wkFaqs, wkTail } from '../lib/wakefield';
+const info = AREA_INFO.pontefract;
+const schools = loadArea('wakefield.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...wkFaqs('Pontefract', openLatest(schools).length, schools.length),
+  wkBorder('Pontefract', 'From Brotherton or Byram, that’s North Yorkshire Council, and from Allerton Bywater or Kippax it’s Leeds City Council'),
+  ...wkTail,
+];
+---
+<AreaPage areaKey="pontefract"
+  title="Pontefract, Castleford and Knottingley primary schools, admissions and Ofsted · Yorkshire School Checker"
+  description="Pontefract, Castleford, Knottingley and Altofts primary schools: how popular each one is, how places went, Ofsted ratings and the 2027 Reception dates, with the council’s catchment search."
+  h1="Pontefract, Castleford and Knottingley primary schools"
+  lede="Every primary school in Pontefract, Carleton, Darrington, Castleford, Airedale, Ferry Fryston, Whitwood, Altofts and Knottingley."
+  area="Pontefract"
+  schools={schools}
+  groups={[{ label: 'Pontefract, Castleford and Knottingley', note: `${schools.length} Wakefield primary schools. Wakefield publishes its catchments only as an address search, so the checker shows how popular each school is rather than whether you’re in its catchment.`, schools }]}
+  faqs={faqs}
+/>

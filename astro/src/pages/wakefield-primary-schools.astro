@@ -1,0 +1,25 @@
+---
+// Area page: Wakefield's wakefield area (lib/specs.ts AREA_INFO). The questions every Wakefield page shares are in
+// lib/wakefield.ts. Wakefield's catchments can't be checked, so the page leads on how popular schools are.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { AREA_INFO } from '../lib/specs';
+import { wkBorder, wkFaqs, wkTail } from '../lib/wakefield';
+const info = AREA_INFO.wakefield;
+const schools = loadArea('wakefield.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...wkFaqs('Wakefield', openLatest(schools).length, schools.length),
+  wkBorder('Wakefield', 'From Rothwell, Robin Hood or Carlton, that’s Leeds City Council'),
+  ...wkTail,
+];
+---
+<AreaPage areaKey="wakefield"
+  title="Wakefield primary schools, admissions and Ofsted · Yorkshire School Checker"
+  description="Wakefield, Outwood, Stanley and Wrenthorpe primary schools: how popular each one is, how places went, Ofsted ratings and the 2027 Reception dates, with the council’s catchment search."
+  h1="Wakefield, Outwood and Stanley primary schools"
+  lede="Every primary school in Wakefield city and the north of the district: Thornes, Flanshaw, Alverthorpe, Eastmoor, Newton Hill, Outwood, Wrenthorpe, Kirkhamgate, Stanley and Lofthouse Gate."
+  area="Wakefield"
+  schools={schools}
+  groups={[{ label: 'Wakefield, Outwood and Stanley', note: `${schools.length} Wakefield primary schools. Wakefield publishes its catchments only as an address search, so the checker shows how popular each school is rather than whether you’re in its catchment.`, schools }]}
+  faqs={faqs}
+/>

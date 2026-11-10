@@ -96,6 +96,17 @@ export const COUNCILS: Record<string, Council> = {
     mapTip: 'See {map:the council’s priority area maps}',
     noCatch: 'Most of Bradford’s primary schools don’t have catchment areas. After children in care and brothers and sisters, places go to the children who live nearest',
   },
+  Wakefield: {
+    name: 'Wakefield Council',
+    catchMap: 'https://www.wakefield.gov.uk/schools-and-education/schools/school-catchment-area-search',
+    apply: 'https://www.wakefield.gov.uk/schools-and-education/schools/school-admissions/apply-for-a-full-time-place-in-reception',
+    policy: 'children in care, then children in the catchment (brothers and sisters first), then brothers and sisters, then the children who live nearest, in a straight line',
+    prefs: 5,
+    // every school has a catchment, but the only full detail is an address search behind a reCAPTCHA
+    mapData: false,
+    mapNote: 'publishes its catchments only as an address search',
+    mapTip: 'Look up your address in {map:the council’s catchment search}',
+  },
   York: {
     name: 'City of York Council',
     catchMap: 'https://www.york.gov.uk/schools/PrimaryMap',

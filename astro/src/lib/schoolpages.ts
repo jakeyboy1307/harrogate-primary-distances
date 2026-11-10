@@ -25,7 +25,7 @@ const DROP: RegExp[] = [
   /\b(Church of England|C of E|Cof E|CofE|CE)\b/gi, /\b(Roman )?Catholic\b/gi, /\bMethodist\b/gi, /\bAnglican\b/gi,
   /\bVoluntary (Controlled|Aided)\b/gi, /\bControlled\b/gi, /\bCommunity\b/gi, /\bCounty\b/gi, /\band Nursery\b/gi,
   /\bVoluntary\s+(?=Academy\b)/gi,                           // "St Vincent's Voluntary Catholic Academy" (Catholic is gone by now)
-  /\bJunior and Infants? School\b/gi,                         // "Colden Junior and Infant School" (after SPELL below)
+  /\bJunior and Infants? (School|Academy)\b/gi,               // "Colden Junior and Infant School" (after SPELL below), "Horbury Bridge CofE Junior and Infant Academy"
   /\bFirst School\b/gi,                                       // "Shepley First School", Reception to Year 5 (Kirklees)
   /\b(Primary|Infant|Infants|Junior) (Foundation )?(School|Academy)\b/gi, /\bSchool\b/gi, /\bAcademy\b/gi,
   /\s+Primary\s*$/i,                                         // "Westfield Primary Community School"
@@ -38,10 +38,12 @@ const SPELL: [RegExp, string][] = [
   [/\bJunior,?\s+(?=Infant\b)/g, 'Junior and '], [/\bJunior\s*&\s*(?=Infant\b)/g, 'Junior and '], [/\s+and Early Years\b/g, ''],
   [/\bJunior and Infants? (&|and) Nursery\b/gi, 'Junior and Infant'], [/\bPrimary and Foundation Stage School\b/, 'Primary School'],
   [/\bFirst (&|and) Nursery School\b/, 'First School'], [/\bPrimary (School )?(&|and) Nursery$/, 'Primary School'], [/(?<!Voluntary )\bAided (?=Primary\b)/, ''], [/\s*(&|and)\s+Pre[- ]School\b/gi, ''], [/\bSchool In ([A-Z]\w+)$/, 'School, $1'],
+  // Wakefield's "Moorthorpe Primary School With Inclusion Resource", "…Nursery School: With Communication Resource", "…School 3-11yrs"
+  [/:?\s*With (Communication|Inclusion) Resource\b/gi, ''], [/\s+\d+-\d+\s*yrs\b/gi, ''],
 ];
 const spell = (name: string) => SPELL.reduce((n, [r, w]) => n.replace(r, w), name);
 // names so common that the town has to go with them
-const GENERIC = /^(St|Saint|All Saints|Holy|Our Lady|Christ|Sacred|Riverside)\b/i;
+const GENERIC = /^(St|Saint|All Saints|Holy|Our Lady|Christ|Sacred|Riverside|Methodist)\b/i;
 
 export const kindOf = (name: string): Kind => {
   const n = spell(name);
@@ -51,7 +53,11 @@ export const kindOf = (name: string): Kind => {
 export function shortOf(name: string) {
   let s = spell(name);
   for (const r of DROP) s = s.replace(r, ' ');
-  return s.replace(/\s+/g, ' ').trim();
+  s = s.replace(/\s+/g, ' ').trim();
+  // a name that is only its faith and status ("Methodist Voluntary Controlled Junior, Infant and Nursery School",
+  // Wakefield) keeps its faith, and takes its town (GENERIC)
+  const faith = spell(name).match(/\b(Methodist|Catholic|Anglican)\b/i);
+  return s || (faith ? faith[1] : s);
 }
 const title = (k: Kind) => k.replace(/\b(?!and\b)\w/g, (c) => c.toUpperCase());   // "Junior and Infant School"
 // "Alanbrooke Academy", "Knayton CofE Academy": no primary, infant or junior in the name, so it stays an Academy

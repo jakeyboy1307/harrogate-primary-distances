@@ -1,0 +1,25 @@
+---
+// Area page: Wakefield's ossett area (lib/specs.ts AREA_INFO). The questions every Wakefield page shares are in
+// lib/wakefield.ts. Wakefield's catchments can't be checked, so the page leads on how popular schools are.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { AREA_INFO } from '../lib/specs';
+import { wkBorder, wkFaqs, wkTail } from '../lib/wakefield';
+const info = AREA_INFO.ossett;
+const schools = loadArea('wakefield.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...wkFaqs('Ossett', openLatest(schools).length, schools.length),
+  wkBorder('Ossett', 'From Dewsbury, Thornhill or Flockton, that’s Kirklees Council'),
+  ...wkTail,
+];
+---
+<AreaPage areaKey="ossett"
+  title="Ossett, Horbury and Crigglestone primary schools, admissions and Ofsted · Yorkshire School Checker"
+  description="Ossett, Horbury, Crigglestone and Sandal primary schools: how popular each one is, how places went, Ofsted ratings and the 2027 Reception dates, with the council’s catchment search."
+  h1="Ossett, Horbury and Crigglestone primary schools"
+  lede="Every primary school in Ossett, Gawthorpe, Horbury, Middlestown, Netherton, Crigglestone, Kettlethorpe, Sandal, Agbrigg and West Bretton."
+  area="Ossett"
+  schools={schools}
+  groups={[{ label: 'Ossett, Horbury and Crigglestone', note: `${schools.length} Wakefield primary schools. Wakefield publishes its catchments only as an address search, so the checker shows how popular each school is rather than whether you’re in its catchment.`, schools }]}
+  faqs={faqs}
+/>

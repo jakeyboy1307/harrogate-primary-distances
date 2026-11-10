@@ -6,7 +6,8 @@ export type Area = 'harrogate' | 'york' | 'craven' | 'selby' | 'hambleton' | 'ri
   | 'middlesbrough' | 'redcar' | 'halifax' | 'caldervalley'
   | 'huddersfield' | 'dewsbury' | 'spenvalley' | 'colnevalley' | 'denbydale'
   | 'headingley' | 'eastleeds' | 'neleeds' | 'horsforth' | 'southleeds' | 'morley' | 'pudsey' | 'wetherby'
-  | 'bradfordwest' | 'bradfordeast' | 'bradfordsouth' | 'keighley' | 'shipley';
+  | 'bradfordwest' | 'bradfordeast' | 'bradfordsouth' | 'keighley' | 'shipley'
+  | 'wakefield' | 'ossett' | 'pontefract' | 'hemsworth';
 export type Placement = 'uniform' | 'profile' | 'nearby' | 'results' | 'plan' | 'area' | 'pagesponsor';
 
 // Every area the checker covers, in one place: the area pages, the school pages' breadcrumbs, the ad areas, the
@@ -72,6 +73,12 @@ export const AREA_INFO: Record<Area, AreaInfo> = {
   bradfordsouth: { label: 'Bradford South: Wibsey, Queensbury and Wyke', short: 'Bradford South', name: 'Wibsey, Great Horton, Queensbury and Wyke', page: 'bradford-south-primary-schools/', council: 'Bradford', constituencies: ['Bradford South'], home: ['E08000032'], example: ['BD5 8FG', 'Odsal'] },
   keighley: { label: 'Keighley, Ilkley and Silsden', short: 'Keighley', name: 'Keighley, Ilkley, Silsden and Haworth', page: 'keighley-primary-schools/', council: 'Bradford', constituencies: ['Keighley and Ilkley'], home: ['E08000032'], example: ['LS29 9BE', 'Ilkley'] },
   shipley: { label: 'Shipley, Bingley and Baildon', short: 'Shipley', name: 'Shipley, Bingley, Baildon and Saltaire', page: 'shipley-primary-schools/', council: 'Bradford', constituencies: ['Shipley'], home: ['E08000032'], example: ['BD18 2NT', 'Shipley'] },
+  // Wakefield: its four constituencies (the Wakefield half of Ossett and Denby Dale, and of Wakefield and Rothwell). Every
+  // school has a catchment, but the council publishes them only as an address search, so these pages can't check them
+  wakefield: { label: 'Wakefield, Outwood and Stanley', short: 'Wakefield', name: 'Wakefield, Outwood, Stanley and Wrenthorpe', page: 'wakefield-primary-schools/', council: 'Wakefield', constituencies: ['Wakefield and Rothwell'], home: ['E08000036'], example: ['WF2 8QW', 'Thornes'] },
+  ossett: { label: 'Ossett, Horbury and Crigglestone', short: 'Ossett', name: 'Ossett, Horbury, Crigglestone and Sandal', page: 'ossett-primary-schools/', council: 'Wakefield', constituencies: ['Ossett and Denby Dale'], home: ['E08000036'], example: ['WF5 0DZ', 'Ossett'] },
+  pontefract: { label: 'Pontefract, Castleford and Knottingley', short: 'Pontefract', name: 'Pontefract, Castleford, Knottingley and Altofts', page: 'pontefract-primary-schools/', council: 'Wakefield', constituencies: ['Pontefract, Castleford and Kno'], home: ['E08000036'], example: ['WF8 3PT', 'Pontefract'] },
+  hemsworth: { label: 'Hemsworth, Normanton and South Elmsall', short: 'Hemsworth', name: 'Hemsworth, Normanton, South Elmsall and Featherstone', page: 'hemsworth-primary-schools/', council: 'Wakefield', constituencies: ['Normanton and Hemsworth'], home: ['E08000036'], example: ['WF9 4BQ', 'Hemsworth'] },
 };
 // The areas' names for the site's wording, so a new area appears everywhere from its line above:
 // PLACES "Harrogate, York, Skipton, Northallerton, Richmond, Malton, Scarborough and Selby"; NY_PLACES the same without York
@@ -99,6 +106,8 @@ export const KIRK_TERM_DATES = 'https://www.kirklees.gov.uk/beta/admissions/poli
 export const LEEDS_TERM_DATES = 'https://www.leeds.gov.uk/schools-and-education/school-holidays-and-term-dates';
 // and Bradford Council's
 export const BRAD_TERM_DATES = 'https://www.bradford.gov.uk/education-and-skills/school-holidays-and-term-dates/school-holidays-and-term-dates/';
+// and Wakefield Council's
+export const WAKE_TERM_DATES = 'https://www.wakefield.gov.uk/schools-and-education/schools/school-term-and-holiday-dates';
 export const AREAS = Object.fromEntries(Object.entries(AREA_INFO).map(([k, a]) => [k, a.label])) as Record<Area, string>;
 export const AREA_SHORT = Object.fromEntries(Object.entries(AREA_INFO).map(([k, a]) => [k, a.short])) as Record<Area, string>;
 // Used by the admin's coverage map: these districts show as fully covered, others with some of our schools as partly

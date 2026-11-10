@@ -1,0 +1,25 @@
+---
+// Area page: Wakefield's hemsworth area (lib/specs.ts AREA_INFO). The questions every Wakefield page shares are in
+// lib/wakefield.ts. Wakefield's catchments can't be checked, so the page leads on how popular schools are.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { AREA_INFO } from '../lib/specs';
+import { wkBorder, wkFaqs, wkTail } from '../lib/wakefield';
+const info = AREA_INFO.hemsworth;
+const schools = loadArea('wakefield.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...wkFaqs('Hemsworth', openLatest(schools).length, schools.length),
+  wkBorder('Hemsworth', 'From Royston, Shafton or Brierley, that’s Barnsley Council'),
+  ...wkTail,
+];
+---
+<AreaPage areaKey="hemsworth"
+  title="Hemsworth, Normanton and South Elmsall primary schools, admissions and Ofsted · Yorkshire School Checker"
+  description="Hemsworth, Normanton, South Elmsall, Featherstone and Ackworth primary schools: how popular each one is, how places went, Ofsted ratings and the 2027 Reception dates."
+  h1="Hemsworth, Normanton and South Elmsall primary schools"
+  lede="Every primary school in Hemsworth, Normanton, Featherstone, Ackworth, South Elmsall, South Kirkby, Upton, Crofton, Walton, Sharlston, Ryhill, Havercroft and South Hiendley."
+  area="Hemsworth"
+  schools={schools}
+  groups={[{ label: 'Hemsworth, Normanton and South Elmsall', note: `${schools.length} Wakefield primary schools. Wakefield publishes its catchments only as an address search, so the checker shows how popular each school is rather than whether you’re in its catchment.`, schools }]}
+  faqs={faqs}
+/>

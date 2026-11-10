@@ -147,7 +147,7 @@ alternative to reading them from the map (decision 2).
   - A postcode in a covered council but in no catchment (much of Leeds: only community schools have one) no longer says it's "outside the areas this checker covers".
   - Websites fixed for eight schools; 223 phone numbers and 168 emails, ten left out (four named staff, a business manager, a bursar, two trust inboxes, another school's and a photographer's).
 
-- **Bradford (W4), 10 November:** built on the `bradford` branch, not yet live.
+- **Bradford (W4), 10 November:** live.
   - 160 schools on five pages: `/bradford-west-`, `/bradford-east-`, `/bradford-south-`, `/keighley-` and `/shipley-primary-schools/`, one a constituency.
   - Who got in comes from the council's primary guides, read by `build/bradford_guide.py`: the September 2027 guide for 2026 and the September 2024 guide for 2023. They give each school's applications considered, places by rule and the furthest distance offered. The guides with 2024's and 2025's figures are no longer online, so those years are the DfE's first choices. Where the national figures show a refusal, the page says they "don't say who got the last one", because the council's own figures for those years are gone, not unpublished.
   - Reading 2026: 103 schools took everyone. 48 went by distance after brothers and sisters ("near"), 6 priority-area schools also took others by distance ("out"), 2 went by faith ("by the school's own rules"), and 1 has the DfE's figures only.
@@ -156,6 +156,24 @@ alternative to reading them from the map (decision 2).
   - Page names: "Primary School & Nursery" and "Aided Primary" are shortened, and "Primary Leadership Academy" counts as an academy. Every earlier title is unchanged.
   - Websites fixed for five schools. 160 phone numbers and 117 emails; ten left out (nine give their trust's inbox, one a named member of staff).
   - Sources download with `build/fetch_bradford.sh`.
+
+- **Wakefield (W5), 10 November:** built on the `wakefield` branch, not yet live. That completes West Yorkshire.
+  - 105 schools on four pages: `/wakefield-`, `/ossett-`, `/pontefract-` and `/hemsworth-primary-schools/`, one a constituency.
+  - Every year, 2023 to 2026, is the DfE's first choices: the council publishes no cut-off distances.
+  - 2026 also carries a note from the council's Primary Guide for Parents (a Word file, read by `build/wakefield_guide.py`) on how places went: to children in the catchment, to brothers and sisters outside it, to others nearest first, and to children in care. 81 schools have one. The other 24 list their places by their own rules' letters, so they have no note. Every listed school's categories add up to its total.
+  - The guide leaves out the names of Townville and Cherry Tree, each at a postcode it shares with another school, so those two are matched by their websites. Simpson's Lane's postcode differs by a letter.
+  - Catchments: every school has one, but the council publishes them only as an address search behind a reCAPTCHA, so they're marked "not checked". The search line and pages point to the council's catchment search.
+  - Ark Northfield and Townville are linked to the old schools they replaced, under different numbers. Stanley Grove and Smawthorne Henry Moore are linked under the same number.
+  - Places: where the register gives only "Wakefield", the school's ward, with the city's wards as "Wakefield". Nine are set from the address (Sandal, Thornes, Eastmoor and others).
+  - Page names:
+    - "With Communication Resource", "With Inclusion Resource" and "3-11yrs" are dropped.
+    - A "Junior and Infant Academy" reads as a junior and infant school.
+    - A name that is only its faith and status keeps the faith and its town: "Methodist Junior and Infant School, Wakefield".
+    - Five register names get their apostrophe or lose a full stop.
+    - Every earlier title is unchanged.
+  - Websites fixed for six schools. Smawthorne Henry Moore's old address doesn't answer and its new site is switched off, so it has none.
+  - 104 phone numbers and 78 emails. Nine are left out: seven Enhance Academy Trust schools give the trust's inbox, and two emails are for named members of staff.
+  - Sources download with `build/fetch_wakefield.sh`.
 
 ## Decisions (10 November 2026)
 

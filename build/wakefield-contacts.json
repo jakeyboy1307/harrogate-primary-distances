@@ -1,0 +1,577 @@
+{
+ "2002": {
+  "checked": "2026-11-10",
+  "email": "info@willowgreen.org.uk",
+  "emailSrc": "https://willowgreen.org.uk/",
+  "tel": "01977 722487"
+ },
+ "2003": {
+  "checked": "2026-11-10",
+  "email": "enquiries@kirkhamgate.outwood.com",
+  "emailSrc": "https://www.kirkhamgate.outwood.com/contact",
+  "tel": "01924 907436"
+ },
+ "2004": {
+  "checked": "2026-11-10",
+  "tel": "01924 207340"
+ },
+ "2005": {
+  "checked": "2026-11-10",
+  "tel": "01924 767080"
+ },
+ "2007": {
+  "checked": "2026-11-10",
+  "tel": "01977 617955"
+ },
+ "2008": {
+  "checked": "2026-11-10",
+  "tel": "01924 967617"
+ },
+ "2009": {
+  "checked": "2026-11-10",
+  "email": "admin@arkdelacy.org.uk",
+  "emailSrc": "https://arkdelacy.org.uk",
+  "tel": "01977 722620"
+ },
+ "2010": {
+  "checked": "2026-11-10",
+  "email": "info@elacademy.org.uk",
+  "emailSrc": "https://elacademy.org.uk/",
+  "tel": "01977 722486"
+ },
+ "2011": {
+  "checked": "2026-11-10",
+  "email": "admin@arkcarletonpark.org.uk",
+  "emailSrc": "https://arkcarletonpark.org.uk/",
+  "tel": "01977 722615"
+ },
+ "2012": {
+  "checked": "2026-11-10",
+  "email": "admin@sjm.bkcat.uk",
+  "emailSrc": "https://www.sjm.bkcat.co.uk/",
+  "tel": "01977 651755"
+ },
+ "2014": {
+  "checked": "2026-11-10",
+  "tel": "01977 515994"
+ },
+ "2023": {
+  "checked": "2026-11-10",
+  "email": "admin@fairburnview.co.uk",
+  "emailSrc": "https://www.Fairburnview.co.uk/page/?title=Contact+Us&pid=26",
+  "tel": "01977 558350"
+ },
+ "2024": {
+  "checked": "2026-11-10",
+  "email": "cherrytreeoffice@watertonacademytrust.org",
+  "emailSrc": "https://cherrytreeacademy.org/",
+  "tel": "01924 967603"
+ },
+ "2029": {
+  "checked": "2026-11-10",
+  "tel": "01977 677494"
+ },
+ "2030": {
+  "checked": "2026-11-10",
+  "email": "enquiries@parkhill.outwood.com",
+  "emailSrc": "https://www.parkhill.outwood.com/contact",
+  "tel": "01924 303655"
+ },
+ "2031": {
+  "checked": "2026-11-10",
+  "email": "enquiries@newstead.outwood.com",
+  "emailSrc": "https://www.newstead.outwood.com/contact",
+  "tel": "01226 722484"
+ },
+ "2036": {
+  "checked": "2026-11-10",
+  "email": "enquiries@belllane.outwood.com",
+  "emailSrc": "https://www.belllane.outwood.com/contact",
+  "tel": "01977 613304"
+ },
+ "2038": {
+  "checked": "2026-11-10",
+  "email": "kingsmeadowoffice@watertonacademytrust.org",
+  "emailSrc": "https://kingsmeadowacademy.org/",
+  "tel": "01924 967607"
+ },
+ "2040": {
+  "checked": "2026-11-10",
+  "email": "croftoninfantadmin@watertonacademytrust.org",
+  "emailSrc": "https://croftoninfants.org/",
+  "tel": "01924 967606"
+ },
+ "2041": {
+  "checked": "2026-11-10",
+  "email": "ag-enquiries@inspirepartnership.org.uk",
+  "emailSrc": "https://ashgrove.inspirepartnership.org.uk/",
+  "tel": "01977 640625"
+ },
+ "2042": {
+  "checked": "2026-11-10",
+  "email": "enquiries@greenhill.outwood.com",
+  "emailSrc": "https://www.greenhill.outwood.com/contact",
+  "tel": "01924 942790"
+ },
+ "2043": {
+  "checked": "2026-11-10",
+  "email": "admin@arknorthfield.org.uk",
+  "emailSrc": "https://arknorthfield.org.uk/",
+  "tel": "01977 651291"
+ },
+ "2044": {
+  "checked": "2026-11-10",
+  "email": "admin@townville.wakefield.sch.uk",
+  "emailSrc": "https://www.townvilleinfants.org.uk/page/?title=Contact+Us&pid=10",
+  "tel": "01977 554185"
+ },
+ "2052": {
+  "checked": "2026-11-10",
+  "email": "ncpaadmin@watertonacademytrust.org",
+  "emailSrc": "https://normantoncommonacademy.org/",
+  "tel": "01924 967612"
+ },
+ "2054": {
+  "checked": "2026-11-10",
+  "tel": "01924 897814"
+ },
+ "2057": {
+  "checked": "2026-11-10",
+  "email": "leebriggadmin@watertonacademytrust.org",
+  "emailSrc": "https://leebrigginfants.org/",
+  "tel": "01924 967609"
+ },
+ "2060": {
+  "checked": "2026-11-10",
+  "email": "headteacher@flushdyke.wakefield.sch.uk",
+  "emailSrc": "https://www.flushdyke.co.uk/",
+  "tel": "01924 261988"
+ },
+ "2061": {
+  "checked": "2026-11-10",
+  "email": "gca-enquiries@inspirepartnership.org.uk",
+  "emailSrc": "https://gawthorpe.inspirepartnership.org.uk/",
+  "tel": "01924 679680"
+ },
+ "2067": {
+  "checked": "2026-11-10",
+  "email": "sharlstonadmin@watertonacademytrust.org",
+  "emailSrc": "https://sharlstonschool.org/",
+  "tel": "01924 967614"
+ },
+ "2069": {
+  "checked": "2026-11-10",
+  "email": "info@middlestownprimary.com",
+  "emailSrc": "https://middlestownprimary.com/",
+  "tel": "01924 278290"
+ },
+ "2070": {
+  "checked": "2026-11-10",
+  "tel": "01924 274873"
+ },
+ "2076": {
+  "checked": "2026-11-10",
+  "email": "contact@stanleygrove.wakefield.sch.uk",
+  "emailSrc": "https://www.stanleygroveprimary.co.uk/page/?title=Contact+Us&pid=8",
+  "tel": "01924 303805"
+ },
+ "2078": {
+  "checked": "2026-11-10",
+  "email": "enquiries@lofthousegate.outwood.com",
+  "emailSrc": "https://www.lofthousegate.outwood.com/contact",
+  "tel": "01924 821160"
+ },
+ "2079": {
+  "checked": "2026-11-10",
+  "email": "admin@newton-hill.org.uk",
+  "emailSrc": "https://www.newtonhill.wakefield.sch.uk/website/contact/",
+  "tel": "01924 303680"
+ },
+ "2080": {
+  "checked": "2026-11-10",
+  "email": "enquiries@ledgerlane.outwood.com",
+  "emailSrc": "https://www.ledgerlane.outwood.com/contact",
+  "tel": "01924 907430"
+ },
+ "2084": {
+  "checked": "2026-11-10",
+  "email": "office@westbretton.wakefield.sch.uk",
+  "emailSrc": "https://www.westbrettonschool.org.uk/",
+  "tel": "01924 830204"
+ },
+ "2088": {
+  "checked": "2026-11-10",
+  "email": "gh-enquiries@inspirepartnership.org.uk",
+  "emailSrc": "https://girnhill.inspirepartnership.org.uk/",
+  "tel": "01977 702261"
+ },
+ "2091": {
+  "checked": "2026-11-10",
+  "email": "headteacher@dimplewell.wakefield.sch.uk",
+  "emailSrc": "https://dimplewell.wakefield.sch.uk/",
+  "tel": "01924 635033"
+ },
+ "2094": {
+  "checked": "2026-11-10",
+  "email": "admin@arkorchardhead.org.uk",
+  "emailSrc": "https://arkorchardhead.org.uk/",
+  "tel": "01977 723495"
+ },
+ "2095": {
+  "checked": "2026-11-10",
+  "email": "admin@arkrookeries.org.uk",
+  "emailSrc": "https://arkrookeries.org.uk/",
+  "tel": "01977 600368"
+ },
+ "2100": {
+  "checked": "2026-11-10",
+  "email": "info@thevpacademy.org.uk",
+  "emailSrc": "https://thevpacademy.org.uk/",
+  "tel": "01977 722485"
+ },
+ "2101": {
+  "checked": "2026-11-10",
+  "email": "info@simpsonslane.org.uk",
+  "emailSrc": "https://simpsonslane.org.uk/",
+  "tel": "01977 722515"
+ },
+ "2115": {
+  "checked": "2026-11-10",
+  "email": "admin@arklarkshill.org.uk",
+  "emailSrc": "https://arklarkshill.org.uk/",
+  "tel": "01977 722845"
+ },
+ "2116": {
+  "checked": "2026-11-10",
+  "email": "info@southossettinfants.com",
+  "emailSrc": "https://southossettinfants.com/",
+  "tel": "01924 274380"
+ },
+ "2128": {
+  "checked": "2026-11-10",
+  "email": "office@streethouse.wakefield.sch.uk",
+  "emailSrc": "https://www.streethouseprimary.co.uk",
+  "tel": "01977 798616"
+ },
+ "2129": {
+  "checked": "2026-11-10",
+  "email": "tga-enquiries@inspirepartnership.org.uk",
+  "emailSrc": "https://towngate.inspirepartnership.org.uk/",
+  "tel": "01924 302865"
+ },
+ "2131": {
+  "checked": "2026-11-10",
+  "tel": "01924 870700"
+ },
+ "2133": {
+  "checked": "2026-11-10",
+  "tel": "01977 704344"
+ },
+ "2142": {
+  "checked": "2026-11-10",
+  "tel": "01924 303665"
+ },
+ "2147": {
+  "checked": "2026-11-10",
+  "email": "admin@arkhalfpennylane.org.uk",
+  "emailSrc": "https://arkhalfpennylane.org.uk/",
+  "tel": "01977 703270"
+ },
+ "2150": {
+  "checked": "2026-11-10",
+  "email": "admin@northfeatherstone.wakefield.sch.uk",
+  "emailSrc": "https://www.northfeatherstone.wakefield.sch.uk/",
+  "tel": "01977 799888"
+ },
+ "2154": {
+  "checked": "2026-11-10",
+  "tel": "01924 303700"
+ },
+ "2155": {
+  "checked": "2026-11-10",
+  "tel": "01924 303520"
+ },
+ "2156": {
+  "checked": "2026-11-10",
+  "email": "admin@daneroyd.wakefield.sch.uk",
+  "emailSrc": "https://www.daneroyd.com",
+  "tel": "01924 242917"
+ },
+ "2159": {
+  "checked": "2026-11-10",
+  "email": "office@mount.wakefield.sch.uk",
+  "emailSrc": "https://www.mountjischool.co.uk/",
+  "tel": "01924 371738"
+ },
+ "2160": {
+  "checked": "2026-11-10",
+  "email": "reception@flanshawjin.co.uk",
+  "emailSrc": "https://www.flanshawjin.co.uk/contacts",
+  "tel": "01924 290360"
+ },
+ "2162": {
+  "checked": "2026-11-10",
+  "email": "office@hendal.wakefield.sch.uk",
+  "emailSrc": "https://www.hendalprimary.org.uk",
+  "tel": "01924 259465"
+ },
+ "2170": {
+  "checked": "2026-11-10",
+  "email": "wrenthorpeoffice@watertonacademytrust.org",
+  "emailSrc": "https://wrenthorpeacademy.org/",
+  "tel": "01924 967618"
+ },
+ "2172": {
+  "checked": "2026-11-10",
+  "tel": "01977 519281"
+ },
+ "2179": {
+  "checked": "2026-11-10",
+  "tel": "01977 516343"
+ },
+ "2180": {
+  "checked": "2026-11-10",
+  "email": "admin@wheldon.wakefield.sch.uk",
+  "emailSrc": "https://www.wheldoninfants.co.uk/",
+  "tel": "01977 553528"
+ },
+ "2182": {
+  "checked": "2026-11-10",
+  "email": "ha-enquiries@inspirepartnership.org.uk",
+  "emailSrc": "https://halfacres.inspirepartnership.org.uk/",
+  "tel": "01977 802325"
+ },
+ "2184": {
+  "checked": "2026-11-10",
+  "tel": "01977 524483"
+ },
+ "2185": {
+  "checked": "2026-11-10",
+  "email": "ap-enquiries@inspirepartnership.org.uk",
+  "emailSrc": "https://acktonpastures.inspirepartnership.org.uk/",
+  "tel": "01977 802322"
+ },
+ "2186": {
+  "checked": "2026-11-10",
+  "email": "office@commonroad.wakefield.sch.uk",
+  "emailSrc": "https://commonroadschool.org.uk/",
+  "tel": "01977 651918"
+ },
+ "2191": {
+  "checked": "2026-11-10",
+  "email": "headteacher@carlton.wakefield.sch.uk",
+  "emailSrc": "https://www.carltonjandischool.co.uk",
+  "tel": "01977 643129"
+ },
+ "2192": {
+  "checked": "2026-11-10",
+  "email": "admin@moorthorpe.wakefield.sch.uk",
+  "emailSrc": "https://www.moorthorpeprimary.co.uk/",
+  "tel": "01977 642820"
+ },
+ "2193": {
+  "checked": "2026-11-10",
+  "email": "office@upton.wakefield.sch.uk",
+  "emailSrc": "https://www.uptonprimary.co.uk/contact-us",
+  "tel": "01977 650820"
+ },
+ "2195": {
+  "checked": "2026-11-10",
+  "email": "headteacher@ryhill.wakefield.sch.uk",
+  "emailSrc": "https://ryhillschool.org.uk/",
+  "tel": "01226 722530"
+ },
+ "2196": {
+  "checked": "2026-11-10",
+  "email": "sh-enquiries@inspirepartnership.org.uk",
+  "emailSrc": "https://southhiendley.inspirepartnership.org.uk/",
+  "tel": "01226 711485"
+ },
+ "2197": {
+  "checked": "2026-11-10",
+  "email": "fw-enquiries@inspirepartnership.org.uk",
+  "emailSrc": "https://fitzwilliam.inspirepartnership.org.uk/",
+  "tel": "01977 624490"
+ },
+ "2199": {
+  "checked": "2026-11-10",
+  "email": "glp-enquiries@inspirepartnership.org.uk",
+  "emailSrc": "https://grovelea.inspirepartnership.org.uk/",
+  "tel": "01977 615080"
+ },
+ "2201": {
+  "checked": "2026-11-10",
+  "tel": "01924 967602"
+ },
+ "2203": {
+  "checked": "2026-11-10",
+  "email": "headteacher@shaylane.wakefield.sch.uk",
+  "emailSrc": "https://www.shaylane.wakefield.sch.uk/",
+  "tel": "01924 862600"
+ },
+ "2204": {
+  "checked": "2026-11-10",
+  "email": "admin@lawefield.wakefield.sch.uk",
+  "emailSrc": "https://www.lawefield.wakefield.sch.uk/",
+  "tel": "01924 291973"
+ },
+ "2206": {
+  "checked": "2026-11-10",
+  "email": "office@newlands.wakefield.sch.uk",
+  "emailSrc": "https://www.newlands.wakefield.sch.uk/",
+  "tel": "01924 302585"
+ },
+ "2207": {
+  "checked": "2026-11-10",
+  "email": "info@horburyprimary.com",
+  "emailSrc": "https://horburyprimary.com/",
+  "tel": "01924 263224"
+ },
+ "2208": {
+  "checked": "2026-11-10",
+  "tel": "01977 558395"
+ },
+ "2209": {
+  "checked": "2026-11-10",
+  "email": "office@snapethorpeprimary.co.uk",
+  "emailSrc": "https://www.snapethorpeprimary.co.uk/contact-us",
+  "tel": "01924 367396"
+ },
+ "3003": {
+  "checked": "2026-11-10",
+  "email": "admin@darringtonschool.org.uk",
+  "emailSrc": "https://www.darringtonschool.co.uk",
+  "tel": "01977 232320"
+ },
+ "3006": {
+  "checked": "2026-11-10",
+  "tel": "01924 302800"
+ },
+ "3015": {
+  "checked": "2026-11-10",
+  "tel": "01924 663641"
+ },
+ "3019": {
+  "checked": "2026-11-10",
+  "email": "admin@stjamesacademy.co.uk",
+  "emailSrc": "https://www.stjamesacademy.co.uk",
+  "tel": "01924 251048"
+ },
+ "3021": {
+  "checked": "2026-11-10",
+  "email": "admin@methodist.wakefield.sch.uk",
+  "emailSrc": "https://www.methodist.wakefield.sch.uk/home/contact",
+  "tel": "01924 204940"
+ },
+ "3022": {
+  "checked": "2026-11-10",
+  "email": "secretary@badsworth.wakefield.sch.uk",
+  "emailSrc": "https://www.badsworthceschool.co.uk/contact-details",
+  "tel": "01977 649157"
+ },
+ "3023": {
+  "checked": "2026-11-10",
+  "tel": "01977 612124"
+ },
+ "3301": {
+  "checked": "2026-11-10",
+  "email": "admin@alverthorpestpauls.co.uk",
+  "emailSrc": "https://www.alverthorpestpauls.co.uk/",
+  "tel": "01924 290125"
+ },
+ "3303": {
+  "checked": "2026-11-10",
+  "email": "office@sa.bkcat.uk",
+  "emailSrc": "https://www.sa.bkcat.co.uk",
+  "tel": "01924 339435"
+ },
+ "3305": {
+  "checked": "2026-11-10",
+  "email": "headteacher@st-johns.wakefield.sch.uk",
+  "emailSrc": "https://www.wakefieldstjohnscofeschool.co.uk",
+  "tel": "01924 369136"
+ },
+ "3311": {
+  "checked": "2026-11-10",
+  "email": "office@ems.bkcat.uk",
+  "emailSrc": "https://www.ems.bkcat.co.uk/",
+  "tel": "01924 299244"
+ },
+ "3316": {
+  "checked": "2026-11-10",
+  "tel": "01977 780225"
+ },
+ "3318": {
+  "checked": "2026-11-10",
+  "tel": "01924 894309"
+ },
+ "3319": {
+  "checked": "2026-11-10",
+  "email": "enquiries@holytrinity.wakefield.sch.uk",
+  "emailSrc": "https://www.holytrinityossett.co.uk/page/?title=Contact+Us&pid=159",
+  "tel": "01924 266543"
+ },
+ "3327": {
+  "checked": "2026-11-10",
+  "email": "admin@sjc.bkcat.uk",
+  "emailSrc": "https://www.sjc.bkcat.co.uk",
+  "tel": "01977 555780"
+ },
+ "3329": {
+  "checked": "2026-11-10",
+  "email": "admin@sh.bkcat.uk",
+  "emailSrc": "https://www.sacredheart.bkcat.co.uk/",
+  "tel": "01977 625354"
+ },
+ "3330": {
+  "checked": "2026-11-10",
+  "tel": "01924 891685"
+ },
+ "3332": {
+  "checked": "2026-11-10",
+  "email": "admin@stig.bkcat.uk",
+  "emailSrc": "https://stig.bkcat.co.uk/",
+  "tel": "01924 271625"
+ },
+ "3333": {
+  "checked": "2026-11-10",
+  "email": "admin@sjp.bkcat.uk",
+  "emailSrc": "https://www.sjp.bkcat.co.uk/",
+  "tel": "01977 701493"
+ },
+ "3336": {
+  "checked": "2026-11-10",
+  "email": "admin@hfsm.bkcat.uk",
+  "emailSrc": "https://www.hfsm.bkcat.co.uk/",
+  "tel": "01977 798303"
+ },
+ "3337": {
+  "checked": "2026-11-10",
+  "tel": "01977 794179"
+ },
+ "3338": {
+  "checked": "2026-11-10",
+  "email": "office@stmaryswakefield.co.uk",
+  "emailSrc": "https://stmarysceprimarywakefield.co.uk/",
+  "tel": "01924 303625"
+ },
+ "3339": {
+  "checked": "2026-11-10",
+  "email": "office@sandal.wakefield.sch.uk",
+  "emailSrc": "https://www.sandalcastleprimary.co.uk",
+  "tel": "01924 303525"
+ },
+ "3341": {
+  "checked": "2026-11-10",
+  "tel": "01924 302875"
+ },
+ "3342": {
+  "checked": "2026-11-10",
+  "email": "waltonschooloffice@watertonacademytrust.org",
+  "emailSrc": "https://waltonprimary.org/",
+  "tel": "01924 967616"
+ },
+ "3343": {
+  "checked": "2026-11-10"
+ }
+}
