@@ -3,7 +3,7 @@
 
 export type Area = 'harrogate' | 'york' | 'craven' | 'selby' | 'hambleton' | 'richmondshire' | 'ryedale' | 'scarborough'
   | 'bridlington' | 'beverley' | 'goole' | 'cottingham' | 'hulleast' | 'hullnorth' | 'hullwest'
-  | 'middlesbrough' | 'redcar';
+  | 'middlesbrough' | 'redcar' | 'halifax' | 'caldervalley';
 export type Placement = 'uniform' | 'profile' | 'nearby' | 'results' | 'plan' | 'area' | 'pagesponsor';
 
 // Every area the checker covers, in one place: the area pages, the school pages' breadcrumbs, the ad areas, the
@@ -43,6 +43,9 @@ export const AREA_INFO: Record<Area, AreaInfo> = {
   // Teesside, in ceremonial North Yorkshire: one page per council. Neither publishes its admission zones as map data
   middlesbrough: { label: 'Middlesbrough', short: 'Middlesbrough', name: 'Middlesbrough', page: 'middlesbrough-primary-schools/', council: 'Middlesbrough', home: ['E06000002'], example: ['TS5 6EA', 'Middlesbrough'] },
   redcar: { label: 'Redcar, Guisborough and Saltburn', short: 'Redcar', name: 'Redcar, Guisborough and Saltburn', page: 'redcar-primary-schools/', council: 'Redcar and Cleveland', home: ['E06000003'], example: ['TS10 1NL', 'Redcar'] },
+  // Calderdale, West Yorkshire: its two constituencies. Its primary schools have no catchments
+  halifax: { label: 'Halifax and Sowerby Bridge', short: 'Halifax', name: 'Halifax and Sowerby Bridge', page: 'halifax-primary-schools/', council: 'Calderdale', constituencies: ['Halifax'], home: ['E08000033'], example: ['HX1 3ER', 'Halifax'] },
+  caldervalley: { label: 'Brighouse, Elland and the Calder Valley', short: 'Calder Valley', name: 'Brighouse, Elland, Hebden Bridge and Todmorden', page: 'calder-valley-primary-schools/', council: 'Calderdale', constituencies: ['Calder Valley'], home: ['E08000033'], example: ['HX7 6DS', 'Hebden Bridge'] },
 };
 // The areas' names for the site's wording, so a new area appears everywhere from its line above:
 // PLACES "Harrogate, York, Skipton, Northallerton, Richmond, Malton, Scarborough and Selby"; NY_PLACES the same without York
@@ -60,6 +63,8 @@ export const NY_TERM_DATES = 'https://www.northyorks.gov.uk/education-and-learni
 export const ER_TERM_DATES = 'https://www.eastriding.gov.uk/learning/schools-colleges-and-academies/school-term-dates/';
 // and Hull City Council's (2026 to 2027)
 export const HULL_TERM_DATES = 'https://www.hull.gov.uk/schools-2/school-holidays-term-dates/2';
+// and Calderdale Council's
+export const CALD_TERM_DATES = 'https://new.calderdale.gov.uk/schools-and-learning/schools/school-term-dates';
 export const AREAS = Object.fromEntries(Object.entries(AREA_INFO).map(([k, a]) => [k, a.label])) as Record<Area, string>;
 export const AREA_SHORT = Object.fromEntries(Object.entries(AREA_INFO).map(([k, a]) => [k, a.short])) as Record<Area, string>;
 // Used by the admin's coverage map: these districts show as fully covered, others with some of our schools as partly

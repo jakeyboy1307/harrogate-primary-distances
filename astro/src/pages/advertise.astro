@@ -3,7 +3,7 @@
 // and an enquiry form that posts to /api/enquiry (astro/worker/index.js), which emails it on.
 // Prices are a DRAFT starting point (see MONETISATION.md). Kept out of search until they're agreed.
 import Base from '../layouts/Base.astro';
-import { AREAS, PLACES } from '../lib/specs';
+import { AREAS, COVERED } from '../lib/specs';
 const slots = [
   { id: 'uniform', alt: 'A school’s panel on the checker, with the uniform shop card highlighted under the school’s details', h: 'School uniform', p: 'Your shop in the panel for each school you supply, seen by parents choosing that school.', price: 'From £40 a month per area', who: 'Uniform shops, PE kit, book bags' },
   { id: 'results', alt: 'Postcode search results, with the featured card highlighted after the fourth school', h: 'Featured in results', p: 'One card among the schools after a postcode search, never above the first four.', price: 'From £150 a month per area', who: 'Independent schools, nurseries, after-school care' },
@@ -29,11 +29,11 @@ const season = [
 ];
 const types = ['School uniform shop', 'Independent school or nursery', 'State school or academy trust', 'Estate agent or mortgage broker', 'Childcare, clubs or tutoring', 'Something else'];
 ---
-<Base title="Advertise with us · Yorkshire School Checker" description={`Reach parents in ${PLACES} while they choose a primary school. Clearly labelled placements for local businesses and schools.`} index={false}>
+<Base title="Advertise with us · Yorkshire School Checker" description={`Reach parents in ${COVERED} while they choose a primary school. Clearly labelled placements for local businesses and schools.`} index={false}>
   <section class="how-hero wrap">
     <div>
       <h1>Reach parents across Yorkshire</h1>
-      <p class="lede">Parents across {PLACES} use the checker to choose a Reception place. Be there when they’re planning for September.</p>
+      <p class="lede">Parents across {COVERED} use the checker to choose a Reception place. Be there when they’re planning for September.</p>
       <p class="area-acts"><a class="btn btn-primary" href="#enquire">Get in touch</a><a class="btn" href="#options">See the options</a></p>
     </div>
   </section>

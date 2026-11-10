@@ -10,10 +10,10 @@ export const ROUTER = 'https://routing.openstreetmap.de/routed-foot/table/v1/foo
 // prefs: schools the form takes. mapData false: the council doesn't publish its catchments as map data (Hull,
 // Middlesbrough, Redcar and Cleveland), so the checker can't tell anyone which catchment they're in. mapNote says what
 // it does publish ("publishes its catchments only as a printed map"), mapTip how to find out instead, with {map} for
-// the link to catchMap
+// the link to catchMap. noCatch: the council's primary schools have no catchments (Calderdale); what to say instead
 export interface Council {
   name: string; catchMap: string; apply: string; policy: string; prefs: number;
-  mapData?: false; mapNote?: string; mapTip?: string;
+  mapData?: false; mapNote?: string; mapTip?: string; noCatch?: string;
 }
 export const COUNCILS: Record<string, Council> = {
   'North Yorkshire': {
@@ -60,6 +60,17 @@ export const COUNCILS: Record<string, Council> = {
     mapNote: 'doesn’t publish maps of its admission zones',
     mapTip: 'Ask the school which zone you’re in, or see {map:the council’s guide to starting primary school}',
   },
+  Calderdale: {
+    name: 'Calderdale Council',
+    catchMap: 'https://new.calderdale.gov.uk/schools-and-learning/schools/admissions/process/community-voluntary-primary-2026',
+    apply: 'https://new.calderdale.gov.uk/schools-and-learning/schools/admissions/process/primary',
+    policy: 'children in care, then brothers and sisters, then the children who live nearest, in a straight line',
+    prefs: 5,
+    mapData: false,
+    mapNote: 'doesn’t publish a map of it',
+    mapTip: 'Ask the school, or see {map:Calderdale Council’s admissions rules}',
+    noCatch: 'Calderdale’s primary schools don’t have catchment areas. After children in care and brothers and sisters, places go to the children who live nearest',
+  },
   York: {
     name: 'City of York Council',
     catchMap: 'https://www.york.gov.uk/schools/PrimaryMap',
@@ -84,7 +95,7 @@ export interface YearRec {
   // where a council publishes nothing on who got the last place (Hull, and East Riding's earlier years).
   s: 'distance' | 'catchment' | 'all_offered' | 'not_published' | 'firsts';
   m?: number;
-  g?: 'in' | 'out' | 'sib' | 'staff' | 'crit';
+  g?: 'in' | 'out' | 'sib' | 'staff' | 'crit' | 'near';   // near: no catchment, brothers and sisters then distance (Calderdale)
   crit?: string;
   a?: number; o?: number; p?: number; f?: number; fo?: number;
   ia?: number; ir?: number; xa?: number; xr?: number;
@@ -404,6 +415,7 @@ export function whoGotIn(x: YearRec) {
     return x.g === 'out' ? `Everyone in the catchment, plus others within ${d}`
       : x.g === 'in' ? `Only children in the catchment, within ${d}`
       : x.g === 'sib' || x.g === 'staff' ? `Everyone in the catchment, plus ${WHO_ELSE[x.g]}`
+      : x.g === 'near' ? `Brothers and sisters, then children within ${d}`
       : `Children within ${d}, by the school’s own rules`;
   }
   if (x.s === 'catchment') {

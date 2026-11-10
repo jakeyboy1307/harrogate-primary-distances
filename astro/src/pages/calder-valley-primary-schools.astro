@@ -1,0 +1,27 @@
+---
+// Area page: Calderdale's Calder Valley constituency, Brighouse and Elland up the valley to Hebden Bridge and
+// Todmorden (lib/specs.ts AREA_INFO). The questions both Calderdale pages share are in lib/calderdale.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { cdBorder, cdFaqs, cdTail } from '../lib/calderdale';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.caldervalley;
+const schools = loadArea('calderdale.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...cdFaqs('the Calder Valley', openLatest(schools).length, schools.length),
+  ['How do the infant and junior schools work in Hebden Bridge and Brighouse?',
+    'Central Street Infant and Stubbings Infant in Hebden Bridge, and St Andrew’s CE Infant in Brighouse, take children from Reception to Year 2. They then move to a junior school (Riverside Junior in Hebden Bridge, St Andrew’s CE Junior in Brighouse) for Year 3, and you apply again for that place while your child is in Year 2. The checker covers the Reception place at the infant school.'],
+  cdBorder('Calder Valley', 'From Littleborough that’s Rochdale Council, and from Fixby or Hartshead it’s Kirklees Council'),
+  ...cdTail,
+];
+---
+<AreaPage areaKey="caldervalley"
+  title="Calder Valley primary schools: Brighouse, Elland, Hebden Bridge, Todmorden · Yorkshire School Checker"
+  description="Brighouse, Elland, Hebden Bridge and Todmorden primary schools: how far places went each year, which schools are hardest to get into, Ofsted ratings and the 2027 Reception dates."
+  h1="Brighouse, Elland and Calder Valley primary schools"
+  lede="Every primary school in the Calder Valley: Brighouse, Rastrick, Elland and Greetland, Ripponden, Mytholmroyd, Hebden Bridge and Todmorden."
+  area="Calder Valley"
+  schools={schools}
+  groups={[{ label: 'Brighouse, Elland and the Calder Valley', note: `${schools.length} primary schools. Calderdale’s primary schools don’t have catchment areas, so the checker shows how far places went at each one.`, schools }]}
+  faqs={faqs}
+/>

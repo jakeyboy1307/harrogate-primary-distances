@@ -1,0 +1,27 @@
+---
+// Area page: Calderdale's Halifax constituency, Halifax and Sowerby Bridge (lib/specs.ts AREA_INFO). Calderdale's
+// primary schools have no catchments; the questions both Calderdale pages share are in lib/calderdale.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { cdBorder, cdFaqs, cdTail } from '../lib/calderdale';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.halifax;
+const schools = loadArea('calderdale.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...cdFaqs('Halifax', openLatest(schools).length, schools.length),
+  ['Is Crossley Heath or North Halifax Grammar School on here?',
+    'No. Crossley Heath, North Halifax Grammar and the other high schools take children from Year 7, and the checker covers primary schools and Reception places only.'],
+  cdBorder('Halifax', 'From Queensbury or Thornton, that’s Bradford Council'),
+  ...cdTail,
+];
+---
+<AreaPage areaKey="halifax"
+  title="Halifax primary schools: admissions, distances and Ofsted · Yorkshire School Checker"
+  description="Halifax and Sowerby Bridge primary schools: how far places went each year, which schools are hardest to get into, Ofsted ratings and the 2027 Reception dates."
+  h1="Halifax and Sowerby Bridge primary schools"
+  lede="Every primary school in Halifax and Sowerby Bridge, from Ovenden, Illingworth and Mixenden to Pellon, King Cross, Siddal, Northowram and Shelf."
+  area="Halifax"
+  schools={schools}
+  groups={[{ label: 'Halifax and Sowerby Bridge', note: `${schools.length} primary schools. Calderdale’s primary schools don’t have catchment areas, so the checker shows how far places went at each one.`, schools }]}
+  faqs={faqs}
+/>

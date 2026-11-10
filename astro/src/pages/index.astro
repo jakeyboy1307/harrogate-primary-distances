@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import SchoolPanel from '../components/SchoolPanel.astro';
 import { COUNCILS } from '../lib/engine';
 import { url } from '../lib/url';
-import { AREA_INFO, COVERED, PLACES } from '../lib/specs';
+import { AREA_INFO, COVERED } from '../lib/specs';
 const keys = [
   ['in', 'Safe bet', 'You’d have got in every year published.'],
   ['all', 'Open to all', 'Everyone who applied got a place.'],
@@ -27,7 +27,7 @@ const about: [string, string][] = [
 ];
 const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: about.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a.replace(/<[^>]+>/g, '') } })) };
 ---
-<Base title="School catchment checker for Harrogate and York primary schools · Yorkshire School Checker" description={`Free school catchment checker for primary schools in ${PLACES}. Find your catchment school and your chances at every primary school by postcode, from up to four years of Reception offers.`} active="find">
+<Base title="School catchment checker for Yorkshire primary schools · Yorkshire School Checker" description={`Free school catchment checker for primary schools in ${COVERED}. Find your catchment school and your chances at every primary school by postcode, from up to four years of Reception offers.`} active="find">
   <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify([siteSchema, aboutSchema])} />
 
   <!-- ONBOARDING -->
@@ -82,7 +82,7 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
 
   <!-- ABOUT: the catchment questions parents search for, hidden once a search runs -->
   <section class="how-sec sec-pale wrap home-about" id="about">
-    <h2>A school catchment checker for {PLACES}</h2>
+    <h2>A school catchment checker for {COVERED}</h2>
     <p class="intro">Primary school catchment areas decide a lot about who gets a Reception place. Here’s what they are and how to find yours.</p>
     <div class="sources home-faqs">{about.map(([q, a]) => <div><h3>{q}</h3><p set:html={a} /></div>)}</div>
     <p class="intro">Browse primary school catchment areas for {Object.values(AREA_INFO).map((a, i, all) => <>{i ? (i === all.length - 1 ? ' or ' : ', ') : ''}<a href={url(a.page)}>{a.short}</a></>)}, with every school’s own page.</p>
@@ -261,7 +261,9 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
     const mine = res.mine;
     // the council the postcode is in (or, for "your location", the nearest school's council), for its catchment map
     const cn = council(p.district ?? [...near].sort((a, b) => a.straight! - b.straight!)[0]?.council);
-    $('#catchline').innerHTML = cn.mapData === false && !mine.length
+    $('#catchline').innerHTML = cn.noCatch && !mine.length
+      ? `${cn.noCatch}.`
+      : cn.mapData === false && !mine.length
       ? `${esc(cn.name)} ${cn.mapNote}, so we can’t tell you which one you’re in. ${mapTipHtml(cn)}.`
       : (mine.length
         ? `You’re in the catchment for <b>${mine.map((s) => esc(s.name)).join('</b> and <b>')}</b>.`

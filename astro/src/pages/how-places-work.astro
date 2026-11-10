@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import { url } from '../lib/url';
 import { COUNCILS } from '../lib/engine';
-import { AREA_INFO, COVERED, NY_PLACES, PLACES } from '../lib/specs';
+import { AREA_INFO, COVERED, NY_PLACES } from '../lib/specs';
 const ny = COUNCILS['North Yorkshire'], cyc = COUNCILS.York;
 // the catchment questions in section 1, for search engines
 const faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: [
@@ -30,7 +30,7 @@ const phrases = [
   ['“By the school’s own rules”', 'Academies, voluntary aided and foundation schools decide their own order. Faith schools may put church members first.'],
 ];
 ---
-<Base title="How do school catchment areas work? · Yorkshire School Checker" description={`How school catchment areas work in ${PLACES}: what your catchment school is, where to find the catchment area map, who gets a Reception place first, and what “last place” means.`} active="how">
+<Base title="How do school catchment areas work? · Yorkshire School Checker" description={`How school catchment areas work in ${COVERED}: what your catchment school is, where to find the catchment area map, who gets a Reception place first, and what “last place” means.`} active="how">
   <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <section class="how-hero wrap">
     <div>
@@ -105,7 +105,7 @@ const phrases = [
   <section class="how-sec wrap split" id="five">
     <div>
       <h2>5. Picking your schools</h2>
-      <p class="intro">North Yorkshire’s and York’s forms take up to five schools, and East Riding’s, Hull’s, Middlesbrough’s and Redcar and Cleveland’s up to three. Each one is considered equally, without knowing where you ranked it.</p>
+      <p class="intro">North Yorkshire’s, York’s and Calderdale’s forms take up to five schools, and East Riding’s, Hull’s, Middlesbrough’s and Redcar and Cleveland’s up to three. Each one is considered equally, without knowing where you ranked it.</p>
       <p class="intro">If more than one could take you, you’re offered the one highest on your list. So put your real favourite first, and include at least one safe bet.</p>
       <p style="margin-top:24px"><a class="btn btn-primary" href={url('plan/')}>Start my plan</a></p>
     </div>

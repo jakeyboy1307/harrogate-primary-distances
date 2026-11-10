@@ -59,6 +59,8 @@ const faqs: [string, string][] = [
       ? `Yes. ${council.name} publishes a <a href="${council.catchMap}" target="_blank" rel="noopener">school catchment area map</a> that shows the ${p.short} catchment. Search your address on it, or put your postcode into the <a href="#check">school catchment checker</a> above, which uses the same map.`
       : unchecked
       ? `${council.name} ${council.mapNote}, so the checker can’t show you the ${p.short} catchment. ${mapTip}.`
+      : council.noCatch && !s.own
+      ? `No. ${council.noCatch}, so there’s no map to check. Put your postcode into the <a href="#check">school checker</a> above to compare your distance with how far places have gone at ${p.short}.`
       : `No, because ${p.name} doesn’t have a catchment area. Its places go by ${s.own ? 'the school’s own admissions rules' : `${council.name}’s rules`}. To find your catchment school, put your postcode into the <a href="#check">school catchment checker</a> above.`],
   [`How far away can you live and still get into ${p.name}?`, reach],
   [`How many Reception places does ${p.name} have?`,
@@ -134,14 +136,16 @@ const schema = [
               ? `As ${article} ${typeText}, it sets its own admissions rules, so check its policy for any faith, feeder or other priorities.`
               : `Places go ${council.policy}.`}</p>
           : unchecked
-          ? <p>{p.name} has a catchment area, set by {council.name}. {s.own ? `As ${article} ${typeText}, it sets its own admissions rules, so check its policy for the order places go in.` : `Places go ${council.policy}.`} The council {council.mapNote}, so the checker can’t tell you whether you’re in it.</p>
-          : <p>{p.name} doesn’t have a catchment area. Places are given {s.own ? 'by the school’s own admissions rules, so check its policy for any faith, feeder or other priorities' : `by ${council.name}’s rules`}.</p>}
+          ? <p>{p.name} has a catchment area{council.noCatch ? ' of its own' : `, set by ${council.name}`}. {s.own ? `As ${article} ${typeText}, it sets its own admissions rules, so check its policy for the order places go in.` : `Places go ${council.policy}.`} The council {council.mapNote}, so the checker can’t tell you whether you’re in it.</p>
+          : <p>{p.name} doesn’t have a catchment area. {s.own ? 'Places are given by the school’s own admissions rules, so check its policy for any faith, feeder or other priorities.' : council.noCatch ? `Places go to ${council.policy}.` : `Places are given by ${council.name}’s rules.`}</p>}
         {years.slice(0, 2).map((y) => <p>{yearLine(y)}</p>)}
         {dists.length > 1 && sm.furthest !== sm.closest && <p>Over the years published, the last place has gone between {miles(sm.closest!.m)} and {miles(sm.furthest!.m)} from the school.</p>}
         {hasCatchment
           ? <p><b>Is {p.short} your catchment school?</b> <a href="#check">Put your postcode in</a> and we’ll tell you, along with your chances at every school nearby. Near the boundary? Check your exact address on <a href={council.catchMap} target="_blank" rel="noopener">{council.name}’s school catchment area map</a>.</p>
           : unchecked
           ? <p><b>Is {p.short} your catchment school?</b> <Fragment set:html={mapTip} />. Then <a href="#check">put your postcode in</a> to see how popular {p.short} and every school near you are.</p>
+          : council.noCatch
+          ? <p><b>Could you get a place at {p.short}?</b> <a href="#check">Put your postcode in</a> and we’ll compare your distance with how far places have gone each year, at {p.short} and every school nearby.</p>
           : <p><b>What is your catchment school?</b> <a href="#check">Put your postcode in</a> and we’ll tell you, along with your chances at {p.short} and every school nearby.</p>}
         <p>New to catchments? <a href={url('how-places-work/')}>How school catchment areas work</a> explains who gets a place first, and the <a href={url(p.areaPage)}>{p.areaName} primary school catchment areas</a> page covers every school nearby.</p>
       </div>

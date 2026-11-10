@@ -41,7 +41,12 @@ FIXED = {'142851': ('admin@northrigton.ycway.uk', 'https://asnrfellowship.ycst.c
          # the Ribblesdale Federation's site lists all three offices
          '121392': ('office@giggleswick-pri.n-yorks.sch.uk', 'https://ribblesdalefed.n-yorks.sch.uk/contact-us/'),
          '121402': ('office@hellifield.n-yorks.sch.uk', 'https://ribblesdalefed.n-yorks.sch.uk/contact-us/'),
-         '121631': ('office@longpreston.n-yorks.sch.uk', 'https://ribblesdalefed.n-yorks.sch.uk/contact-us/')}
+         '121631': ('office@longpreston.n-yorks.sch.uk', 'https://ribblesdalefed.n-yorks.sch.uk/contact-us/'),
+         # Calderdale: Central Street's site also lists the council's web team, and Todmorden's an old address; St Joseph's,
+         # Todmorden had no website in the register
+         '107507': ('admin@centralstreet.calderdale.sch.uk', 'https://www.centralstreet.org.uk/'),
+         '107556': ('office@todmorden-jun.calderdale.sch.uk', 'https://www.todmordenprimary.org.uk/our-school/contact-us'),
+         '147583': ('admin@stjosephs.romerocat.com', 'https://www.st-josephs-tod.org.uk/contact-us')}
 # Emails the school's site gives that aren't its office, by URN, left out: a named teacher (Molescroft), the SENCo
 # (Swinefleet), a typo (North Frodingham), and a federation partner's (Hornsea Burton has Skipsea's, Sutton upon
 # Derwent has Bugthorpe's); five Hull schools whose shared website template shows Bricknell's; and on Teesside a

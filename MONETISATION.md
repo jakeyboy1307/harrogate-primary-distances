@@ -41,7 +41,7 @@ These are a starting point to test, not researched market rates. Set them proper
 | Area page sponsor | £100 a month | 1: £100 |
 | School profile | £150 a year | 20 schools: £250 a month |
 
-Fully sold, that's about **£960 a month per area, £23,000 a year for Harrogate and York**. Expect to sell a quarter to a third of it in the first year: roughly **£6,000 to £8,000**. Each new area (Leeds, Selby, Scarborough) adds the same again.
+Fully sold, that's about **£960 a month per area**. With the 19 areas live in November 2026 (North Yorkshire, York, East Riding, Hull, Middlesbrough, Redcar and Calderdale), that's about £18,000 a month if every slot sold, which it won't: expect a small share in the first year, starting with the busiest areas. Each new area page adds another £960 of slots; West Yorkshire's plan (WEST.md) adds 24.
 
 Sell by **season**, not just by month: September to January is when parents choose and apply (forms close 15 January), April is offer day, and May to August is uniform, shoes and care. A "September to January" package for independent schools and estate agents is the easiest first sale.
 

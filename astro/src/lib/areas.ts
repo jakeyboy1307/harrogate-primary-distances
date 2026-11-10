@@ -22,7 +22,7 @@ function difficulty(r?: YearRec) {
   if (r.s === 'distance') {
     if (r.g === 'in') return 3 + 1 / (1 + r.m! / MI);              // only catchment children, nearest first
     if (r.g === 'sib' || r.g === 'staff') return 2.5;               // outside the catchment, only brothers and sisters or staff children
-    if (r.g === 'out') return r.m! < 2 * MI ? 1 + 1 / (1 + r.m! / MI) : null;
+    if (r.g === 'out' || r.g === 'near') return r.m! < 2 * MI ? 1 + 1 / (1 + r.m! / MI) : null;
     return null;                                                    // the school's own rules
   }
   if (r.s === 'firsts') return firstsOk(r) ? null : 1 + 1 - r.fo! / r.f!;   // share of first choices turned away

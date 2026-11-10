@@ -10,7 +10,7 @@ import { AREA_INFO, areaOf, type Area } from './specs';
 // rules; after building, `npm run lock-slugs` adds them here (scripts/lock-slugs.mjs).
 import LOCKED from './slugs.json';
 
-export type Kind = 'primary school' | 'infant school' | 'junior school';
+export type Kind = 'primary school' | 'infant school' | 'junior school' | 'junior and infant school';
 
 // Words parents leave out when they search: the faith, the legal status and the type of school
 const DROP: RegExp[] = [
@@ -25,19 +25,31 @@ const DROP: RegExp[] = [
   /\b(Church of England|C of E|Cof E|CofE|CE)\b/gi, /\b(Roman )?Catholic\b/gi, /\bMethodist\b/gi, /\bAnglican\b/gi,
   /\bVoluntary (Controlled|Aided)\b/gi, /\bControlled\b/gi, /\bCommunity\b/gi, /\bCounty\b/gi, /\band Nursery\b/gi,
   /\bVoluntary\s+(?=Academy\b)/gi,                           // "St Vincent's Voluntary Catholic Academy" (Catholic is gone by now)
+  /\bJunior and Infants? School\b/gi,                         // "Colden Junior and Infant School" (after SPELL below)
   /\b(Primary|Infant|Infants|Junior) (Foundation )?(School|Academy)\b/gi, /\bSchool\b/gi, /\bAcademy\b/gi,
   /\s+Primary\s*$/i,                                         // "Westfield Primary Community School"
 ];
+// Register names written in shorthand, put the way parents say them before the rules above run (Calderdale's
+// "Todmorden CofE J, I & N School", "Elland CE Junior, Infant and Nursery School", "St John's Primary School In
+// Rishworth", "St Michael and All Angels CofE Primary & Pre School"). No school published before them had these forms
+const SPELL: [RegExp, string][] = [
+  [/\bJ,?\s*I,?\s*(&|and)\s*N\b/g, 'Junior and Infant'], [/\bJ\s*(&|and)\s*I\b/g, 'Junior and Infant'],
+  [/\bJunior,?\s+(?=Infant\b)/g, 'Junior and '], [/\bJunior and Infants? (&|and) Nursery\b/gi, 'Junior and Infant'], [/\s*(&|and)\s+Pre[- ]School\b/gi, ''], [/\bSchool In ([A-Z]\w+)$/, 'School, $1'],
+];
+const spell = (name: string) => SPELL.reduce((n, [r, w]) => n.replace(r, w), name);
 // names so common that the town has to go with them
 const GENERIC = /^(St|Saint|All Saints|Holy|Our Lady|Christ|Sacred|Riverside)\b/i;
 
-export const kindOf = (name: string): Kind => (/\bInfants?\b/i.test(name) ? 'infant school' : /\bJunior\b/i.test(name) ? 'junior school' : 'primary school');
+export const kindOf = (name: string): Kind => {
+  const n = spell(name);
+  return /\bJunior and Infants?\b/i.test(n) ? 'junior and infant school' : /\bInfants?\b/i.test(n) ? 'infant school' : /\bJunior\b/i.test(n) ? 'junior school' : 'primary school';
+};
 export function shortOf(name: string) {
-  let s = name;
+  let s = spell(name);
   for (const r of DROP) s = s.replace(r, ' ');
   return s.replace(/\s+/g, ' ').trim();
 }
-const title = (k: Kind) => k.replace(/\b\w/g, (c) => c.toUpperCase());
+const title = (k: Kind) => k.replace(/\b(?!and\b)\w/g, (c) => c.toUpperCase());   // "Junior and Infant School"
 // "Alanbrooke Academy", "Knayton CofE Academy": no primary, infant or junior in the name, so it stays an Academy
 const isAcademy = (name: string) => /\bAcademy\b/i.test(name) && !/\b(Primary|Infants?|Junior)\b/i.test(name);
 const kebab = (s: string) => s.toLowerCase().replace(/[’']/g, '').replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -108,6 +120,7 @@ export function yearLine(y: YearRec) {
     if (y.g === 'out') return `In ${y.y}, everyone in the catchment got a place, and so did children from outside it who lived within ${d}.`;
     if (y.g === 'in') return `In ${y.y}, only children in the catchment got a place, and the last one went to a child ${d} away.`;
     if (y.g === 'sib' || y.g === 'staff') return `In ${y.y}, everyone in the catchment got a place, plus ${WHO_ELSE[y.g]}, but no other children from outside it.`;
+    if (y.g === 'near') return `In ${y.y}, after brothers and sisters, places went to the children who lived nearest: the furthest child offered one lived ${d} away.`;
     return `In ${y.y}, places went by the school’s own rules, and the last one went to a child ${d} away.`;
   }
   if (y.s === 'catchment') {
