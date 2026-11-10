@@ -1,6 +1,6 @@
 // The questions Middlesbrough's and Redcar and Cleveland's area pages share. Neither council publishes its admission
 // zones as map data, so the checker can't say which zone you're in; each council's own wording is in lib/engine.ts.
-import { COUNCILS, mapTipHtml } from './engine';
+import { COUNCILS, mapTipHtml, placesGo } from './engine';
 import { COVERED } from './specs';
 import { url } from './url';
 
@@ -10,7 +10,7 @@ export function teesFaqs(key: 'Middlesbrough' | 'Redcar and Cleveland', town: st
     [`What is my catchment school in ${town}?`,
       `Schools here call it an admission zone. ${c.name} ${c.mapNote}, so the checker can’t tell you which zone you’re in. ${mapTipHtml(c)}. Then put your postcode into the <a href="${url('')}">school checker</a> to see how far every school near you is and how hard each has been to get into.`],
     [`How do school places work in ${town}?`,
-      `Places go by ${c.policy}. Catholic schools usually put baptised Catholic children first. <a href="${url('how-places-work/')}">How school catchment areas work</a> explains the queue.`],
+      `${placesGo(c)}. Catholic schools usually put baptised Catholic children first. <a href="${url('how-places-work/')}">How school catchment areas work</a> explains the queue.`],
     ['How do you know how hard each school is to get into?', figures],
     ['When do I apply for a Reception place for September 2027?',
       `Apply online to <a href="${c.apply}" target="_blank" rel="noopener">${c.name}</a> by Friday 15 January 2027. You can name up to three schools, in the order you want them.`],

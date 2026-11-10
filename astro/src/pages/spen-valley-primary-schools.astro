@@ -1,0 +1,24 @@
+---
+// Area page: Kirklees's spenvalley area (lib/specs.ts AREA_INFO). The questions every Kirklees page shares are in lib/kirklees.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { kBorder, kFaqs, kTail } from '../lib/kirklees';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.spenvalley;
+const schools = loadArea('kirklees.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...kFaqs('the Spen Valley', openLatest(schools).length, schools.length),
+  kBorder('Spen Valley', 'From Drighlington, that’s Leeds City Council, and from Wyke or Low Moor it’s Bradford Council'),
+  ...kTail,
+];
+---
+<AreaPage areaKey="spenvalley"
+  title="Mirfield, Cleckheaton and Heckmondwike primary schools: catchment areas and Ofsted · Yorkshire School Checker"
+  description="Mirfield, Cleckheaton, Heckmondwike, Birstall and Liversedge primary school catchment areas: find your catchment school, which schools are hardest to get into, Ofsted ratings and the 2027 Reception dates."
+  h1="Mirfield, Cleckheaton and Heckmondwike primary schools"
+  lede="Primary school catchment areas for every school in the Spen Valley: Cleckheaton, Heckmondwike, Liversedge, Birstall, Gomersal and Birkenshaw, and Mirfield and Kirkheaton."
+  area="the Spen Valley"
+  schools={schools}
+  groups={[{ label: 'Mirfield, Cleckheaton and Heckmondwike', note: `${schools.length} primary, infant and first schools.`, schools }]}
+  faqs={faqs}
+/>

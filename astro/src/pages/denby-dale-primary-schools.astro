@@ -1,0 +1,26 @@
+---
+// Area page: Kirklees's denbydale area (lib/specs.ts AREA_INFO). The questions every Kirklees page shares are in lib/kirklees.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { kBorder, kFaqs, kTail } from '../lib/kirklees';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.denbydale;
+const schools = loadArea('kirklees.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...kFaqs('Denby Dale', openLatest(schools).length, schools.length),
+  ['Why are the schools here called first schools?',
+    'This part of Kirklees has three tiers. Every school here is a first school, from Reception to Year 5. Children then move to Kirkburton Middle or Scissett Middle School for Years 6 to 8, and Shelley College from Year 9. You apply again for the middle school place while your child is at the first school.'],
+  kBorder('Denby Dale', 'From Penistone, that’s Barnsley Council'),
+  ...kTail,
+];
+---
+<AreaPage areaKey="denbydale"
+  title="Denby Dale, Kirkburton and Skelmanthorpe first schools: catchment areas and Ofsted · Yorkshire School Checker"
+  description="Denby Dale, Kirkburton, Skelmanthorpe, Shepley and Emley first and primary school catchment areas: find your catchment school, which schools are hardest to get into, Ofsted ratings and the 2027 Reception dates."
+  h1="Denby Dale, Kirkburton and Skelmanthorpe first schools"
+  lede="First and primary school catchment areas for every school in the villages south-east of Huddersfield: Kirkburton, Shepley, Denby Dale, Skelmanthorpe, Clayton West, Emley and Scissett."
+  area="Denby Dale"
+  schools={schools}
+  groups={[{ label: 'Denby Dale and Kirkburton', note: `${schools.length} primary, infant and first schools.`, schools }]}
+  faqs={faqs}
+/>

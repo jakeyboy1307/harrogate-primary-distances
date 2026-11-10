@@ -1,0 +1,734 @@
+{
+ "2000": {
+  "checked": "2026-11-10",
+  "tel": "01484 226595"
+ },
+ "2002": {
+  "checked": "2026-11-10",
+  "email": "boothroyd@focus-trust.co.uk",
+  "emailSrc": "https://www.boothroydprimaryacademy.co.uk/",
+  "tel": "01924 562425"
+ },
+ "2004": {
+  "checked": "2026-11-10",
+  "email": "bba-office@berrybrow.co.uk",
+  "emailSrc": "https://berrybrow.co.uk/",
+  "tel": "01484 663965"
+ },
+ "2005": {
+  "checked": "2026-11-10",
+  "email": "office.carlton@kirkleeseducation.uk",
+  "emailSrc": "https://www.carltonji.org.uk",
+  "tel": "01924 325265"
+ },
+ "2006": {
+  "checked": "2026-11-10",
+  "tel": "01484 223969"
+ },
+ "2012": {
+  "checked": "2026-11-10",
+  "tel": "01924 325300"
+ },
+ "2013": {
+  "checked": "2026-11-10",
+  "email": "office@earlsheatoninfants.co.uk",
+  "emailSrc": "https://www.earlsheatoninfants.co.uk",
+  "tel": "01924 460969"
+ },
+ "2014": {
+  "checked": "2026-11-10",
+  "email": "office@shawcrossinfants.co.uk",
+  "emailSrc": "https://www.shawcrossinfants.co.uk/kgfl/primary/shawcrosspri/site/pages/aboutus/contactus",
+  "tel": "01924 325319"
+ },
+ "2016": {
+  "checked": "2026-11-10",
+  "email": "office@windmillcofeprimary.co.uk",
+  "emailSrc": "https://www.windmillcofeprimary.co.uk/",
+  "tel": "01924 470555"
+ },
+ "2017": {
+  "checked": "2026-11-10",
+  "tel": "01924 325308"
+ },
+ "2021": {
+  "checked": "2026-11-10",
+  "email": "office@netherton.tlt.school",
+  "emailSrc": "https://www.nethertonian.co.uk/",
+  "tel": "01484 661832"
+ },
+ "2022": {
+  "checked": "2026-11-10",
+  "email": "millbridge.office@sharemat.co.uk",
+  "emailSrc": "https://www.millbridge.org.uk/",
+  "tel": "01924 668836"
+ },
+ "2023": {
+  "checked": "2026-11-10",
+  "tel": "01924 485982"
+ },
+ "2025": {
+  "checked": "2026-11-10",
+  "email": "office@paddockjinschool.co.uk",
+  "emailSrc": "https://www.paddockjinschool.co.uk/kirklees/primary/paddock",
+  "tel": "01484 515954"
+ },
+ "2026": {
+  "checked": "2026-11-10",
+  "email": "thornhill@focus-trust.co.uk",
+  "emailSrc": "https://www.thornhilljischool.co.uk/",
+  "tel": "01924 453259"
+ },
+ "2028": {
+  "checked": "2026-11-10",
+  "email": "office@springgrovejin.co.uk",
+  "emailSrc": "https://www.springgrovejin.co.uk",
+  "tel": "01484 517998"
+ },
+ "2031": {
+  "checked": "2026-11-10",
+  "email": "office@orchard.spacademies.org",
+  "emailSrc": "https://www.orchardprimaryacademy.org/",
+  "tel": "01924 469578"
+ },
+ "2032": {
+  "checked": "2026-11-10",
+  "email": "office@oakprimary.co.uk",
+  "emailSrc": "https://www.oakprimary.co.uk",
+  "tel": "01484 977211"
+ },
+ "2037": {
+  "checked": "2026-11-10",
+  "tel": "01484 651103"
+ },
+ "2038": {
+  "checked": "2026-11-10",
+  "email": "office@crowlaneschool.co.uk",
+  "emailSrc": "https://www.crowlane.org.uk",
+  "tel": "01484 646422"
+ },
+ "2043": {
+  "checked": "2026-11-10",
+  "email": "office@ashbrowschool.org.uk",
+  "emailSrc": "https://www.ashbrowschool.org.uk/",
+  "tel": "01484 452128"
+ },
+ "2047": {
+  "checked": "2026-11-10",
+  "email": "woodsidegreen.office@sharemat.co.uk",
+  "emailSrc": "https://www.woodsidegreenprimary.org.uk/",
+  "tel": "01484 508170"
+ },
+ "2049": {
+  "checked": "2026-11-10",
+  "email": "office@beaumont.spacademies.org",
+  "emailSrc": "https://www.beaumontprimary.org.uk",
+  "tel": "01484 503111"
+ },
+ "2050": {
+  "checked": "2026-11-10",
+  "email": "office@honleyjin.co.uk",
+  "emailSrc": "https://www.honleyjin.co.uk/home/contact-us",
+  "tel": "01484 508001"
+ },
+ "2051": {
+  "checked": "2026-11-10",
+  "email": "office@healeyschool.co.uk",
+  "emailSrc": "https://www.healeyschool.co.uk/",
+  "tel": "01924 326386"
+ },
+ "2053": {
+  "checked": "2026-11-10",
+  "email": "office@brambles.spacademies.org",
+  "emailSrc": "https://www.bramblesprimaryacademy.org/",
+  "tel": "01484 240338"
+ },
+ "2055": {
+  "checked": "2026-11-10",
+  "email": "office@helmeschool.com",
+  "emailSrc": "https://www.helmeschool.com",
+  "tel": "01484 854524"
+ },
+ "2056": {
+  "checked": "2026-11-10",
+  "email": "admin@fixby.polarismat.org.uk",
+  "emailSrc": "https://www.fixby.polarismat.org.uk",
+  "tel": "01484 226650"
+ },
+ "2058": {
+  "checked": "2026-11-10",
+  "email": "office@newmillschools.org",
+  "emailSrc": "https://www.newmillschools.org.uk/",
+  "tel": "01484 955820"
+ },
+ "2059": {
+  "checked": "2026-11-10",
+  "email": "smit-office@coopacademies.co.uk",
+  "emailSrc": "https://www.smithiesmoor.coopacademies.co.uk/",
+  "tel": "01924 326708"
+ },
+ "2060": {
+  "checked": "2026-11-10",
+  "email": "birstall@focus-trust.co.uk",
+  "emailSrc": "https://www.birstallprimaryacademy.co.uk/",
+  "tel": "01924 471372"
+ },
+ "2062": {
+  "checked": "2026-11-10",
+  "email": "office@fieldlaneschool.co.uk",
+  "emailSrc": "https://www.fieldlaneschool.co.uk/",
+  "tel": "01924 326378"
+ },
+ "2063": {
+  "checked": "2026-11-10",
+  "tel": "01924 326371"
+ },
+ "2065": {
+  "checked": "2026-11-10",
+  "email": "office@mill-lane.org.uk",
+  "emailSrc": "https://www.mill-lane.org.uk",
+  "tel": "01924 477544"
+ },
+ "2066": {
+  "checked": "2026-11-10",
+  "tel": "01924 326728"
+ },
+ "2067": {
+  "checked": "2026-11-10",
+  "email": "office@purlwellschool.co.uk",
+  "emailSrc": "https://www.purlwellschool.co.uk/",
+  "tel": "01924 326734"
+ },
+ "2068": {
+  "checked": "2026-11-10",
+  "tel": "01924 455593"
+ },
+ "2069": {
+  "checked": "2026-11-10",
+  "email": "office.cloughhead@kirkleeseducation.uk",
+  "emailSrc": "https://cloughheadpri-kgfl.secure-dbprimary.com/kgfl/primary/cloughheadpri/site/pages/parents/information/contactus",
+  "tel": "01484 222217"
+ },
+ "2070": {
+  "checked": "2026-11-10",
+  "email": "oba-office@oldbankacademy.co.uk",
+  "emailSrc": "https://oldbankacademy.co.uk/",
+  "tel": "01924 495790"
+ },
+ "2071": {
+  "checked": "2026-11-10",
+  "email": "office@hillviewacademy.co.uk",
+  "emailSrc": "https://hillviewacademy.co.uk/",
+  "tel": "01484 976216"
+ },
+ "2072": {
+  "checked": "2026-11-10",
+  "tel": "01924 326718"
+ },
+ "2073": {
+  "checked": "2026-11-10",
+  "email": "office@marsdeniandnschool.co.uk",
+  "emailSrc": "https://www.marsdeniandnschool.co.uk",
+  "tel": "01484 845124"
+ },
+ "2074": {
+  "checked": "2026-11-10",
+  "email": "office@scapegoathill.co.uk",
+  "emailSrc": "https://scapegoat-hill.kirklees.sch.uk/",
+  "tel": "01484 647008"
+ },
+ "2076": {
+  "checked": "2026-11-10",
+  "email": "office@wellhouse.heightsfed.org",
+  "emailSrc": "https://wellhousepri-kgfl.secure-dbprimary.com/kgfl/primary/wellhousepri",
+  "tel": "01484 645794"
+ },
+ "2077": {
+  "checked": "2026-11-10",
+  "tel": "01484 222588"
+ },
+ "2078": {
+  "checked": "2026-11-10",
+  "email": "birdsedgeoffice@themast.co.uk",
+  "emailSrc": "https://www.birdsedgefirst.org",
+  "tel": "01484 605441"
+ },
+ "2079": {
+  "checked": "2026-11-10",
+  "email": "office@kayesfirst.co.uk",
+  "emailSrc": "https://www.kayesacademy.co.uk/kgfl/primary/kayesprimary",
+  "tel": "01484 222918"
+ },
+ "2080": {
+  "checked": "2026-11-10",
+  "tel": "01924 326361"
+ },
+ "2081": {
+  "checked": "2026-11-10",
+  "email": "office@emleyschool.co.uk",
+  "emailSrc": "https://www.emleyschool.co.uk/kgfl/primary/emleypri",
+  "tel": "01924 326802"
+ },
+ "2082": {
+  "checked": "2026-11-10",
+  "email": "office@skelmanthorpeacademy.org",
+  "emailSrc": "https://www.skelmanthorpeacademy.org",
+  "tel": "01484 863306"
+ },
+ "2085": {
+  "checked": "2026-11-10",
+  "email": "office@holmfirthjinschool.net",
+  "emailSrc": "https://www.holmfirthjinschool.net/",
+  "tel": "01484 687565"
+ },
+ "2086": {
+  "checked": "2026-11-10",
+  "email": "office@hadeedgeschool.co.uk",
+  "emailSrc": "https://www.hadeedgeschool.co.uk/kgfl/primary/hadeedge/site/pages/aboutus/contactus",
+  "tel": "01484 682782"
+ },
+ "2087": {
+  "checked": "2026-11-10",
+  "email": "office@hepworthschool.co.uk",
+  "emailSrc": "https://hepworthschool.co.uk/",
+  "tel": "01484 685450"
+ },
+ "2088": {
+  "checked": "2026-11-10",
+  "email": "office@hinchliffemillschool.org.uk",
+  "emailSrc": "https://www.hinchliffemillschool.org.uk/",
+  "tel": "01484 689692"
+ },
+ "2089": {
+  "checked": "2026-11-10",
+  "email": "office@holmejischool.co.uk",
+  "emailSrc": "https://www.holmejischool.co.uk",
+  "tel": "01484 687362"
+ },
+ "2090": {
+  "checked": "2026-11-10",
+  "email": "office@netherthongprimary.co.uk",
+  "emailSrc": "https://www.netherthongprimary.co.uk/",
+  "tel": "01484 681950"
+ },
+ "2092": {
+  "checked": "2026-11-10",
+  "email": "scholesoffice@themast.co.uk",
+  "emailSrc": "https://www.scholesji.org.uk",
+  "tel": "01484 682190"
+ },
+ "2093": {
+  "checked": "2026-11-10",
+  "email": "info@eastborough.org.uk",
+  "emailSrc": "https://eastborough.org.uk/",
+  "tel": "01924 311361"
+ },
+ "2094": {
+  "checked": "2026-11-10",
+  "email": "shelleyoffice@themast.co.uk",
+  "emailSrc": "https://www.shelleyfirstschool.co.uk",
+  "tel": "01484 604484"
+ },
+ "2095": {
+  "checked": "2026-11-10",
+  "tel": "01484 603230"
+ },
+ "2096": {
+  "checked": "2026-11-10",
+  "email": "grangemooroffice@themast.co.uk",
+  "emailSrc": "https://www.grangemoorps.co.uk",
+  "tel": "01924 840748"
+ },
+ "2097": {
+  "checked": "2026-11-10",
+  "email": "office.hopton@kirkleeseducation.uk",
+  "emailSrc": "https://www.hoptonprimaryschool.co.uk/",
+  "tel": "01924 489736"
+ },
+ "2099": {
+  "checked": "2026-11-10",
+  "email": "office@gomersalprimaryschool.co.uk",
+  "emailSrc": "https://www.gomersalprimaryschool.co.uk",
+  "tel": "01274 879313"
+ },
+ "2100": {
+  "checked": "2026-11-10",
+  "tel": "01274 879700"
+ },
+ "2101": {
+  "checked": "2026-11-10",
+  "email": "heatonavenue.office@sharemat.co.uk",
+  "emailSrc": "https://www.heatonavenue.co.uk/",
+  "tel": "01274 028613"
+ },
+ "2102": {
+  "checked": "2026-11-10",
+  "email": "office@hightown.kirklees.sch.uk",
+  "emailSrc": "https://www.hightown.kirklees.sch.uk",
+  "tel": "01274 865745"
+ },
+ "2103": {
+  "checked": "2026-11-10",
+  "tel": "01274 878136"
+ },
+ "2104": {
+  "checked": "2026-11-10",
+  "tel": "01924 311360"
+ },
+ "2105": {
+  "checked": "2026-11-10",
+  "email": "lucklane.office@sharemat.co.uk",
+  "emailSrc": "https://www.lucklaneprimary.org.uk",
+  "tel": "01484 505229"
+ },
+ "2106": {
+  "checked": "2026-11-10",
+  "tel": "01484 842154"
+ },
+ "2107": {
+  "checked": "2026-11-10",
+  "email": "office@linthwaiteclough.tlt.school",
+  "emailSrc": "https://linthwaiteclough.co.uk/",
+  "tel": "01484 844300"
+ },
+ "2108": {
+  "checked": "2026-11-10",
+  "email": "office@howardpark.co.uk",
+  "emailSrc": "https://howardpark.co.uk/elementor-4920/",
+  "tel": "01274 864972"
+ },
+ "2114": {
+  "checked": "2026-11-10",
+  "email": "office@scholesprimary.co.uk",
+  "emailSrc": "https://scholespri-kgfl.secure-dbprimary.com/kgfl/primary/scholespri",
+  "tel": "01274 679541"
+ },
+ "2120": {
+  "checked": "2026-11-10",
+  "email": "office@rowleylane.co.uk",
+  "emailSrc": "https://www.rowleylane.co.uk",
+  "tel": "01484 222745"
+ },
+ "2122": {
+  "checked": "2026-11-10",
+  "email": "head.lydgateji@kirkleeseducation.uk",
+  "emailSrc": "https://lydgateprimary-kgfl.secure-dbprimary.com/kgfl/primary/lydgateprimary",
+  "tel": "01924 476218"
+ },
+ "2124": {
+  "checked": "2026-11-10",
+  "email": "fieldhead@focus-trust.co.uk",
+  "emailSrc": "https://www.fieldheadprimaryacademy.co.uk/",
+  "tel": "01924 473016"
+ },
+ "2125": {
+  "checked": "2026-11-10",
+  "email": "office@upperthongschool.co.uk",
+  "emailSrc": "https://www.upperthongschool.co.uk/kgfl/primary/upperthongprimary/site/pages/contact",
+  "tel": "01484 683176"
+ },
+ "2126": {
+  "checked": "2026-11-10",
+  "email": "office@melthammoor.org",
+  "emailSrc": "https://www.melthammoor.org",
+  "tel": "01484 859032"
+ },
+ "2130": {
+  "checked": "2026-11-10",
+  "email": "office@kirkheatonprimary.com",
+  "emailSrc": "https://www.kirkheatonprimary.com/",
+  "tel": "01484 548049"
+ },
+ "2134": {
+  "checked": "2026-11-10",
+  "email": "office@highbankschool.co.uk",
+  "emailSrc": "https://www.highbankschool.co.uk",
+  "tel": "01274 875330"
+ },
+ "2135": {
+  "checked": "2026-11-10",
+  "tel": "01924 325720"
+ },
+ "2139": {
+  "checked": "2026-11-10",
+  "email": "office@denbydale.education",
+  "emailSrc": "https://www.denbydale.education",
+  "tel": "01484 866071"
+ },
+ "2144": {
+  "checked": "2026-11-10",
+  "tel": "01924 451631"
+ },
+ "2145": {
+  "checked": "2026-11-10",
+  "tel": "01484 226681"
+ },
+ "2151": {
+  "checked": "2026-11-10",
+  "email": "mra-office@manorroadacademy.co.uk",
+  "emailSrc": "https://manorroadacademy.co.uk/",
+  "tel": "01484 652954"
+ },
+ "2152": {
+  "checked": "2026-11-10",
+  "email": "office@crossleyfields.com",
+  "emailSrc": "https://www.crossleyfields.com",
+  "tel": "01924 499608"
+ },
+ "2153": {
+  "checked": "2026-11-10",
+  "email": "mpps.office@kirkleeseducation.uk",
+  "emailSrc": "https://www.mountpleasantschool.co.uk/contact",
+  "tel": "01484 223198"
+ },
+ "2157": {
+  "checked": "2026-11-10",
+  "email": "office.dalton@kirkleeseducation.uk",
+  "emailSrc": "https://www.daltonschool.co.uk/",
+  "tel": "01484 538729"
+ },
+ "3000": {
+  "checked": "2026-11-10",
+  "email": "office@lowerhousesschool.co.uk",
+  "emailSrc": "https://www.lowerhousesschool.co.uk",
+  "tel": "01484 226672"
+ },
+ "3002": {
+  "checked": "2026-11-10",
+  "email": "info@nlconline.org.uk",
+  "emailSrc": "https://www.nlconline.org.uk/netherhall-st-james-c-of-e-vc-infant-and-nursery-school/",
+  "tel": "01484 226601"
+ },
+ "3003": {
+  "checked": "2026-11-10",
+  "email": "office@stjohnsdewsbury.co.uk",
+  "emailSrc": "https://www.stjohnsdewsbury.co.uk/",
+  "tel": "01924 325323"
+ },
+ "3004": {
+  "checked": "2026-11-10",
+  "email": "web-admin@saviletown.co.uk",
+  "emailSrc": "https://www.saviletown.co.uk/Contact.html",
+  "tel": "01924 469455"
+ },
+ "3008": {
+  "checked": "2026-11-10",
+  "tel": "01924 430548"
+ },
+ "3014": {
+  "checked": "2026-11-10",
+  "tel": "01924 463035"
+ },
+ "3016": {
+  "checked": "2026-11-10",
+  "email": "office@slaithwaitejandi.co.uk",
+  "emailSrc": "https://www.slaithwaitejandi.co.uk",
+  "tel": "01484 506463"
+ },
+ "3021": {
+  "checked": "2026-11-10",
+  "tel": "01484 666601"
+ },
+ "3022": {
+  "checked": "2026-11-10",
+  "email": "office@flocktonschool.co.uk",
+  "emailSrc": "https://www.flocktonschool.co.uk/contact-details/",
+  "tel": "01924 326800"
+ },
+ "3023": {
+  "checked": "2026-11-10",
+  "tel": "01484 506526"
+ },
+ "3026": {
+  "checked": "2026-11-10",
+  "tel": "01484 600384"
+ },
+ "3027": {
+  "checked": "2026-11-10",
+  "email": "office@thurstonlandfirst.co.uk",
+  "emailSrc": "https://www.thurstonlandfirst.org.uk/about-us/contact-us",
+  "tel": "01484 666480"
+ },
+ "3028": {
+  "checked": "2026-11-10",
+  "tel": "01484 850671"
+ },
+ "3032": {
+  "checked": "2026-11-10",
+  "email": "theoffice@eastbierleyprimary.com",
+  "emailSrc": "https://www.eastbierleyprimary.com",
+  "tel": "01274 681235"
+ },
+ "3034": {
+  "checked": "2026-11-10",
+  "email": "office@rjis.org.uk",
+  "emailSrc": "https://www.roberttownschool.co.uk",
+  "tel": "01924 403532"
+ },
+ "3036": {
+  "checked": "2026-11-10",
+  "email": "office@farnleytyasfirst.co.uk",
+  "emailSrc": "https://www.farnleytyasfirst.co.uk/information/contact-us",
+  "tel": "01484 666714"
+ },
+ "3037": {
+  "checked": "2026-11-10",
+  "email": "office@headlandsce.net",
+  "emailSrc": "https://headlandscofeschool.co.uk/",
+  "tel": "01924 767066"
+ },
+ "3041": {
+  "checked": "2026-11-10",
+  "email": "office@crowlees.co.uk",
+  "emailSrc": "https://crowlees.schooljotter3.com/",
+  "tel": "01924 494970"
+ },
+ "3045": {
+  "checked": "2026-11-10",
+  "tel": "01484 431700"
+ },
+ "3046": {
+  "checked": "2026-11-10",
+  "email": "office@battyefordprimary.com",
+  "emailSrc": "https://battyefordprimary.com/kirklees/primary/battyeford/site/pages/aboutus/contactus",
+  "tel": "01924 495518"
+ },
+ "3048": {
+  "checked": "2026-11-10",
+  "email": "office.birkenshawprimary@kirkleeseducation.uk",
+  "emailSrc": "https://www.birkenshawprimary.org.uk/",
+  "tel": "01274 651232"
+ },
+ "3049": {
+  "checked": "2026-11-10",
+  "email": "office@stthomas.org.uk",
+  "emailSrc": "https://www.stthomas.org.uk",
+  "tel": "01484 226557"
+ },
+ "3303": {
+  "checked": "2026-11-10",
+  "email": "office@lindleyinfantschool.org.uk",
+  "emailSrc": "https://lindleyinfantschool.org.uk/kirklees/primary/lindley",
+  "tel": "01484 646888"
+ },
+ "3304": {
+  "checked": "2026-11-10",
+  "email": "office@stmarysbatley.co.uk",
+  "emailSrc": "https://www.stmarysbatley.co.uk/",
+  "tel": "01924 472273"
+ },
+ "3310": {
+  "checked": "2026-11-10",
+  "email": "office@stjosephsdewsbury.co.uk",
+  "emailSrc": "https://www.stjosephsdewsbury.co.uk/",
+  "tel": "01924 462053"
+ },
+ "3321": {
+  "checked": "2026-11-10",
+  "email": "office@stpetersschoolbirstall.co.uk",
+  "emailSrc": "https://www.stpetersschoolbirstall.co.uk",
+  "tel": "01924 326750"
+ },
+ "3323": {
+  "checked": "2026-11-10",
+  "tel": "01484 644444"
+ },
+ "3324": {
+  "checked": "2026-11-10",
+  "email": "head.linthardron@kirkleeseducation.uk",
+  "emailSrc": "https://www.linthwaite-ardron.org.uk/information/contact-us",
+  "tel": "01484 845544"
+ },
+ "3325": {
+  "checked": "2026-11-10",
+  "email": "office@cumberworthfirstschool.co.uk",
+  "emailSrc": "https://cumberworthfirstschool.co.uk/",
+  "tel": "01484 609818"
+ },
+ "3326": {
+  "checked": "2026-11-10",
+  "tel": "01484 866511"
+ },
+ "3327": {
+  "checked": "2026-11-10",
+  "email": "office@scissettceacademy.org",
+  "emailSrc": "https://www.scissettceacademy.org/",
+  "tel": "01484 861488"
+ },
+ "3328": {
+  "checked": "2026-11-10",
+  "email": "office@saintaidans.org.uk",
+  "emailSrc": "https://www.saintaidans.org.uk/",
+  "tel": "01484 862142"
+ },
+ "3329": {
+  "checked": "2026-11-10",
+  "email": "office@kirkburtonfirst.co.uk",
+  "emailSrc": "https://www.kirkburtonfirst.co.uk",
+  "tel": "01484 609190"
+ },
+ "3332": {
+  "checked": "2026-11-10",
+  "email": "office@gsmcep.co.uk",
+  "emailSrc": "https://www.gomersalstmarys.co.uk/",
+  "tel": "01274 874550"
+ },
+ "3336": {
+  "checked": "2026-11-10",
+  "email": "office@holyspiritprimary.co.uk",
+  "emailSrc": "https://www.holyspiritprimary.co.uk/",
+  "tel": "01924 400820"
+ },
+ "3400": {
+  "checked": "2026-11-10",
+  "email": "office@stjosephscps.co.uk",
+  "emailSrc": "https://www.stjosephscps.co.uk",
+  "tel": "01484 531669"
+ },
+ "3401": {
+  "checked": "2026-11-10",
+  "email": "office@stpatricks.org.uk",
+  "emailSrc": "https://www.stpatricks.org.uk/",
+  "tel": "01484 300800"
+ },
+ "3402": {
+  "checked": "2026-11-10",
+  "email": "office@ourladyoflourdesschool.org.uk",
+  "emailSrc": "https://www.ourladyoflourdesschool.org.uk/",
+  "tel": "01484 310700"
+ },
+ "3405": {
+  "checked": "2026-11-10",
+  "email": "head@stpatricksbirstall.co.uk",
+  "emailSrc": "https://www.stpatricksbirstall.co.uk/",
+  "tel": "01924 423220"
+ },
+ "3408": {
+  "checked": "2026-11-10",
+  "email": "office@stpaulinus.org",
+  "emailSrc": "https://www.stpaulinuscps.org.uk/",
+  "tel": "01924 488282"
+ },
+ "3410": {
+  "checked": "2026-11-10",
+  "email": "office@moorlandsprimary.org.uk",
+  "emailSrc": "https://www.moorlandsprimary.org.uk/page/default.asp?title=Home&pid=1",
+  "tel": "01484 655800"
+ },
+ "3411": {
+  "checked": "2026-11-10",
+  "email": "office@hillside.spacademies.org",
+  "emailSrc": "https://www.hillsideprimaryschool.co.uk/",
+  "tel": "01484 226834"
+ },
+ "3412": {
+  "checked": "2026-11-10",
+  "tel": "01274 876461"
+ },
+ "6012": {
+  "checked": "2026-11-10",
+  "email": "info@batleygrammar.co.uk",
+  "emailSrc": "https://www.batleygrammar.co.uk/",
+  "tel": "01924 474980"
+ }
+}

@@ -5,7 +5,7 @@
 // school's details open.
 import Base from '../../layouts/Base.astro';
 import { url } from '../../lib/url';
-import { mon, noDist, whoGotIn, NUM, mapTipHtml } from '../../lib/engine';
+import { mon, noDist, whoGotIn, NUM, mapTipHtml, placesGo } from '../../lib/engine';
 import { miles, nearby, published, schoolPages, summary, yearLine, type SchoolPage } from '../../lib/schoolpages';
 
 export function getStaticPaths() {
@@ -134,10 +134,10 @@ const schema = [
         {hasCatchment
           ? <p>{p.name} has a catchment area, set by {council.name}. {s.own
               ? `As ${article} ${typeText}, it sets its own admissions rules, so check its policy for any faith, feeder or other priorities.`
-              : `Places go ${council.policy}.`}</p>
+              : `${placesGo(council)}.`}</p>
           : unchecked
-          ? <p>{p.name} has a catchment area{council.noCatch ? ' of its own' : `, set by ${council.name}`}. {s.own ? `As ${article} ${typeText}, it sets its own admissions rules, so check its policy for the order places go in.` : `Places go ${council.policy}.`} The council {council.mapNote}, so the checker can’t tell you whether you’re in it.</p>
-          : <p>{p.name} doesn’t have a catchment area. {s.own ? 'Places are given by the school’s own admissions rules, so check its policy for any faith, feeder or other priorities.' : council.noCatch ? `Places go to ${council.policy}.` : `Places are given by ${council.name}’s rules.`}</p>}
+          ? <p>{p.name} has a catchment area{council.noCatch ? ' of its own' : `, set by ${council.name}`}. {s.own ? `As ${article} ${typeText}, it sets its own admissions rules, so check its policy for the order places go in.` : `${placesGo(council)}.`} The council {council.mapNote}, so the checker can’t tell you whether you’re in it.</p>
+          : <p>{p.name} doesn’t have a catchment area. {s.own ? 'Places are given by the school’s own admissions rules, so check its policy for any faith, feeder or other priorities.' : council.noCatch ? `${placesGo(council)}.` : `Places are given by ${council.name}’s rules.`}</p>}
         {years.slice(0, 2).map((y) => <p>{yearLine(y)}</p>)}
         {dists.length > 1 && sm.furthest !== sm.closest && <p>Over the years published, the last place has gone between {miles(sm.closest!.m)} and {miles(sm.furthest!.m)} from the school.</p>}
         {hasCatchment

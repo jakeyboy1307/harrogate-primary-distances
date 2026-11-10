@@ -71,6 +71,13 @@ export const COUNCILS: Record<string, Council> = {
     mapTip: 'Ask the school, or see {map:Calderdale Council’s admissions rules}',
     noCatch: 'Calderdale’s primary schools don’t have catchment areas. After children in care and brothers and sisters, places go to the children who live nearest',
   },
+  Kirklees: {
+    name: 'Kirklees Council',
+    catchMap: 'https://mapping.kirklees.gov.uk/connect/analyst/mobile/#/main?mapcfg=Priority%20Admission%20Areas%20(Public)',
+    apply: 'https://www.kirklees.gov.uk/beta/admissions/apply-primary-school-place.aspx',
+    policy: 'children in care, then children in the catchment with a brother or sister at the school, then the rest of the catchment, then brothers and sisters from outside it, then distance in a straight line',
+    prefs: 3,
+  },
   York: {
     name: 'City of York Council',
     catchMap: 'https://www.york.gov.uk/schools/PrimaryMap',
@@ -79,6 +86,8 @@ export const COUNCILS: Record<string, Council> = {
     prefs: 5,
   },
 };
+// "Places go …" with a council's policy: "catchment first, …", "to children in care, …", "by each academy's own rules"
+export const placesGo = (c: Council) => `Places go ${/^children\b/.test(c.policy) ? 'to ' : /^each\b/.test(c.policy) ? 'by ' : ''}${c.policy}`;
 // A council's tip on finding your catchment, with its link filled in (councils without map data)
 export const mapTipHtml = (c: Council) => (c.mapTip ?? 'Find your address on {map:the council’s catchment map}')
   .replace(/\{map:([^}]*)\}/, (_, t) => `<a href="${c.catchMap}" target="_blank" rel="noopener">${t}</a>`);

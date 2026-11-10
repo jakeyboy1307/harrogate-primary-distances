@@ -10,7 +10,7 @@ import { AREA_INFO, areaOf, type Area } from './specs';
 // rules; after building, `npm run lock-slugs` adds them here (scripts/lock-slugs.mjs).
 import LOCKED from './slugs.json';
 
-export type Kind = 'primary school' | 'infant school' | 'junior school' | 'junior and infant school';
+export type Kind = 'primary school' | 'infant school' | 'junior school' | 'junior and infant school' | 'first school';
 
 // Words parents leave out when they search: the faith, the legal status and the type of school
 const DROP: RegExp[] = [
@@ -26,6 +26,7 @@ const DROP: RegExp[] = [
   /\bVoluntary (Controlled|Aided)\b/gi, /\bControlled\b/gi, /\bCommunity\b/gi, /\bCounty\b/gi, /\band Nursery\b/gi,
   /\bVoluntary\s+(?=Academy\b)/gi,                           // "St Vincent's Voluntary Catholic Academy" (Catholic is gone by now)
   /\bJunior and Infants? School\b/gi,                         // "Colden Junior and Infant School" (after SPELL below)
+  /\bFirst School\b/gi,                                       // "Shepley First School", Reception to Year 5 (Kirklees)
   /\b(Primary|Infant|Infants|Junior) (Foundation )?(School|Academy)\b/gi, /\bSchool\b/gi, /\bAcademy\b/gi,
   /\s+Primary\s*$/i,                                         // "Westfield Primary Community School"
 ];
@@ -34,7 +35,9 @@ const DROP: RegExp[] = [
 // Rishworth", "St Michael and All Angels CofE Primary & Pre School"). No school published before them had these forms
 const SPELL: [RegExp, string][] = [
   [/\bJ,?\s*I,?\s*(&|and)\s*N\b/g, 'Junior and Infant'], [/\bJ\s*(&|and)\s*I\b/g, 'Junior and Infant'],
-  [/\bJunior,?\s+(?=Infant\b)/g, 'Junior and '], [/\bJunior and Infants? (&|and) Nursery\b/gi, 'Junior and Infant'], [/\s*(&|and)\s+Pre[- ]School\b/gi, ''], [/\bSchool In ([A-Z]\w+)$/, 'School, $1'],
+  [/\bJunior,?\s+(?=Infant\b)/g, 'Junior and '], [/\bJunior\s*&\s*(?=Infant\b)/g, 'Junior and '], [/\s+and Early Years\b/g, ''],
+  [/\bJunior and Infants? (&|and) Nursery\b/gi, 'Junior and Infant'], [/\bPrimary and Foundation Stage School\b/, 'Primary School'],
+  [/\bFirst (&|and) Nursery School\b/, 'First School'], [/\s*(&|and)\s+Pre[- ]School\b/gi, ''], [/\bSchool In ([A-Z]\w+)$/, 'School, $1'],
 ];
 const spell = (name: string) => SPELL.reduce((n, [r, w]) => n.replace(r, w), name);
 // names so common that the town has to go with them
@@ -42,7 +45,8 @@ const GENERIC = /^(St|Saint|All Saints|Holy|Our Lady|Christ|Sacred|Riverside)\b/
 
 export const kindOf = (name: string): Kind => {
   const n = spell(name);
-  return /\bJunior and Infants?\b/i.test(n) ? 'junior and infant school' : /\bInfants?\b/i.test(n) ? 'infant school' : /\bJunior\b/i.test(n) ? 'junior school' : 'primary school';
+  return /\bFirst School\b/i.test(n) ? 'first school' : /\bJunior and Infants?\b/i.test(n) ? 'junior and infant school'
+    : /\bInfants?\b/i.test(n) ? 'infant school' : /\bJunior\b/i.test(n) ? 'junior school' : 'primary school';
 };
 export function shortOf(name: string) {
   let s = spell(name);
@@ -73,7 +77,8 @@ export function schoolPages(): SchoolPage[] {
   const shorts = all.map((s) => `${shortOf(s.name)}|${kindOf(s.name)}`);
   const pages = all.map((s, i) => {
     const kind = kindOf(s.name);
-    const label = isAcademy(s.name) ? 'Academy' : title(kind);
+    // "Batley Grammar School" takes Reception too: a grammar school keeps its own name
+    const label = isAcademy(s.name) ? 'Academy' : /\bGrammar School\b/.test(s.name) ? 'School' : title(kind);
     // "Trinity Academy Richmond": the word Academy sits inside the name, so it stays there, in the short name too
     const [before, after = ''] = s.name.replace(/,.*$/, '').split(/\bAcademy\b/);
     const inside = label === 'Academy' && !!shortOf(after);

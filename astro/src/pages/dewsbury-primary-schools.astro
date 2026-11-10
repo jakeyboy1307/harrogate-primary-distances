@@ -1,0 +1,26 @@
+---
+// Area page: Kirklees's dewsbury area (lib/specs.ts AREA_INFO). The questions every Kirklees page shares are in lib/kirklees.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { kBorder, kFaqs, kTail } from '../lib/kirklees';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.dewsbury;
+const schools = loadArea('kirklees.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...kFaqs('Dewsbury', openLatest(schools).length, schools.length),
+  ['How do the infant and junior schools work in Dewsbury and Batley?',
+    'Several schools here are infant schools, taking children from Reception to Year 2: Shaw Cross, Pentland, Savile Town CE, Thornhill Lees CE, Manorfield, Earlsheaton and Purlwell. Children then move to a junior school (such as Bywell CE, Headfield CE, Ravensthorpe CE, Staincliffe CE or Hyrstmount Junior) for Year 3, and you apply again for that place while your child is in Year 2. The checker covers the Reception place at the infant school.'],
+  kBorder('Dewsbury', 'From Ossett or Horbury, that’s Wakefield Council'),
+  ...kTail,
+];
+---
+<AreaPage areaKey="dewsbury"
+  title="Dewsbury and Batley primary school catchment areas, map and Ofsted · Yorkshire School Checker"
+  description="Dewsbury and Batley primary school catchment areas (priority admission areas): find your catchment school, which schools are hardest to get into, Ofsted ratings and the 2027 Reception dates."
+  h1="Dewsbury and Batley primary schools and catchment areas"
+  lede="Primary school catchment areas for every school in Dewsbury and Batley, from Ravensthorpe, Savile Town and Thornhill to Birstall's edge, Soothill, Hanging Heaton and Flockton."
+  area="Dewsbury"
+  schools={schools}
+  groups={[{ label: 'Dewsbury and Batley', note: `${schools.length} primary, infant and first schools.`, schools }]}
+  faqs={faqs}
+/>

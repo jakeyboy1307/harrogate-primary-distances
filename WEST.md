@@ -118,7 +118,7 @@ alternative to reading them from the map (decision 2).
 
 ## Progress
 
-- **Calderdale (W1), 10 November:** built on the `calderdale` branch, not yet live.
+- **Calderdale (W1), 10 November:** live.
   - 80 schools (the DfE's 81 less Tuel Lane Infant, which has since closed), on two pages: `/halifax-primary-schools/` and `/calder-valley-primary-schools/`.
   - Every year, 2023 to 2026, from the council's open data, matched to the register by name (with the town where two schools share one, and Whitehill's old name before 2026). A school with no distance, or "All on time prefs met", took everyone.
   - A distance becomes the new "near" record: "Brothers and sisters, then children within X". The council's figure is the furthest child offered a place, which could be a brother or sister, and the area pages say so. Church schools with faith rules read "by the school's own rules"; Bolton Brow, the one academy with a catchment of its own, is marked "not checked".
@@ -126,6 +126,15 @@ alternative to reading them from the map (decision 2).
   - Register names in shorthand ("J, I & N", "Junior, Infant and Nursery", "& Pre School", "In Rishworth") are spelled out before the page names are made, and "Junior and Infant School" is its own kind of school. No school published before had these forms; every earlier title is unchanged.
   - The home page title now says Yorkshire, and the site's descriptions name the councils covered rather than all 19 areas.
   - 80 phone numbers and 63 emails; St Joseph's, Todmorden's website added, and three emails set by hand (Central Street's site also lists the council's web team).
+
+- **Kirklees (W2), 10 November:** built on the `kirklees` branch, not yet live.
+  - 132 schools on five pages: `/huddersfield-primary-schools/`, `/dewsbury-primary-schools/`, `/spen-valley-primary-schools/`, `/colne-valley-primary-schools/` and `/denby-dale-primary-schools/`.
+  - Who got in, 2023 to 2026, from the council's PDFs, read by word position (`build/kirklees_tables.py`, saved in `build/kirklees/allocations.json`) because blank cells shift the columns. Every community and VC row's places by rule add up to its total. A refused year reads "everyone in the catchment, plus others within X" when out-of-area children got in, "plus brothers and sisters" when only they did, and "only children in the catchment" otherwise; schools with their own rules read "by the school's own rules".
+  - The 114 priority admission areas come from the council's public map, three queries (`build/fetch_kirklees.sh`), and are matched to the school that takes Reception. No two overlap; every school sits inside its own area except Luck Lane, whose area is Leymoor in Golcar, as the council's own map shows. 16 schools (mostly Catholic and church academies) have none, matching the council's list.
+  - Six schools became academies after the DfE’s 2026 figures; they’re linked to their old numbers (Golcar Junior Infant and Nursery is now Manor Road Academy).
+  - Page names: "First School" is its own kind (Reception to Year 5, in the three-tier villages), "Batley Grammar School" keeps its name, and more shorthand is spelled out. Every earlier title is unchanged.
+  - "Places go …" now reads "to children in care" or "by each academy's own rules" where the council's rules start that way; Middlesbrough's and Hull's pages had "Places go children in care" and "Places go each academy's".
+  - Websites fixed for six schools (four moved from kgfl.dbprimary.com; Whitechapel's shows only an error page, so it has none). 132 phone numbers and 102 emails; seven left out (a trust inbox shared by five Enhance schools, a named member of staff, a SENCo).
 
 ## Decisions (10 November 2026)
 

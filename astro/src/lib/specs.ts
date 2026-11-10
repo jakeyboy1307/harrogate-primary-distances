@@ -3,7 +3,8 @@
 
 export type Area = 'harrogate' | 'york' | 'craven' | 'selby' | 'hambleton' | 'richmondshire' | 'ryedale' | 'scarborough'
   | 'bridlington' | 'beverley' | 'goole' | 'cottingham' | 'hulleast' | 'hullnorth' | 'hullwest'
-  | 'middlesbrough' | 'redcar' | 'halifax' | 'caldervalley';
+  | 'middlesbrough' | 'redcar' | 'halifax' | 'caldervalley'
+  | 'huddersfield' | 'dewsbury' | 'spenvalley' | 'colnevalley' | 'denbydale';
 export type Placement = 'uniform' | 'profile' | 'nearby' | 'results' | 'plan' | 'area' | 'pagesponsor';
 
 // Every area the checker covers, in one place: the area pages, the school pages' breadcrumbs, the ad areas, the
@@ -46,6 +47,13 @@ export const AREA_INFO: Record<Area, AreaInfo> = {
   // Calderdale, West Yorkshire: its two constituencies. Its primary schools have no catchments
   halifax: { label: 'Halifax and Sowerby Bridge', short: 'Halifax', name: 'Halifax and Sowerby Bridge', page: 'halifax-primary-schools/', council: 'Calderdale', constituencies: ['Halifax'], home: ['E08000033'], example: ['HX1 3ER', 'Halifax'] },
   caldervalley: { label: 'Brighouse, Elland and the Calder Valley', short: 'Calder Valley', name: 'Brighouse, Elland, Hebden Bridge and Todmorden', page: 'calder-valley-primary-schools/', council: 'Calderdale', constituencies: ['Calder Valley'], home: ['E08000033'], example: ['HX7 6DS', 'Hebden Bridge'] },
+  // Kirklees, West Yorkshire: its constituencies (the Kirklees half of Ossett and Denby Dale). Its catchments are
+  // "priority admission areas"
+  huddersfield: { label: 'Huddersfield', short: 'Huddersfield', name: 'Huddersfield', page: 'huddersfield-primary-schools/', council: 'Kirklees', constituencies: ['Huddersfield'], home: ['E08000034'], example: ['HD5 8YE', 'Almondbury'] },
+  dewsbury: { label: 'Dewsbury and Batley', short: 'Dewsbury', name: 'Dewsbury and Batley', page: 'dewsbury-primary-schools/', council: 'Kirklees', constituencies: ['Dewsbury and Batley'], home: ['E08000034'], example: ['WF17 6BS', 'Batley'] },
+  spenvalley: { label: 'Mirfield, Cleckheaton and Heckmondwike', short: 'Spen Valley', name: 'Mirfield, Cleckheaton, Heckmondwike and Birstall', page: 'spen-valley-primary-schools/', council: 'Kirklees', constituencies: ['Spen Valley'], home: ['E08000034'], example: ['WF14 8PR', 'Mirfield'] },
+  colnevalley: { label: 'Holmfirth and the Colne Valley', short: 'Colne Valley', name: 'Holmfirth, Meltham and the Colne Valley', page: 'colne-valley-primary-schools/', council: 'Kirklees', constituencies: ['Colne Valley'], home: ['E08000034'], example: ['HD9 2RG', 'Holmfirth'] },
+  denbydale: { label: 'Denby Dale and Kirkburton', short: 'Denby Dale', name: 'Denby Dale, Kirkburton and Skelmanthorpe', page: 'denby-dale-primary-schools/', council: 'Kirklees', constituencies: ['Ossett and Denby Dale'], home: ['E08000034'], example: ['HD8 8SG', 'Denby Dale'] },
 };
 // The areas' names for the site's wording, so a new area appears everywhere from its line above:
 // PLACES "Harrogate, York, Skipton, Northallerton, Richmond, Malton, Scarborough and Selby"; NY_PLACES the same without York
@@ -65,6 +73,8 @@ export const ER_TERM_DATES = 'https://www.eastriding.gov.uk/learning/schools-col
 export const HULL_TERM_DATES = 'https://www.hull.gov.uk/schools-2/school-holidays-term-dates/2';
 // and Calderdale Council's
 export const CALD_TERM_DATES = 'https://new.calderdale.gov.uk/schools-and-learning/schools/school-term-dates';
+// and Kirklees Council's (its admissions publications, which include the school calendar)
+export const KIRK_TERM_DATES = 'https://www.kirklees.gov.uk/beta/admissions/policies-and-publications.aspx';
 export const AREAS = Object.fromEntries(Object.entries(AREA_INFO).map(([k, a]) => [k, a.label])) as Record<Area, string>;
 export const AREA_SHORT = Object.fromEntries(Object.entries(AREA_INFO).map(([k, a]) => [k, a.short])) as Record<Area, string>;
 // Used by the admin's coverage map: these districts show as fully covered, others with some of our schools as partly
