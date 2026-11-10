@@ -5,7 +5,7 @@
 // school's details open.
 import Base from '../../layouts/Base.astro';
 import { url } from '../../lib/url';
-import { mon, noDist, whoGotIn, NUM } from '../../lib/engine';
+import { mon, noDist, whoGotIn, NUM, mapTipHtml } from '../../lib/engine';
 import { miles, nearby, published, schoolPages, summary, yearLine, type SchoolPage } from '../../lib/schoolpages';
 
 export function getStaticPaths() {
@@ -16,16 +16,18 @@ const s = p.s, sm = summary(p), council = sm.council, latest = sm.latest;
 const site = Astro.site!;
 const pageUrl = new URL(url(`schools/${p.slug}/`), site).href;
 const strip = (h: string) => h.replace(/<[^>]+>/g, '');
-const typeText = s.type.toLowerCase();
+const typeText = s.type;   // already in sentence case: "academy", "C of E voluntary controlled", "Catholic academy"
 // "in Knaresborough", or, when the school is named after its village, "near Otley" from the post town
 const town = s.addr?.split(',').map((x) => x.trim()).filter((x) => x && x !== s.postcode && !x.includes(s.postcode)).pop();
 const placeFull = s.council === 'York' && s.place !== 'York' ? `${s.place}, York` : s.place;   // York schools' places are wards
 // nothing when the name already says where it is ("St Peter's Primary School, Harrogate", "St Mary's Knaresborough")
 const where = p.name.includes(`, ${s.place}`) || (p.withPlace && p.short.includes(s.place)) ? ''
   : !p.short.includes(s.place) ? `in ${placeFull}` : town && town !== s.place ? `near ${town}` : '';
-const article = /^[aeiou]/.test(typeText) ? 'an' : 'a';
+const article = /^[aeiou]/i.test(typeText) ? 'an' : 'a';
+const shortArticle = /^[aeiou]/i.test(p.short) ? 'an' : 'a';   // "an Acklam Whin catchment area map"
 const hasCatchment = !!s.cz?.length;
-const unchecked = !!s.cu;   // a catchment the council publishes only as a picture (Hull)
+const unchecked = !!s.cu;   // a catchment the council doesn't publish as map data (Hull, Middlesbrough, Redcar)
+const mapTip = mapTipHtml(council);   // how to find out instead, with the link
 const years = published(s);
 const dists = s.d.filter((y) => y.s === 'distance' && !noDist(y) && y.m != null);
 const ratio = sm.perPlace ? (sm.perPlace >= 1.05 ? `${sm.perPlace.toFixed(1)} children for every place` : 'fewer children than places') : null;
@@ -50,13 +52,13 @@ const faqs: [string, string][] = [
     hasCatchment
       ? `Put your postcode into the <a href="#check">box at the top of this page</a> and the checker tells you whether you’re in the ${p.short} catchment, and your chances at every school nearby. Near the boundary? Check your exact address on <a href="${council.catchMap}" target="_blank" rel="noopener">${council.name}’s catchment map</a>.`
       : unchecked
-      ? `${p.name} has a catchment area, but ${council.name} publishes its catchments only as a printed map, so the checker can’t tell you whether you’re in it. Find your address on <a href="${council.catchMap}" target="_blank" rel="noopener">the council’s catchment map</a>, then put your postcode into the <a href="#check">box at the top of this page</a> to see how popular each school nearby is.`
+      ? `${p.name} has a catchment area, but ${council.name} ${council.mapNote}, so the checker can’t tell you whether you’re in it. ${mapTip}. Then put your postcode into the <a href="#check">box at the top of this page</a> to see how popular each school nearby is.`
       : `${p.name} doesn’t have a catchment area, so places don’t depend on being inside one. Put your postcode into the <a href="#check">box at the top of this page</a> to see your chances, based on who got a place in past years.`],
-  [`Is there a ${p.short} catchment area map?`,
+  [`Is there ${shortArticle} ${p.short} catchment area map?`,
     hasCatchment
       ? `Yes. ${council.name} publishes a <a href="${council.catchMap}" target="_blank" rel="noopener">school catchment area map</a> that shows the ${p.short} catchment. Search your address on it, or put your postcode into the <a href="#check">school catchment checker</a> above, which uses the same map.`
       : unchecked
-      ? `Yes. ${council.name} publishes a <a href="${council.catchMap}" target="_blank" rel="noopener">primary school catchment map</a> (a PDF) showing the ${p.short} catchment. Find your address on it: the checker can’t read it for you.`
+      ? `${council.name} ${council.mapNote}, so the checker can’t show you the ${p.short} catchment. ${mapTip}.`
       : `No, because ${p.name} doesn’t have a catchment area. Its places go by ${s.own ? 'the school’s own admissions rules' : `${council.name}’s rules`}. To find your catchment school, put your postcode into the <a href="#check">school catchment checker</a> above.`],
   [`How far away can you live and still get into ${p.name}?`, reach],
   [`How many Reception places does ${p.name} have?`,
@@ -132,14 +134,14 @@ const schema = [
               ? `As ${article} ${typeText}, it sets its own admissions rules, so check its policy for any faith, feeder or other priorities.`
               : `Places go ${council.policy}.`}</p>
           : unchecked
-          ? <p>{p.name} has a catchment area, set by {council.name}. {s.own ? `As ${article} ${typeText}, it sets its own admissions rules, so check its policy for the order places go in.` : `Places go ${council.policy}.`} The council publishes its catchments only as a printed map, so the checker can’t tell you whether you’re in it.</p>
+          ? <p>{p.name} has a catchment area, set by {council.name}. {s.own ? `As ${article} ${typeText}, it sets its own admissions rules, so check its policy for the order places go in.` : `Places go ${council.policy}.`} The council {council.mapNote}, so the checker can’t tell you whether you’re in it.</p>
           : <p>{p.name} doesn’t have a catchment area. Places are given {s.own ? 'by the school’s own admissions rules, so check its policy for any faith, feeder or other priorities' : `by ${council.name}’s rules`}.</p>}
         {years.slice(0, 2).map((y) => <p>{yearLine(y)}</p>)}
         {dists.length > 1 && sm.furthest !== sm.closest && <p>Over the years published, the last place has gone between {miles(sm.closest!.m)} and {miles(sm.furthest!.m)} from the school.</p>}
         {hasCatchment
           ? <p><b>Is {p.short} your catchment school?</b> <a href="#check">Put your postcode in</a> and we’ll tell you, along with your chances at every school nearby. Near the boundary? Check your exact address on <a href={council.catchMap} target="_blank" rel="noopener">{council.name}’s school catchment area map</a>.</p>
           : unchecked
-          ? <p><b>Is {p.short} your catchment school?</b> Find your address on <a href={council.catchMap} target="_blank" rel="noopener">{council.name}’s primary school catchment map</a>. Then <a href="#check">put your postcode in</a> to see how popular {p.short} and every school near you are.</p>
+          ? <p><b>Is {p.short} your catchment school?</b> <Fragment set:html={mapTip} />. Then <a href="#check">put your postcode in</a> to see how popular {p.short} and every school near you are.</p>
           : <p><b>What is your catchment school?</b> <a href="#check">Put your postcode in</a> and we’ll tell you, along with your chances at {p.short} and every school nearby.</p>}
         <p>New to catchments? <a href={url('how-places-work/')}>How school catchment areas work</a> explains who gets a place first, and the <a href={url(p.areaPage)}>{p.areaName} primary school catchment areas</a> page covers every school nearby.</p>
       </div>
@@ -170,7 +172,7 @@ const schema = [
           ? <p class="intro">{p.name} hasn’t had an Ofsted inspection published yet.</p>
           : <p class="intro">{p.name} is rated <b>{sm.of.head}</b> by Ofsted. {sm.of.sub}.</p>}
         {s.of?.areas?.length ? <ul class="sp-areas">{s.of.areas.map(([k, v]) => <li><span>{k}</span><b>{v}</b></li>)}</ul> : ''}
-        {s.of?.link && <p class="intro"><a href={s.of.link} target="_blank" rel="noopener">Read {p.short}’s Ofsted reports</a></p>}
+        {s.of?.link && <p class="intro"><a href={s.of.link} target="_blank" rel="noopener">Read the {p.short} Ofsted reports</a></p>}
       </div>
     </div>
   </section>
@@ -179,7 +181,7 @@ const schema = [
     <div class="sp-two">
       <div>
         <h2>Applying to {p.short} for September 2027</h2>
-        <p class="intro">You apply to the council where you live, not to the school. Apply online to <a href={council.apply} target="_blank" rel="noopener">{council.name}</a> by <b>Friday 15 January 2027</b>, naming up to five schools in the order you want them. Offers go out on <b>Friday 16 April 2027</b>.</p>
+        <p class="intro">You apply to the council where you live, not to the school. Apply online to <a href={council.apply} target="_blank" rel="noopener">{council.name}</a> by <b>Friday 15 January 2027</b>, naming up to {NUM[council.prefs]} schools in the order you want them. Offers go out on <b>Friday 16 April 2027</b>.</p>
         <p class="intro">Every school on your list is looked at equally, and you’re offered the highest one that has room, so put {p.short} where it truly ranks for you. <a href={url('how-places-work/')}>How places work</a> explains it step by step.</p>
       </div>
       <div>

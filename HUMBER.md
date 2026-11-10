@@ -147,12 +147,18 @@ To Hull City Council (LSadmissions@hullcc.gov.uk):
   - The family's list now follows their council: three schools in the East Riding, five elsewhere. A longer list moves its extra schools to the backups.
   - 30 random postcodes match the council's catchment layer. Five websites fixed (Kirk Ella's old domain is now a gambling site), five emails left out.
 
-- **Hull (H2), 10 November:** built on the `hull` branch, not yet live.
+- **Hull (H2), 10 November:** live.
   - 70 schools (every school in the DfE's Reception figures; St Andrew's became an academy in August 2026, so its figures are under its old number), on three area pages by constituency: `/east-hull-primary-schools/`, `/north-hull-primary-schools/`, `/west-hull-primary-schools/`.
   - Every year, 2023 to 2026, is a DfE first-choices record. The council's guide adds each school's places a year and how 2026's places went (catchment, brothers and sisters, distance, other), read by `build/hull_guide.py` into `build/hull/allocations.json` and shown as a note. The guide's own counts run a little higher than the DfE's (they seem to include late and out-of-area applications), so the DfE's are used for every year.
   - The 56 schools whose places went partly by catchment are marked `cu`: they have a catchment, but Hull publishes it only as a scanned map, so the checker says "Not checked" and points to the map. A Hull postcode no longer says it's outside our areas.
   - A school where a first choice or two missed out in a single older year, with everyone getting in since, reads as open, with that year explained; Oversubscribed is kept for a miss in the latest year or more than one year.
   - Websites fixed for seven schools (Alderman Cogan's old domain is now a gambling site); five schools on a shared website template show Bricknell's email, so they're left without one.
+
+- **Middlesbrough and Redcar and Cleveland, 10 November:** built on the `teesside` branch, not yet live. They aren't in the Humber, but they finish ceremonial North Yorkshire (Stockton-on-Tees, the rest of Teesside, is left for later).
+  - Middlesbrough: 41 schools, one page, `/middlesbrough-primary-schools/`. The council's admission statistics give, for each school and year from 2023 to 2026, whether anyone was refused, the rule the last place went by and that child's straight-line distance, so the checker shows how far places went, as in North Yorkshire. Every home is in two admission zones (one church, one not), published only as a PDF map, so zones aren't checked (`cu`) and the page links to the map.
+  - Redcar and Cleveland: 44 schools, one page, `/redcar-primary-schools/` ("Redcar, Guisborough and Saltburn"). The council publishes no figures and no zone maps, and most schools are academies, so every year is a DfE first-choices record, as in Hull, and the page tells families to ask the school which zone they're in.
+  - Both councils take three choices. School pages now say "up to three" or "up to five" by council (they said five everywhere, wrongly for East Riding and Hull too), and their type now keeps its capitals ("a C of E academy", "a Catholic academy").
+  - Websites fixed for two Middlesbrough and five Redcar schools; seven emails that reach a trust or one member of staff rather than the school are left out.
 
 ## Decisions (9 November 2026)
 

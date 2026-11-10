@@ -1,0 +1,21 @@
+---
+// Area page: Redcar and Cleveland, one council in ceremonial North Yorkshire (lib/specs.ts AREA_INFO). The council
+// publishes no figures on who got in and no maps of its admission zones, so the page uses the DfE's figures.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { teesFaqs } from '../lib/teesside';
+const schools = loadArea('redcar.json');
+const DFE = 'https://explore-education-statistics.service.gov.uk/find-statistics/primary-and-secondary-school-applications-and-offers';
+const faqs = teesFaqs('Redcar and Cleveland', 'Redcar', openLatest(schools).length, schools.length,
+  `Redcar and Cleveland Council doesn’t publish who got the last place. The Department for Education publishes, for every school, <a href="${DFE}" target="_blank" rel="noopener">how many families put it first and how many of them got a place</a>, and the checker shows that for every year.`);
+---
+<AreaPage areaKey="redcar"
+  title="Redcar, Guisborough and Saltburn primary schools, admissions and Ofsted · Yorkshire School Checker"
+  description="Redcar, Guisborough, Saltburn and East Cleveland primary schools: how popular each one is, Ofsted ratings and the 2027 Reception dates."
+  h1="Redcar, Guisborough and Saltburn primary schools"
+  lede="Every primary school in Redcar and Cleveland: Redcar, Marske, Saltburn, Guisborough, Eston, Normanby, Ormesby and the East Cleveland villages from Skelton to Loftus."
+  area="Redcar and Cleveland"
+  schools={schools}
+  groups={[{ label: 'Redcar and Cleveland', note: `${schools.length} primary schools. The council doesn’t publish maps of its admission zones, so the checker shows how popular each school is rather than whether you’re in its zone.`, schools }]}
+  faqs={faqs}
+/>

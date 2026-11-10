@@ -96,7 +96,7 @@ import { PLACES } from '../lib/specs';
   // ---------- list ----------
   initPanel({ order: () => getList().map((d) => byUrn.get(d)!.id), byId: (id) => schools[id], mode, home: () => saved?.place.ll ?? null });
   const plOpts = { el: $<HTMLOListElement>('#slots'), backups: $<HTMLOListElement>('#backups'), byUrn: (d: number) => byUrn.get(d), mode, onOpen: (s: School) => openPanel(s.id),
-    emptyText: getList().length ? 'Add another from “Also near you”, or leave it blank. Four is fine.' : 'Your list is empty. Add schools from Find schools or from the list here.', big: true };
+    emptyText: getList().length ? 'Add another from “Also near you”, or leave it blank. You don’t have to use every choice.' : 'Your list is empty. Add schools from Find schools or from the list here.', big: true };
   initPList(plOpts);
 
   function render() {

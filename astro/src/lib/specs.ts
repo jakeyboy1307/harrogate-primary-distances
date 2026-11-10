@@ -2,7 +2,8 @@
 // (worker/admin.js, which enforces it) and the ad specs page, so they can't disagree.
 
 export type Area = 'harrogate' | 'york' | 'craven' | 'selby' | 'hambleton' | 'richmondshire' | 'ryedale' | 'scarborough'
-  | 'bridlington' | 'beverley' | 'goole' | 'cottingham' | 'hulleast' | 'hullnorth' | 'hullwest';
+  | 'bridlington' | 'beverley' | 'goole' | 'cottingham' | 'hulleast' | 'hullnorth' | 'hullwest'
+  | 'middlesbrough' | 'redcar';
 export type Placement = 'uniform' | 'profile' | 'nearby' | 'results' | 'plan' | 'area' | 'pagesponsor';
 
 // Every area the checker covers, in one place: the area pages, the school pages' breadcrumbs, the ad areas, the
@@ -39,6 +40,9 @@ export const AREA_INFO: Record<Area, AreaInfo> = {
   hulleast: { label: 'East Hull', short: 'East Hull', name: 'East Hull', page: 'east-hull-primary-schools/', council: 'Kingston upon Hull, City of', constituencies: ['Kingston upon Hull East'], home: ['E06000010'], example: ['HU8 9JH', 'East Hull'] },
   hullnorth: { label: 'North Hull', short: 'North Hull', name: 'North Hull', page: 'north-hull-primary-schools/', council: 'Kingston upon Hull, City of', constituencies: ['Kingston upon Hull North and C'], home: ['E06000010'], example: ['HU5 4ET', 'North Hull'] },
   hullwest: { label: 'West Hull', short: 'West Hull', name: 'West Hull', page: 'west-hull-primary-schools/', council: 'Kingston upon Hull, City of', constituencies: ['Kingston upon Hull West and Ha'], home: ['E06000010'], example: ['HU3 2RA', 'West Hull'] },
+  // Teesside, in ceremonial North Yorkshire: one page per council. Neither publishes its admission zones as map data
+  middlesbrough: { label: 'Middlesbrough', short: 'Middlesbrough', name: 'Middlesbrough', page: 'middlesbrough-primary-schools/', council: 'Middlesbrough', home: ['E06000002'], example: ['TS5 6EA', 'Middlesbrough'] },
+  redcar: { label: 'Redcar, Guisborough and Saltburn', short: 'Redcar', name: 'Redcar, Guisborough and Saltburn', page: 'redcar-primary-schools/', council: 'Redcar and Cleveland', home: ['E06000003'], example: ['TS10 1NL', 'Redcar'] },
 };
 // The areas' names for the site's wording, so a new area appears everywhere from its line above:
 // PLACES "Harrogate, York, Skipton, Northallerton, Richmond, Malton, Scarborough and Selby"; NY_PLACES the same without York
@@ -47,7 +51,7 @@ export const PLACES = listOf(Object.values(AREA_INFO).map((a) => a.short));
 export const NY_PLACES = listOf(Object.values(AREA_INFO).filter((a) => a.council === 'North Yorkshire').map((a) => a.short));
 
 // The councils covered, as parents call them, for wording like "The checker covers North Yorkshire and York schools"
-const COUNCIL_SHORT: Record<string, string> = { 'East Riding of Yorkshire': 'East Riding', 'Kingston upon Hull, City of': 'Hull' };
+const COUNCIL_SHORT: Record<string, string> = { 'East Riding of Yorkshire': 'East Riding', 'Kingston upon Hull, City of': 'Hull', 'Redcar and Cleveland': 'Redcar' };
 export const COVERED = listOf([...new Set(Object.values(AREA_INFO).map((a) => COUNCIL_SHORT[a.council] ?? a.council))]);
 
 // North Yorkshire Council's term and holiday dates, for the area pages' term dates question

@@ -110,3 +110,30 @@ def firsts_year(y, rec, places=None):
     if places:
         r['p'] = places
     return r
+
+
+# ---------- the national register of schools (Get Information About Schools: fetch_eastriding.sh's gias.csv) ----------
+GIAS_TYPES = {'Community school': 'Community School', 'Voluntary controlled school': 'Voluntary Controlled',
+              'Voluntary aided school': 'Voluntary Aided', 'Foundation school': 'Foundation', 'Academy converter': 'Academy',
+              'Academy sponsor led': 'Academy', 'Free schools': 'Free School'}
+
+
+def register_schools(path, la, urns):
+    """A council's open primary schools in the register that are among `urns` (those with a Reception intake in the
+    DfE's figures): number, name, type, faith, location (latitude and longitude), postcode, address and website."""
+    from pyproj import Transformer
+    to_ll = Transformer.from_crs(27700, 4326, always_xy=True)
+    out = []
+    for r in csv.DictReader(open(path, encoding='cp1252')):
+        if r['LA (code)'] != la or not r['EstablishmentStatus (name)'].startswith('Open') or r['URN'] not in urns:
+            continue
+        if r['PhaseOfEducation (name)'] not in ('Primary', 'All-through'):
+            continue
+        lng, lat = to_ll.transform(float(r['Easting']), float(r['Northing']))
+        web = r['SchoolWebsite'].strip()
+        out.append({'urn': r['URN'], 'code': int(r['EstablishmentNumber']), 'name': r['EstablishmentName'],
+                    'kind': GIAS_TYPES[r['TypeOfEstablishment (name)']], 'faith': r['ReligiousCharacter (name)'],
+                    'll': [round(lat, 6), round(lng, 6)], 'postcode': r['Postcode'], 'locality': r['Locality'], 'town': r['Town'],
+                    'addr': ', '.join(x for x in (r['Street'], r['Locality'], r['Town'], r['Postcode']) if x),
+                    'web': (web if web.startswith('http') else 'https://' + web) if web else None})
+    return out

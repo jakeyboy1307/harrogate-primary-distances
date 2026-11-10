@@ -20,6 +20,8 @@ const areas = [
   { id: 'york', name: 'York', data: read('../../build/york.json'), contacts: readIf('../../build/york-contacts.json') },
   { id: 'east-riding', name: 'East Riding of Yorkshire', data: read('../../build/east-riding.json'), contacts: readIf('../../build/east-riding-contacts.json') },
   { id: 'hull', name: 'Kingston upon Hull, City of', data: read('../../build/hull.json'), contacts: readIf('../../build/hull-contacts.json') },
+  { id: 'middlesbrough', name: 'Middlesbrough', data: read('../../build/middlesbrough.json'), contacts: readIf('../../build/middlesbrough-contacts.json') },
+  { id: 'redcar', name: 'Redcar and Cleveland', data: read('../../build/redcar.json'), contacts: readIf('../../build/redcar-contacts.json') },
 ];
 
 const out = resolve(here, '../public/data');

@@ -1,0 +1,20 @@
+---
+// Area page: Middlesbrough, one council in ceremonial North Yorkshire (lib/specs.ts AREA_INFO). The council publishes
+// who got the last place each year and how far away they lived, but its admission zones only as a PDF map.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { teesFaqs } from '../lib/teesside';
+const schools = loadArea('middlesbrough.json');
+const faqs = teesFaqs('Middlesbrough', 'Middlesbrough', openLatest(schools).length, schools.length,
+  'Middlesbrough Council publishes, for every school and year, whether anyone was refused, the rule the last place went by, and how far from the school that child lived. The checker compares that distance with yours.');
+---
+<AreaPage areaKey="middlesbrough"
+  title="Middlesbrough primary school catchment areas, admissions and Ofsted · Yorkshire School Checker"
+  description="Middlesbrough primary schools: how far places went each year, which schools are hardest to get into, Ofsted ratings and the 2027 Reception dates, from Linthorpe and Acklam to Marton, Nunthorpe and Coulby Newham."
+  h1="Middlesbrough primary schools and admission zones"
+  lede="Every primary school in Middlesbrough, from the town centre, Linthorpe and Acklam to Marton, Nunthorpe, Hemlington and Coulby Newham."
+  area="Middlesbrough"
+  schools={schools}
+  groups={[{ label: 'Middlesbrough', note: `${schools.length} primary schools. Middlesbrough publishes its admission zones only as a PDF map, so the checker shows how far places went rather than whether you’re in a zone.`, schools }]}
+  faqs={faqs}
+/>

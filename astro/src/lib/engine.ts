@@ -7,9 +7,14 @@ export const MAX_SHORT = 5;         // the most choices any council's form takes
 export const NUM = ['none', 'one', 'two', 'three', 'four', 'five'];
 export const ROUTER = 'https://routing.openstreetmap.de/routed-foot/table/v1/foot/';
 // Each council's own catchment map and Reception application page, by the district postcodes.io gives a postcode
-// prefs: schools the form takes. mapData false: the council publishes its catchments only as a picture (Hull), so the
-// checker can't tell anyone which catchment they're in
-export interface Council { name: string; catchMap: string; apply: string; policy: string; prefs: number; mapData?: false }
+// prefs: schools the form takes. mapData false: the council doesn't publish its catchments as map data (Hull,
+// Middlesbrough, Redcar and Cleveland), so the checker can't tell anyone which catchment they're in. mapNote says what
+// it does publish ("publishes its catchments only as a printed map"), mapTip how to find out instead, with {map} for
+// the link to catchMap
+export interface Council {
+  name: string; catchMap: string; apply: string; policy: string; prefs: number;
+  mapData?: false; mapNote?: string; mapTip?: string;
+}
 export const COUNCILS: Record<string, Council> = {
   'North Yorkshire': {
     name: 'North Yorkshire Council',
@@ -32,6 +37,28 @@ export const COUNCILS: Record<string, Council> = {
     policy: 'each academy’s own rules, most often catchment first, then brothers and sisters, then the shortest walk',
     prefs: 3,
     mapData: false,
+    mapNote: 'publishes its catchments only as a printed map',
+    mapTip: 'Find your address on {map:the council’s catchment map}',
+  },
+  Middlesbrough: {
+    name: 'Middlesbrough Council',
+    catchMap: 'https://www.middlesbrough.gov.uk/schools-and-education/school-admissions/school-admission-zones/',
+    apply: 'https://www.middlesbrough.gov.uk/schools-and-education/school-admissions/',
+    policy: 'children in care, then the admission zone, then brothers and sisters, then distance in a straight line',
+    prefs: 3,
+    mapData: false,
+    mapNote: 'publishes its admission zones only as a PDF map',
+    mapTip: 'Find your address on {map:the council’s admission zones map}. Every home is in two zones, one for a church school and one not',
+  },
+  'Redcar and Cleveland': {
+    name: 'Redcar and Cleveland Council',
+    catchMap: 'https://www.redcar-cleveland.gov.uk/schools-and-education/school-admissions/starting-primary-education',
+    apply: 'https://www.redcar-cleveland.gov.uk/schools-and-education/school-admissions/apply-for-school-places-online',
+    policy: 'each academy’s own rules, most often the admission zone first, then brothers and sisters, then distance in a straight line',
+    prefs: 3,
+    mapData: false,
+    mapNote: 'doesn’t publish maps of its admission zones',
+    mapTip: 'Ask the school which zone you’re in, or see {map:the council’s guide to starting primary school}',
   },
   York: {
     name: 'City of York Council',
@@ -41,6 +68,9 @@ export const COUNCILS: Record<string, Council> = {
     prefs: 5,
   },
 };
+// A council's tip on finding your catchment, with its link filled in (councils without map data)
+export const mapTipHtml = (c: Council) => (c.mapTip ?? 'Find your address on {map:the council’s catchment map}')
+  .replace(/\{map:([^}]*)\}/, (_, t) => `<a href="${c.catchMap}" target="_blank" rel="noopener">${t}</a>`);
 export const council = (district?: string | null) => COUNCILS[district ?? ''] ?? COUNCILS['North Yorkshire'];
 
 export type LatLng = [number, number];

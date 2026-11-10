@@ -182,7 +182,7 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
 </style>
 
 <script>
-  import { addWalking, esc, lookupPostcode, loadCatchments, loadData, ORDER, plural, prepareSearch, scoreAll, type Area, type Mode, type Place, type School, type V, council, NUM } from '../lib/engine';
+  import { addWalking, esc, lookupPostcode, loadCatchments, loadData, ORDER, plural, prepareSearch, scoreAll, type Area, type Mode, type Place, type School, type V, council, NUM, mapTipHtml } from '../lib/engine';
   import { addedText, addLabel, addSchool, backupOf, getList, getSearch, onListChange, ordinal, rankOf, setSearch, listMax } from '../lib/store';
   import { $, $$, chip, distTxt, ICON, toast, vOf } from '../lib/ui';
   import { initPanel, openPanel, refreshPanel } from '../lib/panel';
@@ -233,7 +233,7 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
   });
   const plOpts = {
     el: $<HTMLOListElement>('#slots'), backups: $<HTMLOListElement>('#backups'), byUrn: (d: number) => byUrn.get(d), mode,
-    onOpen: (s: School) => openPanel(s.id), emptyText: 'Add a school from the list, or leave it. Four is fine.',
+    onOpen: (s: School) => openPanel(s.id), emptyText: 'Add a school from the list, or leave it. You don’t have to use every choice.',
   };
   initPList(plOpts);
   // ads arrive separately; draw them in once they do (the results work without them)
@@ -262,7 +262,7 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
     // the council the postcode is in (or, for "your location", the nearest school's council), for its catchment map
     const cn = council(p.district ?? [...near].sort((a, b) => a.straight! - b.straight!)[0]?.council);
     $('#catchline').innerHTML = cn.mapData === false && !mine.length
-      ? `${esc(cn.name)} publishes its catchments only as a printed map, so we can’t tell you which one you’re in. <a href="${cn.catchMap}" target="_blank" rel="noopener">Check your address on its map</a>.`
+      ? `${esc(cn.name)} ${cn.mapNote}, so we can’t tell you which one you’re in. ${mapTipHtml(cn)}.`
       : (mine.length
         ? `You’re in the catchment for <b>${mine.map((s) => esc(s.name)).join('</b> and <b>')}</b>.`
         : 'You’re not in the catchment of any school this checker covers.')
