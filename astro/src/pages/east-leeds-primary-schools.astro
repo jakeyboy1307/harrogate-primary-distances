@@ -1,0 +1,24 @@
+---
+// Area page: Leeds's eastleeds area (lib/specs.ts AREA_INFO). The questions every Leeds page shares are in lib/leeds.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { ldBorder, ldFaqs, ldTail } from '../lib/leeds';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.eastleeds;
+const schools = loadArea('leeds.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...ldFaqs('East Leeds', openLatest(schools).length, schools.length),
+  ldBorder('east Leeds', 'From Sherburn in Elmet or South Milford, that’s North Yorkshire Council, and from Castleford it’s Wakefield Council'),
+  ...ldTail,
+];
+---
+<AreaPage areaKey="eastleeds"
+  title="East Leeds primary school catchment areas: Garforth, Cross Gates, Kippax · Yorkshire School Checker"
+  description="East Leeds primary school catchment areas, from Harehills and Seacroft to Cross Gates, Garforth, Kippax and Methley: find your catchment school, how far places went and Ofsted ratings."
+  h1="East Leeds, Garforth and Kippax primary schools"
+  lede="Primary school catchment areas for every school in east Leeds: Harehills, Gipton, Seacroft, Cross Gates, Whitkirk, Garforth, Swillington, Kippax, Allerton Bywater and Methley."
+  area="East Leeds"
+  schools={schools}
+  groups={[{ label: 'East Leeds, Garforth and Kippax', note: `${schools.length} Leeds primary schools.`, schools }]}
+  faqs={faqs}
+/>

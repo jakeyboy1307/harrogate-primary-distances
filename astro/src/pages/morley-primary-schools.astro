@@ -1,0 +1,24 @@
+---
+// Area page: Leeds's morley area (lib/specs.ts AREA_INFO). The questions every Leeds page shares are in lib/leeds.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { ldBorder, ldFaqs, ldTail } from '../lib/leeds';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.morley;
+const schools = loadArea('leeds.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...ldFaqs('Morley', openLatest(schools).length, schools.length),
+  ldBorder('Morley', 'From Birstall or Batley, that’s Kirklees Council, and from Tingley’s edge with Wakefield it’s Wakefield Council'),
+  ...ldTail,
+];
+---
+<AreaPage areaKey="morley"
+  title="Morley primary school catchment areas, map and Ofsted · Yorkshire School Checker"
+  description="Morley, Churwell, Gildersome, Drighlington, Farnley and Wortley primary school catchment areas: find your catchment school, how far places went, Ofsted ratings and the 2027 Reception dates."
+  h1="Morley, Farnley and Wortley primary schools"
+  lede="Primary school catchment areas for every school in Morley, Churwell, Tingley, the Ardsleys, Gildersome, Drighlington, Farnley and Wortley."
+  area="Morley"
+  schools={schools}
+  groups={[{ label: 'Morley, Farnley and Wortley', note: `${schools.length} Leeds primary schools.`, schools }]}
+  faqs={faqs}
+/>

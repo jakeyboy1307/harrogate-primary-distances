@@ -1,0 +1,5432 @@
+{
+ "2024": [
+  {
+   "code": 3030,
+   "name": "Aberford Church of England Voluntary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2416,
+   "name": "Adel Primary School",
+   "all": false,
+   "dist": 0.649,
+   "crit": "4",
+   "desc": "In-Catchment"
+  },
+  {
+   "code": 3902,
+   "name": "Adel St John The Baptist Church of England",
+   "all": false,
+   "dist": 1.039,
+   "crit": "6",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2034,
+   "name": "Alder Tree Primary Academy (previously",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3909,
+   "name": "All Saint's Richmond Hill Church of England",
+   "all": false,
+   "dist": 0.398,
+   "crit": "6",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2507,
+   "name": "Allerton Bywater",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3931,
+   "name": "Allerton Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2436,
+   "name": "Alwoodley Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2032,
+   "name": "Armley Park Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2401,
+   "name": "Ashfield Primary School",
+   "all": false,
+   "dist": 0.258,
+   "crit": "4",
+   "desc": "In-Catchment"
+  },
+  {
+   "code": 2512,
+   "name": "Asquith Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2463,
+   "name": "Austhorpe Primary",
+   "all": false,
+   "dist": 0.71,
+   "crit": "6",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2425,
+   "name": "Bankside Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2385,
+   "name": "Bardsey Primary",
+   "all": false,
+   "dist": 3.414,
+   "crit": "4",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3033,
+   "name": "Barwick-in-Elmet Church of England Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2444,
+   "name": "Beechwood Primary",
+   "all": false,
+   "dist": 0.551,
+   "crit": "4",
+   "desc": "In-Catchment"
+  },
+  {
+   "code": 2407,
+   "name": "Beecroft Primary School",
+   "all": false,
+   "dist": 0.295,
+   "crit": "4",
+   "desc": "In-Catchment"
+  },
+  {
+   "code": 3913,
+   "name": "Beeston Hill St Luke's Church of England",
+   "all": false,
+   "dist": 0.525,
+   "crit": "4",
+   "desc": "In the Parish"
+  },
+  {
+   "code": 2470,
+   "name": "Beeston Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2369,
+   "name": "Birchfield Primary School",
+   "all": false,
+   "dist": 0.85,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2025,
+   "name": "Blackgates Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2408,
+   "name": "Blenheim Primary School",
+   "all": false,
+   "dist": 0.526,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2433,
+   "name": "Bracken Edge Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2329,
+   "name": "Bramham Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2406,
+   "name": "Bramhope Primary",
+   "all": false,
+   "dist": 1.814,
+   "crit": "4",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2030,
+   "name": "Bramley Park Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3054,
+   "name": "Bramley St Peter's Church of England",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2398,
+   "name": "Broadgate Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3915,
+   "name": "Brodetsky Primary",
+   "all": false,
+   "dist": 0.982,
+   "crit": "3",
+   "desc": "Jewish faith"
+  },
+  {
+   "code": 2409,
+   "name": "Brudenell Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3052,
+   "name": "Burley St Matthias' Church of England",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3046,
+   "name": "Calverley Church of England Voluntary Aided",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2028,
+   "name": "Calverley Parkside",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2308,
+   "name": "Carlton Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 4041,
+   "name": "Carr Manor Community",
+   "all": false,
+   "dist": 1.114,
+   "crit": "6",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2486,
+   "name": "Castleton Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2427,
+   "name": "Chapel Allerton Primary",
+   "all": false,
+   "dist": 0.676,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2027,
+   "name": "Christ Church Upper Armley Church Of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2020,
+   "name": "Christ The King Catholic Primary School, A Voluntary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2286,
+   "name": "Churwell Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2482,
+   "name": "Clapgate Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2487,
+   "name": "Cobden Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2031,
+   "name": "Cockburn Haigh Road Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3357,
+   "name": "Collingham Lady Elizabeth Hastings' Church of England Aided Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2453,
+   "name": "Colton Primary School",
+   "all": false,
+   "dist": 1.626,
+   "crit": "6",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3903,
+   "name": "Cookridge Holy Trinity Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2418,
+   "name": "Cookridge Primary School",
+   "all": false,
+   "dist": 0.564,
+   "crit": "5",
+   "desc": "In-Catchment"
+  },
+  {
+   "code": 2022,
+   "name": "Co-op Academy Beckfield",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2007,
+   "name": "Co-op Academy Brownhill",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2012,
+   "name": "Co-op Academy Nightingale",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2010,
+   "name": "Co-op Academy Oakwood",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2008,
+   "name": "Co-op Academy Woodlands",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3370,
+   "name": "Corpus Christi Catholic Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2006,
+   "name": "Cottingley Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2458,
+   "name": "Cross Gates Primary School",
+   "all": false,
+   "dist": 0.54,
+   "crit": "4",
+   "desc": "In-Catchment"
+  },
+  {
+   "code": 2347,
+   "name": "Crossley Street Primary School",
+   "all": false,
+   "dist": 0.59,
+   "crit": "4",
+   "desc": "In-Catchment"
+  },
+  {
+   "code": 2400,
+   "name": "Deighton Gates Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 4075,
+   "name": "Dixons Trinity Chapeltown (Primary Campus)",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3921,
+   "name": "Drighlington Primary School",
+   "all": false,
+   "dist": 0.382,
+   "crit": "4",
+   "desc": "In-Catchment"
+  },
+  {
+   "code": 2504,
+   "name": "East Ardsley Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2395,
+   "name": "East Garforth Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2018,
+   "name": "Ebor Gardens Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2024,
+   "name": "Elements Primary School",
+   "all": false,
+   "dist": 1.029,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2505,
+   "name": "Farsley Farfield Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2338,
+   "name": "Farsley Springbank Primary School",
+   "all": false,
+   "dist": 0.426,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2302,
+   "name": "Farsley Westroyd Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2469,
+   "name": "Fieldhead Carr Primary School",
+   "all": false,
+   "dist": 1.55,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2492,
+   "name": "Five Lanes Primary School",
+   "all": false,
+   "dist": 0.907,
+   "crit": "4",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3926,
+   "name": "Fountain Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2336,
+   "name": "Gildersome Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2428,
+   "name": "Gledhow Primary School",
+   "all": false,
+   "dist": 0.598,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2447,
+   "name": "Grange Farm Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3925,
+   "name": "Great Preston CofE Primary School",
+   "all": false,
+   "dist": 0.662,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2396,
+   "name": "Green Lane Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2499,
+   "name": "Greenhill Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2473,
+   "name": "Greenmount Primary School",
+   "all": false,
+   "dist": 0.618,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2303,
+   "name": "Greenside Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2448,
+   "name": "Grimes Dyke Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2270,
+   "name": "Guiseley Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2449,
+   "name": "Harehills Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3037,
+   "name": "Harewood Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3351,
+   "name": "Hawksworth Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2417,
+   "name": "Hawksworth Wood Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2438,
+   "name": "Highfield Primary School",
+   "all": false,
+   "dist": 1.536,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2292,
+   "name": "Hill Top Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2014,
+   "name": "Hillcrest Academy",
+   "all": false,
+   "dist": 1.478,
+   "crit": "4",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3922,
+   "name": "Hollybush Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3372,
+   "name": "Holy Family Catholic Primary School",
+   "all": false,
+   "dist": 0.065,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2017,
+   "name": "Holy Name Catholic Voluntary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3383,
+   "name": "Holy Rosary and St Anne's Catholic Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2013,
+   "name": "Holy Trinity Church of England Academy (Rothwell)",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2283,
+   "name": "Horsforth Featherbank Primary School",
+   "all": false,
+   "dist": 0.442,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2363,
+   "name": "Horsforth Newlaithes Primary School",
+   "all": false,
+   "dist": 0.93,
+   "crit": "4",
+   "desc": "In-Catchment"
+  },
+  {
+   "code": 2450,
+   "name": "Hovingham Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2483,
+   "name": "Hugh Gaitskell Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2474,
+   "name": "Hunslet Carr Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2475,
+   "name": "Hunslet Moor Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3381,
+   "name": "Immaculate Heart Of Mary Catholic Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2476,
+   "name": "Ingram Road Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2420,
+   "name": "Ireland Wood Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2410,
+   "name": "Iveson Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2434,
+   "name": "Kerr Mackie Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2801,
+   "name": "Kippax Ash Tree Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2384,
+   "name": "Kippax Greenfield Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2399,
+   "name": "Kippax North Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3904,
+   "name": "Kirkstall St Stephen's Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2411,
+   "name": "Kirkstall Valley Primary School",
+   "all": false,
+   "dist": 4.57,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 5200,
+   "name": "Lady Elizabeth Hastings CofE Primary School (Ledston)",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3356,
+   "name": "Lady Elizabeth Hastings CofE Primary School (Thorpe Arch)",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2000,
+   "name": "Lane End Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2497,
+   "name": "Lawns Park Primary School",
+   "all": false,
+   "dist": 0.263,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2037,
+   "name": "Little London Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2481,
+   "name": "Low Road Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2496,
+   "name": "Lower Wortley Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2365,
+   "name": "Lowtown Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2437,
+   "name": "Manor Wood Primary School",
+   "all": false,
+   "dist": 0.76,
+   "crit": "4",
+   "desc": "In-Catchment"
+  },
+  {
+   "code": 2464,
+   "name": "Manston Primary School",
+   "all": false,
+   "dist": 0.298,
+   "crit": "5",
+   "desc": ""
+  },
+  {
+   "code": 3910,
+   "name": "Manston St James Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3923,
+   "name": "Meadowfield Primary School",
+   "all": false,
+   "dist": 1.684,
+   "crit": "6",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3907,
+   "name": "Meanwood Church of England Primary School",
+   "all": false,
+   "dist": 2.241,
+   "crit": "10",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2023,
+   "name": "Methley Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2035,
+   "name": "Micklefield Church of England Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2477,
+   "name": "Middleton Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3053,
+   "name": "Middleton St Mary's Church of England VC Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2439,
+   "name": "Moor Allerton Hall Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2440,
+   "name": "Moortown Primary School",
+   "all": false,
+   "dist": 0.264,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2321,
+   "name": "Morley Newlands Academy",
+   "all": false,
+   "dist": 0.808,
+   "crit": "4",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2382,
+   "name": "Morley Victoria Primary School",
+   "all": false,
+   "dist": 1.242,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3927,
+   "name": "New Bewerley Community Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2397,
+   "name": "Ninelands Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2513,
+   "name": "Otley All Saints Church England Primary School",
+   "all": false,
+   "dist": 0.356,
+   "crit": "4",
+   "desc": "In-Catchment"
+  },
+  {
+   "code": 2405,
+   "name": "Otley The Whartons Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2327,
+   "name": "Oulton Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3376,
+   "name": "Our Lady of Good Counsel Catholic Primary School",
+   "all": false,
+   "dist": 0.694,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2488,
+   "name": "Park Spring Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2005,
+   "name": "Park View Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2467,
+   "name": "Parklands Primary School",
+   "all": false,
+   "dist": 0.435,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3051,
+   "name": "Pool-in-Wharfedale Church of England Voluntary Controlled Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2011,
+   "name": "Primley Wood Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2389,
+   "name": "Primrose Lane Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2331,
+   "name": "Pudsey Bolton Royd Primary School",
+   "all": false,
+   "dist": 1.556,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2339,
+   "name": "Pudsey Primrose Hill Primary School",
+   "all": false,
+   "dist": 1.208,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3920,
+   "name": "Pudsey Waterloo Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2413,
+   "name": "Quarry Mount Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2356,
+   "name": "Queensway Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2271,
+   "name": "Rawdon Littlemoor Primary School",
+   "all": false,
+   "dist": 0.899,
+   "crit": "3",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3031,
+   "name": "Rawdon St Peter's Church of England Voluntary Controlled Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2489,
+   "name": "Raynville Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2021,
+   "name": "Richmond Hill Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2309,
+   "name": "Robin Hood Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2415,
+   "name": "Rosebank Primary School",
+   "all": false,
+   "dist": 0.291,
+   "crit": "4",
+   "desc": "In-Catchment"
+  },
+  {
+   "code": 2506,
+   "name": "Rothwell Primary School",
+   "all": false,
+   "dist": 0.802,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3364,
+   "name": "Rothwell St Mary's Catholic Primary School",
+   "all": false,
+   "dist": 1.342,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2342,
+   "name": "Rothwell Victoria Junior School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 4063,
+   "name": "Roundhay School",
+   "all": false,
+   "dist": 0.408,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3329,
+   "name": "Roundhay St John's Church of England Primary School",
+   "all": false,
+   "dist": 0.642,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2002,
+   "name": "Rufford Park Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2016,
+   "name": "Ryecroft Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3377,
+   "name": "Sacred Heart Catholic Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2275,
+   "name": "Scholes (Elmet) Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2452,
+   "name": "Seacroft Grange Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2293,
+   "name": "Seven Hills Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2441,
+   "name": "Shadwell Primary School",
+   "all": false,
+   "dist": 1.245,
+   "crit": "4",
+   "desc": "In-Catchment"
+  },
+  {
+   "code": 2462,
+   "name": "Shakespeare Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2510,
+   "name": "Sharp Lane Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3929,
+   "name": "Shire Oak Church Of England Voluntary Controlled Primary School",
+   "all": false,
+   "dist": 0.874,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2335,
+   "name": "Southroyd Primary and Nursery School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2414,
+   "name": "Spring Bank Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3363,
+   "name": "SS Peter and Paul Catholic Primary School A Voluntary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3367,
+   "name": "St Anthony's Catholic Primary School, Beeston",
+   "all": false,
+   "dist": 0.082,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3368,
+   "name": "St Augustine's Catholic Primary School",
+   "all": false,
+   "dist": 1.327,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3056,
+   "name": "St Bartholomew's CofE Primary School",
+   "all": false,
+   "dist": 0.484,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3365,
+   "name": "St Benedict's Catholic Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3315,
+   "name": "St Chad's Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3358,
+   "name": "St Edward's Catholic Primary School, Boston Spa",
+   "all": false,
+   "dist": 0.598,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3362,
+   "name": "St Francis Catholic Primary School, Morley",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3371,
+   "name": "St Francis of Assisi Catholic Primary School, Beeston",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3374,
+   "name": "St Joseph's Catholic Primary School, Hunslet",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3360,
+   "name": "St Joseph's Catholic Primary School, Otley Voluntary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3361,
+   "name": "St Joseph's Catholic Primary School, Pudsey A Voluntary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3366,
+   "name": "St Joseph's Catholic Primary School, Wetherby",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3038,
+   "name": "St Margaret's Church England Voluntary Controlled Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3359,
+   "name": "St Mary's Catholic Primary School, Horsforth",
+   "all": false,
+   "dist": 0.258,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3047,
+   "name": "St Mary's Church of England Controlled Primary School, Boston Spa",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2033,
+   "name": "St Mary's Church of England Primary Academy, Hunslet",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3908,
+   "name": "St Matthew's Church England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3375,
+   "name": "St Nicholas Catholic Primary School",
+   "all": false,
+   "dist": 0.544,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3350,
+   "name": "St Oswald's CofE Primary School",
+   "all": false,
+   "dist": 0.748,
+   "crit": "4",
+   "desc": "In the Parish"
+  },
+  {
+   "code": 3382,
+   "name": "St Patrick's Catholic Primary School",
+   "all": false,
+   "dist": 0.455,
+   "crit": "7",
+   "desc": "Member of Eastern Christian Church"
+  },
+  {
+   "code": 3378,
+   "name": "St Paul's Catholic Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3911,
+   "name": "St Peter's Church of England Primary School",
+   "all": false,
+   "dist": 0.518,
+   "crit": "3",
+   "desc": "Practicing member of a Christian Church that is member of Churches Together"
+  },
+  {
+   "code": 3379,
+   "name": "St Philip's Catholic Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3385,
+   "name": "St Theresa's Catholic Primary School",
+   "all": false,
+   "dist": 0.45,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3373,
+   "name": "St Urban's Catholic Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2490,
+   "name": "Stanningley Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3917,
+   "name": "Strawberry Fields Primary School",
+   "all": false,
+   "dist": 2.082,
+   "crit": "4",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2491,
+   "name": "Summerfield Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2468,
+   "name": "Swarcliffe Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2328,
+   "name": "Swillington Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2503,
+   "name": "Swinnow Primary School",
+   "all": false,
+   "dist": 0.818,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2432,
+   "name": "Talbot Primary School",
+   "all": false,
+   "dist": 0.544,
+   "crit": "4",
+   "desc": "In-Catchment"
+  },
+  {
+   "code": 4068,
+   "name": "Temple Learning Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2465,
+   "name": "Templenewsam Halton Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3044,
+   "name": "Thorner Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2312,
+   "name": "Thorpe Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2348,
+   "name": "Tranmere Park Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3928,
+   "name": "Valley View Community Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2454,
+   "name": "Victoria Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2421,
+   "name": "Weetwood Primary School",
+   "all": false,
+   "dist": 0.544,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2334,
+   "name": "West End Primary School",
+   "all": false,
+   "dist": 0.373,
+   "crit": "4",
+   "desc": "In-Catchment"
+  },
+  {
+   "code": 2364,
+   "name": "Westbrook Lane Primary School",
+   "all": false,
+   "dist": 0.508,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2297,
+   "name": "Westerton Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2403,
+   "name": "Westgate Primary School",
+   "all": false,
+   "dist": 1.04,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2478,
+   "name": "Westwood Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3045,
+   "name": "Wetherby St James' Church of England Voluntary Controlled Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2493,
+   "name": "Whingate Primary School",
+   "all": false,
+   "dist": 0.903,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3912,
+   "name": "Whinmoor St Paul's Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2456,
+   "name": "White Laith Primary School",
+   "all": false,
+   "dist": 0.389,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2494,
+   "name": "Whitecote Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2466,
+   "name": "Whitkirk Primary School",
+   "all": false,
+   "dist": 0.961,
+   "crit": "6",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2390,
+   "name": "Wigton Moor Primary School",
+   "all": false,
+   "dist": 1.567,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2471,
+   "name": "Windmill Primary School",
+   "all": false,
+   "dist": 0.762,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2314,
+   "name": "Woodlesford Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2457,
+   "name": "Wykebeck Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2358,
+   "name": "Yeadon Westfield Infant School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2324,
+   "name": "Yeadon Westfield Junior School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  }
+ ],
+ "2025": [
+  {
+   "code": 3030,
+   "name": "Aberford Church of England Voluntary Controlled",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2416,
+   "name": "Adel Primary School",
+   "all": false,
+   "dist": 0.764,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3902,
+   "name": "Adel St John The Baptist Church of England Primary",
+   "all": false,
+   "dist": 2.268,
+   "crit": "6",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2034,
+   "name": "Alder Tree Primary Academy (previously Mill Field)",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3909,
+   "name": "All Saint's Richmond Hill Church of England Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2507,
+   "name": "Allerton Bywater Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3931,
+   "name": "Allerton Church of England",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2436,
+   "name": "Alwoodley Primary School",
+   "all": false,
+   "dist": 2.089,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2032,
+   "name": "Armley Park Primary School",
+   "all": false,
+   "dist": 0.85,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2401,
+   "name": "Ashfield Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2512,
+   "name": "Asquith Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2463,
+   "name": "Austhorpe Primary School",
+   "all": false,
+   "dist": 1.547,
+   "crit": "6",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2425,
+   "name": "Bankside Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2385,
+   "name": "Bardsey Primary Academy",
+   "all": false,
+   "dist": 0.515,
+   "crit": "3",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 3033,
+   "name": "Barwick-in-Elmet Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2444,
+   "name": "Beechwood Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2407,
+   "name": "Beecroft Primary School",
+   "all": false,
+   "dist": 0.521,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3913,
+   "name": "Beeston Hill St Luke's Church of England Primary",
+   "all": false,
+   "dist": 0.865,
+   "crit": "7",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2470,
+   "name": "Beeston Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2369,
+   "name": "Birchfield Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2025,
+   "name": "Blackgates Primary",
+   "all": false,
+   "dist": 0.952,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2408,
+   "name": "Blenheim Primary School",
+   "all": false,
+   "dist": 0.579,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2433,
+   "name": "Bracken Edge Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2329,
+   "name": "Bramham Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2406,
+   "name": "Bramhope Primary School",
+   "all": false,
+   "dist": 1.406,
+   "crit": "4",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2030,
+   "name": "Bramley Park Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3054,
+   "name": "Bramley St Peter's Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2398,
+   "name": "Broadgate Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3915,
+   "name": "Brodetsky Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2409,
+   "name": "Brudenell Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3052,
+   "name": "Burley St Matthias' Church of England Voluntary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3046,
+   "name": "Calverley Church of England Voluntary Aided",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2028,
+   "name": "Calverley Parkside Primary",
+   "all": false,
+   "dist": 1.829,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2308,
+   "name": "Carlton Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 4041,
+   "name": "Carr Manor Community",
+   "all": false,
+   "dist": 0.617,
+   "crit": "6",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2486,
+   "name": "Castleton Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2427,
+   "name": "Chapel Allerton Primary School",
+   "all": false,
+   "dist": 1.214,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2027,
+   "name": "Christ Church Upper Armley Church Of England Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2020,
+   "name": "Christ The King Catholic Primary School, A Voluntary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2286,
+   "name": "Churwell Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2482,
+   "name": "Clapgate Primary School",
+   "all": false,
+   "dist": 1.466,
+   "crit": "4",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2487,
+   "name": "Cobden Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2031,
+   "name": "Cockburn Haigh Road",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3357,
+   "name": "Collingham Lady Elizabeth Hastings' Church of",
+   "all": false,
+   "dist": 0.803,
+   "crit": "3",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 2453,
+   "name": "Colton Primary School",
+   "all": false,
+   "dist": 0.546,
+   "crit": "6",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3903,
+   "name": "Cookridge Holy Trinity Church of England Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2418,
+   "name": "Cookridge Primary School",
+   "all": false,
+   "dist": 0.513,
+   "crit": "5",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 2022,
+   "name": "Co-op Academy Beckfield",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2007,
+   "name": "Co-op Academy Brownhill",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2012,
+   "name": "Co-op Academy Nightingale",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2010,
+   "name": "Co-op Academy Oakwood",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2008,
+   "name": "Co-op Academy Woodlands",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3370,
+   "name": "Corpus Christi Catholic",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2006,
+   "name": "Cottingley Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2458,
+   "name": "Cross Gates Primary School",
+   "all": false,
+   "dist": 0.582,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2347,
+   "name": "Crossley Street Primary",
+   "all": false,
+   "dist": 0.555,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2400,
+   "name": "Deighton Gates Primary",
+   "all": false,
+   "dist": 0.522,
+   "crit": "4",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 4075,
+   "name": "Dixons Trinity Chapeltown",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3921,
+   "name": "Drighlington Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2504,
+   "name": "East Ardsley Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2395,
+   "name": "East Garforth Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2018,
+   "name": "Ebor Gardens Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2024,
+   "name": "Elements Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2505,
+   "name": "Farsley Farfield Primary",
+   "all": false,
+   "dist": 1.456,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2338,
+   "name": "Farsley Springbank Primary",
+   "all": false,
+   "dist": 0.471,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2302,
+   "name": "Farsley Westroyd Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2469,
+   "name": "Fieldhead Carr Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2492,
+   "name": "Five Lanes Primary School",
+   "all": false,
+   "dist": 0.323,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3926,
+   "name": "Fountain Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2336,
+   "name": "Gildersome Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2428,
+   "name": "Gledhow Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2447,
+   "name": "Grange Farm Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3925,
+   "name": "Great Preston CofE Primary",
+   "all": false,
+   "dist": 1.323,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2396,
+   "name": "Green Lane Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2499,
+   "name": "Greenhill Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2473,
+   "name": "Greenmount Primary School",
+   "all": false,
+   "dist": 0.676,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2303,
+   "name": "Greenside Primary School",
+   "all": false,
+   "dist": 1.046,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2448,
+   "name": "Grimes Dyke Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2270,
+   "name": "Guiseley Primary School",
+   "all": false,
+   "dist": 1.096,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2449,
+   "name": "Harehills Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3037,
+   "name": "Harewood Church of England Primary School",
+   "all": false,
+   "dist": 3.69,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3351,
+   "name": "Hawksworth Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2417,
+   "name": "Hawksworth Wood Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2438,
+   "name": "Highfield Primary School",
+   "all": false,
+   "dist": 3.241,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2292,
+   "name": "Hill Top Primary Academy",
+   "all": false,
+   "dist": 1.215,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2014,
+   "name": "Hillcrest Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3922,
+   "name": "Hollybush Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3372,
+   "name": "Holy Family Catholic",
+   "all": false,
+   "dist": 0.374,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2017,
+   "name": "Holy Name Catholic",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3383,
+   "name": "Holy Rosary and St Anne's Catholic Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2013,
+   "name": "Holy Trinity Church of England Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2283,
+   "name": "Horsforth Featherbank",
+   "all": false,
+   "dist": 0.233,
+   "crit": "4",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 2363,
+   "name": "Horsforth Newlaithes",
+   "all": false,
+   "dist": 0.533,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2450,
+   "name": "Hovingham Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2483,
+   "name": "Hugh Gaitskell Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2474,
+   "name": "Hunslet Carr Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2475,
+   "name": "Hunslet Moor Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3381,
+   "name": "Immaculate Heart Of Mary Catholic Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2476,
+   "name": "Ingram Road Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2420,
+   "name": "Ireland Wood Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2410,
+   "name": "Iveson Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2434,
+   "name": "Kerr Mackie Primary School",
+   "all": false,
+   "dist": 1.464,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2801,
+   "name": "Kippax Ash Tree Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2384,
+   "name": "Kippax Greenfield Primary",
+   "all": false,
+   "dist": 0.327,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2399,
+   "name": "Kippax North Primary",
+   "all": false,
+   "dist": 0.629,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3904,
+   "name": "Kirkstall St Stephen's Church of England Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2411,
+   "name": "Kirkstall Valley Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 5200,
+   "name": "Lady Elizabeth Hastings CofE Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3356,
+   "name": "Lady Elizabeth Hastings CofE Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2000,
+   "name": "Lane End Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2497,
+   "name": "Lawns Park Primary School",
+   "all": false,
+   "dist": 0.278,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2037,
+   "name": "Little London Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2481,
+   "name": "Low Road Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2496,
+   "name": "Lower Wortley Primary",
+   "all": false,
+   "dist": 0.414,
+   "crit": "4",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 2365,
+   "name": "Lowtown Primary School",
+   "all": false,
+   "dist": 0.913,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2437,
+   "name": "Manor Wood Primary",
+   "all": false,
+   "dist": 0.253,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2464,
+   "name": "Manston Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3910,
+   "name": "Manston St James Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3923,
+   "name": "Meadowfield Primary",
+   "all": false,
+   "dist": 1.062,
+   "crit": "6",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3907,
+   "name": "Meanwood Church of England Primary School",
+   "all": false,
+   "dist": 0.348,
+   "crit": "8",
+   "desc": "Live In Meanwood"
+  },
+  {
+   "code": 2023,
+   "name": "Methley Primary School",
+   "all": false,
+   "dist": 2.096,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2035,
+   "name": "Micklefield Church of England Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2477,
+   "name": "Middleton Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3053,
+   "name": "Middleton St Mary's Church of England VC Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2439,
+   "name": "Moor Allerton Hall Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2440,
+   "name": "Moortown Primary School",
+   "all": false,
+   "dist": 0.473,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2321,
+   "name": "Morley Newlands Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2382,
+   "name": "Morley Victoria Primary",
+   "all": false,
+   "dist": 0.617,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3927,
+   "name": "New Bewerley Community",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2397,
+   "name": "Ninelands Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2513,
+   "name": "Otley Saints Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2405,
+   "name": "Otley The Whartons Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2327,
+   "name": "Oulton Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3376,
+   "name": "Our Lady of Good Counsel Catholic Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2488,
+   "name": "Park Spring Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2005,
+   "name": "Park View Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2467,
+   "name": "Parklands Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3051,
+   "name": "Pool-in-Wharfedale Church of England Voluntary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2011,
+   "name": "Primley Wood Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2389,
+   "name": "Primrose Lane Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2331,
+   "name": "Pudsey Bolton Royd Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2339,
+   "name": "Pudsey Primrose Hill",
+   "all": false,
+   "dist": 0.864,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3920,
+   "name": "Pudsey Waterloo Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2413,
+   "name": "Quarry Mount Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2356,
+   "name": "Queensway Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2271,
+   "name": "Rawdon Littlemoor Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3031,
+   "name": "Rawdon St Peter's Church of England Voluntary Controlled Primary School",
+   "all": false,
+   "dist": 3.515,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2489,
+   "name": "Raynville Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2021,
+   "name": "Richmond Hill Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2309,
+   "name": "Robin Hood Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2415,
+   "name": "Rosebank Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2506,
+   "name": "Rothwell Primary School",
+   "all": false,
+   "dist": 0.752,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3364,
+   "name": "Rothwell St Mary's Catholic",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2342,
+   "name": "Rothwell Victoria Junior",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 4063,
+   "name": "Roundhay School",
+   "all": false,
+   "dist": 0.472,
+   "crit": "4",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 3329,
+   "name": "Roundhay St John's Church of England Primary School",
+   "all": false,
+   "dist": 0.376,
+   "crit": "4",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2002,
+   "name": "Rufford Park Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2016,
+   "name": "Ryecroft Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3377,
+   "name": "Sacred Heart Catholic",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2275,
+   "name": "Scholes (Elmet) Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2452,
+   "name": "Seacroft Grange Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2293,
+   "name": "Seven Hills Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2441,
+   "name": "Shadwell Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2462,
+   "name": "Shakespeare Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2510,
+   "name": "Sharp Lane Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3929,
+   "name": "Shire Oak Church Of England Voluntary",
+   "all": false,
+   "dist": 0.376,
+   "crit": "4",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 2335,
+   "name": "Southroyd Primary and",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2038,
+   "name": "Spring Bank Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3363,
+   "name": "SS Peter and Paul Catholic Primary School - A",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3367,
+   "name": "St Anthony's Catholic Primary School, Beeston",
+   "all": false,
+   "dist": 0.172,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3368,
+   "name": "St Augustine's Catholic",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3056,
+   "name": "St Bartholomew's CofE",
+   "all": false,
+   "dist": 1.678,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3365,
+   "name": "St Benedict's Catholic",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3315,
+   "name": "St Chad's Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3358,
+   "name": "St Edward's Catholic Primary School, Boston Spa",
+   "all": false,
+   "dist": 4.136,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3362,
+   "name": "St Francis Catholic Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3371,
+   "name": "St Francis of Assisi Catholic Primary School, Beeston",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3374,
+   "name": "St Joseph's Catholic Primary School, Hunslet",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3360,
+   "name": "St Joseph's Catholic Primary School, Otley - A Voluntary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3361,
+   "name": "St Joseph's Catholic Primary School, Pudsey - A Voluntary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3366,
+   "name": "St Joseph's Catholic Primary School, Wetherby",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3038,
+   "name": "St Margaret's Church of England Voluntary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3359,
+   "name": "St Mary's Catholic Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3047,
+   "name": "St Mary's Church of England Controlled Primary School,",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2033,
+   "name": "St Mary's Church of England Primary Academy, Hunslet",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3908,
+   "name": "St Matthew's Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3375,
+   "name": "St Nicholas Catholic",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3350,
+   "name": "St Oswald's CofE Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3382,
+   "name": "St Patrick's Catholic",
+   "all": false,
+   "dist": 0.379,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3378,
+   "name": "St Paul's Catholic Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3911,
+   "name": "St Peter's Church of England Primary School",
+   "all": false,
+   "dist": 0.535,
+   "crit": "4",
+   "desc": "World religion -attached to place of worship"
+  },
+  {
+   "code": 3379,
+   "name": "St Philip's Catholic Primary",
+   "all": false,
+   "dist": 0.664,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3385,
+   "name": "St Theresa's Catholic",
+   "all": false,
+   "dist": 0.714,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3373,
+   "name": "St Urban's Catholic Primary",
+   "all": false,
+   "dist": 0.887,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2490,
+   "name": "Stanningley Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3917,
+   "name": "Strawberry Fields Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2491,
+   "name": "Summerfield Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2468,
+   "name": "Swarcliffe Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2328,
+   "name": "Swillington Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2503,
+   "name": "Swinnow Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2432,
+   "name": "Talbot Primary School",
+   "all": false,
+   "dist": 0.389,
+   "crit": "4",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 4068,
+   "name": "Temple Learning Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2465,
+   "name": "Templenewsam Halton",
+   "all": false,
+   "dist": 1.12,
+   "crit": "6",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3044,
+   "name": "Thorner Church of England",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2312,
+   "name": "Thorpe Primary School",
+   "all": false,
+   "dist": 1.217,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2348,
+   "name": "Tranmere Park Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3928,
+   "name": "Valley View Community",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2454,
+   "name": "Victoria Primary Academy",
+   "all": false,
+   "dist": 0.707,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2421,
+   "name": "Weetwood Primary School",
+   "all": false,
+   "dist": 0.308,
+   "crit": "4",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 2334,
+   "name": "West End Primary School",
+   "all": false,
+   "dist": 0.497,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2364,
+   "name": "Westbrook Lane Primary",
+   "all": false,
+   "dist": 0.427,
+   "crit": "4",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 2297,
+   "name": "Westerton Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2403,
+   "name": "Westgate Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2478,
+   "name": "Westwood Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3045,
+   "name": "Wetherby St James' Church of England Voluntary Controlled Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2493,
+   "name": "Whingate Primary School",
+   "all": false,
+   "dist": 1.242,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3912,
+   "name": "Whinmoor St Paul's Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2456,
+   "name": "White Laith Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2494,
+   "name": "Whitecote Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2466,
+   "name": "Whitkirk Primary School",
+   "all": false,
+   "dist": 1.367,
+   "crit": "6",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2390,
+   "name": "Wigton Moor Primary",
+   "all": false,
+   "dist": 1.412,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2471,
+   "name": "Windmill Primary School",
+   "all": false,
+   "dist": 0.694,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2314,
+   "name": "Woodlesford Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2457,
+   "name": "Wykebeck Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2358,
+   "name": "Yeadon Westfield Infant",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2324,
+   "name": "Yeadon Westfield Junior School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  }
+ ],
+ "2026": [
+  {
+   "code": 3030,
+   "name": "Aberford Church of England Voluntary Controlled Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2416,
+   "name": "Adel Primary School",
+   "all": false,
+   "dist": 0.692,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3902,
+   "name": "Adel St John The Baptist Church of England Primary",
+   "all": false,
+   "dist": 0.87,
+   "crit": "5a",
+   "desc": "Heart of Christian Church that is member of Churches Together"
+  },
+  {
+   "code": 2034,
+   "name": "Alder Tree Primary Academy (previously Mill",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3909,
+   "name": "All Saint's Richmond Hill Church of England Primary",
+   "all": false,
+   "dist": 0.314,
+   "crit": "6",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2507,
+   "name": "Allerton Bywater Primary",
+   "all": false,
+   "dist": 1.359,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3931,
+   "name": "Allerton Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2436,
+   "name": "Alwoodley Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2032,
+   "name": "Armley Park Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2401,
+   "name": "Ashfield Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2512,
+   "name": "Asquith Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2463,
+   "name": "Austhorpe Primary School",
+   "all": false,
+   "dist": 0.793,
+   "crit": "6",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2425,
+   "name": "Bankside Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2385,
+   "name": "Bardsey Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3033,
+   "name": "Barwick-in-Elmet Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2444,
+   "name": "Beechwood Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2407,
+   "name": "Beecroft Primary School",
+   "all": false,
+   "dist": 0.435,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3913,
+   "name": "Beeston Hill St Luke's Church of England Primary",
+   "all": false,
+   "dist": 3.806,
+   "crit": "5",
+   "desc": "Worships at Church affiliated to Churches Together"
+  },
+  {
+   "code": 2470,
+   "name": "Beeston Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2369,
+   "name": "Birchfield Primary School",
+   "all": false,
+   "dist": 0.573,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2025,
+   "name": "Blackgates Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2408,
+   "name": "Blenheim Primary School",
+   "all": false,
+   "dist": 1.182,
+   "crit": "4",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2433,
+   "name": "Bracken Edge Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2329,
+   "name": "Bramham Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2406,
+   "name": "Bramhope Primary School",
+   "all": false,
+   "dist": 2.68,
+   "crit": "4",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2030,
+   "name": "Bramley Park Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3054,
+   "name": "Bramley St Peter's Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2398,
+   "name": "Broadgate Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3915,
+   "name": "Brodetsky Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2409,
+   "name": "Brudenell Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3052,
+   "name": "Burley St Matthias' Church of England Voluntary Controlled Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3046,
+   "name": "Calverley Church of England Voluntary Aided",
+   "all": false,
+   "dist": 1.02,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2028,
+   "name": "Calverley Parkside Primary",
+   "all": false,
+   "dist": 1.195,
+   "crit": "4",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2308,
+   "name": "Carlton Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 4041,
+   "name": "Carr Manor Community",
+   "all": false,
+   "dist": 0.655,
+   "crit": "5",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 2486,
+   "name": "Castleton Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2427,
+   "name": "Chapel Allerton Primary",
+   "all": false,
+   "dist": 1.926,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2027,
+   "name": "Christ Church Upper Armley Church Of England",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2020,
+   "name": "Christ The King Catholic Primary School, A",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2286,
+   "name": "Churwell Primary School",
+   "all": false,
+   "dist": 0.996,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2482,
+   "name": "Clapgate Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2487,
+   "name": "Cobden Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2031,
+   "name": "Cockburn Haigh Road Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2039,
+   "name": "Cockbun Ingram Road Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3357,
+   "name": "Collingham Lady Elizabeth Hastings' Church of England Primary School",
+   "all": false,
+   "dist": 0.397,
+   "crit": "3",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 2453,
+   "name": "Colton Primary School",
+   "all": false,
+   "dist": 0.481,
+   "crit": "6",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3903,
+   "name": "Cookridge Holy Trinity Church of England Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2418,
+   "name": "Cookridge Primary School",
+   "all": false,
+   "dist": 0.577,
+   "crit": "5",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 2022,
+   "name": "Co-op Academy Beckfield",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2007,
+   "name": "Co-op Academy Brownhill",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2012,
+   "name": "Co-op Academy Nightingale",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2010,
+   "name": "Co-op Academy Oakwood",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2008,
+   "name": "Co-op Academy Woodlands",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3370,
+   "name": "Corpus Christi Catholic Primary School",
+   "all": false,
+   "dist": 1.204,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2006,
+   "name": "Cottingley Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2458,
+   "name": "Cross Gates Primary",
+   "all": false,
+   "dist": 0.649,
+   "crit": "4",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 2347,
+   "name": "Crossley Street Primary",
+   "all": false,
+   "dist": 0.55,
+   "crit": "4",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2400,
+   "name": "Deighton Gates Primary",
+   "all": false,
+   "dist": 0.338,
+   "crit": "4",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 4075,
+   "name": "Dixons Trinity Chapeltown (Primary Campus)",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3921,
+   "name": "Drighlington Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2504,
+   "name": "East Ardsley Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2395,
+   "name": "East Garforth Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2018,
+   "name": "Ebor Gardens Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2024,
+   "name": "Elements Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2505,
+   "name": "Farsley Farfield Primary",
+   "all": false,
+   "dist": 2.1,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2338,
+   "name": "Farsley Springbank Primary",
+   "all": false,
+   "dist": 0.441,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2302,
+   "name": "Farsley Westroyd Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2469,
+   "name": "Fieldhead Carr Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2492,
+   "name": "Five Lanes Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3926,
+   "name": "Fountain Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2336,
+   "name": "Gildersome Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2428,
+   "name": "Gledhow Primary School",
+   "all": false,
+   "dist": 0.607,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2447,
+   "name": "Grange Farm Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3925,
+   "name": "Great Preston CofE Primary School",
+   "all": false,
+   "dist": 0.41,
+   "crit": "4",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 2396,
+   "name": "Green Lane Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2499,
+   "name": "Greenhill Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2473,
+   "name": "Greenmount Primary",
+   "all": false,
+   "dist": 0.324,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2303,
+   "name": "Greenside Primary School",
+   "all": false,
+   "dist": 0.693,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2448,
+   "name": "Grimes Dyke Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2270,
+   "name": "Guiseley Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2449,
+   "name": "Harehills Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3037,
+   "name": "Harewood Church of England Primary School",
+   "all": false,
+   "dist": 6.07,
+   "crit": "3",
+   "desc": "Sibling"
+  },
+  {
+   "code": 3351,
+   "name": "Hawksworth Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2417,
+   "name": "Hawksworth Wood Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2438,
+   "name": "Highfield Primary School",
+   "all": false,
+   "dist": 0.551,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2292,
+   "name": "Hill Top Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2014,
+   "name": "Hillcrest Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3922,
+   "name": "Hollybush Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3372,
+   "name": "Holy Family Catholic Primary School",
+   "all": false,
+   "dist": 0.434,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2017,
+   "name": "Holy Name Catholic Voluntary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3383,
+   "name": "Holy Rosary and St Anne's Catholic Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2013,
+   "name": "Holy Trinity Church of England Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2283,
+   "name": "Horsforth Featherbank Primary School",
+   "all": false,
+   "dist": 1.033,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2363,
+   "name": "Horsforth Newlaithes Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2450,
+   "name": "Hovingham Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2483,
+   "name": "Hugh Gaitskell Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2474,
+   "name": "Hunslet Carr Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2475,
+   "name": "Hunslet Moor Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3381,
+   "name": "Immaculate Heart Of Mary Catholic Primary School",
+   "all": false,
+   "dist": 1.402,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2420,
+   "name": "Ireland Wood Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2410,
+   "name": "Iveson Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2434,
+   "name": "Kerr Mackie Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2801,
+   "name": "Kippax Ash Tree Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2384,
+   "name": "Kippax Greenfield Primary",
+   "all": false,
+   "dist": 0.429,
+   "crit": "6",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2399,
+   "name": "Kippax North Primary",
+   "all": false,
+   "dist": 1.181,
+   "crit": "6",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3904,
+   "name": "Kirkstall St Stephen's Church of England Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2411,
+   "name": "Kirkstall Valley Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 5200,
+   "name": "Lady Elizabeth Hastings CofE Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3356,
+   "name": "Lady Elizabeth Hastings CofE Primary School",
+   "all": false,
+   "dist": 4.001,
+   "crit": "6",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2000,
+   "name": "Lane End Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2497,
+   "name": "Lawns Park Primary School",
+   "all": false,
+   "dist": 0.373,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2037,
+   "name": "Little London Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2481,
+   "name": "Low Road Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2496,
+   "name": "Lower Wortley Primary",
+   "all": false,
+   "dist": 0.293,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2365,
+   "name": "Lowtown Primary School",
+   "all": false,
+   "dist": 1.242,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2437,
+   "name": "Manor Wood Primary",
+   "all": false,
+   "dist": 0.534,
+   "crit": "3",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 2464,
+   "name": "Manston Primary School",
+   "all": false,
+   "dist": 7.301,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3910,
+   "name": "Manston St James Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3923,
+   "name": "Meadowfield Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3907,
+   "name": "Meanwood Church of England Primary School",
+   "all": false,
+   "dist": 0.508,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2023,
+   "name": "Methley Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2035,
+   "name": "Micklefield Church of England Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2477,
+   "name": "Middleton Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3053,
+   "name": "Middleton St Mary's Church of England VC Primary",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2439,
+   "name": "Moor Allerton Hall Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2440,
+   "name": "Moortown Primary School",
+   "all": false,
+   "dist": 0.451,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2321,
+   "name": "Morley Newlands Academy",
+   "all": false,
+   "dist": 1.463,
+   "crit": "4",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2382,
+   "name": "Morley Victoria Primary",
+   "all": false,
+   "dist": 0.853,
+   "crit": "4",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3927,
+   "name": "New Bewerley Community Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2397,
+   "name": "Ninelands Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2513,
+   "name": "Otley All Saints Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2405,
+   "name": "Otley The Whartons Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2327,
+   "name": "Oulton Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3376,
+   "name": "Our Lady of Good Counsel Catholic Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2488,
+   "name": "Park Spring Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2005,
+   "name": "Park View Primary",
+   "all": false,
+   "dist": 0.296,
+   "crit": "4",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 2467,
+   "name": "Parklands Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3051,
+   "name": "Pool-in-Wharfedale Church of England Voluntary Controlled Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2011,
+   "name": "Primley Wood Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2389,
+   "name": "Primrose Lane Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2331,
+   "name": "Pudsey Bolton Royd Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2339,
+   "name": "Pudsey Primrose Hill Primary School",
+   "all": false,
+   "dist": 1.257,
+   "crit": "4",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3920,
+   "name": "Pudsey Waterloo Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2413,
+   "name": "Quarry Mount Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2356,
+   "name": "Queensway Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2271,
+   "name": "Rawdon Littlemoor Primary School",
+   "all": false,
+   "dist": 2.001,
+   "crit": "4",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3031,
+   "name": "Rawdon St Peter's Church of England Voluntary Controlled Primary School",
+   "all": false,
+   "dist": 1.775,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2489,
+   "name": "Raynville Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2021,
+   "name": "Richmond Hill Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2309,
+   "name": "Robin Hood Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2415,
+   "name": "Rosebank Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2506,
+   "name": "Rothwell Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3364,
+   "name": "Rothwell St Mary's Catholic Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2342,
+   "name": "Rothwell Victoria Junior School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 4063,
+   "name": "Roundhay School",
+   "all": false,
+   "dist": 0.646,
+   "crit": "4",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 3329,
+   "name": "Roundhay St John's Church of England Primary School",
+   "all": false,
+   "dist": 0.713,
+   "crit": "4",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2002,
+   "name": "Rufford Park Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2016,
+   "name": "Ryecroft Academy",
+   "all": false,
+   "dist": 0.858,
+   "crit": "4",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3377,
+   "name": "Sacred Heart Catholic Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2275,
+   "name": "Scholes (Elmet) Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2452,
+   "name": "Seacroft Grange Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2293,
+   "name": "Seven Hills Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2441,
+   "name": "Shadwell Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2462,
+   "name": "Shakespeare Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2510,
+   "name": "Sharp Lane Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3929,
+   "name": "Shire Oak Church Of England Voluntary Controlled Primary School",
+   "all": false,
+   "dist": 0.577,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2335,
+   "name": "Southroyd Primary and Nursery School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2038,
+   "name": "Spring Bank Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3363,
+   "name": "SS Peter and Paul Catholic Primary School - A",
+   "all": false,
+   "dist": 3.452,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3367,
+   "name": "St Anthony's Catholic Primary School, Beeston",
+   "all": false,
+   "dist": 0.094,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3368,
+   "name": "St Augustine's Catholic Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3056,
+   "name": "St Bartholomew's CofE Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3365,
+   "name": "St Benedict's Catholic Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3315,
+   "name": "St Chad's Church of England Primary School",
+   "all": false,
+   "dist": 3.1,
+   "crit": "3",
+   "desc": "Criteria 3.1 = regular worship at named churches. Criteria 4 = Any other children"
+  },
+  {
+   "code": 3358,
+   "name": "St Edward's Catholic Primary School, Boston",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3362,
+   "name": "St Francis Catholic Primary School, Morley",
+   "all": false,
+   "dist": 0.718,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3371,
+   "name": "St Francis of Assisi Catholic Primary School,",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3374,
+   "name": "St Joseph's Catholic Primary School, Hunslet",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3360,
+   "name": "St Joseph's Catholic Primary School, Otley - A Voluntary Academy",
+   "all": false,
+   "dist": 0.703,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3361,
+   "name": "St Joseph's Catholic Primary School, Pudsey - Voluntary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3366,
+   "name": "St Joseph's Catholic Primary School, Wetherby",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3038,
+   "name": "St Margaret's Church of England Voluntary Controlled Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3359,
+   "name": "St Mary's Catholic Primary School, Horsforth",
+   "all": false,
+   "dist": 0.715,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3047,
+   "name": "St Mary's Church of England Controlled Primary School, Boston Spa",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2033,
+   "name": "St Mary's Church of England Primary Academy,",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3908,
+   "name": "St Matthew's Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3375,
+   "name": "St Nicholas Catholic Primary School",
+   "all": false,
+   "dist": 1.445,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3350,
+   "name": "St Oswald's CofE Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3382,
+   "name": "St Patrick's Catholic Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3378,
+   "name": "St Paul's Catholic Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3911,
+   "name": "St Peter's Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3379,
+   "name": "St Philip's Catholic Primary",
+   "all": false,
+   "dist": 0.652,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3385,
+   "name": "St Theresa's Catholic Primary School",
+   "all": false,
+   "dist": 0.508,
+   "crit": "9",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3373,
+   "name": "St Urban's Catholic Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2490,
+   "name": "Stanningley Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3917,
+   "name": "Strawberry Fields Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2491,
+   "name": "Summerfield Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2468,
+   "name": "Swarcliffe Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2328,
+   "name": "Swillington Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2503,
+   "name": "Swinnow Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2432,
+   "name": "Talbot Primary School",
+   "all": false,
+   "dist": 0.569,
+   "crit": "4",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 4068,
+   "name": "Temple Learning Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2465,
+   "name": "Templenewsam Halton Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3044,
+   "name": "Thorner Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2312,
+   "name": "Thorpe Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2348,
+   "name": "Tranmere Park Primary",
+   "all": false,
+   "dist": 2.863,
+   "crit": "4",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3928,
+   "name": "Valley View Community Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2454,
+   "name": "Victoria Primary Academy",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2421,
+   "name": "Weetwood Primary School",
+   "all": false,
+   "dist": 0.268,
+   "crit": "4",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 2334,
+   "name": "West End Primary School",
+   "all": false,
+   "dist": 0.384,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2364,
+   "name": "Westbrook Lane Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2297,
+   "name": "Westerton Primary",
+   "all": false,
+   "dist": 1.113,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2403,
+   "name": "Westgate Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2478,
+   "name": "Westwood Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 3045,
+   "name": "Wetherby St James' Church of England Voluntary Controlled Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2493,
+   "name": "Whingate Primary School",
+   "all": false,
+   "dist": 0.484,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 3912,
+   "name": "Whinmoor St Paul's Church of England Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2456,
+   "name": "White Laith Primary School",
+   "all": false,
+   "dist": 0.249,
+   "crit": "4",
+   "desc": "In defined catchment area"
+  },
+  {
+   "code": 2494,
+   "name": "Whitecote Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2466,
+   "name": "Whitkirk Primary School",
+   "all": false,
+   "dist": 0.838,
+   "crit": "6",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2390,
+   "name": "Wigton Moor Primary",
+   "all": false,
+   "dist": 0.703,
+   "crit": "5",
+   "desc": "Any Other Children"
+  },
+  {
+   "code": 2471,
+   "name": "Windmill Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2314,
+   "name": "Woodlesford Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2457,
+   "name": "Wykebeck Primary School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2358,
+   "name": "Yeadon Westfield Infant School",
+   "all": true,
+   "dist": null,
+   "crit": null,
+   "desc": null
+  },
+  {
+   "code": 2324,
+   "name": "Yeadon Westfield Junior School",
+   "all": false,
+   "dist": 2.277,
+   "crit": "5",
+   "desc": "At Feeder school"
+  }
+ ]
+}

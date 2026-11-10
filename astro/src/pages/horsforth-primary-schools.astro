@@ -1,0 +1,24 @@
+---
+// Area page: Leeds's horsforth area (lib/specs.ts AREA_INFO). The questions every Leeds page shares are in lib/leeds.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { ldBorder, ldFaqs, ldTail } from '../lib/leeds';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.horsforth;
+const schools = loadArea('leeds.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...ldFaqs('Horsforth', openLatest(schools).length, schools.length),
+  ldBorder('Leeds', 'From Menston, Burley-in-Wharfedale or Baildon, that’s Bradford Council'),
+  ...ldTail,
+];
+---
+<AreaPage areaKey="horsforth"
+  title="Horsforth, Otley and Guiseley primary school catchment areas and Ofsted · Yorkshire School Checker"
+  description="Horsforth, Otley, Guiseley, Yeadon, Rawdon and Adel primary school catchment areas: find your catchment school, how far places went, Ofsted ratings and the 2027 Reception dates."
+  h1="Horsforth, Otley, Guiseley and Yeadon primary schools"
+  lede="Primary school catchment areas for every school in north west Leeds: Horsforth, Rawdon, Yeadon, Guiseley, Otley, Pool-in-Wharfedale, Bramhope and Adel."
+  area="Horsforth"
+  schools={schools}
+  groups={[{ label: 'Horsforth, Otley, Guiseley and Yeadon', note: `${schools.length} Leeds primary schools.`, schools }]}
+  faqs={faqs}
+/>

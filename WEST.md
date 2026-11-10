@@ -127,7 +127,7 @@ alternative to reading them from the map (decision 2).
   - The home page title now says Yorkshire, and the site's descriptions name the councils covered rather than all 19 areas.
   - 80 phone numbers and 63 emails; St Joseph's, Todmorden's website added, and three emails set by hand (Central Street's site also lists the council's web team).
 
-- **Kirklees (W2), 10 November:** built on the `kirklees` branch, not yet live.
+- **Kirklees (W2), 10 November:** live.
   - 132 schools on five pages: `/huddersfield-primary-schools/`, `/dewsbury-primary-schools/`, `/spen-valley-primary-schools/`, `/colne-valley-primary-schools/` and `/denby-dale-primary-schools/`.
   - Who got in, 2023 to 2026, from the council's PDFs, read by word position (`build/kirklees_tables.py`, saved in `build/kirklees/allocations.json`) because blank cells shift the columns. Every community and VC row's places by rule add up to its total. A refused year reads "everyone in the catchment, plus others within X" when out-of-area children got in, "plus brothers and sisters" when only they did, and "only children in the catchment" otherwise; schools with their own rules read "by the school's own rules".
   - The 114 priority admission areas come from the council's public map, three queries (`build/fetch_kirklees.sh`), and are matched to the school that takes Reception. No two overlap; every school sits inside its own area except Luck Lane, whose area is Leymoor in Golcar, as the council's own map shows. 16 schools (mostly Catholic and church academies) have none, matching the council's list.
@@ -135,6 +135,17 @@ alternative to reading them from the map (decision 2).
   - Page names: "First School" is its own kind (Reception to Year 5, in the three-tier villages), "Batley Grammar School" keeps its name, and more shorthand is spelled out. Every earlier title is unchanged.
   - "Places go …" now reads "to children in care" or "by each academy's own rules" where the council's rules start that way; Middlesbrough's and Hull's pages had "Places go children in care" and "Places go each academy's".
   - Websites fixed for six schools (four moved from kgfl.dbprimary.com; Whitechapel's shows only an error page, so it has none). 132 phone numbers and 102 emails; seven left out (a trust inbox shared by five Enhance schools, a named member of staff, a SENCo).
+
+- **Leeds (W3), 10 November:** built on the `leeds` branch, not yet live.
+  - 224 schools on eight pages: `/headingley-`, `/east-leeds-`, `/north-east-leeds-`, `/horsforth-`, `/south-leeds-`, `/morley-`, `/pudsey-` and `/wetherby-primary-schools/`. Kippax and Methley's schools (in Selby's constituency) join East Leeds, Rothwell's (Wakefield and Rothwell's) join South Leeds, and one Otley school joins Horsforth.
+  - 2024 to 2026 from the council's cut-off PDFs, read by word position (`build/leeds_tables.py`): every school's furthest distance or "All applicants admitted", the last priority and its description. Rows printed above a page's header and names wrapped above their number are handled; All Saints' Richmond Hill's 2026 "314" is read as 0.314 miles. 2023 has no PDF: Data Mill North's file covers the schools on the council's rules (a school counts as full when it gave every place and has a distance, which matches the PDFs about 96% of the time); other schools' 2023 is the DfE's first choices.
+  - A refused year reads "everyone in the catchment, plus others within X" when the last place was "any other children" at a school with a catchment, "brothers and sisters, then children within X" at one without, "only children in the catchment" when the last went by catchment, and otherwise "by the school's own rules", with the rule named in a note.
+  - Catchments: GDAL wouldn't install (Homebrew was compiling it from source), so `build/leeds_maps.py` reads the council's GeoPDF maps with PyMuPDF instead. Each page's map frame gives its corners, so the "Catchment Area" layer's boundary is placed exactly; all 90 schools sit inside their own catchment. These are the maps for 2026 admissions, the latest published; check for a 2027 set in the spring.
+  - Renumbered schools: Roundhay School and Carr Manor's primary phases (8901 and 8902 in Data Mill North), Cobden (an academy from September 2026) and Cockburn Ingram Road are linked to their old numbers; older academy conversions take their 2023 DfE figures from the closed school with the same number. `successors()` is now in `common.py`.
+  - Places: where the register gives only "Leeds", the school's ward (`build/leeds/wards.json`).
+  - Names that differ only by an apostrophe now count as the same, so both Lady Elizabeth Hastings' schools get their village. Every earlier title is unchanged.
+  - A postcode in a covered council but in no catchment (much of Leeds: only community schools have one) no longer says it's "outside the areas this checker covers".
+  - Websites fixed for eight schools; 223 phone numbers and 168 emails, ten left out (four named staff, a business manager, a bursar, two trust inboxes, another school's and a photographer's).
 
 ## Decisions (10 November 2026)
 

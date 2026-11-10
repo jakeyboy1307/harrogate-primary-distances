@@ -137,3 +137,12 @@ def register_schools(path, la, urns):
                     'addr': ', '.join(x for x in (r['Street'], r['Locality'], r['Town'], r['Postcode']) if x),
                     'web': (web if web.startswith('http') else 'https://' + web) if web else None})
     return out
+
+
+def successors(path, la, taking):
+    """Schools that became academies after the DfE's latest figures: the register has them under a new URN with the same
+    school number as the closed one the figures are under. Returns {new URN: the closed school's register row}."""
+    rows = [r for r in csv.DictReader(open(path, encoding='cp1252')) if r['LA (code)'] == la]
+    closed = {r['EstablishmentNumber']: r for r in rows if r['URN'] in taking and not r['EstablishmentStatus (name)'].startswith('Open')}
+    return {r['URN']: closed[r['EstablishmentNumber']] for r in rows
+            if r['EstablishmentStatus (name)'].startswith('Open') and r['EstablishmentNumber'] in closed and r['URN'] not in taking}

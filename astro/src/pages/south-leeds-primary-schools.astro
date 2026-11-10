@@ -1,0 +1,24 @@
+---
+// Area page: Leeds's southleeds area (lib/specs.ts AREA_INFO). The questions every Leeds page shares are in lib/leeds.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { ldBorder, ldFaqs, ldTail } from '../lib/leeds';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.southleeds;
+const schools = loadArea('leeds.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...ldFaqs('South Leeds', openLatest(schools).length, schools.length),
+  ldBorder('south Leeds', 'From Lofthouse, Outwood or Stanley, that’s Wakefield Council'),
+  ...ldTail,
+];
+---
+<AreaPage areaKey="southleeds"
+  title="South Leeds primary school catchment areas: Beeston, Middleton, Rothwell · Yorkshire School Checker"
+  description="South Leeds primary school catchment areas, from Holbeck, Beeston and Hunslet to Belle Isle, Middleton and Rothwell: find your catchment school, how far places went and Ofsted ratings."
+  h1="South Leeds, Middleton and Rothwell primary schools"
+  lede="Primary school catchment areas for every school in south Leeds: Holbeck, Beeston, Hunslet, Belle Isle, Middleton, Rothwell, Oulton and Woodlesford."
+  area="South Leeds"
+  schools={schools}
+  groups={[{ label: 'South Leeds, Middleton and Rothwell', note: `${schools.length} Leeds primary schools.`, schools }]}
+  faqs={faqs}
+/>

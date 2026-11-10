@@ -1,0 +1,24 @@
+---
+// Area page: Leeds's pudsey area (lib/specs.ts AREA_INFO). The questions every Leeds page shares are in lib/leeds.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { ldBorder, ldFaqs, ldTail } from '../lib/leeds';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.pudsey;
+const schools = loadArea('leeds.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...ldFaqs('Pudsey', openLatest(schools).length, schools.length),
+  ldBorder('Pudsey', 'From Thornbury, Idle or Greengates, that’s Bradford Council'),
+  ...ldTail,
+];
+---
+<AreaPage areaKey="pudsey"
+  title="Pudsey, Farsley and Bramley primary school catchment areas and Ofsted · Yorkshire School Checker"
+  description="Pudsey, Farsley, Calverley, Bramley, Stanningley and Armley primary school catchment areas: find your catchment school, how far places went, Ofsted ratings and the 2027 Reception dates."
+  h1="Pudsey, Bramley and Armley primary schools"
+  lede="Primary school catchment areas for every school in west Leeds: Armley, Bramley, Rodley, Stanningley, Pudsey, Farsley and Calverley."
+  area="Pudsey"
+  schools={schools}
+  groups={[{ label: 'Pudsey, Bramley and Armley', note: `${schools.length} Leeds primary schools.`, schools }]}
+  faqs={faqs}
+/>

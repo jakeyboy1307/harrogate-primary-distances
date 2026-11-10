@@ -4,7 +4,8 @@
 export type Area = 'harrogate' | 'york' | 'craven' | 'selby' | 'hambleton' | 'richmondshire' | 'ryedale' | 'scarborough'
   | 'bridlington' | 'beverley' | 'goole' | 'cottingham' | 'hulleast' | 'hullnorth' | 'hullwest'
   | 'middlesbrough' | 'redcar' | 'halifax' | 'caldervalley'
-  | 'huddersfield' | 'dewsbury' | 'spenvalley' | 'colnevalley' | 'denbydale';
+  | 'huddersfield' | 'dewsbury' | 'spenvalley' | 'colnevalley' | 'denbydale'
+  | 'headingley' | 'eastleeds' | 'neleeds' | 'horsforth' | 'southleeds' | 'morley' | 'pudsey' | 'wetherby';
 export type Placement = 'uniform' | 'profile' | 'nearby' | 'results' | 'plan' | 'area' | 'pagesponsor';
 
 // Every area the checker covers, in one place: the area pages, the school pages' breadcrumbs, the ad areas, the
@@ -54,6 +55,16 @@ export const AREA_INFO: Record<Area, AreaInfo> = {
   spenvalley: { label: 'Mirfield, Cleckheaton and Heckmondwike', short: 'Spen Valley', name: 'Mirfield, Cleckheaton, Heckmondwike and Birstall', page: 'spen-valley-primary-schools/', council: 'Kirklees', constituencies: ['Spen Valley'], home: ['E08000034'], example: ['WF14 8PR', 'Mirfield'] },
   colnevalley: { label: 'Holmfirth and the Colne Valley', short: 'Colne Valley', name: 'Holmfirth, Meltham and the Colne Valley', page: 'colne-valley-primary-schools/', council: 'Kirklees', constituencies: ['Colne Valley'], home: ['E08000034'], example: ['HD9 2RG', 'Holmfirth'] },
   denbydale: { label: 'Denby Dale and Kirkburton', short: 'Denby Dale', name: 'Denby Dale, Kirkburton and Skelmanthorpe', page: 'denby-dale-primary-schools/', council: 'Kirklees', constituencies: ['Ossett and Denby Dale'], home: ['E08000034'], example: ['HD8 8SG', 'Denby Dale'] },
+  // Leeds: its constituencies, with the few schools in constituencies that cross the council border joining the
+  // nearest (Kippax and Methley in Selby's, Rothwell in Wakefield and Rothwell's, one Otley school in Skipton and Ripon's)
+  headingley: { label: 'Headingley, Kirkstall and central Leeds', short: 'Headingley', name: 'Headingley, Kirkstall and central Leeds', page: 'headingley-primary-schools/', council: 'Leeds', constituencies: ['Leeds Central and Headingley'], home: ['E08000035'], example: ['LS6 2DT', 'Headingley'] },
+  eastleeds: { label: 'East Leeds, Garforth and Kippax', short: 'East Leeds', name: 'Cross Gates, Seacroft, Garforth and Kippax', page: 'east-leeds-primary-schools/', council: 'Leeds', constituencies: ['Leeds East', 'Selby'], home: ['E08000035'], example: ['LS15 8HS', 'Cross Gates'] },
+  neleeds: { label: 'Roundhay, Moortown and Alwoodley', short: 'North East Leeds', name: 'Roundhay, Moortown, Alwoodley and Chapel Allerton', page: 'north-east-leeds-primary-schools/', council: 'Leeds', constituencies: ['Leeds North East'], home: ['E08000035'], example: ['LS8 1ND', 'Roundhay'] },
+  horsforth: { label: 'Horsforth, Otley, Guiseley and Yeadon', short: 'Horsforth', name: 'Horsforth, Otley, Guiseley and Yeadon', page: 'horsforth-primary-schools/', council: 'Leeds', constituencies: ['Leeds North West', 'Skipton and Ripon'], home: ['E08000035'], example: ['LS18 4QP', 'Horsforth'] },
+  southleeds: { label: 'South Leeds, Middleton and Rothwell', short: 'South Leeds', name: 'Beeston, Hunslet, Middleton and Rothwell', page: 'south-leeds-primary-schools/', council: 'Leeds', constituencies: ['Leeds South', 'Wakefield and Rothwell'], home: ['E08000035'], example: ['LS10 4NU', 'Middleton'] },
+  morley: { label: 'Morley, Farnley and Wortley', short: 'Morley', name: 'Morley, Farnley, Wortley and Gildersome', page: 'morley-primary-schools/', council: 'Leeds', constituencies: ['Leeds South West and Morley'], home: ['E08000035'], example: ['LS27 8LA', 'Morley'] },
+  pudsey: { label: 'Pudsey, Bramley and Armley', short: 'Pudsey', name: 'Pudsey, Farsley, Bramley and Armley', page: 'pudsey-primary-schools/', council: 'Leeds', constituencies: ['Leeds West and Pudsey'], home: ['E08000035'], example: ['LS28 5BH', 'Farsley'] },
+  wetherby: { label: 'Wetherby, Boston Spa and the villages', short: 'Wetherby', name: 'Wetherby, Boston Spa and the villages', page: 'wetherby-primary-schools/', council: 'Leeds', constituencies: ['Wetherby and Easingwold'], home: ['E08000035'], example: ['LS22 6RT', 'Wetherby'] },
 };
 // The areas' names for the site's wording, so a new area appears everywhere from its line above:
 // PLACES "Harrogate, York, Skipton, Northallerton, Richmond, Malton, Scarborough and Selby"; NY_PLACES the same without York
@@ -75,6 +86,8 @@ export const HULL_TERM_DATES = 'https://www.hull.gov.uk/schools-2/school-holiday
 export const CALD_TERM_DATES = 'https://new.calderdale.gov.uk/schools-and-learning/schools/school-term-dates';
 // and Kirklees Council's (its admissions publications, which include the school calendar)
 export const KIRK_TERM_DATES = 'https://www.kirklees.gov.uk/beta/admissions/policies-and-publications.aspx';
+// and Leeds City Council's
+export const LEEDS_TERM_DATES = 'https://www.leeds.gov.uk/schools-and-education/school-holidays-and-term-dates';
 export const AREAS = Object.fromEntries(Object.entries(AREA_INFO).map(([k, a]) => [k, a.label])) as Record<Area, string>;
 export const AREA_SHORT = Object.fromEntries(Object.entries(AREA_INFO).map(([k, a]) => [k, a.short])) as Record<Area, string>;
 // Used by the admin's coverage map: these districts show as fully covered, others with some of our schools as partly

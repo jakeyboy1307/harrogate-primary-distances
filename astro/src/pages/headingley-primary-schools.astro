@@ -1,0 +1,24 @@
+---
+// Area page: Leeds's headingley area (lib/specs.ts AREA_INFO). The questions every Leeds page shares are in lib/leeds.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { ldBorder, ldFaqs, ldTail } from '../lib/leeds';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.headingley;
+const schools = loadArea('leeds.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...ldFaqs('Headingley', openLatest(schools).length, schools.length),
+
+  ...ldTail,
+];
+---
+<AreaPage areaKey="headingley"
+  title="Headingley and central Leeds primary school catchment areas and Ofsted · Yorkshire School Checker"
+  description="Headingley, Kirkstall, Hyde Park and central Leeds primary school catchment areas: find your catchment school, how far places went, Ofsted ratings and the 2027 Reception dates."
+  h1="Headingley, Kirkstall and central Leeds primary schools"
+  lede="Primary school catchment areas for every school in Headingley, Hyde Park, Kirkstall, Burley, Cookridge, Tinshill and central Leeds."
+  area="Headingley"
+  schools={schools}
+  groups={[{ label: 'Headingley, Kirkstall and central Leeds', note: `${schools.length} Leeds primary schools.`, schools }]}
+  faqs={faqs}
+/>

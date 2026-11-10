@@ -1,0 +1,24 @@
+---
+// Area page: Leeds's neleeds area (lib/specs.ts AREA_INFO). The questions every Leeds page shares are in lib/leeds.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { ldBorder, ldFaqs, ldTail } from '../lib/leeds';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.neleeds;
+const schools = loadArea('leeds.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...ldFaqs('North East Leeds', openLatest(schools).length, schools.length),
+  ldBorder('Leeds', 'From Pannal or Kirkby Overblow, that’s North Yorkshire Council'),
+  ...ldTail,
+];
+---
+<AreaPage areaKey="neleeds"
+  title="Roundhay, Moortown and Alwoodley primary school catchment areas and Ofsted · Yorkshire School Checker"
+  description="North east Leeds primary school catchment areas, from Chapeltown and Chapel Allerton to Roundhay, Moortown and Alwoodley: find your catchment school, how far places went and Ofsted ratings."
+  h1="Roundhay, Moortown and Alwoodley primary schools"
+  lede="Primary school catchment areas for every school in north east Leeds: Chapeltown, Chapel Allerton, Meanwood, Moortown, Roundhay, Shadwell and Alwoodley."
+  area="North East Leeds"
+  schools={schools}
+  groups={[{ label: 'Roundhay, Moortown and Alwoodley', note: `${schools.length} Leeds primary schools.`, schools }]}
+  faqs={faqs}
+/>

@@ -78,6 +78,13 @@ export const COUNCILS: Record<string, Council> = {
     policy: 'children in care, then children in the catchment with a brother or sister at the school, then the rest of the catchment, then brothers and sisters from outside it, then distance in a straight line',
     prefs: 3,
   },
+  Leeds: {
+    name: 'Leeds City Council',
+    catchMap: 'https://www.leeds.gov.uk/schools-and-education/school-admissions/check-school-details',
+    apply: 'https://www.leeds.gov.uk/schools-and-education/school-admissions/apply-for-a-primary-school',
+    policy: 'children in care, then brothers and sisters, then children in the catchment, then everyone else, nearest first in a straight line',
+    prefs: 5,
+  },
   York: {
     name: 'City of York Council',
     catchMap: 'https://www.york.gov.uk/schools/PrimaryMap',
@@ -541,8 +548,9 @@ export function prepareSearch(all: School[], catches: Area[], place: Place, radi
   const shown = place.label === 'your location' ? 'Your location' : place.label;
   const outside = place.district && !COUNCILS[place.district]
     ? `${place.label} is in ${place.district}, which this checker doesn’t cover yet, so schools there aren’t shown.`
-    // no catchment around it: outside our areas, unless it's in a council whose catchments can't be checked (Hull)
-    : !areas.size && !(place.district && COUNCILS[place.district]?.mapData === false) ? `${shown} is outside the areas this checker covers, so schools there aren’t shown.` : '';
+    // no catchment around it and no council we cover: outside our areas. A covered council's catchments needn't cover
+    // all of it (Leeds maps only its community schools'; Hull's can't be checked), so a postcode there isn't outside
+    : !areas.size && !(place.district && COUNCILS[place.district]) ? `${shown} is outside the areas this checker covers, so schools there aren’t shown.` : '';
   return { near, mine: all.filter((s) => s.inC), areas, outside };
 }
 export function scoreAll(list: School[], mode: Mode) {

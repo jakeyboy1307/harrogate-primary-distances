@@ -74,7 +74,8 @@ let cache: SchoolPage[] | null = null;
 export function schoolPages(): SchoolPage[] {
   if (cache) return cache;
   const all = loadAll();
-  const shorts = all.map((s) => `${shortOf(s.name)}|${kindOf(s.name)}`);
+  // names that differ only by an apostrophe are the same name ("Lady Elizabeth Hastings'", Thorp Arch and Ledston)
+  const shorts = all.map((s) => `${shortOf(s.name).replace(/['’]/g, '')}|${kindOf(s.name)}`);
   const pages = all.map((s, i) => {
     const kind = kindOf(s.name);
     // "Batley Grammar School" takes Reception too: a grammar school keeps its own name

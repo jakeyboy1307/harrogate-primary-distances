@@ -1,0 +1,24 @@
+---
+// Area page: Leeds's wetherby area (lib/specs.ts AREA_INFO). The questions every Leeds page shares are in lib/leeds.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { ldBorder, ldFaqs, ldTail } from '../lib/leeds';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.wetherby;
+const schools = loadArea('leeds.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...ldFaqs('Wetherby', openLatest(schools).length, schools.length),
+  ldBorder('Wetherby', 'From Spofforth, Kirk Deighton or Tadcaster, that’s North Yorkshire Council'),
+  ...ldTail,
+];
+---
+<AreaPage areaKey="wetherby"
+  title="Wetherby and Boston Spa primary school catchment areas and Ofsted · Yorkshire School Checker"
+  description="Wetherby, Boston Spa, Bramham, Collingham, Scholes, Barwick-in-Elmet and Harewood primary school catchment areas: find your catchment school, how far places went and Ofsted ratings."
+  h1="Wetherby, Boston Spa and village primary schools"
+  lede="Primary school catchment areas for every school in outer north east Leeds: Wetherby, Boston Spa, Thorp Arch, Bramham, Collingham, Bardsey, Thorner, Scholes, Barwick-in-Elmet, Aberford and Harewood."
+  area="Wetherby"
+  schools={schools}
+  groups={[{ label: 'Wetherby, Boston Spa and the villages', note: `${schools.length} Leeds primary schools.`, schools }]}
+  faqs={faqs}
+/>

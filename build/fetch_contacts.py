@@ -53,7 +53,9 @@ FIXED = {'142851': ('admin@northrigton.ycway.uk', 'https://asnrfellowship.ycst.c
 # web designer's address, a trust's central inbox, a named teacher's and a football club charity's (Wilton)
 # Kirklees: five Enhance Academy Trust schools give only the trust's inbox; All Hallows a named member of staff;
 # Norristhorpe its SENCo
-NO_EMAIL = {'117861', '117889', '117942', '118026', '133519', '140229', '144305', '145611', '145612', '144673', '138559', '138560', '139931', '145664', '145665', '140319', '146067', '107727', '150152', '138584', '140392', '147623', '107685', '138979'}
+# Leeds: four named members of staff, a business manager, a bursar, two trust inboxes, another school's address and a
+# photographer's
+NO_EMAIL = {'117861', '117889', '117942', '118026', '133519', '140229', '144305', '145611', '145612', '144673', '138559', '138560', '139931', '145664', '145665', '140319', '146067', '107727', '150152', '138584', '140392', '147623', '107685', '138979', '151590', '108048', '107903', '107854', '107950', '133555', '150861', '152145', '107897', '142452'}
 
 
 def get(url, timeout=20, hops=3):
