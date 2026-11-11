@@ -1,0 +1,24 @@
+---
+// Area page: Doncaster's doncentral area (lib/specs.ts AREA_INFO). The questions every Doncaster page shares are in lib/doncaster.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { dnBorder, dnFaqs, dnTail } from '../lib/doncaster';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.doncentral;
+const schools = loadArea('doncaster.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...dnFaqs('Doncaster', openLatest(schools).length, schools.length),
+  dnBorder('Doncaster', 'From Bircotes or Harworth, that’s Nottinghamshire County Council'),
+  ...dnTail,
+];
+---
+<AreaPage areaKey="doncentral"
+  title="Doncaster primary school catchment areas, map and Ofsted · Yorkshire School Checker"
+  description="Doncaster town, Balby, Bessacarr, Armthorpe and Tickhill primary school catchment areas: find your catchment school, how popular each school is, Ofsted ratings and the 2027 Reception dates."
+  h1="Doncaster Central primary schools and catchment areas"
+  lede="Primary school catchment areas for every school in central Doncaster: the town centre, Hexthorpe, Balby, Wheatley, Intake, Cantley, Bessacarr, Edenthorpe, Kirk Sandall, Armthorpe, Tickhill and Wadworth."
+  area="Doncaster"
+  schools={schools}
+  groups={[{ label: 'Doncaster Central', note: `${schools.length} primary and infant schools.`, schools }]}
+  faqs={faqs}
+/>

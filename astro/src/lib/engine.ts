@@ -114,6 +114,13 @@ export const COUNCILS: Record<string, Council> = {
     mapTip: 'Ask the school, or see {map:Barnsley Council’s admission arrangements}',
     noCatch: 'Barnsley’s primary schools don’t have catchment areas. After children in care and brothers and sisters, places go to the children who live nearest',
   },
+  Doncaster: {
+    name: 'City of Doncaster Council',
+    catchMap: 'https://www.doncaster.gov.uk/services/schools/school-catchment-areas',
+    apply: 'https://www.doncaster.gov.uk/services/schools/primary-year-of-entry',
+    policy: 'children in care, then children in the catchment, then brothers and sisters, then the children who live nearest, in a straight line',
+    prefs: 3,
+  },
   Wakefield: {
     name: 'Wakefield Council',
     catchMap: 'https://www.wakefield.gov.uk/schools-and-education/schools/school-catchment-area-search',

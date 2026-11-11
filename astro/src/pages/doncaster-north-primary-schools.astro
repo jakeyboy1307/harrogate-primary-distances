@@ -1,0 +1,24 @@
+---
+// Area page: Doncaster's donnorth area (lib/specs.ts AREA_INFO). The questions every Doncaster page shares are in lib/doncaster.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { dnBorder, dnFaqs, dnTail } from '../lib/doncaster';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.donnorth;
+const schools = loadArea('doncaster.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...dnFaqs('Doncaster North', openLatest(schools).length, schools.length),
+  dnBorder('Doncaster North', 'From South Elmsall or Upton, that’s Wakefield Council, and from Goldthorpe it’s Barnsley Council'),
+  ...dnTail,
+];
+---
+<AreaPage areaKey="donnorth"
+  title="Doncaster North primary school catchment areas: Bentley, Adwick and Mexborough · Yorkshire School Checker"
+  description="Bentley, Adwick, Carcroft, Askern, Stainforth, Sprotbrough and Mexborough primary school catchment areas: find your catchment school, how popular each school is and Ofsted ratings."
+  h1="Doncaster North primary schools: Bentley, Adwick and Mexborough"
+  lede="Primary school catchment areas for every school in north Doncaster: Bentley, Toll Bar, Arksey, Scawthorpe, Scawsby, Sprotbrough, Adwick, Woodlands, Carcroft, Skellow, Askern, Norton, Stainforth, Barnburgh and Mexborough."
+  area="Doncaster North"
+  schools={schools}
+  groups={[{ label: 'Doncaster North: Bentley, Adwick and Mexborough', note: `${schools.length} primary and infant schools.`, schools }]}
+  faqs={faqs}
+/>

@@ -90,7 +90,7 @@ push. After each, its sitemaps join the Search Console task.
   - Websites added or fixed for four schools; Nether Edge's sits behind a bot check that people pass. 119 phone numbers and 104 emails (Fox Hill's was a named member of staff).
   - The home page's examples are now one per council (decision 4), and the Calderdale and Kirklees pages no longer say "the rest of West Yorkshire is coming".
 
-- **Barnsley (S2), 11 November:** built on the `barnsley` branch, not yet live.
+- **Barnsley (S2), 11 November:** live.
   - 78 schools on three pages: `/barnsley-north-`, `/barnsley-south-` and `/penistone-primary-schools/`, one a constituency.
   - No catchments, as Calderdale: the search says so (`noCatch`) and Barnsley gets the "Ask the school" map line.
   - Who got in, 2024 to 2026: the council's guides for parents, read by `build/barnsley_guide.py` into `build/barnsley/allocations.json`. Each lists every school that was full, with the distance of the last place offered, and an appendix of every school's places by rule. The guide with 2024's figures is gone from the council's site, so it comes from the Internet Archive's copy of April 2025. 2023 is the DfE's first choices.
@@ -100,6 +100,13 @@ push. After each, its sitemaps join the Search Console task.
   - Page names: "Primary Learning Centre" reads as a primary school, and Holy Trinity Catholic and Church of England School drops both faiths. Every earlier title is unchanged.
   - Websites: Gawber's and Sandhill's domains have lapsed and are for sale, so they have none; five more added or fixed. 78 phone numbers (the register's site timed out on the first run, so a second filled them) and 51 emails; six left out (two Enhance Academy Trust inboxes, four named members of staff).
   - Sources download with `build/fetch_barnsley.sh`.
+
+- **Doncaster (S3), 11 November:** built on the `doncaster` branch, not yet live.
+  - 91 schools on four pages: `/doncaster-central-`, `/doncaster-north-`, `/thorne-` and `/conisbrough-primary-schools/`. Mexborough's schools turned out to be in Doncaster North, so the small page (decision 3) is Conisbrough, Edlington, Denaby and Warmsworth (9 schools).
+  - Catchments: 80 schools, from the layer behind the council's catchment finder. Its eleven shared "option areas" ("Kirkby Avenue Primary School or Scawthorpe Sunnyfields Primary School") go to every school they name, so a home there is told it's in both catchments. Areas are matched by name before number, as Branton St Wilfrid's area carries Canon Popham's number. The 11 without one are Catholic schools and Canon Popham (VA). Every school sits inside its own area except Mexborough St John the Baptist, whose only area is one it shares with Barnburgh, 0.7 km away.
+  - Who got in is the DfE's first choices every year: the council's own table gives the same counts.
+  - The Mallard Academy is linked to Mallard Primary (closed 2024).
+  - Websites fixed for two schools. 91 phone numbers and 77 emails (two JMAT schools give the trust's inbox).
 
 ## Decisions (10 November 2026)
 

@@ -1,0 +1,24 @@
+---
+// Area page: Doncaster's conisbrough area (lib/specs.ts AREA_INFO). The questions every Doncaster page shares are in lib/doncaster.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { dnBorder, dnFaqs, dnTail } from '../lib/doncaster';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.conisbrough;
+const schools = loadArea('doncaster.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...dnFaqs('Conisbrough', openLatest(schools).length, schools.length),
+  dnBorder('Conisbrough', 'From Kilnhurst or Swinton, that’s Rotherham Council'),
+  ...dnTail,
+];
+---
+<AreaPage areaKey="conisbrough"
+  title="Conisbrough, Edlington and Denaby primary school catchment areas, map and Ofsted · Yorkshire School Checker"
+  description="Conisbrough, Denaby Main, Edlington and Warmsworth primary school catchment areas: find your catchment school, how popular each school is, Ofsted ratings and the 2027 Reception dates."
+  h1="Conisbrough, Edlington and Denaby primary schools"
+  lede="Primary school catchment areas for every Doncaster school in the south west of the borough: Conisbrough, Denaby Main, Edlington and Warmsworth."
+  area="Conisbrough"
+  schools={schools}
+  groups={[{ label: 'Conisbrough, Edlington and Denaby', note: `${schools.length} primary and infant schools.`, schools }]}
+  faqs={faqs}
+/>

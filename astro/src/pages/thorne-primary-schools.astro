@@ -1,0 +1,24 @@
+---
+// Area page: Doncaster's thorne area (lib/specs.ts AREA_INFO). The questions every Doncaster page shares are in lib/doncaster.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { dnBorder, dnFaqs, dnTail } from '../lib/doncaster';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.thorne;
+const schools = loadArea('doncaster.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...dnFaqs('Thorne', openLatest(schools).length, schools.length),
+  dnBorder('Thorne', 'From Crowle or Epworth, that’s North Lincolnshire Council'),
+  ...dnTail,
+];
+---
+<AreaPage areaKey="thorne"
+  title="Thorne, Hatfield and Rossington primary school catchment areas, map and Ofsted · Yorkshire School Checker"
+  description="Thorne, Moorends, Hatfield, Dunscroft, Rossington, Auckley, Finningley and Bawtry primary school catchment areas: find your catchment school, how popular each school is and Ofsted ratings."
+  h1="Thorne, Hatfield and Rossington primary schools"
+  lede="Primary school catchment areas for every school in east Doncaster: Thorne, Moorends, Hatfield, Dunscroft, Dunsville, Branton, Auckley, Finningley, Rossington and Bawtry."
+  area="Thorne"
+  schools={schools}
+  groups={[{ label: 'Thorne, Hatfield and Rossington', note: `${schools.length} primary and infant schools.`, schools }]}
+  faqs={faqs}
+/>
