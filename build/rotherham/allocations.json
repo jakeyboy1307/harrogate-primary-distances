@@ -1,0 +1,718 @@
+{
+ "year": 2026,
+ "schools": [
+  {
+   "name": "ANSTON BROOK PRIMARY",
+   "postcode": "S254DN",
+   "roll": 130,
+   "pan": 30
+  },
+  {
+   "name": "ANSTON GREENLANDS PRIMARY",
+   "postcode": "S254HD",
+   "roll": 211,
+   "pan": 30
+  },
+  {
+   "name": "ANSTON HILLCREST PRIMARY",
+   "postcode": "S255GR",
+   "roll": 221,
+   "pan": 30
+  },
+  {
+   "name": "ANSTON PARK INFANT",
+   "postcode": "S252QZ",
+   "roll": 145,
+   "pan": 45
+  },
+  {
+   "name": "ANSTON PARK JUNIOR",
+   "postcode": "S252QZ",
+   "roll": 213,
+   "pan": 60
+  },
+  {
+   "name": "ASTON FENCE JUNIOR & INFANT",
+   "postcode": "S139ZD",
+   "roll": 206,
+   "pan": 30
+  },
+  {
+   "name": "ASTON HALL JUNIOR & INFANT",
+   "postcode": "S262AX",
+   "roll": 293,
+   "pan": 45
+  },
+  {
+   "name": "ASTON LODGE PRIMARY",
+   "postcode": "S262BL",
+   "roll": 155,
+   "pan": 30
+  },
+  {
+   "name": "SPRINGWOOD JUNIOR ACADEMY",
+   "postcode": "S262AL",
+   "roll": 191,
+   "pan": 30
+  },
+  {
+   "name": "AUGHTON JUNIOR ACADEMY",
+   "postcode": "S263XQ",
+   "roll": 129,
+   "pan": 30
+  },
+  {
+   "name": "BADSLEY PRIMARY",
+   "postcode": "S652QS",
+   "roll": 515,
+   "pan": 90
+  },
+  {
+   "name": "BLACKBURN PRIMARY",
+   "postcode": "S612BU",
+   "roll": 131,
+   "pan": 30
+  },
+  {
+   "name": "BRAMLEY GRANGE PRIMARY",
+   "postcode": "S662SY",
+   "roll": 190,
+   "pan": 30
+  },
+  {
+   "name": "BRAMLEY SUNNYSIDE INFANT",
+   "postcode": "S663QW",
+   "roll": 225,
+   "pan": 75
+  },
+  {
+   "name": "BRAMLEY SUNNYSIDE JUNIOR",
+   "postcode": "S663QW",
+   "roll": 321,
+   "pan": 90
+  },
+  {
+   "name": "BRAMPTON CORTONWOOD INFANT",
+   "postcode": "S730XH",
+   "roll": 87,
+   "pan": 30
+  },
+  {
+   "name": "BRINSWORTH HOWARTH PRIMARY",
+   "postcode": "S605JR",
+   "roll": 176,
+   "pan": 30
+  },
+  {
+   "name": "BRINSWORTH MANOR INFANT",
+   "postcode": "S605BX",
+   "roll": 118,
+   "pan": 60
+  },
+  {
+   "name": "BRINSWORTH MANOR JUNIOR",
+   "postcode": "S605BX",
+   "roll": 231,
+   "pan": 60
+  },
+  {
+   "name": "BRINSWORTH WHITEHILL PRIMARY",
+   "postcode": "S605HT",
+   "roll": 276,
+   "pan": 45
+  },
+  {
+   "name": "BROOKFIELD JUNIOR ACADEMY",
+   "postcode": "S648TQ",
+   "roll": 237,
+   "pan": 30
+  },
+  {
+   "name": "BROOM VALLEY COMMUNITY SCHOOL",
+   "postcode": "S602QU",
+   "roll": 364,
+   "pan": 60
+  },
+  {
+   "name": "CANKLOW WOODS PRIMARY",
+   "postcode": "S602XJ",
+   "roll": 215,
+   "pan": 30
+  },
+  {
+   "name": "CATCLIFFE PRIMARY SCHOOL",
+   "postcode": "S605SW",
+   "roll": 145,
+   "pan": 30
+  },
+  {
+   "name": "COLERIDGE PRIMARY",
+   "postcode": "S651LW",
+   "roll": 211,
+   "pan": 30
+  },
+  {
+   "name": "DINNINGTON COMMUNITY PRIMARY",
+   "postcode": "S252RE",
+   "roll": 176,
+   "pan": 30
+  },
+  {
+   "name": "EAST DENE PRIMARY",
+   "postcode": "S652DF",
+   "roll": 280,
+   "pan": 45
+  },
+  {
+   "name": "EASTWOOD VILLAGE PRIMARY SCHOOL",
+   "postcode": "S651RD",
+   "roll": 181,
+   "pan": 30
+  },
+  {
+   "name": "FERHAM PRIMARY",
+   "postcode": "S611AP",
+   "roll": 205,
+   "pan": 30
+  },
+  {
+   "name": "FLANDERWELL PRIMARY",
+   "postcode": "S662JF",
+   "roll": 366,
+   "pan": 60
+  },
+  {
+   "name": "GREASBROUGH PRIMARY SCHOOL",
+   "postcode": "S614RB",
+   "roll": 235,
+   "pan": 45
+  },
+  {
+   "name": "HARTHILL PRIMARY",
+   "postcode": "S267YH",
+   "roll": 149,
+   "pan": 30
+  },
+  {
+   "name": "HERRINGTHORPE INFANT SCHOOL",
+   "postcode": "S652JW",
+   "roll": 240,
+   "pan": 90
+  },
+  {
+   "name": "HERRINGTHORPE JUNIOR SCHOOL",
+   "postcode": "S652JW",
+   "roll": 350,
+   "pan": 90
+  },
+  {
+   "name": "HIGH GREAVE INFANT",
+   "postcode": "S653LZ",
+   "roll": 80,
+   "pan": 30
+  },
+  {
+   "name": "HIGH GREAVE JUNIOR",
+   "postcode": "S653LZ",
+   "roll": 127,
+   "pan": 30
+  },
+  {
+   "name": "KILNHURST PRIMARY",
+   "postcode": "S645TA",
+   "roll": 152,
+   "pan": 30
+  },
+  {
+   "name": "KIMBERWORTH COMMUNITY PRIMARY",
+   "postcode": "S611HE",
+   "roll": 215,
+   "pan": 30
+  },
+  {
+   "name": "KIVETON PARK INFANT",
+   "postcode": "S266QP",
+   "roll": 120,
+   "pan": 45
+  },
+  {
+   "name": "KIVETON PARK MEADOWS JUNIOR",
+   "postcode": "S265QT",
+   "roll": 174,
+   "pan": 45
+  },
+  {
+   "name": "LAUGHTON JUNIOR & INFANT",
+   "postcode": "S251YP",
+   "roll": 195,
+   "pan": 30
+  },
+  {
+   "name": "LISTERDALE JUNIOR ACADEMY",
+   "postcode": "S653HN",
+   "roll": 332,
+   "pan": 60
+  },
+  {
+   "name": "MALTBY CRAGS COMMUNITY SCHOOL",
+   "postcode": "S667QJ",
+   "roll": 346,
+   "pan": 45
+  },
+  {
+   "name": "MALTBY LILLY HALL ACADEMY",
+   "postcode": "S668AU",
+   "roll": 391,
+   "pan": 60
+  },
+  {
+   "name": "MALTBY MANOR ACADEMY",
+   "postcode": "S668JN",
+   "roll": 332,
+   "pan": 45
+  },
+  {
+   "name": "MALTBY REDWOOD ACADEMY",
+   "postcode": "S668DL",
+   "roll": 186,
+   "pan": 30
+  },
+  {
+   "name": "MEADOW VIEW PRIMARY",
+   "postcode": "S612JD",
+   "roll": 192,
+   "pan": 30
+  },
+  {
+   "name": "MONKWOOD PRIMARY ACADEMY",
+   "postcode": "S627JD",
+   "roll": 374,
+   "pan": 60
+  },
+  {
+   "name": "RAVENFIELD PRIMARY ACADEMY",
+   "postcode": "S654LZ",
+   "roll": 189,
+   "pan": 30
+  },
+  {
+   "name": "RAWMARSH ASHWOOD ACADEMY",
+   "postcode": "S626HT",
+   "roll": 162,
+   "pan": 30
+  },
+  {
+   "name": "RAWMARSH RYECROFT INFANT",
+   "postcode": "S625QW",
+   "roll": 123,
+   "pan": 60
+  },
+  {
+   "name": "RAWMARSH ROSEHILL JUNIOR",
+   "postcode": "S625QH",
+   "roll": 198,
+   "pan": 60
+  },
+  {
+   "name": "RAWMARSH THOROGATE JUNIOR & INFANT",
+   "postcode": "S627HS",
+   "roll": 211,
+   "pan": 30
+  },
+  {
+   "name": "REDSCOPE PRIMARY",
+   "postcode": "S613JT",
+   "roll": 340,
+   "pan": 60
+  },
+  {
+   "name": "ROCKINGHAM JUNIOR & INFANT SCHOOL",
+   "postcode": "S614HY",
+   "roll": 247,
+   "pan": 50
+  },
+  {
+   "name": "ROUGHWOOD PRIMARY",
+   "postcode": "S613HL",
+   "roll": 205,
+   "pan": 30
+  },
+  {
+   "name": "RAWMARSH SANDHILL PRIMARY",
+   "postcode": "S625LH",
+   "roll": 175,
+   "pan": 30
+  },
+  {
+   "name": "ST ANN’S PRIMARY",
+   "postcode": "S651PD",
+   "roll": 357,
+   "pan": 60
+  },
+  {
+   "name": "ST THOMAS CE PRIMARY ACADEMY",
+   "postcode": "S645UA",
+   "roll": 193,
+   "pan": 30
+  },
+  {
+   "name": "SITWELL NURSERY & INFANT",
+   "postcode": "S603LA",
+   "roll": 189,
+   "pan": 60
+  },
+  {
+   "name": "SITWELL JUNIOR",
+   "postcode": "S603LA",
+   "roll": 300,
+   "pan": 76
+  },
+  {
+   "name": "SWALLOWNEST PRIMARY",
+   "postcode": "S264UR",
+   "roll": 175,
+   "pan": 30
+  },
+  {
+   "name": "SWINTON FITZWILLIAM PRIMARY",
+   "postcode": "S648HP",
+   "roll": 288,
+   "pan": 45
+  },
+  {
+   "name": "SWINTON QUEEN PRIMARY",
+   "postcode": "S648NE",
+   "roll": 317,
+   "pan": 45
+  },
+  {
+   "name": "THORNHILL PRIMARY",
+   "postcode": "S611TD",
+   "roll": 306,
+   "pan": 45
+  },
+  {
+   "name": "THORPE HESLEY PRIMARY",
+   "postcode": "S612PL",
+   "roll": 487,
+   "pan": 70
+  },
+  {
+   "name": "FOLJAMBE PRIMARY",
+   "postcode": "S654HQ",
+   "roll": 132,
+   "pan": 30
+  },
+  {
+   "name": "THRYBERGH PRIMARY SCHOOL",
+   "postcode": "S654JG",
+   "roll": 146,
+   "pan": 30
+  },
+  {
+   "name": "THURCROFT INFANT",
+   "postcode": "S669NT",
+   "roll": 202,
+   "pan": 75
+  },
+  {
+   "name": "THURCROFT JUNIOR ACADEMY",
+   "postcode": "S669DD",
+   "roll": 280,
+   "pan": 70
+  },
+  {
+   "name": "TODWICK JUNIOR & INFANT",
+   "postcode": "S261HJ",
+   "roll": 203,
+   "pan": 30
+  },
+  {
+   "name": "WALES PRIMARY",
+   "postcode": "S265QG",
+   "roll": 210,
+   "pan": 30
+  },
+  {
+   "name": "WATH CENTRAL PRIMARY",
+   "postcode": "S637HG",
+   "roll": 378,
+   "pan": 60
+  },
+  {
+   "name": "WATH VICTORIA PRIMARY",
+   "postcode": "S637AD",
+   "roll": 251,
+   "pan": 30
+  },
+  {
+   "name": "WAVERLEY JUNIOR ACADEMY",
+   "postcode": "S608DD",
+   "roll": 614,
+   "pan": 90
+  },
+  {
+   "name": "WENTWORTH CE JUNIOR & INFANT",
+   "postcode": "S627TX",
+   "roll": 104,
+   "pan": 16
+  },
+  {
+   "name": "HIGHFIELD FARM PRIMARY",
+   "postcode": "S636NF",
+   "roll": 76,
+   "pan": 15
+  },
+  {
+   "name": "WHISTON JUNIOR & INFANT",
+   "postcode": "S604DX",
+   "roll": 191,
+   "pan": 30
+  },
+  {
+   "name": "WHISTON WORRYGOOSE JUNIOR & INFANT",
+   "postcode": "S604AG",
+   "roll": 214,
+   "pan": 30
+  },
+  {
+   "name": "WICKERSLEY NORTHFIELD ACADEMY",
+   "postcode": "S662HL",
+   "roll": 409,
+   "pan": 60
+  },
+  {
+   "name": "WOODSETTS PRIMARY",
+   "postcode": "S818SB",
+   "roll": 207,
+   "pan": 30
+  },
+  {
+   "name": "ASTON ALL SAINTS CE PRIMARY",
+   "postcode": "S262BL",
+   "roll": 157,
+   "pan": 30
+  },
+  {
+   "name": "LAUGHTON ALL SAINTS CE PRIMARY",
+   "postcode": "S251YF",
+   "roll": 91,
+   "pan": 15
+  },
+  {
+   "name": "THRYBERGH FULLERTON CE PRIMARY ACADEMY",
+   "postcode": "S654BL",
+   "roll": 163,
+   "pan": 30
+  },
+  {
+   "name": "TREETON CE PRIMARY",
+   "postcode": "S605QS",
+   "roll": 294,
+   "pan": 45
+  },
+  {
+   "name": "TRINITY CROFT CE PRIMARY",
+   "postcode": "S653QJ",
+   "roll": 165,
+   "pan": 30
+  },
+  {
+   "name": "WATH CE PRIMARY",
+   "postcode": "S636PY",
+   "roll": 382,
+   "pan": 60
+  },
+  {
+   "name": "WICKERSLEY ST ALBAN CE PRIMARY",
+   "postcode": "S661EU",
+   "roll": 217,
+   "pan": 30
+  },
+  {
+   "name": "ST JOSEPH’S CATHOLIC PRIMARY (DINNINGTON)",
+   "postcode": "S252QD",
+   "roll": 128,
+   "pan": 30
+  },
+  {
+   "name": "ST JOSEPH’S CATHOLIC PRIMARY (RAWMARSH)",
+   "postcode": "S626JY",
+   "roll": 199,
+   "pan": 30
+  },
+  {
+   "name": "ST BEDE’S CATHOLIC PRIMARY",
+   "postcode": "S611PD",
+   "roll": 315,
+   "pan": 45
+  },
+  {
+   "name": "ST GERARD’S CATHOLIC PRIMARY",
+   "postcode": "S654AE",
+   "roll": 158,
+   "pan": 30
+  },
+  {
+   "name": "ST MARY’S CATHOLIC PRIMARY (HERRINGTHORPE)",
+   "postcode": "S652NU",
+   "roll": 204,
+   "pan": 30
+  },
+  {
+   "name": "ST MARY’S CATHOLIC PRIMARY (MALTBY)",
+   "postcode": "S667JU",
+   "roll": 130,
+   "pan": 30
+  },
+  {
+   "name": "OUR LADY & ST. JOSEPH’S CATHOLIC PRIMARY",
+   "postcode": "S637HG",
+   "roll": 199,
+   "pan": 30
+  }
+ ],
+ "full": [
+  {
+   "name": "Anston Park Infant",
+   "kind": "dist",
+   "left": 12,
+   "apps": 18,
+   "refused": 6
+  },
+  {
+   "name": "Aston Fence",
+   "kind": "dist",
+   "left": 10,
+   "apps": 25,
+   "refused": 15
+  },
+  {
+   "name": "Coleridge",
+   "kind": "dist",
+   "left": 1,
+   "apps": 11,
+   "refused": 10
+  },
+  {
+   "name": "Kimberworth Community",
+   "kind": "dist",
+   "left": 2,
+   "apps": 8,
+   "refused": 6
+  },
+  {
+   "name": "Thorogate",
+   "kind": "dist",
+   "left": 17,
+   "apps": 19,
+   "refused": 2
+  },
+  {
+   "name": "Sitwell Infant",
+   "kind": "dist",
+   "left": 15,
+   "apps": 21,
+   "refused": 6
+  },
+  {
+   "name": "Todwick Primary",
+   "kind": "dist",
+   "left": 6,
+   "apps": 14,
+   "refused": 8
+  },
+  {
+   "name": "Wales Primary",
+   "kind": "dist",
+   "left": 10,
+   "apps": 11,
+   "refused": 1
+  },
+  {
+   "name": "Whiston Worrygoose",
+   "kind": "dist",
+   "left": 6,
+   "apps": 31,
+   "refused": 25
+  },
+  {
+   "name": "Woodsetts Primary",
+   "kind": "dist",
+   "left": 18,
+   "apps": 20,
+   "refused": 2
+  },
+  {
+   "name": "Waverley Junior Academy",
+   "kind": "catch",
+   "left": 48,
+   "apps": 77,
+   "refused": 49,
+   "also": {
+    "sibling": 3,
+    "distance": 17
+   }
+  },
+  {
+   "name": "Laughton Junior and Infant",
+   "kind": "dist",
+   "left": 11,
+   "apps": 12,
+   "refused": 1
+  },
+  {
+   "name": "Brinsworth Howarth",
+   "kind": "dist",
+   "left": 6,
+   "apps": 21,
+   "refused": 15
+  },
+  {
+   "name": "Anston Greenlands Primary",
+   "kind": "dist",
+   "left": 13,
+   "apps": 26,
+   "refused": 13
+  },
+  {
+   "name": "Thorpe Hesley Primary",
+   "kind": "dist",
+   "left": 8,
+   "apps": 22,
+   "refused": 14
+  },
+  {
+   "name": "Maltby Lilly Hall Academy",
+   "kind": "dist",
+   "left": 17,
+   "apps": 20,
+   "refused": 3
+  },
+  {
+   "name": "Maltby Manor Academy",
+   "kind": "dist",
+   "left": 7,
+   "apps": 8,
+   "refused": 1
+  },
+  {
+   "name": "St Alban’s CE Primary",
+   "kind": "va",
+   "apps": 33,
+   "refused": 3
+  },
+  {
+   "name": "St Bede’s Catholic Primary",
+   "kind": "va",
+   "apps": 57,
+   "refused": 12
+  },
+  {
+   "name": "St. Gerard’s Catholic Primary",
+   "kind": "va",
+   "apps": 31,
+   "refused": 1
+  }
+ ]
+}

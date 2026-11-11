@@ -1,0 +1,24 @@
+---
+// Area page: Rotherham's rotherham area (lib/specs.ts AREA_INFO). The questions every Rotherham page shares are in lib/rotherham.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { rtBorder, rtFaqs, rtTail } from '../lib/rotherham';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.rotherham;
+const schools = loadArea('rotherham.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...rtFaqs('Rotherham', openLatest(schools).length, schools.length),
+  rtBorder('Rotherham', 'From Tinsley or Wincobank, that’s Sheffield City Council'),
+  ...rtTail,
+];
+---
+<AreaPage areaKey="rotherham"
+  title="Rotherham primary school catchment areas, map and Ofsted · Yorkshire School Checker"
+  description="Rotherham primary school catchment areas: Kimberworth, Herringthorpe, Thrybergh, Brinsworth, Catcliffe and Thorpe Hesley. How popular each school is, how its places went and Ofsted ratings."
+  h1="Rotherham primary schools"
+  lede="Primary school catchment areas for every school in Rotherham town and around it: Kimberworth, Blackburn, Greasbrough, Herringthorpe, Eastwood, East Dene, Dalton, Thrybergh, Brinsworth, Catcliffe, Treeton and Thorpe Hesley."
+  area="Rotherham"
+  schools={schools}
+  groups={[{ label: 'Rotherham', note: `${schools.length} primary and infant schools.`, schools }]}
+  faqs={faqs}
+/>

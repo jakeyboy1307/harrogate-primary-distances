@@ -1,0 +1,24 @@
+---
+// Area page: Rotherham's wath area (lib/specs.ts AREA_INFO). The questions every Rotherham page shares are in lib/rotherham.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { rtBorder, rtFaqs, rtTail } from '../lib/rotherham';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.wath;
+const schools = loadArea('rotherham.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...rtFaqs('Wath', openLatest(schools).length, schools.length),
+  rtBorder('Wath', 'From Mexborough or Denaby, that’s the City of Doncaster Council'),
+  ...rtTail,
+];
+---
+<AreaPage areaKey="wath"
+  title="Rawmarsh, Wath and Swinton primary school catchment areas, map and Ofsted · Yorkshire School Checker"
+  description="Rawmarsh, Parkgate, Wath-upon-Dearne, Swinton, Kilnhurst, Brampton, West Melton, Ravenfield and Wentworth primary school catchment areas: how popular each school is, how its places went and Ofsted ratings."
+  h1="Rawmarsh, Wath and Swinton primary schools"
+  lede="Primary school catchment areas for every school in the north of the borough: Rawmarsh, Parkgate, Wath-upon-Dearne, Swinton, Kilnhurst, Brampton Bierlow, West Melton, Ravenfield and Wentworth."
+  area="Wath"
+  schools={schools}
+  groups={[{ label: 'Rawmarsh, Wath and Swinton', note: `${schools.length} primary and infant schools.`, schools }]}
+  faqs={faqs}
+/>

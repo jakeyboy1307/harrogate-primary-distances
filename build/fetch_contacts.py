@@ -59,8 +59,13 @@ FIXED = {'142851': ('admin@northrigton.ycway.uk', 'https://asnrfellowship.ycst.c
 # Wakefield: seven Enhance Academy Trust schools give the trust's inbox; Ackworth Mill Dam and Pinders a named member of staff
 # Sheffield: Fox Hill gives a named member of staff
 # Barnsley: two Enhance Academy Trust schools give the trust's inbox; Birdwell, Oxspring, Silkstone Common and Thurlstone a named member of staff
+# Phone numbers set by hand, by URN, where the register has none: Foljambe's from Rotherham Council's booklet
+FIXED_TEL = {'149198': '01709 850569'}
+
 # Doncaster: two JMAT schools give the trust's inbox
-NO_EMAIL = {'144536', '143581', '149455', '140539', '106584', '142556', '106589', '106588', '139134', '144563', '143960', '137967', '152595', '139280', '140453', '139573', '139279', '108210', '117861', '117889', '117942', '118026', '133519', '140229', '144305', '145611', '145612', '144673', '138559', '138560', '139931', '145664', '145665', '140319', '146067', '107727', '150152', '138584', '140392', '147623', '107685', '138979', '151590', '108048', '107903', '107854', '107950', '133555', '150861', '152145', '107897', '142452', '150002', '148869', '146581', '144862', '148201', '144860', '144861', '150016', '143511', '139358'}
+# Rotherham: fifteen JMAT schools, two Learners' Trust schools and Crags (Nexus) give the trust's inbox; Thrybergh, Monkwood and
+# Aston Lodge the Wickersley Partnership Trust's clerk; East Dene and Eastwood Village a named member of staff
+NO_EMAIL = {'139225', '140378', '140993', '145017', '143055', '142977', '142978', '143481', '147920', '143544', '148013', '144324', '146492', '146411', '146470', '140170', '146866', '149118', '147374', '146467', '147938', '143480', '144197', '144536', '143581', '149455', '140539', '106584', '142556', '106589', '106588', '139134', '144563', '143960', '137967', '152595', '139280', '140453', '139573', '139279', '108210', '117861', '117889', '117942', '118026', '133519', '140229', '144305', '145611', '145612', '144673', '138559', '138560', '139931', '145664', '145665', '140319', '146067', '107727', '150152', '138584', '140392', '147623', '107685', '138979', '151590', '108048', '107903', '107854', '107950', '133555', '150861', '152145', '107897', '142452', '150002', '148869', '146581', '144862', '148201', '144860', '144861', '150016', '143511', '139358'}
 
 
 def get(url, timeout=20, hops=3):
@@ -150,6 +155,8 @@ def main(data_path, out_path, everything=False):
         except Exception as e:
             print(f"  website failed for {s['name']}: {e}", file=sys.stderr)
         u = str(s.get('urn') or (s.get('of') or {}).get('urn'))
+        if u in FIXED_TEL and not rec.get('tel'):
+            rec['tel'] = FIXED_TEL[u]
         if u in FIXED:
             rec['email'], rec['emailSrc'] = FIXED[u]
         if u in NO_EMAIL:

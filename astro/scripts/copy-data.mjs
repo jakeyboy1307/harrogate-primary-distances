@@ -30,6 +30,7 @@ const areas = [
   { id: 'sheffield', name: 'Sheffield', data: read('../../build/sheffield.json'), contacts: readIf('../../build/sheffield-contacts.json') },
   { id: 'barnsley', name: 'Barnsley', data: read('../../build/barnsley.json'), contacts: readIf('../../build/barnsley-contacts.json') },
   { id: 'doncaster', name: 'Doncaster', data: read('../../build/doncaster.json'), contacts: readIf('../../build/doncaster-contacts.json') },
+  { id: 'rotherham', name: 'Rotherham', data: read('../../build/rotherham.json'), contacts: readIf('../../build/rotherham-contacts.json') },
 ];
 
 const out = resolve(here, '../public/data');

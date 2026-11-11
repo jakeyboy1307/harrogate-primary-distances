@@ -101,12 +101,21 @@ push. After each, its sitemaps join the Search Console task.
   - Websites: Gawber's and Sandhill's domains have lapsed and are for sale, so they have none; five more added or fixed. 78 phone numbers (the register's site timed out on the first run, so a second filled them) and 51 emails; six left out (two Enhance Academy Trust inboxes, four named members of staff).
   - Sources download with `build/fetch_barnsley.sh`.
 
-- **Doncaster (S3), 11 November:** built on the `doncaster` branch, not yet live.
+- **Doncaster (S3), 11 November:** live.
   - 91 schools on four pages: `/doncaster-central-`, `/doncaster-north-`, `/thorne-` and `/conisbrough-primary-schools/`. Mexborough's schools turned out to be in Doncaster North, so the small page (decision 3) is Conisbrough, Edlington, Denaby and Warmsworth (9 schools).
   - Catchments: 80 schools, from the layer behind the council's catchment finder. Its eleven shared "option areas" ("Kirkby Avenue Primary School or Scawthorpe Sunnyfields Primary School") go to every school they name, so a home there is told it's in both catchments. Areas are matched by name before number, as Branton St Wilfrid's area carries Canon Popham's number. The 11 without one are Catholic schools and Canon Popham (VA). Every school sits inside its own area except Mexborough St John the Baptist, whose only area is one it shares with Barnburgh, 0.7 km away.
   - Who got in is the DfE's first choices every year: the council's own table gives the same counts.
   - The Mallard Academy is linked to Mallard Primary (closed 2024).
   - Websites fixed for two schools. 91 phone numbers and 77 emails (two JMAT schools give the trust's inbox).
+
+- **Rotherham (S4), 11 November:** built on the `rotherham` branch, not yet live.
+  - 87 schools on three pages: `/rotherham-` (36), `/rother-valley-` (30) and `/wath-primary-schools/` (21, Rawmarsh, Wath and Swinton: Rotherham's part of Rawmarsh and Conisbrough).
+  - Catchments: not checked (decision 2). The council's map draws them from a "Primary Catchment" layer, but only as pictures inside a viewing session; clicking an area gives its school's name, not its outline. Nothing is published as open data (data.gov.uk has none for Rotherham). So every school is "not checked", as Wakefield, and the search points to the map with where to find the layer.
+  - Who got in is the DfE's first choices every year. 2026 carries a note from the council's [primary application booklet](https://www.rotherham.gov.uk/downloads/download/728/primary-application-booklet) for the 20 schools it lists as full: how many places were left for children applying on distance, and how many of them missed out (16 schools); for Waverley, that the last places went to catchment children and 49 of them missed out; for three voluntary aided schools, the applications and refusals. Read by `build/rotherham_guide.py` into `build/rotherham/allocations.json`, with every school's admission number.
+  - The booklet doesn't list every full school: Whiston Junior and Infant and Crags turned away 13 and 11 first choices in the DfE's figures, so they keep those alone.
+  - Brinsworth Manor Infant is linked to its old number (renumbered April 2025). Brampton the Ellis's admission number is 40 (the booklet gives infant and junior together).
+  - Places: the register's village or estate, else the ward; Broom Valley, St Mary's (Herringthorpe), Rockingham (Wingfield) and Waverley set by hand.
+  - Websites added for Brinsworth Manor Infant, Foljambe and Greasbrough, from the booklet. 87 phone numbers (Foljambe's from the booklet: the register has none) and 46 emails; 23 left out (fifteen JMAT, two Learners' Trust and one Nexus school give the trust's inbox, three Wickersley Partnership schools its clerk, two a named member of staff).
 
 ## Decisions (10 November 2026)
 

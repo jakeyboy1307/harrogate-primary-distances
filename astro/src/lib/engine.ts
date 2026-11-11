@@ -121,6 +121,17 @@ export const COUNCILS: Record<string, Council> = {
     policy: 'children in care, then children in the catchment, then brothers and sisters, then the children who live nearest, in a straight line',
     prefs: 3,
   },
+  Rotherham: {
+    name: 'Rotherham Council',
+    catchMap: 'https://maps.rotherham.gov.uk/intranet/en-gb/PublicMap/Rotherham',
+    apply: 'https://www.rotherham.gov.uk/school-admissions-3/starting-primary-school',
+    policy: 'children in care, then children in the catchment (those with an older brother or sister at the school first), then brothers and sisters, then the children who live nearest, in a straight line',
+    prefs: 3,
+    // every school has a catchment, but the council draws them only on its web map, as pictures rather than data
+    mapData: false,
+    mapNote: 'draws its catchments only on its web map',
+    mapTip: 'Find your address on {map:the council’s map}, under Layers, Education, Primary Catchment',
+  },
   Wakefield: {
     name: 'Wakefield Council',
     catchMap: 'https://www.wakefield.gov.uk/schools-and-education/schools/school-catchment-area-search',

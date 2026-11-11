@@ -1,0 +1,24 @@
+---
+// Area page: Rotherham's rothervalley area (lib/specs.ts AREA_INFO). The questions every Rotherham page shares are in lib/rotherham.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { rtBorder, rtFaqs, rtTail } from '../lib/rotherham';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.rothervalley;
+const schools = loadArea('rotherham.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...rtFaqs('the Rother Valley', openLatest(schools).length, schools.length),
+  rtBorder('the Rother Valley', 'From Beighton or Mosborough, that’s Sheffield City Council'),
+  ...rtTail,
+];
+---
+<AreaPage areaKey="rothervalley"
+  title="Rother Valley primary school catchment areas: Maltby, Dinnington and Aston · Yorkshire School Checker"
+  description="Maltby, Dinnington, North and South Anston, Aston, Aughton, Swallownest, Wales, Kiveton Park, Thurcroft, Whiston and Laughton primary school catchment areas: how popular each school is, how its places went and Ofsted ratings."
+  h1="Rother Valley primary schools: Maltby, Dinnington and Aston"
+  lede="Primary school catchment areas for every school in the south of the borough: Maltby, Dinnington, the Anstons, Woodsetts, Aston, Aughton, Swallownest, Todwick, Wales, Kiveton Park, Harthill, Thurcroft, Laughton and Whiston."
+  area="Rother Valley"
+  schools={schools}
+  groups={[{ label: 'Rother Valley', note: `${schools.length} primary and infant schools.`, schools }]}
+  faqs={faqs}
+/>
