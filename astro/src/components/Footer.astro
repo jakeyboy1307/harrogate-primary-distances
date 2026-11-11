@@ -7,15 +7,6 @@ import { AREA_INFO } from '../lib/specs';
 import { HUBS } from '../lib/hubs';
 ---
 <footer class="site-foot">
-  <div class="foot-brand"><Rose size={26} /><span>Yorkshire School Checker</span></div>
-  <nav class="foot-links" aria-label="Footer">
-    <a href={url('')}>Find schools</a>
-    <a href={url('plan/')}>My plan</a>
-    <a href={url('how-places-work/')}>How places work</a>
-    <a href={url('how-places-work/#sources')}>Where our numbers come from</a>
-    <a href={url('about/')}>About</a>
-    <a href={url('privacy/')}>Privacy</a>
-  </nav>
   <div class="foot-nav">
     <nav class="foot-areas" aria-label="Councils we cover">
       <span>Councils</span>
@@ -26,14 +17,26 @@ import { HUBS } from '../lib/hubs';
       {Object.values(AREA_INFO).map((a) => <a href={url(a.page)}>{a.name} primary schools</a>)}
     </nav>
   </div>
-  <div class="foot-fb"><Feedback /></div>
-  <hr class="foot-rule" />
-  <div class="foot-legal">
-    <p>An independent tool, not run by any council or school.</p>
-    <p class="foot-biz">Local business? <a href={url('advertise/')}>Advertise with us</a></p>
+  <div class="foot-bottom">
+    <div class="foot-id">
+      <a class="foot-brand" href={url('')}><Rose size={28} /><span>Yorkshire School Checker</span></a>
+      <p class="foot-tag">An independent tool, not run by any council or school.</p>
+    </div>
+    <nav class="foot-links" aria-label="Footer">
+      <a href={url('')}>Find schools</a>
+      <a href={url('plan/')}>My plan</a>
+      <a href={url('how-places-work/')}>How places work</a>
+      <a href={url('how-places-work/#sources')}>Where our numbers come from</a>
+      <a href={url('about/')}>About</a>
+      <Feedback />
+      <a href={url('privacy/')}>Privacy</a>
+    </nav>
   </div>
-  <p class="credit">
-    <span>Made by</span>
-    <a class="credit-link" href="https://www.mammothwebsites.co.uk" target="_blank" rel="noopener"><Mammoth /><span>Mammoth Websites</span></a>
-  </p>
+  <div class="foot-base">
+    <p class="foot-biz">Local business? <a href={url('advertise/')}>Advertise with us</a></p>
+    <p class="credit">
+      <span>Made by</span>
+      <a class="credit-link" href="https://www.mammothwebsites.co.uk" target="_blank" rel="noopener"><Mammoth /><span>Mammoth Websites</span></a>
+    </p>
+  </div>
 </footer>

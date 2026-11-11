@@ -65,30 +65,32 @@ label.pill, select { cursor: pointer; }
 }
 
 /* ---------- footer ---------- */
-.site-foot { display: grid; grid-template-columns: 1fr auto auto; grid-template-areas: 'links links links' 'areas areas areas' 'legal fb credit'; column-gap: 32px; align-items: center; gap: 16px; padding: 32px var(--gr) 32px var(--gl); border-top: 1px solid var(--line); color: var(--muted); font-size: 15px; margin-top: 0; }
-.foot-brand, .foot-rule { display: none; }
-/* the site's own pages (About, Privacy, How places work), above the council and area lists */
-.foot-links { grid-area: links; display: flex; flex-wrap: wrap; gap: 8px 28px; font-weight: 600; color: var(--ink); }
-.foot-links a { text-decoration: none; }
-.foot-links a:hover { text-decoration: underline; }
-.foot-legal { grid-area: legal; display: grid; gap: 6px; }
-.foot-biz a { color: var(--ink); font-weight: 600; }
-.foot-nav { grid-area: areas; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 40px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+/* the council and area lists, then the site's own name and pages, then advertising and the credit */
+.site-foot { padding: 40px var(--gr) 32px var(--gl); border-top: 1px solid var(--line); color: var(--muted); font-size: 15px; }
+.foot-nav { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 40px; padding-bottom: 32px; }
 .foot-areas { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 24px; }
 .foot-areas span { font-weight: 700; color: var(--ink); }
 .foot-areas a { color: var(--ink); font-weight: 600; }
-.foot-fb { grid-area: fb; }
-.credit { grid-area: credit; display: flex; align-items: flex-start; gap: 6px; margin: 0; }
+.foot-bottom { display: grid; grid-template-columns: minmax(0, 320px) minmax(0, 1fr); gap: 24px 48px; align-items: center; padding: 32px 36px; background: var(--pale); border-radius: 20px; }
+.foot-brand { display: inline-flex; align-items: center; gap: 10px; font: 700 19px/1.2 var(--display); color: var(--ink); text-decoration: none; }
+.foot-tag { margin-top: 10px; font-size: 14px; line-height: 1.5; max-width: 300px; text-wrap: pretty; }
+.foot-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 12px 28px; }
+.foot-links a, .foot-links .feedback-btn { color: var(--ink); font-weight: 600; font-size: 15px; text-decoration: none; text-underline-offset: 4px; text-decoration-thickness: 1.5px; }
+.foot-links a:hover, .foot-links .feedback-btn:hover { text-decoration: underline; }
+.foot-base { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px 24px; padding-top: 24px; font-size: 14px; }
+.foot-base p { margin: 0; }
+.foot-biz a { color: var(--ink); font-weight: 600; }
+.credit { display: flex; align-items: flex-start; gap: 6px; }
 .credit > span { padding-top: 2.5px; }
 .credit-link { display: inline-flex; align-items: center; gap: 5px; padding-bottom: 3px; border-bottom: 1.5px solid currentColor; text-decoration: none; }
 .mammoth { flex-shrink: 0; }
 @media (max-width: 760px) {
-  .site-foot { grid-template-columns: 1fr; grid-template-areas: 'brand' 'links' 'areas' 'fb' 'rule' 'legal' 'credit'; gap: 16px; padding: 28px var(--gr) 36px var(--gl); font-size: 13px; }
-  .foot-brand { grid-area: brand; display: flex; align-items: center; gap: 8px; font-family: var(--display); font-weight: 700; font-size: 16px; color: var(--ink); }
-  .foot-links { gap: 8px 20px; }
-  .foot-rule { grid-area: rule; display: block; width: 100%; border: 0; border-top: 1px solid var(--line); margin: 0; }
-  .foot-nav { flex-direction: column; gap: 16px; padding-bottom: 0; border-bottom: 0; }
-  .foot-areas { font-size: 15px; gap: 8px 20px; }
+  .site-foot { padding: 28px var(--gr) 36px var(--gl); }
+  .foot-nav { flex-direction: column; gap: 16px; padding-bottom: 28px; }
+  .foot-areas { gap: 8px 20px; }
+  .foot-bottom { grid-template-columns: 1fr; gap: 20px; padding: 24px 20px; border-radius: 16px; align-items: start; }
+  .foot-links { justify-content: flex-start; gap: 14px 22px; }
+  .foot-base { flex-direction: column; align-items: flex-start; }
 }
 
 /* ---------- buttons, chips, pills ---------- */
@@ -569,8 +571,8 @@ body.panel-open { overflow: hidden; }
 }
 
 /* ---------- feedback ---------- */
-.feedback-btn { padding: 8px 16px; border-radius: 999px; border: 2px solid var(--ink); background: #fff; color: var(--ink); font-weight: 700; font-size: 15px; box-shadow: 3px 3px 0 var(--cobalt); }
-.feedback-btn:hover { background: var(--sticky); }
+/* "Contact us" in the footer: opens the message form, so it's a button, but it reads as one of the links */
+.feedback-btn { padding: 0; border: 0; background: none; font: inherit; cursor: pointer; text-align: left; }
 .fb { width: min(460px, calc(100% - 32px)); padding: 0; border: 2.5px solid var(--ink); border-radius: 20px; box-shadow: 6px 6px 0 var(--cobalt); color: var(--ink); }
 .fb::backdrop { background: rgba(20, 24, 43, .42); }
 .fb-form, .fb-done { padding: 24px; display: grid; gap: 14px; }
@@ -590,7 +592,7 @@ body.panel-open { overflow: hidden; }
 .fb-done { justify-items: start; }
 .fb-done .hand { font-size: 28px; transform: rotate(-3deg); }
 .fb-done p { color: var(--muted); }
-@media (max-width: 760px) { .foot-fb { justify-self: start; } .fb-acts .btn { width: 100%; } }
+@media (max-width: 760px) { .fb-acts .btn { width: 100%; } }
 
 /* ---------- toast ---------- */
 body.panel-open .toast { bottom: calc(96px + env(safe-area-inset-bottom)); }
