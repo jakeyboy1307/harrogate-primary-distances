@@ -581,6 +581,8 @@ body.panel-open { overflow: hidden; }
 .fb-field em { font-style: normal; font-weight: 400; color: var(--muted-2); }
 .fb-field textarea, .fb-field input { width: 100%; font: 400 16px/1.5 var(--body); color: var(--ink); padding: 10px 12px; border: 2px solid var(--ink); border-radius: 12px; background: #fff; resize: vertical; }
 .fb-hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.fb-note { font-size: 13px; color: var(--muted-2); }
+.fb-note a { color: var(--muted); }
 .fb-status { font-size: 14px; color: var(--muted); min-height: 1em; }
 .fb-status:empty { display: none; }
 .fb-status.err { color: var(--bad); font-weight: 600; }

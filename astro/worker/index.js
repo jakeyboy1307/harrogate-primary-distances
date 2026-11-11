@@ -2,6 +2,8 @@
 //   GET  /api/sponsors  the ads running today, for the ad slots on the site (from the DB binding, a D1 database)
 //   POST /api/enquiry   the advertising enquiry form on /advertise/: saved to the database, then emailed with
 //                       Cloudflare Email Service (the ENQUIRY binding). Under `wrangler dev` nothing is sent.
+//   POST /api/message   the "Send us a message" form (src/components/Feedback.astro): emailed the same way, with
+//                       Reply-To set to the sender, so a reply goes straight back to them. Not saved anywhere.
 //   /admin, /api/admin/* only for a signed-in admin (worker/auth.js); everyone else gets "not allowed".
 // The live site and previews use separate databases (see wrangler.jsonc), so preview data never shows live.
 
@@ -117,6 +119,28 @@ async function enquiry(request, env) {
   return id != null || emailed ? json({ ok: true }) : json({ error: 'send' }, 502);
 }
 
+async function message(request, env) {
+  if (request.method !== 'POST') return json({ error: 'method' }, 405);
+  const origin = request.headers.get('Origin');
+  if (origin !== new URL(request.url).origin) return json({ error: 'origin' }, 403);
+  let b;
+  try { b = await request.json(); } catch { return json({ error: 'json' }, 400); }
+  if (b.website) return json({ ok: true });   // the hidden field: a bot, so pretend it worked
+  const f = { name: clip(b.name, 120), email: clip(b.email, 200), message: clip(b.message, 5000), page: clip(b.page, 200) };
+  if (!f.name || !EMAIL_RE.test(f.email) || !f.message) return json({ error: 'fields' }, 400);
+  try {
+    await env.ENQUIRY.send({
+      to: TO, from: FROM, replyTo: f.email,
+      subject: `Message from the site: ${f.name}`.replace(/[\r\n]+/g, ' ').slice(0, 150),
+      text: [`Name: ${f.name}`, `Email: ${f.email}`, `Sent from: ${f.page || 'not known'}`, '', f.message].join('\n'),
+    });
+  } catch (e) {
+    console.error('message email failed', e);
+    return json({ error: 'send' }, 502);
+  }
+  return json({ ok: true });
+}
+
 // what anyone who isn't a signed-in admin sees at /admin
 const DENIED = `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex"><title>Not allowed</title>
@@ -159,6 +183,7 @@ export default {
       if (pathname === '/admin' || pathname.startsWith('/admin/') || pathname.startsWith('/api/admin/')) return await admin(request, env, ctx, pathname);
       if (pathname === '/api/sponsors' && request.method === 'GET') return await sponsors(env);
       if (pathname === '/api/enquiry') return await enquiry(request, env);
+      if (pathname === '/api/message') return await message(request, env);
       if (pathname === '/api/hit') return await hit(request, env);
     } catch (e) {
       console.error(pathname, e);
