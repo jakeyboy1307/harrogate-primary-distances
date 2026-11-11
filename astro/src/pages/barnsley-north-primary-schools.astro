@@ -1,0 +1,24 @@
+---
+// Area page: Barnsley's barnsleynorth area (lib/specs.ts AREA_INFO). The questions every Barnsley page shares are in lib/barnsley.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { bnBorder, bnFaqs, bnTail } from '../lib/barnsley';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.barnsleynorth;
+const schools = loadArea('barnsley.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...bnFaqs('Barnsley', openLatest(schools).length, schools.length),
+  bnBorder('Barnsley', 'From Havercroft, Ryhill or South Hiendley, that’s Wakefield Council'),
+  ...bnTail,
+];
+---
+<AreaPage areaKey="barnsleynorth"
+  title="Barnsley primary schools: admissions, distances and Ofsted · Yorkshire School Checker"
+  description="Barnsley town, Royston, Cudworth, Darton and Mapplewell primary schools: how far places went each year, Ofsted ratings and the 2027 Reception dates. Barnsley has no catchments."
+  h1="Barnsley North primary schools: the town, Royston and Cudworth"
+  lede="Every primary school in Barnsley town and the north of the borough: Old Town, Kingstone, Athersley, Monk Bretton, Lundwood, Darton, Mapplewell, Royston, Carlton, Cudworth, Shafton and Grimethorpe."
+  area="Barnsley"
+  schools={schools}
+  groups={[{ label: 'Barnsley North: the town, Royston and Cudworth', note: `${schools.length} Barnsley primary schools. Barnsley has no catchment areas, so the checker shows how far places went at each one.`, schools }]}
+  faqs={faqs}
+/>

@@ -1,0 +1,2851 @@
+{
+ "2024": {
+  "schools": [
+   {
+    "name": "All Saints Academy Darfield",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 2,
+    "sib": 14,
+    "dist": 13,
+    "total": 29
+   },
+   {
+    "name": "Athersley North Primary School",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 18,
+    "dist": 22,
+    "total": 40
+   },
+   {
+    "name": "Athersley South Primary School",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 22,
+    "dist": 17,
+    "total": 40
+   },
+   {
+    "name": "Barugh Green Primary School",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 0,
+    "dist": 19,
+    "total": 31
+   },
+   {
+    "name": "Birdwell Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 15,
+    "dist": 15,
+    "total": 30
+   },
+   {
+    "name": "Birkwood Primary School",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 15,
+    "dist": 32,
+    "total": 48
+   },
+   {
+    "name": "Brierley Church of England Primary Voluntary Controlled School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 20,
+    "dist": 10,
+    "total": 30
+   },
+   {
+    "name": "Burton Road Primary School",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 16,
+    "dist": 29,
+    "total": 45
+   },
+   {
+    "name": "Carlton Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 1,
+    "lac": 1,
+    "sib": 13,
+    "dist": 25,
+    "total": 40
+   },
+   {
+    "name": "Carrfield Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 10,
+    "dist": 28,
+    "total": 38
+   },
+   {
+    "name": "Cawthorne Church of England Voluntary Controlled Primary School",
+    "own": false,
+    "rules": {},
+    "places": 24,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 13,
+    "dist": 11,
+    "total": 24
+   },
+   {
+    "name": "Cherry Dale Primary School",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 1,
+    "lac": 1,
+    "sib": 24,
+    "dist": 14,
+    "total": 40
+   },
+   {
+    "name": "Cudworth Churchfield Primary School",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 4,
+    "lac": 2,
+    "sib": 16,
+    "dist": 30,
+    "total": 53
+   },
+   {
+    "name": "Darton Primary",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 14,
+    "dist": 26,
+    "total": 40
+   },
+   {
+    "name": "Dodworth St John the Baptist CofE Primary Academy",
+    "own": true,
+    "rules": {
+     "Children who have an exceptional medical or social need": 0,
+     "A child who resides within the catchment area of the school": 0
+    },
+    "places": 30,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 4,
+    "dist": 10,
+    "total": 15
+   },
+   {
+    "name": "Elsecar Holy Trinity CofE Primary Academy",
+    "own": true,
+    "rules": {
+     "A child who, or whose parents/guardians, resides within the parish of Elsecar, or whose": 0,
+     "A child whose parents/guardians reside within the parish of Elsecar who are members": 0,
+     "A child of parents residing within the parish of Elsecar": 1
+    },
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 10,
+    "dist": 14,
+    "total": 25
+   },
+   {
+    "name": "Gawber Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 12,
+    "dist": 17,
+    "total": 30
+   },
+   {
+    "name": "Goldthorpe Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 1,
+    "lac": 1,
+    "sib": 10,
+    "dist": 28,
+    "total": 40
+   },
+   {
+    "name": "Gooseacre Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 50,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 24,
+    "dist": 25,
+    "total": 50
+   },
+   {
+    "name": "Greenfield Primary School",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 16,
+    "dist": 17,
+    "total": 33
+   },
+   {
+    "name": "Heather Garth Primary Academy",
+    "own": false,
+    "rules": {
+     "Staff": 0,
+     "Attending nursery": 10
+    },
+    "places": 30,
+    "ehcp": 1,
+    "lac": 1,
+    "sib": 1,
+    "dist": 7,
+    "total": 30
+   },
+   {
+    "name": "High View Primary Learning Centre",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 24,
+    "dist": 36,
+    "total": 60
+   },
+   {
+    "name": "Highgate Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 16,
+    "dist": 26,
+    "total": 43
+   },
+   {
+    "name": "Holy Rood Catholic Primary School",
+    "own": true,
+    "rules": {
+     "Catholic children who are looked after and previously looked after": 0,
+     "Catholic children who are resident in the parish(es) of Holy Rood, Barnsley and": 1,
+     "Other Catholic Children": 4,
+     "Other looked after and previously looked after children": 0,
+     "Catechumens and members of an Eastern Christian Church": 0,
+     "Children of other Christian denominations whose membership is evidenced by": 0,
+     "Children of other faiths whose membership is evidenced by a religious leader": 0
+    },
+    "places": 30,
+    "ehcp": 0,
+    "sib": 4,
+    "dist": 9,
+    "total": 18
+   },
+   {
+    "name": "Holy Trinity Catholic and Church of England School",
+    "own": true,
+    "rules": {
+     "Looked After Children": 0,
+     "Catholic children who reside in the parishes of Blessed Sacrament, St Mary Magdalene": 9,
+     "Catholic children who reside outside the Catholic parishes listed and Church of England": 3,
+     "Children who are practising members of other Christian communities and who have the": 4,
+     "Children who are members of other faiths who have the written support of their": 0
+    },
+    "places": 60,
+    "ehcp": 0,
+    "sib": 16,
+    "dist": 19,
+    "total": 51
+   },
+   {
+    "name": "Hoyland Common Primary School",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 24,
+    "dist": 26,
+    "total": 51
+   },
+   {
+    "name": "Hoyland Springwood Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 2,
+    "lac": 0,
+    "sib": 6,
+    "dist": 4,
+    "total": 12
+   },
+   {
+    "name": "Hoylandswaine Primary School",
+    "own": false,
+    "rules": {},
+    "places": 20,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 6,
+    "dist": 2,
+    "total": 8
+   },
+   {
+    "name": "Hunningley Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 23,
+    "dist": 20,
+    "total": 43
+   },
+   {
+    "name": "Joseph Locke Primary School",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 24,
+    "dist": 36,
+    "total": 60
+   },
+   {
+    "name": "Jump Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 3,
+    "sib": 13,
+    "dist": 10,
+    "total": 26
+   },
+   {
+    "name": "Keresforth Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 1,
+    "lac": 1,
+    "sib": 11,
+    "dist": 17,
+    "total": 30
+   },
+   {
+    "name": "Kexborough Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 11,
+    "dist": 10,
+    "total": 22
+   },
+   {
+    "name": "Kings Oak Primary Learning Centre",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 1,
+    "lac": 1,
+    "sib": 13,
+    "dist": 33,
+    "total": 49
+   },
+   {
+    "name": "Lacewood Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 20,
+    "dist": 19,
+    "total": 30
+   },
+   {
+    "name": "Ladywood Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 5,
+    "dist": 17,
+    "total": 23
+   },
+   {
+    "name": "Laithes Primary School",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 2,
+    "lac": 0,
+    "sib": 14,
+    "dist": 24,
+    "total": 40
+   },
+   {
+    "name": "Mapplewell Primary School",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 12,
+    "dist": 33,
+    "total": 45
+   },
+   {
+    "name": "Meadstead Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 7,
+    "dist": 11,
+    "total": 19
+   },
+   {
+    "name": "Milefield Primary School",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 4,
+    "lac": 0,
+    "sib": 0,
+    "dist": 38,
+    "total": 42
+   },
+   {
+    "name": "Milhouse Primary School",
+    "own": false,
+    "rules": {},
+    "places": 20,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 3,
+    "dist": 8,
+    "total": 11
+   },
+   {
+    "name": "Oakhill Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 15,
+    "dist": 18,
+    "total": 33
+   },
+   {
+    "name": "Oakwell Rise Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 2,
+    "lac": 0,
+    "sib": 10,
+    "dist": 18,
+    "total": 30
+   },
+   {
+    "name": "Outwood Primary Academy Darfield",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 14,
+    "dist": 16,
+    "total": 30
+   },
+   {
+    "name": "Outwood Primary Academy Littleworth Grange",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 1,
+    "lac": 2,
+    "sib": 25,
+    "dist": 23,
+    "total": 51
+   },
+   {
+    "name": "Oxspring Primary School",
+    "own": false,
+    "rules": {},
+    "places": 20,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 5,
+    "dist": 9,
+    "total": 14
+   },
+   {
+    "name": "Parkside Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 2,
+    "sib": 8,
+    "dist": 20,
+    "total": 30
+   },
+   {
+    "name": "Penistone St John Voluntary Aided Primary School",
+    "own": true,
+    "rules": {
+     "A child who, or whose parents/guardians, resides within the parishes of Penistone St John": 0
+    },
+    "places": 60,
+    "ehcp": 1,
+    "lac": 1,
+    "sib": 27,
+    "dist": 29,
+    "total": 60
+   },
+   {
+    "name": "Queens Road Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 7,
+    "dist": 8,
+    "total": 16
+   },
+   {
+    "name": "Royston St John Baptist CE Primary School",
+    "own": true,
+    "rules": {
+     "A child who, or whose parents/guardians, resides within the parish of Royston St John": 0,
+     "A child whose parents/guardians reside within the parish of Royston St John Baptist who": 0,
+     "A child of parents residing within the parish of Royston St John Baptist": 7
+    },
+    "places": 30,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 7,
+    "dist": 4,
+    "total": 19
+   },
+   {
+    "name": "Sacred Heart Catholic Primary School",
+    "own": true,
+    "rules": {
+     "Catholic Looked after and previously looked after children": 0,
+     "Catholic children who are resident in the parish(es) of Corpus Christi": 3,
+     "Other Catholic children": 0,
+     "Looked after and previously looked after children": 0,
+     "Catechumens and members of an Eastern Christian Church": 2,
+     "Children of other Christian denominations whose membership is evidenced by": 6,
+     "Children of other faiths whose membership is evidenced by a religious leader": 0
+    },
+    "places": 20,
+    "ehcp": 1,
+    "sib": 8,
+    "dist": 0,
+    "total": 20
+   },
+   {
+    "name": "Sandhill Primary School",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 9,
+    "dist": 21,
+    "total": 30
+   },
+   {
+    "name": "Shafton Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 19,
+    "dist": 20,
+    "total": 40
+   },
+   {
+    "name": "Shawlands Primary School",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 2,
+    "lac": 1,
+    "sib": 17,
+    "dist": 25,
+    "total": 45
+   },
+   {
+    "name": "Silkstone Common Junior and Infant School",
+    "own": false,
+    "rules": {},
+    "places": 20,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 9,
+    "dist": 10,
+    "total": 20
+   },
+   {
+    "name": "Silkstone Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 7,
+    "dist": 20,
+    "total": 27
+   },
+   {
+    "name": "Springvale Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 1,
+    "lac": 2,
+    "sib": 15,
+    "dist": 12,
+    "total": 30
+   },
+   {
+    "name": "St Helen\u2019s Catholic Primary School",
+    "own": true,
+    "rules": {
+     "Catholic children who are Looked after or previously looked after": 0,
+     "Catholic children who are resident in the parish(es) of Corpus Christi": 1,
+     "Other Catholic": 1,
+     "Other looked after": 0,
+     "Catechumens and members of an Eastern Christian Church": 0,
+     "Children of other Christian denominations whose membership is evidenced by": 1,
+     "Children of other faiths whose membership is evidenced by a religious leader": 0
+    },
+    "places": 20,
+    "ehcp": 0,
+    "sib": 3,
+    "dist": 6,
+    "total": 12
+   },
+   {
+    "name": "St Helen\u2019s Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 12,
+    "dist": 7,
+    "total": 19
+   },
+   {
+    "name": "St Mary\u2019s Church of England Primary School",
+    "own": true,
+    "rules": {
+     "A child who (or whose parent(s)/guardian(s)) regularly attends the church of": 0,
+     "A child (or whose parent(s)/guardian(s)) who worship(s) regularly in a": 1
+    },
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 10,
+    "dist": 19,
+    "total": 30
+   },
+   {
+    "name": "St Michael and All Angels Catholic Primary School",
+    "own": true,
+    "rules": {
+     "Catholic Children who are looked after or previously looked after.": 0,
+     "Catholic children who are resident in the parish(es) of Corpus Christi": 1,
+     "Other Catholic children.": 0,
+     "Other looked after and previously looked after children.": 0,
+     "Catechumens and members of an Eastern Christian Church": 0,
+     "Children of other Christian denominations whose membership is evidenced by": 1,
+     "Children of other faiths whose membership is evidenced by a religious leader": 0
+    },
+    "places": 20,
+    "ehcp": 0,
+    "sib": 6,
+    "dist": 2,
+    "total": 10
+   },
+   {
+    "name": "Summer Lane Primary",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 9,
+    "dist": 26,
+    "total": 36
+   },
+   {
+    "name": "Summerfields Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 8,
+    "dist": 18,
+    "total": 26
+   },
+   {
+    "name": "Tankersley St Peter\u2019s C of E (Aided) Primary School",
+    "own": true,
+    "rules": {
+     "The children of parents/carers who are resident within the ecclesiastical parish of Tankersley": 6,
+     "The children of parents/carers who are resident outside the ecclesiastical parish of": 5,
+     "The children of parents/carers who are resident outside the ecclesiastical parish": 0
+    },
+    "places": 30,
+    "ehcp": 1,
+    "sib": 10,
+    "dist": 8,
+    "total": 30
+   },
+   {
+    "name": "The Ellis Church of England (Voluntary Aided) Primary School",
+    "own": true,
+    "rules": {
+     "Children who, or whose parents/carers regularly attend the parish church of St Mary\u2019s,": 3,
+     "Whether the child has any brothers or sisters in the school at the time of admission who": 1,
+     "Whether the child is resident in the village of Hemmingfield and has any brothers or": 4,
+     "Whether the child is resident in the village of Hemmingfield": 10,
+     "Whether the child has any brothers or sisters at the time of admission who were admitted": 4,
+     "Children who, or whose parents/carers reside in the parish of Wombwell and regularly": 0,
+     "Children who, or whose parents/carers reside outside the parish of Wombwell and": 0
+    },
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "dist": 5,
+    "total": 27
+   },
+   {
+    "name": "The Forest Academy",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 21,
+    "dist": 23,
+    "total": 45
+   },
+   {
+    "name": "The Hill Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 23,
+    "dist": 22,
+    "total": 45
+   },
+   {
+    "name": "The Mill Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 8,
+    "dist": 14,
+    "total": 22
+   },
+   {
+    "name": "Thurgoland Church of England (Voluntary Controlled) Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 9,
+    "dist": 20,
+    "total": 29
+   },
+   {
+    "name": "Thurlstone Primary School",
+    "own": false,
+    "rules": {},
+    "places": 25,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 11,
+    "dist": 13,
+    "total": 25
+   },
+   {
+    "name": "Upperwood Academy",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 24,
+    "dist": 20,
+    "total": 45
+   },
+   {
+    "name": "Ward Green Primary School",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 11,
+    "dist": 34,
+    "total": 46
+   },
+   {
+    "name": "Wellgate Primary School",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 21,
+    "dist": 25,
+    "total": 47
+   },
+   {
+    "name": "West Meadows Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 8,
+    "dist": 15,
+    "total": 23
+   },
+   {
+    "name": "Wilthorpe Primary School",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 2,
+    "lac": 0,
+    "sib": 14,
+    "dist": 20,
+    "total": 36
+   },
+   {
+    "name": "Wombwell Park Street Primary School",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 13,
+    "dist": 30,
+    "total": 44
+   },
+   {
+    "name": "Worsbrough Bank End Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 10,
+    "dist": 20,
+    "total": 30
+   },
+   {
+    "name": "Worsbrough Common Primary School",
+    "own": false,
+    "rules": {
+     "Staff": 3
+    },
+    "places": 60,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 9,
+    "dist": 21,
+    "total": 33
+   }
+  ],
+  "over": {
+   "Athersley North Primary School": 1.177,
+   "Athersley South Primary School": 0.494,
+   "Birdwell Primary School": 2.228,
+   "Brierley Church of England Voluntary Controlled Primary School": 0.205,
+   "Burton Road Primary School": 0.987,
+   "Cawthorne Church of England Voluntary Controlled Primary School": 2.01,
+   "Cherry Dale Primary School": 0.506,
+   "Darton Primary School": 0.991,
+   "Gawber Primary School": 0.698,
+   "Gooseacre Primary Academy": 2.685,
+   "Heather Garth Primary School Academy": 1.161,
+   "High View Primary Learning Centre": 1.288,
+   "Joseph Locke Primary School": 1.1,
+   "Keresforth Primary School": 0.677,
+   "Lacewood Primary School": 0.428,
+   "Laithes Primary School": 0.756,
+   "Mapplewell Primary School": 0.884,
+   "Oakwell Rise Primary Academy": 0.372,
+   "Outwood Primary Academy Darfield": 2.557,
+   "Parkside Primary Academy": 0.365,
+   "Penistone St John\u2019s Voluntary Aided Primary School": 0.632,
+   "Sacred Heart Catholic Primary School": 4.673,
+   "Shafton Primary Academy": 1.989,
+   "Shawlands Primary School": 2.075,
+   "Silkstone Common Junior and Infant School": 1.756,
+   "Springvale Primary School": 0.343,
+   "St Marys Church of England Primary School": 0.698,
+   "Tankersley St Peter\u2019s CofE (Aided) Primary School": 0.626,
+   "The Forest Academy": 0.421,
+   "Thurlstone Primary School": 0.988,
+   "Upperwood Academy": 2.0,
+   "Worsbrough Bank End Primary School": 2.016
+  }
+ },
+ "2025": {
+  "schools": [
+   {
+    "name": "All Saints Academy Darfield",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 2,
+    "sib": 8,
+    "dist": 10,
+    "total": 20
+   },
+   {
+    "name": "Athersley North Primary School",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 15,
+    "dist": 18,
+    "total": 33
+   },
+   {
+    "name": "Athersley South Primary School",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 1,
+    "lac": 2,
+    "sib": 16,
+    "dist": 15,
+    "total": 34
+   },
+   {
+    "name": "Barugh Green Primary School",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 9,
+    "dist": 15,
+    "total": 25
+   },
+   {
+    "name": "Birdwell Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 6,
+    "dist": 17,
+    "total": 24
+   },
+   {
+    "name": "Birkwood Primary School",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 1,
+    "lac": 2,
+    "sib": 20,
+    "dist": 37,
+    "total": 60
+   },
+   {
+    "name": "Brierley Church of England Primary Voluntary Controlled School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 18,
+    "dist": 12,
+    "total": 30
+   },
+   {
+    "name": "Burton Road Primary School",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 13,
+    "dist": 28,
+    "total": 42
+   },
+   {
+    "name": "Carlton Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 13,
+    "dist": 25,
+    "total": 38
+   },
+   {
+    "name": "Carrfield Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 12,
+    "dist": 11,
+    "total": 24
+   },
+   {
+    "name": "Cawthorne Church of England Voluntary Controlled Primary School",
+    "own": false,
+    "rules": {},
+    "places": 24,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 8,
+    "dist": 16,
+    "total": 24
+   },
+   {
+    "name": "Cherry Dale Primary School",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 18,
+    "dist": 15,
+    "total": 34
+   },
+   {
+    "name": "Cudworth Churchfield Primary School",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 16,
+    "dist": 41,
+    "total": 58
+   },
+   {
+    "name": "Darton Primary",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 19,
+    "dist": 20,
+    "total": 39
+   },
+   {
+    "name": "Dodworth St John the Baptist CofE Primary Academy",
+    "own": true,
+    "rules": {
+     "Children who have an exceptional medical or social need": 0,
+     "A child who resides within the catchment area of the school": 0
+    },
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 4,
+    "dist": 10,
+    "total": 14
+   },
+   {
+    "name": "Elsecar Holy Trinity CofE Primary Academy",
+    "own": true,
+    "rules": {
+     "A child who, or whose parents/guardians, resides within the parish of Elsecar, or whose": 0,
+     "A child whose parents/guardians reside within the parish of Elsecar who are members": 0,
+     "A child of parents residing within the parish of Elsecar": 0
+    },
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 12,
+    "dist": 10,
+    "total": 23
+   },
+   {
+    "name": "Gawber Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 13,
+    "dist": 16,
+    "total": 30
+   },
+   {
+    "name": "Goldthorpe Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 3,
+    "lac": 1,
+    "sib": 16,
+    "dist": 18,
+    "total": 38
+   },
+   {
+    "name": "Gooseacre Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 50,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 20,
+    "dist": 30,
+    "total": 50
+   },
+   {
+    "name": "Greenfield Primary School",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 10,
+    "dist": 11,
+    "total": 21
+   },
+   {
+    "name": "Heather Garth Primary Academy",
+    "own": false,
+    "rules": {
+     "Staff": 0,
+     "Attending nursery": 10
+    },
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 11,
+    "dist": 5,
+    "total": 26
+   },
+   {
+    "name": "High View Primary Learning Centre",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 1,
+    "lac": 3,
+    "sib": 15,
+    "dist": 41,
+    "total": 60
+   },
+   {
+    "name": "Highgate Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 16,
+    "dist": 19,
+    "total": 35
+   },
+   {
+    "name": "Holy Rood Catholic Primary School",
+    "own": true,
+    "rules": {
+     "Catholic children who are looked after and previously looked after": 0,
+     "Catholic children who are resident in the parish(es) of Holy Rood, Barnsley and": 3,
+     "Other Catholic Children": 0,
+     "Other looked after and previously looked after children": 0,
+     "Catechumens and members of an Eastern Christian Church": 0,
+     "Children of other Christian denominations whose membership is evidenced by": 0,
+     "Children of other faiths whose membership is evidenced by a religious leader": 0
+    },
+    "places": 30,
+    "ehcp": 0,
+    "sib": 4,
+    "dist": 8,
+    "total": 15
+   },
+   {
+    "name": "Holy Trinity Catholic and Church of England School",
+    "own": true,
+    "rules": {
+     "Looked After Children": 0,
+     "Catholic children who reside in the parishes of Blessed Sacrament, St Mary Magdalene": 10,
+     "Catholic children who reside outside the Catholic parishes listed and Church of England": 1,
+     "Children who are practising members of other Christian communities and who have the": 1,
+     "Children who are members of other faiths who have the written support of their": 0
+    },
+    "places": 60,
+    "ehcp": 0,
+    "sib": 19,
+    "dist": 11,
+    "total": 42
+   },
+   {
+    "name": "Hoyland Common Primary School",
+    "own": false,
+    "rules": {
+     "Staff": 0
+    },
+    "places": 60,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 23,
+    "dist": 24,
+    "total": 47
+   },
+   {
+    "name": "Hoyland Springwood Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 8,
+    "dist": 6,
+    "total": 15
+   },
+   {
+    "name": "Hoylandswaine Primary School",
+    "own": false,
+    "rules": {
+     "Staff": 0
+    },
+    "places": 20,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 2,
+    "dist": 5,
+    "total": 8
+   },
+   {
+    "name": "Hunningley Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 1,
+    "lac": 1,
+    "sib": 23,
+    "dist": 20,
+    "total": 45
+   },
+   {
+    "name": "Joseph Locke Primary School",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 25,
+    "dist": 32,
+    "total": 57
+   },
+   {
+    "name": "Jump Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 1,
+    "lac": 1,
+    "sib": 17,
+    "dist": 11,
+    "total": 30
+   },
+   {
+    "name": "Keresforth Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 14,
+    "dist": 15,
+    "total": 30
+   },
+   {
+    "name": "Kexborough Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 11,
+    "dist": 8,
+    "total": 19
+   },
+   {
+    "name": "Kings Oak Primary Learning Centre",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 26,
+    "dist": 32,
+    "total": 59
+   },
+   {
+    "name": "Lacewood Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 1,
+    "lac": 1,
+    "sib": 11,
+    "dist": 16,
+    "total": 29
+   },
+   {
+    "name": "Ladywood Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 13,
+    "dist": 9,
+    "total": 22
+   },
+   {
+    "name": "Laithes Primary School",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 2,
+    "lac": 0,
+    "sib": 11,
+    "dist": 24,
+    "total": 37
+   },
+   {
+    "name": "Mapplewell Primary School",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 23,
+    "dist": 22,
+    "total": 45
+   },
+   {
+    "name": "Meadstead Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 8,
+    "dist": 15,
+    "total": 23
+   },
+   {
+    "name": "Milefield Primary School",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 16,
+    "dist": 17,
+    "total": 33
+   },
+   {
+    "name": "Milhouse Primary School",
+    "own": false,
+    "rules": {},
+    "places": 20,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 3,
+    "dist": 7,
+    "total": 10
+   },
+   {
+    "name": "Oakhill Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 14,
+    "dist": 23,
+    "total": 37
+   },
+   {
+    "name": "Oakwell Rise Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 9,
+    "dist": 20,
+    "total": 30
+   },
+   {
+    "name": "Outwood Primary Academy Darfield",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 9,
+    "dist": 16,
+    "total": 25
+   },
+   {
+    "name": "Outwood Primary Academy Littleworth Grange",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 19,
+    "dist": 27,
+    "total": 46
+   },
+   {
+    "name": "Oxspring Primary School",
+    "own": false,
+    "rules": {},
+    "places": 20,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 7,
+    "dist": 10,
+    "total": 17
+   },
+   {
+    "name": "Parkside Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 7,
+    "dist": 14,
+    "total": 21
+   },
+   {
+    "name": "Penistone St John Voluntary Aided Primary School",
+    "own": true,
+    "rules": {
+     "A child who, or whose parents/guardians, resides within the parishes of Penistone St John": 0
+    },
+    "places": 60,
+    "ehcp": 2,
+    "lac": 0,
+    "sib": 21,
+    "dist": 17,
+    "total": 40
+   },
+   {
+    "name": "Queens Road Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 8,
+    "dist": 16,
+    "total": 24
+   },
+   {
+    "name": "Royston St John Baptist CE Primary School",
+    "own": true,
+    "rules": {
+     "A child who, or whose parents/guardians, resides within the parish of Royston St John": 1,
+     "A child whose parents/guardians reside within the parish of Royston St John Baptist who": 0,
+     "A child of parents residing within the parish of Royston St John Baptist": 7
+    },
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 3,
+    "dist": 0,
+    "total": 11
+   },
+   {
+    "name": "Sacred Heart Catholic Primary School",
+    "own": true,
+    "rules": {
+     "Catholic Looked after and previously looked after children": 0,
+     "Catholic children who are resident in the parish(es) of Corpus Christi": 3,
+     "Other Catholic children": 0,
+     "Looked after and previously looked after children": 0,
+     "Catechumens and members of an Eastern Christian Church": 1,
+     "Children of other Christian denominations whose membership is evidenced by": 1,
+     "Children of other faiths whose membership is evidenced by a religious leader": 1
+    },
+    "places": 20,
+    "ehcp": 1,
+    "sib": 11,
+    "dist": 2,
+    "total": 20
+   },
+   {
+    "name": "Sandhill Primary School",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 14,
+    "dist": 13,
+    "total": 28
+   },
+   {
+    "name": "Shafton Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 12,
+    "dist": 9,
+    "total": 21
+   },
+   {
+    "name": "Shawlands Primary School",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 12,
+    "dist": 19,
+    "total": 32
+   },
+   {
+    "name": "Silkstone Common Junior and Infant School",
+    "own": false,
+    "rules": {},
+    "places": 20,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 9,
+    "dist": 8,
+    "total": 17
+   },
+   {
+    "name": "Silkstone Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 12,
+    "dist": 14,
+    "total": 26
+   },
+   {
+    "name": "Springvale Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 10,
+    "dist": 19,
+    "total": 29
+   },
+   {
+    "name": "St Helen\u2019s Catholic Primary School",
+    "own": true,
+    "rules": {
+     "Catholic children who are Looked after or previously looked after": 0,
+     "Catholic children who are resident in the parish(es) of Corpus Christi": 2,
+     "Other Catholic": 0,
+     "Other looked after": 0,
+     "Catechumens and members of an Eastern Christian Church": 0,
+     "Children of other Christian denominations whose membership is evidenced by": 1,
+     "Children of other faiths whose membership is evidenced by a religious leader": 0
+    },
+    "places": 20,
+    "ehcp": 0,
+    "sib": 6,
+    "dist": 2,
+    "total": 11
+   },
+   {
+    "name": "St Helen\u2019s Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 8,
+    "dist": 7,
+    "total": 15
+   },
+   {
+    "name": "St Mary\u2019s Church of England Primary School",
+    "own": true,
+    "rules": {
+     "A child who (or whose parent(s)/guardian(s)) regularly attends the church of": 0,
+     "A child (or whose parent(s)/guardian(s)) who worship(s) regularly in a": 0
+    },
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 13,
+    "dist": 11,
+    "total": 24
+   },
+   {
+    "name": "St Michael and All Angels Catholic Primary School",
+    "own": true,
+    "rules": {
+     "Catholic children who are looked after or previously looked after": 0,
+     "Catholic children who are resident in the parish(es) of Corpus Christi": 4,
+     "Other Catholic children": 1,
+     "Other looked after and previously looked after children": 0,
+     "Catechumens and members of an Eastern Christian Church": 0,
+     "Children of other Christian denominations whose membership is evidenced by": 0,
+     "Children of other faiths whose membership is evidenced by a religious leader": 0
+    },
+    "places": 20,
+    "ehcp": 0,
+    "sib": 9,
+    "dist": 2,
+    "total": 16
+   },
+   {
+    "name": "Summer Lane Primary",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 11,
+    "dist": 18,
+    "total": 29
+   },
+   {
+    "name": "Summerfields Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 6,
+    "dist": 23,
+    "total": 30
+   },
+   {
+    "name": "Tankersley St Peter\u2019s C of E (Aided) Primary School",
+    "own": true,
+    "rules": {
+     "The children of parents/carers who are resident within the ecclesiastical parish of Tankersley": 9,
+     "The children of parents/carers who are resident outside the ecclesiastical parish of": 2,
+     "The children of parents/carers who are resident outside the ecclesiastical parish": 1
+    },
+    "places": 30,
+    "ehcp": 0,
+    "dist": 3,
+    "total": 30
+   },
+   {
+    "name": "The Ellis Church of England (Voluntary Aided) Primary School",
+    "own": true,
+    "rules": {
+     "Children who, or whose parents/carers regularly attend the parish church of St Mary\u2019s,": 6,
+     "Whether the child has any brothers or sisters in the school at the time of admission who": 0,
+     "Whether the child is resident in the village of Hemmingfield and has any brothers or": 1,
+     "Whether the child is resident in the village of Hemmingfield": 6,
+     "Whether the child has any brothers or sisters at the time of admission who were admitted": 4,
+     "Children who, or whose parents/carers reside in the parish of Wombwell and regularly": 0,
+     "Children who, or whose parents/carers reside outside the parish of Wombwell and": 0
+    },
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "dist": 5,
+    "total": 22
+   },
+   {
+    "name": "The Forest Academy",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 15,
+    "dist": 27,
+    "total": 42
+   },
+   {
+    "name": "The Hill Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 15,
+    "dist": 27,
+    "total": 43
+   },
+   {
+    "name": "The Mill Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 12,
+    "dist": 17,
+    "total": 29
+   },
+   {
+    "name": "Thurgoland Church of England (Voluntary Controlled) Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 11,
+    "dist": 12,
+    "total": 24
+   },
+   {
+    "name": "Thurlstone Primary School",
+    "own": false,
+    "rules": {},
+    "places": 25,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 10,
+    "dist": 13,
+    "total": 24
+   },
+   {
+    "name": "Upperwood Academy",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 13,
+    "dist": 26,
+    "total": 40
+   },
+   {
+    "name": "Ward Green Primary School",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 3,
+    "lac": 0,
+    "sib": 9,
+    "dist": 23,
+    "total": 35
+   },
+   {
+    "name": "Wellgate Primary School",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 13,
+    "dist": 38,
+    "total": 52
+   },
+   {
+    "name": "West Meadows Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 1,
+    "lac": 1,
+    "sib": 13,
+    "dist": 9,
+    "total": 24
+   },
+   {
+    "name": "Wilthorpe Primary School",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 14,
+    "dist": 31,
+    "total": 45
+   },
+   {
+    "name": "Wombwell Park Street Primary School",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 21,
+    "dist": 23,
+    "total": 45
+   },
+   {
+    "name": "Worsbrough Bank End Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 11,
+    "dist": 13,
+    "total": 24
+   },
+   {
+    "name": "Worsbrough Common Primary School",
+    "own": false,
+    "rules": {
+     "Staff": 0
+    },
+    "places": 60,
+    "ehcp": 2,
+    "lac": 3,
+    "sib": 15,
+    "dist": 32,
+    "total": 52
+   }
+  ],
+  "over": {
+   "Birkwood Primary School": 1.808,
+   "Brierley Church of England Voluntary Controlled Primary School": 0.502,
+   "Cawthorne Church of England Voluntary Controlled Primary School": 2.168,
+   "Gawber Primary School": 0.436,
+   "Gooseacre Primary Academy": 0.485,
+   "High View Primary Learning Centre": 1.632,
+   "Jump Primary School": 0.799,
+   "Keresforth Primary School": 0.274,
+   "Mapplewell Primary School": 0.422,
+   "Oakwell Rise Primary Academy": 0.294,
+   "Sacred Heart Catholic Primary School": 0.896,
+   "Summerfields Primary Academy": 1.116,
+   "Tankersley St Peter\u2019s CofE (Aided) Primary School": 0.324,
+   "Wombwell Park Street Primary School": 0.869
+  }
+ },
+ "2026": {
+  "schools": [
+   {
+    "name": "All Saints Academy Darfield",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 10,
+    "dist": 15,
+    "total": 25
+   },
+   {
+    "name": "Athersley North Primary School",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 17,
+    "dist": 13,
+    "total": 30
+   },
+   {
+    "name": "Athersley South Primary School",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 24,
+    "dist": 13,
+    "total": 37
+   },
+   {
+    "name": "Barugh Green Primary School",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 10,
+    "dist": 13,
+    "total": 23
+   },
+   {
+    "name": "Birdwell Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 8,
+    "dist": 21,
+    "total": 30
+   },
+   {
+    "name": "Birkwood Primary School",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 1,
+    "lac": 1,
+    "sib": 21,
+    "dist": 37,
+    "total": 60
+   },
+   {
+    "name": "Brierley Church of England Primary Voluntary Controlled School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 8,
+    "dist": 21,
+    "total": 30
+   },
+   {
+    "name": "Burton Road Primary School",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 20,
+    "dist": 25,
+    "total": 45
+   },
+   {
+    "name": "Carlton Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 8,
+    "dist": 20,
+    "total": 29
+   },
+   {
+    "name": "Carrfield Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 11,
+    "dist": 28,
+    "total": 39
+   },
+   {
+    "name": "Cawthorne Church of England Voluntary Controlled Primary School",
+    "own": false,
+    "rules": {},
+    "places": 24,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 11,
+    "dist": 13,
+    "total": 24
+   },
+   {
+    "name": "Cherry Dale Primary School",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 1,
+    "lac": 2,
+    "sib": 12,
+    "dist": 19,
+    "total": 34
+   },
+   {
+    "name": "Cudworth Churchfield Primary School",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 3,
+    "lac": 0,
+    "sib": 16,
+    "dist": 29,
+    "total": 48
+   },
+   {
+    "name": "Darton Primary",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 14,
+    "dist": 24,
+    "total": 38
+   },
+   {
+    "name": "Dodworth St John the Baptist CofE Primary Academy",
+    "own": true,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 3,
+    "dist": 2,
+    "total": 5
+   },
+   {
+    "name": "Elsecar Holy Trinity CofE Primary Academy",
+    "own": true,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 4,
+    "dist": 10,
+    "total": 15
+   },
+   {
+    "name": "Gawber Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 6,
+    "dist": 24,
+    "total": 30
+   },
+   {
+    "name": "Goldthorpe Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 18,
+    "dist": 17,
+    "total": 35
+   },
+   {
+    "name": "Gooseacre Primary Academy",
+    "own": false,
+    "rules": {
+     "Staff": 1
+    },
+    "places": 50,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 21,
+    "dist": 27,
+    "total": 50
+   },
+   {
+    "name": "Greenfield Primary School",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 10,
+    "dist": 11,
+    "total": 21
+   },
+   {
+    "name": "Heather Garth Primary Academy",
+    "own": false,
+    "rules": {
+     "Staff": 0,
+     "Attending nursery": 13
+    },
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 2,
+    "dist": 4,
+    "total": 19
+   },
+   {
+    "name": "High View Primary Learning Centre",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 23,
+    "dist": 35,
+    "total": 59
+   },
+   {
+    "name": "Highgate Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 15,
+    "dist": 15,
+    "total": 30
+   },
+   {
+    "name": "Holy Rood Catholic Primary School",
+    "own": true,
+    "rules": {
+     "Catholic children who are looked after and previously looked after": 0,
+     "Catholic children who are resident in the parish(es) of Holy Rood, Barnsley and": 4,
+     "Children who are resident in the parish(es) of Holy Rood, Barnsley and": 4,
+     "Other Catholic Children": 1,
+     "Other looked after and previously looked after children": 0,
+     "Catechumens and members of an Eastern Christian Church": 0,
+     "Children of other Christian denominations whose membership is evidenced by": 0,
+     "Children of other faiths whose membership is evidenced by a religious leader": 0
+    },
+    "places": 30,
+    "ehcp": 0,
+    "sib": 4,
+    "dist": 8,
+    "total": 21
+   },
+   {
+    "name": "Holy Trinity Catholic and Church of England School",
+    "own": true,
+    "rules": {
+     "Looked After Children": 1,
+     "Catholic children who reside in the parishes of Blessed Sacrament, St Mary Magdalene": 10,
+     "Catholic children who reside outside the Catholic parishes listed and Church of England": 0,
+     "Children who are practising members of other Christian communities and who have the": 0,
+     "Children who are members of other faiths who have the written support of their": 0
+    },
+    "places": 60,
+    "ehcp": 1,
+    "sib": 21,
+    "dist": 12,
+    "total": 42
+   },
+   {
+    "name": "Hoyland Common Primary School",
+    "own": false,
+    "rules": {
+     "Staff": 0
+    },
+    "places": 60,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 14,
+    "dist": 22,
+    "total": 37
+   },
+   {
+    "name": "Hoyland Springwood Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 6,
+    "dist": 7,
+    "total": 14
+   },
+   {
+    "name": "Hoylandswaine Primary School",
+    "own": false,
+    "rules": {
+     "Staff": 0
+    },
+    "places": 20,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 1,
+    "dist": 6,
+    "total": 8
+   },
+   {
+    "name": "Hunningley Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 20,
+    "dist": 31,
+    "total": 52
+   },
+   {
+    "name": "Joseph Locke Primary School",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 3,
+    "lac": 0,
+    "sib": 17,
+    "dist": 25,
+    "total": 45
+   },
+   {
+    "name": "Jump Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 9,
+    "dist": 18,
+    "total": 28
+   },
+   {
+    "name": "Keresforth Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 21,
+    "dist": 8,
+    "total": 30
+   },
+   {
+    "name": "Kexborough Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 5,
+    "dist": 13,
+    "total": 18
+   },
+   {
+    "name": "Kings Oak Primary Learning Centre",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 23,
+    "dist": 22,
+    "total": 46
+   },
+   {
+    "name": "Lacewood Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 5,
+    "lac": 0,
+    "sib": 9,
+    "dist": 16,
+    "total": 30
+   },
+   {
+    "name": "Ladywood Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 18,
+    "dist": 11,
+    "total": 30
+   },
+   {
+    "name": "Laithes Primary School",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 10,
+    "dist": 22,
+    "total": 33
+   },
+   {
+    "name": "Mapplewell Primary School",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 30,
+    "dist": 14,
+    "total": 45
+   },
+   {
+    "name": "Meadstead Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 2,
+    "lac": 0,
+    "sib": 12,
+    "dist": 15,
+    "total": 29
+   },
+   {
+    "name": "Milefield Primary School",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 16,
+    "dist": 25,
+    "total": 42
+   },
+   {
+    "name": "Milhouse Primary School",
+    "own": false,
+    "rules": {},
+    "places": 20,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 6,
+    "dist": 10,
+    "total": 16
+   },
+   {
+    "name": "Oakhill Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 9,
+    "dist": 23,
+    "total": 32
+   },
+   {
+    "name": "Oakwell Rise Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 11,
+    "dist": 18,
+    "total": 30
+   },
+   {
+    "name": "Outwood Primary Academy Darfield",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 2,
+    "lac": 2,
+    "sib": 10,
+    "dist": 16,
+    "total": 30
+   },
+   {
+    "name": "Outwood Primary Academy Littleworth Grange",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 1,
+    "lac": 1,
+    "sib": 17,
+    "dist": 30,
+    "total": 49
+   },
+   {
+    "name": "Oxspring Primary School",
+    "own": false,
+    "rules": {},
+    "places": 20,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 11,
+    "dist": 8,
+    "total": 19
+   },
+   {
+    "name": "Parkside Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 2,
+    "lac": 0,
+    "sib": 10,
+    "dist": 18,
+    "total": 30
+   },
+   {
+    "name": "Penistone St John Voluntary Aided Primary School",
+    "own": true,
+    "rules": {
+     "A child who, or whose parents/guardians, resides within the parishes of Penistone St John": 0
+    },
+    "places": 60,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 27,
+    "dist": 19,
+    "total": 51
+   },
+   {
+    "name": "Queens Road Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 9,
+    "dist": 9,
+    "total": 18
+   },
+   {
+    "name": "Royston St John Baptist CE Primary School",
+    "own": true,
+    "rules": {
+     "A child who, or whose parents/guardians, resides within the parish of Royston St John": 0,
+     "A child whose parents/guardians reside within the parish of Royston St John Baptist who": 1,
+     "A child of parents residing within the parish of Royston St John Baptist": 0
+    },
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 12,
+    "dist": 15,
+    "total": 28
+   },
+   {
+    "name": "Sacred Heart Catholic Primary School",
+    "own": true,
+    "rules": {
+     "Catholic Looked after and previously looked after children": 0,
+     "Catholic children who are resident in the parish(es) of Corpus Christi": 3,
+     "Other Catholic children": 0,
+     "Looked after and previously looked after children": 0,
+     "Catechumens and members of an Eastern Christian Church": 0,
+     "Children of other Christian denominations whose membership is evidenced by": 11,
+     "Children of other faiths whose membership is evidenced by a religious leader": 0
+    },
+    "places": 20,
+    "ehcp": 2,
+    "sib": 2,
+    "dist": 2,
+    "total": 20
+   },
+   {
+    "name": "Sandhill Primary School",
+    "own": false,
+    "rules": {},
+    "places": 40,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 16,
+    "dist": 13,
+    "total": 30
+   },
+   {
+    "name": "Shafton Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 11,
+    "dist": 12,
+    "total": 23
+   },
+   {
+    "name": "Shawlands Primary School",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 8,
+    "dist": 22,
+    "total": 30
+   },
+   {
+    "name": "Silkstone Common Junior and Infant School",
+    "own": false,
+    "rules": {},
+    "places": 20,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 3,
+    "dist": 17,
+    "total": 20
+   },
+   {
+    "name": "Silkstone Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 16,
+    "dist": 13,
+    "total": 30
+   },
+   {
+    "name": "Springvale Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 10,
+    "dist": 14,
+    "total": 24
+   },
+   {
+    "name": "St Helen\u2019s Catholic Primary School",
+    "own": true,
+    "rules": {
+     "Catholic children who are Looked after or previously looked after": 0,
+     "Catholic children who are resident in the parish(es) of Corpus Christi": 4,
+     "Other Catholic": 0,
+     "Other looked after": 0,
+     "Catechumens and members of an Eastern Christian Church": 0,
+     "Children of other Christian denominations whose membership is evidenced by": 0,
+     "Children of other faiths whose membership is evidenced by a religious leader": 0
+    },
+    "places": 20,
+    "ehcp": 1,
+    "sib": 7,
+    "dist": 2,
+    "total": 14
+   },
+   {
+    "name": "St Helen\u2019s Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 3,
+    "dist": 13,
+    "total": 16
+   },
+   {
+    "name": "St Mary\u2019s Church of England Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 11,
+    "dist": 15,
+    "total": 26
+   },
+   {
+    "name": "St Michael and All Angels Catholic Primary School",
+    "own": true,
+    "rules": {
+     "Catholic children who are looked after or previously looked after": 0,
+     "Catholic children who are resident in the parish(es) of Corpus Christi": 2,
+     "Other Catholic children": 0,
+     "Other looked after and previously looked after children": 0,
+     "Catechumens and members of an Eastern Christian Church": 0,
+     "Children of other Christian denominations whose membership is evidenced by": 2,
+     "Children of other faiths whose membership is evidenced by a religious leader": 0
+    },
+    "places": 20,
+    "ehcp": 0,
+    "sib": 5,
+    "dist": 11,
+    "total": 20
+   },
+   {
+    "name": "Summer Lane Primary",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 2,
+    "lac": 1,
+    "sib": 9,
+    "dist": 10,
+    "total": 22
+   },
+   {
+    "name": "Summerfields Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 10,
+    "dist": 20,
+    "total": 30
+   },
+   {
+    "name": "Tankersley St Peter\u2019s C of E (Aided) Primary School",
+    "own": true,
+    "rules": {
+     "The children of parents/carers who are resident within the ecclesiastical parish of Tankersley": 4,
+     "The children of parents/carers who are resident outside the ecclesiastical parish of": 3,
+     "The children of parents/carers who are resident outside the ecclesiastical parish": 0
+    },
+    "places": 30,
+    "ehcp": 2,
+    "lac": 1,
+    "dist": 4,
+    "total": 25
+   },
+   {
+    "name": "The Ellis Church of England (Voluntary Aided) Primary School",
+    "own": true,
+    "rules": {
+     "Children who, or whose parents/carers regularly attend the parish church of St Mary\u2019s,": 5,
+     "Whether the child is resident in the village of Hemmingfield and has any brothers or": 4,
+     "Whether the child is resident in the village of Hemmingfield": 8,
+     "Whether the child has any brothers or sisters at the time of admission who were admitted": 9,
+     "Children who, or whose parents/carers reside in the parish of Wombwell and regularly": 0,
+     "Children who, or whose parents/carers reside outside the parish of Wombwell and": 0
+    },
+    "places": 30,
+    "ehcp": 2,
+    "lac": 1,
+    "dist": 1,
+    "total": 30
+   },
+   {
+    "name": "The Forest Academy",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 16,
+    "dist": 19,
+    "total": 35
+   },
+   {
+    "name": "The Hill Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 24,
+    "dist": 15,
+    "total": 39
+   },
+   {
+    "name": "The Mill Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 1,
+    "lac": 1,
+    "sib": 0,
+    "dist": 21,
+    "total": 23
+   },
+   {
+    "name": "Thurgoland Church of England (Voluntary Controlled) Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 16,
+    "dist": 7,
+    "total": 23
+   },
+   {
+    "name": "Thurlstone Primary School",
+    "own": false,
+    "rules": {},
+    "places": 25,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 10,
+    "dist": 12,
+    "total": 22
+   },
+   {
+    "name": "Upperwood Academy",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 14,
+    "dist": 20,
+    "total": 34
+   },
+   {
+    "name": "Ward Green Primary School",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 2,
+    "lac": 0,
+    "sib": 17,
+    "dist": 23,
+    "total": 42
+   },
+   {
+    "name": "Wellgate Primary School",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 18,
+    "dist": 41,
+    "total": 60
+   },
+   {
+    "name": "West Meadows Primary School",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 0,
+    "sib": 8,
+    "dist": 13,
+    "total": 21
+   },
+   {
+    "name": "Wilthorpe Primary School",
+    "own": false,
+    "rules": {},
+    "places": 60,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 19,
+    "dist": 31,
+    "total": 51
+   },
+   {
+    "name": "Wombwell Park Street Primary School",
+    "own": false,
+    "rules": {},
+    "places": 45,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 18,
+    "dist": 24,
+    "total": 43
+   },
+   {
+    "name": "Worsbrough Bank End Primary Academy",
+    "own": false,
+    "rules": {},
+    "places": 30,
+    "ehcp": 0,
+    "lac": 1,
+    "sib": 9,
+    "dist": 10,
+    "total": 20
+   },
+   {
+    "name": "Worsbrough Common Primary School",
+    "own": false,
+    "rules": {
+     "Staff": 1
+    },
+    "places": 60,
+    "ehcp": 1,
+    "lac": 0,
+    "sib": 12,
+    "dist": 21,
+    "total": 35
+   }
+  ],
+  "over": {
+   "Birkwood Primary School": 2.834,
+   "Brierley Church of England Voluntary Controlled Primary School": 0.589,
+   "Burton Road Primary School": 1.269,
+   "Cawthorne Church of England Voluntary Controlled Primary School": 3.072,
+   "Gawber Primary School": 0.714,
+   "Gooseacre Primary Academy": 0.706,
+   "Keresforth Primary School": 0.36,
+   "Lacewood Primary School": 0.325,
+   "Ladywood Primary School": 0.211,
+   "Mapplewell Primary School": 0.402,
+   "Oakwell Rise Primary Academy": 0.334,
+   "Outwood Primary Academy Darfield": 0.441,
+   "Parkside Primary Academy": 2.042,
+   "Sacred Heart Catholic Primary School": 0.316,
+   "Silkstone Common Junior and Infant": 2.342,
+   "Silkstone Primary School": 2.737,
+   "St Michaels and All Angels Catholic Primary School": 1.606,
+   "Summerfields Primary Academy": 0.715,
+   "The Ellis Church of England Primary School": 0.583,
+   "Wellgate Primary School": 2.163
+  }
+ }
+}

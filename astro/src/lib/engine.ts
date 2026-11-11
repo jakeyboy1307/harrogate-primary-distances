@@ -103,6 +103,17 @@ export const COUNCILS: Record<string, Council> = {
     policy: 'children in care, then children in the catchment (those with an older brother or sister at the school first), then brothers and sisters, then the children who live nearest, in a straight line',
     prefs: 3,
   },
+  Barnsley: {
+    name: 'Barnsley Council',
+    catchMap: 'https://www.barnsley.gov.uk/services/schools-and-education/school-admissions-and-transfers/school-admission-arrangements/',
+    apply: 'https://www.barnsley.gov.uk/services/schools-and-education/school-admissions-and-transfers/primary-school-places/',
+    policy: 'children in care, then brothers and sisters, then the children who live nearest, in a straight line',
+    prefs: 3,
+    mapData: false,
+    mapNote: 'doesn’t publish a map of it',
+    mapTip: 'Ask the school, or see {map:Barnsley Council’s admission arrangements}',
+    noCatch: 'Barnsley’s primary schools don’t have catchment areas. After children in care and brothers and sisters, places go to the children who live nearest',
+  },
   Wakefield: {
     name: 'Wakefield Council',
     catchMap: 'https://www.wakefield.gov.uk/schools-and-education/schools/school-catchment-area-search',

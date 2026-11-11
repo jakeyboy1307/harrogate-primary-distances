@@ -33,7 +33,7 @@ def check(s):
     return s, 'ok', final
 
 
-schools = [s for f in ('build/data.json', 'build/york.json', 'build/east-riding.json', 'build/hull.json', 'build/middlesbrough.json', 'build/redcar.json', 'build/calderdale.json', 'build/kirklees.json', 'build/leeds.json', 'build/bradford.json', 'build/wakefield.json', 'build/sheffield.json') for s in json.load(open(f))['schools']]
+schools = [s for f in ('build/data.json', 'build/york.json', 'build/east-riding.json', 'build/hull.json', 'build/middlesbrough.json', 'build/redcar.json', 'build/calderdale.json', 'build/kirklees.json', 'build/leeds.json', 'build/bradford.json', 'build/wakefield.json', 'build/sheffield.json', 'build/barnsley.json') for s in json.load(open(f))['schools']]
 with ThreadPoolExecutor(12) as ex:
     res = list(ex.map(check, schools))
 bad = [r for r in res if r[1] != 'ok']

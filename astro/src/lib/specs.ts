@@ -8,7 +8,8 @@ export type Area = 'harrogate' | 'york' | 'craven' | 'selby' | 'hambleton' | 'ri
   | 'headingley' | 'eastleeds' | 'neleeds' | 'horsforth' | 'southleeds' | 'morley' | 'pudsey' | 'wetherby'
   | 'bradfordwest' | 'bradfordeast' | 'bradfordsouth' | 'keighley' | 'shipley'
   | 'wakefield' | 'ossett' | 'pontefract' | 'hemsworth'
-  | 'sheffcentral' | 'hillsborough' | 'heeley' | 'mosborough' | 'hallam' | 'stocksbridge';
+  | 'sheffcentral' | 'hillsborough' | 'heeley' | 'mosborough' | 'hallam' | 'stocksbridge'
+  | 'barnsleynorth' | 'barnsleysouth' | 'penistone';
 export type Placement = 'uniform' | 'profile' | 'nearby' | 'results' | 'plan' | 'area' | 'pagesponsor';
 
 // Every area the checker covers, in one place: the area pages, the school pages' breadcrumbs, the ad areas, the
@@ -88,6 +89,10 @@ export const AREA_INFO: Record<Area, AreaInfo> = {
   mosborough: { label: 'Mosborough, Handsworth and Darnall', short: 'Mosborough', name: 'Mosborough, Handsworth, Woodhouse and Darnall', page: 'mosborough-primary-schools/', council: 'Sheffield', constituencies: ['Sheffield South East'], home: ['E08000019'], example: ['S20 5ES', 'Mosborough'] },
   hallam: { label: 'Hallam: Crookes, Ecclesall and Dore', short: 'Hallam', name: 'Crookes, Fulwood, Ecclesall, Dore and Totley', page: 'hallam-primary-schools/', council: 'Sheffield', constituencies: ['Sheffield Hallam'], home: ['E08000019'], example: ['S10 5FQ', 'Crookes'] },
   stocksbridge: { label: 'Stocksbridge, Chapeltown and High Green', short: 'Stocksbridge', name: 'Stocksbridge, Chapeltown, High Green and Ecclesfield', page: 'stocksbridge-primary-schools/', council: 'Sheffield', constituencies: ['Penistone and Stocksbridge'], home: ['E08000019'], example: ['S36 1EJ', 'Stocksbridge'] },
+  // Barnsley: its constituencies (the Barnsley half of Penistone and Stocksbridge). Its primary schools have no catchments
+  barnsleynorth: { label: 'Barnsley North: the town, Royston and Cudworth', short: 'Barnsley North', name: 'Barnsley town, Royston, Cudworth and Darton', page: 'barnsley-north-primary-schools/', council: 'Barnsley', constituencies: ['Barnsley North'], home: ['E08000016'], example: ['S71 2AA', 'Barnsley'] },
+  barnsleysouth: { label: 'Barnsley South: Wombwell, Hoyland and the Dearne', short: 'Barnsley South', name: 'Wombwell, Hoyland, Worsbrough, Goldthorpe and Thurnscoe', page: 'barnsley-south-primary-schools/', council: 'Barnsley', constituencies: ['Barnsley South'], home: ['E08000016'], example: ['S73 8QS', 'Wombwell'] },
+  penistone: { label: 'Penistone, Dodworth and Silkstone', short: 'Penistone', name: 'Penistone, Dodworth, Silkstone and the villages', page: 'penistone-primary-schools/', council: 'Barnsley', constituencies: ['Penistone and Stocksbridge'], home: ['E08000016'], example: ['S36 6HJ', 'Penistone'] },
 };
 // The areas' names for the site's wording, so a new area appears everywhere from its line above:
 // PLACES "Harrogate, York, Skipton, Northallerton, Richmond, Malton, Scarborough and Selby"; NY_PLACES the same without York
@@ -119,6 +124,8 @@ export const BRAD_TERM_DATES = 'https://www.bradford.gov.uk/education-and-skills
 export const WAKE_TERM_DATES = 'https://www.wakefield.gov.uk/schools-and-education/schools/school-term-and-holiday-dates';
 // and Sheffield City Council's
 export const SHEF_TERM_DATES = 'https://www.sheffield.gov.uk/schools-childcare/school-information-term-dates';
+// and Barnsley Council's
+export const BARN_TERM_DATES = 'https://www.barnsley.gov.uk/services/schools-and-education/school-terms-and-holidays/';
 export const AREAS = Object.fromEntries(Object.entries(AREA_INFO).map(([k, a]) => [k, a.label])) as Record<Area, string>;
 export const AREA_SHORT = Object.fromEntries(Object.entries(AREA_INFO).map(([k, a]) => [k, a.short])) as Record<Area, string>;
 // Used by the admin's coverage map: these districts show as fully covered, others with some of our schools as partly

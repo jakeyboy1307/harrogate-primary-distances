@@ -1,0 +1,24 @@
+---
+// Area page: Barnsley's penistone area (lib/specs.ts AREA_INFO). The questions every Barnsley page shares are in lib/barnsley.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { bnBorder, bnFaqs, bnTail } from '../lib/barnsley';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.penistone;
+const schools = loadArea('barnsley.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...bnFaqs('Penistone', openLatest(schools).length, schools.length),
+  bnBorder('Penistone', 'From Stocksbridge or Deepcar, that’s Sheffield City Council, and from Denby Dale it’s Kirklees Council'),
+  ...bnTail,
+];
+---
+<AreaPage areaKey="penistone"
+  title="Penistone, Dodworth and Silkstone primary schools: admissions, distances and Ofsted · Yorkshire School Checker"
+  description="Penistone, Thurlstone, Oxspring, Dodworth, Silkstone, Cawthorne and Tankersley primary schools: how far places went each year, Ofsted ratings and the 2027 Reception dates."
+  h1="Penistone, Dodworth and Silkstone primary schools"
+  lede="Every Barnsley primary school in the west of the borough: Penistone, Thurlstone, Millhouse Green, Oxspring, Thurgoland, Hoylandswaine, Silkstone, Cawthorne, Dodworth, Gawber and Tankersley."
+  area="Penistone"
+  schools={schools}
+  groups={[{ label: 'Penistone, Dodworth and Silkstone', note: `${schools.length} Barnsley primary schools. Barnsley has no catchment areas, so the checker shows how far places went at each one.`, schools }]}
+  faqs={faqs}
+/>

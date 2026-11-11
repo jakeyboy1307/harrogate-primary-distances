@@ -1,0 +1,24 @@
+---
+// Area page: Barnsley's barnsleysouth area (lib/specs.ts AREA_INFO). The questions every Barnsley page shares are in lib/barnsley.ts.
+import AreaPage from '../components/AreaPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { bnBorder, bnFaqs, bnTail } from '../lib/barnsley';
+import { AREA_INFO } from '../lib/specs';
+const info = AREA_INFO.barnsleysouth;
+const schools = loadArea('barnsley.json').filter((s) => info.constituencies!.includes(s.con!));
+const faqs: [string, string][] = [
+  ...bnFaqs('Wombwell', openLatest(schools).length, schools.length),
+  bnBorder('Wombwell', 'From Wath or Brampton, that’s Rotherham Council, and from Mexborough it’s Doncaster Council'),
+  ...bnTail,
+];
+---
+<AreaPage areaKey="barnsleysouth"
+  title="Wombwell, Hoyland and Dearne primary schools: admissions, distances and Ofsted · Yorkshire School Checker"
+  description="Wombwell, Hoyland, Worsbrough, Darfield, Goldthorpe and Thurnscoe primary schools: how far places went each year, Ofsted ratings and the 2027 Reception dates. Barnsley has no catchments."
+  h1="Barnsley South primary schools: Wombwell, Hoyland and the Dearne"
+  lede="Every primary school in the south of Barnsley: Worsbrough, Kendray, Stairfoot, Ardsley, Wombwell, Darfield, Hoyland, Elsecar, Birdwell, Goldthorpe, Bolton-on-Dearne and Thurnscoe."
+  area="Wombwell"
+  schools={schools}
+  groups={[{ label: 'Barnsley South: Wombwell, Hoyland and the Dearne', note: `${schools.length} Barnsley primary schools. Barnsley has no catchment areas, so the checker shows how far places went at each one.`, schools }]}
+  faqs={faqs}
+/>
