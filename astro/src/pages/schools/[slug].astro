@@ -6,7 +6,7 @@
 import Base from '../../layouts/Base.astro';
 import { url } from '../../lib/url';
 import { mon, noDist, whoGotIn, NUM, mapTipHtml, placesGo } from '../../lib/engine';
-import { miles, nearby, published, schoolPages, summary, yearLine, type SchoolPage } from '../../lib/schoolpages';
+import { comparison, miles, published, schoolPages, summary, wasFull, yearLine, type SchoolPage } from '../../lib/schoolpages';
 import { hubOf } from '../../lib/hubs';
 
 export function getStaticPaths() {
@@ -22,7 +22,7 @@ const typeText = s.type;   // already in sentence case: "academy", "C of E volun
 const town = s.addr?.split(',').map((x) => x.trim()).filter((x) => x && x !== s.postcode && !x.includes(s.postcode)).pop();
 const placeFull = s.council === 'York' && s.place !== 'York' ? `${s.place}, York` : s.place;   // York schools' places are wards
 // nothing when the name already says where it is ("St Peter's Primary School, Harrogate", "St Mary's Knaresborough")
-const where = p.name.includes(`, ${s.place}`) || (p.withPlace && p.short.includes(s.place)) ? ''
+const where = p.name.includes(',') || (p.withPlace && p.short.includes(s.place)) ? ''
   : !p.short.includes(s.place) ? `in ${placeFull}` : town && town !== s.place ? `near ${town}` : '';
 const article = /^[aeiou]/i.test(typeText) ? 'an' : 'a';
 const shortArticle = /^[aeiou]/i.test(p.short) ? 'an' : 'a';   // "an Acklam Whin catchment area map"
@@ -33,7 +33,20 @@ const hub = hubOf(s.council);   // the council's own page, where it has one (lib
 const years = published(s);
 const dists = s.d.filter((y) => y.s === 'distance' && !noDist(y) && y.m != null);
 const ratio = sm.perPlace ? (sm.perPlace >= 1.05 ? `${sm.perPlace.toFixed(1)} children for every place` : 'fewer children than places') : null;
-const near = nearby(p);
+const cmp = comparison(p), near = cmp.near;
+const fullLatest = wasFull(latest);
+// where it sits among its neighbours, and the nearest one that couldn't take everyone
+const cmpLines = [
+  cmp.rank && `In ${cmp.year}, ${p.short} had ${cmp.mine!.toFixed(1)} applications for every place. Of ${p.short} and its ${cmp.rated} nearest neighbours with figures, that makes it ${cmp.rank}.`,
+  cmp.full && (() => {
+    const who = whoGotIn(cmp.full.latest!).replace(/ mi\b/, ' miles').replace(/^./, (c) => c.toLowerCase());
+    const at = `${cmp.full.name}, ${cmp.full.miles} miles away (who got a place: ${who})`;
+    return cmp.fullCount === 1
+      ? `Only one of the ${near.length} nearest schools was oversubscribed in its latest published year: ${at}.`
+      : `${cmp.fullCount} of the ${near.length} nearest schools were oversubscribed in their latest published year. The closest is ${at}.`;
+  })(),
+  !cmp.full && near.length && `None of the ${near.length} nearest schools was oversubscribed in its latest published year${fullLatest ? `, so ${p.short} is the one round here that fills up` : ', so families round here have usually got a place close to home'}.`,
+].filter(Boolean) as string[];
 
 // a name with a town on the end reads better with a colon: "St Peter's Primary School, Harrogate: catchment area..."
 const joiner = p.name.includes(',') ? ': ' : ' ';
@@ -207,11 +220,13 @@ const schema = [
   </section>
 
   <section class="how-sec sec-pale wrap sp-sec">
-    <h2>Other primary schools near {p.short}</h2>
+    <h2>How {p.short} compares with schools nearby</h2>
+    {cmpLines.map((l) => <p class="intro">{l}</p>)}
     <div class="sp-near">
       {near.map((n) => (
         <a class="sp-near-card" href={url(`schools/${n.slug}/`)}>
           <b>{n.name}</b><span>{n.s.place} · {n.miles} miles away</span>
+          {n.perPlace != null && <span>{n.perPlace.toFixed(1)} applied per place{n.latest ? `, ${n.latest.y}` : ''}</span>}
           <span class="sp-near-who">{n.s.d.find((y) => y.s !== 'not_published') ? whoGotIn(n.s.d.find((y) => y.s !== 'not_published')!).replace(/ mi\b/, ' miles') : 'No figures published'}</span>
         </a>
       ))}

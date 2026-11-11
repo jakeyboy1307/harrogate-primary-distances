@@ -12,12 +12,17 @@ export const loadArea = (file: string): AreaSchool[] => readData(file).schools;
 export const councilFiles = (): string[] => readData('areas.json').map((c: { file: string }) => c.file);
 export const loadAll = (): AreaSchool[] => councilFiles().flatMap(loadArea);
 // the newest refresh date across the council data files
+// the date one council's data file was last refreshed (by the council's name, as COUNCILS and areas.json name it)
+export const councilDate = (council: string): string | undefined => {
+  const file = readData('areas.json').find((c: { name: string }) => c.name === council)?.file;
+  return file ? readData(file).updated : undefined;
+};
 export const dataDate = () => (councilFiles().map((f) => readData(f).updated as string | undefined).filter(Boolean) as string[]).sort().pop();
 
 const latest = (s: AreaSchool) => s.d.find((r) => r.s !== 'not_published');
 
 // How hard the latest year was to get into, higher is harder. Null when everyone got in or it can't be told.
-function difficulty(r?: YearRec) {
+export function difficulty(r?: YearRec) {
   if (!r) return null;
   if (r.s === 'distance') {
     if (r.g === 'in') return 3 + 1 / (1 + r.m! / MI);              // only catchment children, nearest first

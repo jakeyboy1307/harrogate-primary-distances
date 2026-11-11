@@ -1,15 +1,45 @@
 ---
 import Base from '../layouts/Base.astro';
 import { url } from '../lib/url';
-import { COUNCILS } from '../lib/engine';
+import { COUNCILS, placesGo } from '../lib/engine';
 import { AREA_INFO, COVERED, NY_PLACES } from '../lib/specs';
 const ny = COUNCILS['North Yorkshire'], cyc = COUNCILS.York;
+// every council except North Yorkshire and York (whose orders section 2 spells out), with the order its places go in
+const others = Object.entries(COUNCILS).filter(([k]) => k !== 'North Yorkshire' && k !== 'York').map(([, c]) => c)
+  .sort((a, b) => a.name.localeCompare(b.name));
+const ext = (href: string, text: string) => `<a href="${href}" target="_blank" rel="noopener">${text}</a>`;
+const DFE = 'https://explore-education-statistics.service.gov.uk/find-statistics/primary-and-secondary-school-applications-and-offers';
+// Where each council's figures and catchments come from (the README's Sources list, in parents' words).
+// Keep in step with the README when a council's sources change.
+const councilSources: [string, string][] = [
+  ['Barnsley', `${ext('https://www.barnsley.gov.uk/services/schools-and-education/school-admissions-and-transfers/primary-school-places/', 'Barnsley Council’s guides for parents')}, 2024 to 2026 entry: every full school’s last distance and how its places were shared out. Barnsley’s primary schools have no catchments.`],
+  ['Bradford', `${ext('https://www.bradford.gov.uk/media/dy1lr1hm/applying-for-a-primary-school-detailed-guide-for-september-2027.pdf', 'Bradford Council’s primary guides')} for 2023 and 2026, and the national first-choice figures for 2024 and 2025. Priority areas from the ${ext('https://bso.bradford.gov.uk/content/admissions/priority-areas', 'council’s priority area maps')}.`],
+  ['Calderdale', `${ext('https://dataworks.calderdale.gov.uk/dataset/vq9q6', 'Calderdale Council’s primary preferences and allocations')}, 2023 to 2026 entry: places, preferences and the furthest child offered a place at full schools. Calderdale’s primary schools have no catchments.`],
+  ['Doncaster', `The national first-choice figures, as City of Doncaster Council publishes no cut-off distances. Catchments from the ${ext('https://maps.doncaster.gov.uk/portal/apps/experiencebuilder/experience/?id=862cc0a6abb244928a1c5ca0462d6f8e', 'council’s catchment finder')}.`],
+  ['East Riding', `East Riding of Yorkshire Council’s summaries of primary school allocations, 2024 to 2026 entry, and catchments from the ${ext(COUNCILS['East Riding of Yorkshire'].catchMap, 'council’s catchment finder')}.`],
+  ['Hull', `${ext('https://www.hull.gov.uk/applications-transfers/primary-school-applications', 'Hull City Council’s guide to primary admissions')}: each school’s places and how the latest year’s went. Its ${ext(COUNCILS['Kingston upon Hull, City of'].catchMap, 'catchment map')} is a scanned picture, so we can’t check your address against it.`],
+  ['Kirklees', `${ext('https://www.kirklees.gov.uk/beta/admissions/pdf/reception-by-preference-and-criteria-26.pdf', 'Kirklees Council’s Reception allocations by preference and criteria')}, 2023 to 2026 entry. Priority admission areas from the ${ext(COUNCILS.Kirklees.catchMap, 'council’s public map')}.`],
+  ['Leeds', `Leeds City Council’s cut-off distances, 2024 to 2026 entry, ${ext('https://datamillnorth.org/dataset/primary-school-allocations', 'Data Mill North’s primary school allocations')} for 2023, and the council’s primary catchment maps for 2026 admissions.`],
+  ['Middlesbrough', `${ext('https://www.middlesbrough.gov.uk/schools-and-education/school-admissions/school-admissions-allocation-statistics/', 'Middlesbrough Council’s school admission statistics')}, 2023 to 2026 entry. Its ${ext(COUNCILS.Middlesbrough.catchMap, 'admission zones')} are only a PDF map, so we can’t check your address against them.`],
+  ['North Yorkshire', `${ext('https://hub.datanorthyorkshire.org/dataset/school-admissions-2026-2027-yearly-statistics-primary-and-secondary-school', 'North Yorkshire Council’s admissions statistics')}, 2023 to 2026 entry, for ${NY_PLACES} and the villages round York. Catchments from the ${ext(ny.catchMap, 'council’s school maps')}, updated September 2025, which it publishes for reference only.`],
+  ['Redcar and Cleveland', `The national first-choice figures, as Redcar and Cleveland Council publishes no figures on who got in and no maps of its admission zones.`],
+  ['Rotherham', `${ext('https://www.rotherham.gov.uk/downloads/download/728/primary-application-booklet', 'Rotherham Council’s primary application booklet')} for how 2026’s places went, and the national first-choice figures. Its catchments are only pictures on ${ext(COUNCILS.Rotherham.catchMap, 'the council’s web map')}, so we can’t check your address against them.`],
+  ['Sheffield', `${ext('https://www.sheffield.gov.uk/sites/default/files/2026-04/oversubscribed_infant_and_primary_schools_2026.pdf', 'Sheffield City Council’s oversubscribed schools lists')}, 2024 to 2026 entry: the last child’s distance and refusals at each full school. Catchments from the ${ext('https://sheffieldcitycouncil.cloud.esriuk.com/server/rest/services/AGOL/OpenData/FeatureServer/1', 'council’s open data')}.`],
+  ['Wakefield', `${ext('https://www.wakefield.gov.uk/media/43xpw5x4/primaryguide-27-28.docx', 'Wakefield Council’s Primary Guide for Parents')} for how 2026’s places went, and the national first-choice figures. Its catchments are only an ${ext(COUNCILS.Wakefield.catchMap, 'address search')}, so we can’t check your address against them.`],
+  ['York', `${ext('https://data.yorkopendata.org/dataset/pupil-level-outcome-summary-primary', 'City of York Council’s anonymised list of every Reception applicant')} for 2022, 2023, 2025 and 2026 entry (its 2024 list is incomplete, so we leave that year out), and its ${ext(cyc.catchMap, 'primary schools map')} for catchments.`],
+];
+const everywhere: [string, string][] = [
+  ['National first-choice figures', `The Department for Education’s ${ext(DFE, 'applications and offers')} for every school in England: how many families put each school first and how many of them got it. We use them where a council publishes nothing on who got the last place.`],
+  ['Distances', 'Walking routes from OpenStreetMap, from your postcode’s centre to the school. Expect differences of 0.1 mile or more. Where a council measures in a straight line, so do we.'],
+  ['Ofsted', 'Ofsted management information as at 30 September 2026, including the new report cards, which rate each area rather than giving one grade.'],
+  ['School details', 'Locations, school types and websites from Get Information about Schools, the government’s register. Phone numbers from the same register, and emails from each school’s own website.'],
+];
 // the catchment questions in section 1, for search engines
 const faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: [
   ['How do school catchment areas work?', 'A catchment area is the patch of streets a council links to a school. Children who live inside it get priority for its Reception places, ahead of most children from outside it. Children in care always come first, and inside each group brothers and sisters of pupils go first, then whoever lives nearest.'],
   ['What is my catchment school?', 'It’s the school whose catchment area your home is in. The council draws the lines, so your catchment school isn’t always the nearest one. A few homes sit in two catchments, and a few in none.'],
   ['What is my school catchment area?', 'Put your postcode into the Yorkshire School Checker. It tells you which catchment you’re in and your chances at every primary school nearby, using the councils’ own catchment maps.'],
-  ['Is there a school catchment area map?', `Yes. North Yorkshire Council publishes a school catchment area map covering every school in the county, including ${NY_PLACES}, and City of York Council publishes a primary schools map for York.`],
+  ['Is there a school catchment area map?', `Yes, most councils publish one: North Yorkshire Council’s covers every school in the county, including ${NY_PLACES}, City of York Council publishes a primary schools map, and Leeds, Sheffield, Kirklees, Doncaster and the East Riding have their own. A few councils, such as Calderdale, Barnsley and most of Bradford, have no catchments at all.`],
   ['Does living in the catchment guarantee a place?', 'No. It puts you near the front of the queue, but a popular school can fill up with catchment children alone.'],
 ].map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) };
 // Coppice Valley's real last-place distances (miles) from the council's figures, against a home 0.75 miles away
@@ -54,7 +84,7 @@ const phrases = [
     <div class="sources">
       <div><h3>What is my catchment school?</h3><p>It’s the school whose catchment area your home is in. The council draws the lines, not the map distance, so your catchment school isn’t always the nearest one. A few homes sit in two catchments, and a few in none.</p></div>
       <div><h3>What is my school catchment area?</h3><p>Put your postcode into the <a href={url('')}>school catchment checker</a>. It tells you which catchment you’re in and your chances at every primary school nearby, using the councils’ own catchment maps.</p></div>
-      <div><h3>Is there a school catchment area map?</h3><p>Yes, from each council: <a href={ny.catchMap} target="_blank" rel="noopener">North Yorkshire Council’s map</a> for {NY_PLACES} and the rest of the county, and <a href={cyc.catchMap} target="_blank" rel="noopener">City of York Council’s primary schools map</a> for York. Use them to check your exact address if you’re near a boundary.</p></div>
+      <div><h3>Is there a school catchment area map?</h3><p>Yes, from each council that has catchments: <a href={ny.catchMap} target="_blank" rel="noopener">North Yorkshire Council’s map</a> for {NY_PLACES} and the rest of the county, <a href={cyc.catchMap} target="_blank" rel="noopener">City of York Council’s primary schools map</a> for York, and each council’s own, linked from <a href="#sources">where our numbers come from</a>. Use them to check your exact address if you’re near a boundary.</p></div>
       <div><h3>Does living in the catchment guarantee a place?</h3><p>No. It puts you near the front of the queue, but a popular school can fill up with catchment children alone. The year by year figures on each school’s page show whether that has happened.</p></div>
     </div>
     <p class="intro" style="margin-top:28px">See every school’s catchment and figures: primary school catchment areas for {Object.values(AREA_INFO).map((a, i, all) => <>{i ? (i === all.length - 1 ? ' and ' : ', ') : ''}<a href={url(a.page)}>{a.short}</a></>)}.</p>
@@ -73,6 +103,11 @@ const phrases = [
     <div class="tiebreak" id="york">
       <div><h3>In York</h3><p>City of York Council’s order is a little different: looked-after children, then children in the catchment with a brother or sister at the school, then the rest of the catchment, then medical or social need, then brothers and sisters from outside it, then whoever has the shortest safe walk.</p></div>
       <div class="dashed"><h3>No “last place” for York schools</h3><p>York doesn’t publish how far the last place went. So for York schools we show how many children from inside and outside the catchment got a place each year, worked out from the council’s anonymised list of every applicant.</p></div>
+    </div>
+    <h3 class="how-sub" id="other-councils">Every other council’s order</h3>
+    <p class="intro">Each council has its own list for its community and voluntary controlled schools. After children in care, this is how they go.</p>
+    <div class="sources">
+      {others.map((c) => <div><h3>{c.name}</h3><p>{placesGo(c)}.</p></div>)}
     </div>
   </section>
 
@@ -120,14 +155,15 @@ const phrases = [
 
   <section class="how-sec wrap" id="sources" style="border-top:1px solid var(--line)">
     <h2>6. Where our numbers come from</h2>
+    <p class="intro">Every figure comes from a council or the government, and every page links to its source. We don’t fill gaps with guesses: where a council hasn’t published something, we say so. The figures were last refreshed in November 2026, for September 2027 entry.</p>
+    <h3 class="how-sub">Council by council</h3>
     <div class="sources">
-      <div><h3>Offers and last places</h3><p>For {NY_PLACES} and the villages round York, North Yorkshire Council admissions statistics for 2023 to 2026 entry, from <a href="https://hub.datanorthyorkshire.org/dataset/school-admissions-2026-2027-yearly-statistics-primary-and-secondary-school" target="_blank" rel="noopener">Data North Yorkshire</a>.</p></div>
-      <div><h3>York offers</h3><p>City of York Council’s anonymised list of every Reception applicant for 2022, 2023, 2025 and 2026 entry, from <a href="https://data.yorkopendata.org/dataset/pupil-level-outcome-summary-primary" target="_blank" rel="noopener">York Open Data</a>. Its 2024 list is incomplete, so we leave that year out.</p></div>
-      <div><h3>York catchments</h3><p>The council’s <a href="https://www.york.gov.uk/schools/PrimaryMap" target="_blank" rel="noopener">primary schools map</a>, which shows each school’s catchment. Check your exact address there if you’re near a boundary.</p></div>
-      <div><h3>Catchments</h3><p>North Yorkshire Council’s school maps, updated September 2025. The council publishes them for reference only, so <a href="https://experience.arcgis.com/experience/4dd5b97eae514b31a067137ebf7cdd6a" target="_blank" rel="noopener">check your exact address</a> if you’re near a boundary.</p></div>
-      <div><h3>Distances</h3><p>Walking routes from OpenStreetMap, from your postcode’s centre to the school. Expect differences of 0.1 mile or more. Where a school doesn’t say how it measures, we use a straight line.</p></div>
-      <div><h3>Ofsted</h3><p>Ofsted management information as at 30 September 2026, including the new report cards, which rate each area rather than giving one grade.</p></div>
+      {councilSources.map(([n, h]) => <div><h3>{n}</h3><p set:html={h} /></div>)}
     </div>
-    <p class="caveat">Junior schools like Oatlands Junior and Saltergate Junior take children into Year 3, so they aren’t included. Always check the school’s current admissions policy and the council’s own figures before you apply. Key dates are from both councils’ primary admissions timetables for 2027 to 2028, which share the same national dates.</p>
+    <h3 class="how-sub">Everywhere</h3>
+    <div class="sources">
+      {everywhere.map(([n, h]) => <div><h3>{n}</h3><p set:html={h} /></div>)}
+    </div>
+    <p class="caveat">Junior schools like Oatlands Junior and Saltergate Junior take children into Year 3, so they aren’t included. Always check the school’s current admissions policy and the council’s own figures before you apply. Key dates are from the councils’ primary admissions timetables for 2027 to 2028, which all share the same national dates. Spotted a mistake? <a href={url('about/#contact')}>Tell us</a> and we’ll put it right.</p>
   </section>
 </Base>

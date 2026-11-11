@@ -3,7 +3,8 @@
 // (November 2026): parents type the short name plus "primary school", "catchment area", "Ofsted", "term dates",
 // and the town when the name is shared with schools elsewhere (St Peter's, St Mary's...).
 import { COUNCILS, firstsOk, fmt, haversine, MI, noDist, ofsted, whoGotIn, WHO_ELSE, type YearRec } from './engine';
-import { loadAll, type AreaSchool } from './areas';
+import { difficulty, loadAll, type AreaSchool } from './areas';
+import { HUBS } from './hubs';
 import { AREA_INFO, areaOf, type Area } from './specs';
 // Every published school page's address, by URN. Once Google knows an address it mustn't change, so a school in
 // here keeps its address even if the naming rules below would now give it another. New schools get one from the
@@ -122,6 +123,20 @@ export function schoolPages(): SchoolPage[] {
   }
   // any address still shared gets the school's URN on the end
   for (const p of pages) if (!locked[p.s.urn] && pages.filter((q) => q.slug === p.slug).length > 1) p.slug = `${p.slug}-${p.s.urn}`;
+  // A name still shared, so two pages would have the same title, is one where the village is the name ("Carlton
+  // Primary School" in Barnsley, Leeds and near Selby), so the town can't be added. Those take their city, or their
+  // area in the two county councils ("Carlton Primary School, Leeds"), and any still alike take their full register
+  // name ("Sutton-in-Craven Community Primary School"). Only the name changes; the address stays as published.
+  const shared = () => { const n = new Map<string, number>(); for (const p of pages) n.set(p.name, (n.get(p.name) ?? 0) + 1); return n; };
+  let count = shared();
+  for (const p of pages) {
+    if (count.get(p.name)! < 2) continue;
+    const county = p.s.council === 'North Yorkshire' || p.s.council === 'East Riding of Yorkshire';
+    const town = (!county && HUBS[p.s.council]?.name) || AREA_INFO[p.area].short;
+    if (!p.name.includes(town)) { p.name = `${p.name}, ${town}`; p.withPlace = true; }
+  }
+  count = shared();
+  for (const p of pages) if (count.get(p.name)! > 1) p.name = p.s.name.replace(/,.*$/, '');
   const fresh = pages.filter((p) => !locked[p.s.urn]);
   if (fresh.length) console.log(`  ${fresh.length} school pages aren't in src/lib/slugs.json yet; run npm run lock-slugs after this build`);
   return (cache = pages);
@@ -176,6 +191,31 @@ export function summary(p: SchoolPage) {
 }
 
 export const miles = (m?: number | null) => (m == null ? '' : fmt(m).replace(' mi', ' miles'));
+
+// Whether a year shows a school couldn't take everyone who applied: a cut-off, first choices turned away, or
+// children from outside the catchment refused (the same test as the area pages' "hardest to get into")
+export const wasFull = (y?: YearRec) => (difficulty(y) ?? 0) > 1;
+// applications per place in a school's latest published year
+export const perPlace = (s: AreaSchool) => { const y = published(s)[0]; return y?.a && y?.p ? y.a / y.p : null; };
+const ORD = ['', 'most', 'second most', 'third most', 'fourth most', 'fifth most', 'sixth most', 'seventh most'];
+
+// How a school compares with its nearest neighbours, so each page says something no other page does: where it
+// ranks for demand among them, and the nearest one that couldn't take everyone (or that none of them was full)
+export function comparison(p: SchoolPage, n = 6) {
+  const near = nearby(p, n).map((q) => ({ ...q, perPlace: perPlace(q.s), latest: published(q.s)[0] }));
+  const mine = perPlace(p.s), year = published(p.s)[0]?.y;
+  const rated = near.filter((q) => q.perPlace != null);
+  let rank = '';
+  if (mine != null && rated.length >= 3) {
+    const busier = rated.filter((q) => q.perPlace! > mine).length, of = rated.length + 1;
+    const quieter = of - 1 - busier;   // "the second least in demand" reads better than "the fifth most" of six
+    rank = busier === 0 ? 'the most in demand' : quieter === 0 ? 'the least in demand'
+      : busier <= quieter ? `the ${ORD[busier + 1]} in demand` : `the ${ORD[quieter + 1].replace('most', 'least')} in demand`;
+  }
+  const full = near.find((q) => wasFull(q.latest));
+  const fullCount = near.filter((q) => wasFull(q.latest)).length;
+  return { near, mine, year, rank, rated: rated.length, full, fullCount };
+}
 
 // The nearest other schools, for "other schools near" and the internal links between pages
 export function nearby(p: SchoolPage, n = 6) {

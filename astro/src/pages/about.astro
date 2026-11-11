@@ -1,0 +1,78 @@
+---
+// Who runs the checker, why it exists, how it's paid for and how to reach us: what parents (and search engines)
+// look for before trusting a site with a school decision. The counts are worked out from the data, so they stay right.
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
+import { COUNCILS } from '../lib/engine';
+import { dataDate, loadAll } from '../lib/areas';
+import { HUBS } from '../lib/hubs';
+import { AREA_INFO, COVERED } from '../lib/specs';
+
+const schools = loadAll().length.toLocaleString('en-GB');
+const councils = Object.keys(COUNCILS).length;
+const areas = Object.keys(AREA_INFO).length;
+const refreshed = new Date(`${dataDate()}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+const pageUrl = new URL(url('about/'), Astro.site).href;
+const schema = {
+  '@context': 'https://schema.org', '@type': 'AboutPage', url: pageUrl, name: 'About the Yorkshire School Checker',
+  mainEntity: {
+    '@type': 'Organization', name: 'Yorkshire School Checker', url: new URL(url(''), Astro.site).href,
+    description: `A free, independent tool showing parents their chances of a Reception place at ${schools} primary schools in ${COVERED}.`,
+    parentOrganization: { '@type': 'Organization', name: 'Mammoth Websites', url: 'https://www.mammothwebsites.co.uk' },
+  },
+};
+---
+<Base title="About the Yorkshire School Checker · Yorkshire School Checker" description={`Who runs the Yorkshire School Checker, where its figures come from and how it’s paid for. A free, independent tool covering ${schools} primary schools across ${councils} councils.`}>
+  <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <section class="how-hero wrap">
+    <div>
+      <h1>About the Yorkshire School Checker</h1>
+      <p class="lede">A free, independent tool that shows you your real chances of a Reception place at every primary school near you, from the councils’ own figures.</p>
+    </div>
+  </section>
+
+  <section class="how-sec sec-pale wrap">
+    <h2>Why it exists</h2>
+    <p class="intro">Every council publishes who got a place at its schools each year, and most publish a map of their catchment areas. But the figures sit in PDFs, spreadsheets and maps spread across {councils} council websites, each in its own format, and they’re hard to read side by side when you’re choosing schools.</p>
+    <p class="intro">The checker brings them together. Put in your postcode and it checks your home against the catchment maps, works out your distance to every school nearby, and tells you in plain English whether children living where you do got a place in past years.</p>
+  </section>
+
+  <section class="how-sec wrap">
+    <h2>What it covers</h2>
+    <p class="intro">{schools} primary, infant and junior-and-infant schools in {COVERED}, on {areas} area pages. Each school has its own page with up to four years of figures, its Ofsted rating and how to apply.</p>
+    <p class="intro">Start with your council: {Object.values(HUBS).map((h, i, all) => <>{i ? (i === all.length - 1 ? ' or ' : ', ') : ''}<a href={url(h.page)}>{h.name}</a></>)}, or <a href={url('')}>search by postcode</a>.</p>
+  </section>
+
+  <section class="how-sec sec-pale wrap">
+    <h2>Independent and free</h2>
+    <div class="sources">
+      <div><h3>Not run by a council or school</h3><p>The checker isn’t part of any council, school or academy trust, and none of them pays for it. Your application still goes to your own council.</p></div>
+      <div><h3>We don’t rank schools</h3><p>We show who got a place and what Ofsted said, and leave the judgement to you. There are no “best school” league tables here.</p></div>
+      <div><h3>How it’s paid for</h3><p>Some pages show listings from local businesses, marked “Sponsored”. They never change a school’s figures or the order schools appear in. <a href={url('advertise/')}>Advertise with us</a>.</p></div>
+      <div><h3>No account, no cookies</h3><p>You never sign up, and your postcode and list stay on your device. <a href={url('privacy/')}>Our privacy page</a> says exactly where your postcode goes.</p></div>
+    </div>
+  </section>
+
+  <section class="how-sec wrap">
+    <h2>Where the figures come from</h2>
+    <p class="intro">Every figure comes from a council or the government, and each school’s page links to its source. Where a council hasn’t published something, we say so rather than guess. The full list, council by council, is in <a href={url('how-places-work/#sources')}>where our numbers come from</a>.</p>
+    <p class="intro">The figures were last refreshed on {refreshed}, for September 2027 entry. We refresh them each year once the councils publish how the last places went, usually in the weeks after national offer day (Friday 16 April 2027).</p>
+    <p class="caveat">Distances run from the centre of your postcode, not your front door, so there’s a margin of about 0.1 mile. Brothers and sisters get priority at most schools, which the figures can’t show for your family. Always check the council’s own figures and the school’s admissions policy before you apply.</p>
+  </section>
+
+  <section class="how-sec sec-pale wrap" id="contact">
+    <h2>Who makes it, and how to reach us</h2>
+    <p class="intro">The Yorkshire School Checker is built and run by <a href="https://www.mammothwebsites.co.uk" target="_blank" rel="noopener">Mammoth Websites</a>.</p>
+    <p class="intro">Spotted a mistake, a school that’s missing, or a figure that doesn’t match the council’s? Please tell us and we’ll check it and put it right. Questions and ideas are welcome too.</p>
+    <p class="about-acts"><button type="button" class="btn btn-primary" id="aboutFb">Send us a message</button></p>
+  </section>
+</Base>
+
+<script>
+  // the feedback form lives in the footer (components/Feedback.astro); this opens the same one
+  document.getElementById('aboutFb')?.addEventListener('click', () => document.getElementById('fbOpen')?.click());
+</script>
+
+<style>
+  .about-acts { margin-top: 24px; }
+</style>

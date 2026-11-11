@@ -37,12 +37,18 @@ const faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEn
 const short = shortOf;   // "Marwood", as parents search for it (lib/schoolpages.ts)
 // the council's own page, where it has one (lib/hubs.ts): up from "Hallam" to "Sheffield"
 const hub = hubOf(AREA_INFO[areaKey].council);
+// the same trail as the breadcrumb above the heading, for search engines
+const crumbs = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+  { '@type': 'ListItem', name: 'School checker', item: new URL(url(''), Astro.site).href },
+  ...(hub ? [{ '@type': 'ListItem', name: `${hub.name} primary schools`, item: new URL(url(hub.page), Astro.site).href }] : []),
+  { '@type': 'ListItem', name: `${AREA_INFO[areaKey].short} primary schools`, item: new URL(url(AREA_INFO[areaKey].page), Astro.site).href },
+].map((x, i) => ({ ...x, position: i + 1 })) };
 ---
 <Base title={title} description={description}>
-  <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify([faqSchema, crumbs])} />
   <section class="how-hero wrap">
     <div>
-      {hub && <nav class="crumbs" aria-label="Breadcrumb"><a href={url('')}>School checker</a><span aria-hidden="true">›</span><a href={url(hub.page)}>{hub.name} primary schools</a><span aria-hidden="true">›</span><span aria-current="page">{AREA_INFO[areaKey].short}</span></nav>}
+      <nav class="crumbs" aria-label="Breadcrumb"><a href={url('')}>School checker</a><span aria-hidden="true">›</span>{hub && <><a href={url(hub.page)}>{hub.name} primary schools</a><span aria-hidden="true">›</span></>}<span aria-current="page">{AREA_INFO[areaKey].short}</span></nav>
       <h1>{h1}</h1>
       <p class="lede">{lede}</p>
       <p class="area-acts"><a class="btn btn-primary" href={url('')}>Check your postcode</a><a class="btn" href={url('how-places-work/')}>How catchment areas work</a></p>
