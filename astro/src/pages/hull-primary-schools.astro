@@ -1,0 +1,18 @@
+---
+// Council page: the whole of Hull (lib/hubs.ts), linking to its area pages. The shared questions are in lib/hull.ts.
+import CouncilPage from '../components/CouncilPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { hullFaqs } from '../lib/hull';
+import { HUBS } from '../lib/hubs';
+const schools = loadArea(HUBS['Kingston upon Hull, City of'].file);
+const faqs: [string, string][] = [
+  ...hullFaqs('Hull', openLatest(schools).length, schools.length),
+];
+---
+<CouncilPage council="Kingston upon Hull, City of"
+  title="Hull primary school catchment areas, map and hardest to get into · Yorkshire School Checker"
+  description="Hull primary school catchment areas: how popular every school is, the hardest to get into, Ofsted ratings and the January 2027 deadline, for east, north and west Hull."
+  h1="Hull primary schools and catchment areas"
+  lede="Every primary school in Hull, east, north and west: how many families put each one first and how many got in, the council’s catchment map and how to apply for September 2027."
+  faqs={faqs}
+/>

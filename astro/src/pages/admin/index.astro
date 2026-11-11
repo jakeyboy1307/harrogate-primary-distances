@@ -59,6 +59,10 @@ const tiles = [
     <section class="adm-card"><h3 class="dash-h3">Schools opened most</h3>
       <div class="adm-table-wrap flat"><table class="adm-table"><thead><tr><th>School</th><th class="r">Opened</th></tr></thead><tbody id="schoolRows"></tbody></table></div></section>
   </div>
+
+  <section class="adm-card"><h3 class="dash-h3">Where visits came from</h3>
+    <p class="adm-note">Counted once when someone arrives from another site: its name, or the tag on a link we handed out (<code>?from=nursery-flyer</code>). “Direct” is typed or bookmarked, or an app that doesn’t say, such as WhatsApp or email. Counting started on 11 November 2026.</p>
+    <div class="adm-table-wrap flat"><table class="adm-table"><thead><tr><th>Source</th><th class="r">Arrivals</th><th class="r">Share</th></tr></thead><tbody id="sourceRows"></tbody></table></div></section>
 </Admin>
 
 <script>
@@ -71,7 +75,7 @@ const tiles = [
 
   interface AdStat { id: number; name: string; advertiser: string | null; advertiserId: number | null; status: string; demo: boolean; views: number; clicks: number; slots: Record<string, { views: number; clicks: number }> }
   interface Stats { from: string; to: string; days: number; total: Record<string, number>; daily: { day: string; pages: number; searches: number }[];
-    pages: { key: string; n: number }[]; searches: { key: string; n: number }[]; schools: { key: string; n: number }[]; ads: AdStat[] }
+    pages: { key: string; n: number }[]; searches: { key: string; n: number }[]; schools: { key: string; n: number }[]; sources?: { key: string; n: number }[]; ads: AdStat[] }
 
   const num = (n: number) => n.toLocaleString('en-GB');
   const PAGE_NAMES: Record<string, string> = {
@@ -137,6 +141,9 @@ const tiles = [
     const AREA_NAMES: Record<string, string> = { ...AREAS, outside: 'Outside the areas covered' };
     document.getElementById('areaRows')!.innerHTML = s.searches.length ? s.searches.map((r) => `<tr><td>${esc(AREA_NAMES[r.key] ?? r.key)}</td><td class="r">${num(r.n)}</td><td class="r">${((r.n / searches) * 100).toFixed(0)}%</td></tr>`).join('') : none(3);
     document.getElementById('pageRows')!.innerHTML = s.pages.length ? s.pages.map((r) => `<tr><td>${r.key === '404' ? 'Page not found' : `<a href="${esc(r.key)}" target="_blank" rel="noopener">${esc(pageName(r.key))}</a>`}</td><td class="r">${num(r.n)}</td></tr>`).join('') : none(2);
+    const src = s.sources ?? [], arrivals = src.reduce((n, r) => n + r.n, 0);
+    const srcName = (k: string) => k.startsWith('tag:') ? `Our link: ${k.slice(4)}` : k === 'direct' ? 'Direct or app' : k === 'other' ? 'Other' : k.charAt(0).toUpperCase() + k.slice(1);
+    document.getElementById('sourceRows')!.innerHTML = src.length ? src.map((r) => `<tr><td>${esc(srcName(r.key))}</td><td class="r">${num(r.n)}</td><td class="r">${((r.n / arrivals) * 100).toFixed(0)}%</td></tr>`).join('') : none(3);
     document.getElementById('schoolRows')!.innerHTML = s.schools.length ? s.schools.map((r) => `<tr><td>${esc(names.get(r.key) ?? `URN ${r.key}`)}</td><td class="r">${num(r.n)}</td></tr>`).join('') : none(2);
   }
 

@@ -1,0 +1,20 @@
+---
+// Council page: the whole of Bradford (lib/hubs.ts), linking to its area pages. The shared questions are in lib/bradford.ts.
+import CouncilPage from '../components/CouncilPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { bdFaqs, bdBorder, bdTail } from '../lib/bradford';
+import { HUBS } from '../lib/hubs';
+const schools = loadArea(HUBS['Bradford'].file);
+const faqs: [string, string][] = [
+  ...bdFaqs('Bradford', schools, openLatest(schools).length),
+  bdBorder('Bradford', 'From Halifax or Pudsey, that’s Calderdale Council or Leeds City Council'),
+  ...bdTail,
+];
+---
+<CouncilPage council="Bradford"
+  title="Bradford primary school catchment areas, priority areas and hardest to get into · Yorkshire School Checker"
+  description="Bradford primary school admissions: priority areas, how far places went at every school, the hardest to get into, Ofsted ratings and the January 2027 deadline, for Bradford, Keighley, Shipley and Ilkley."
+  h1="Bradford primary schools and admissions"
+  lede="Every primary and infant school in the Bradford district, from the city to Keighley, Shipley, Bingley, Ilkley and Queensbury: how far places went each year, which schools have priority areas and how to apply for September 2027."
+  faqs={faqs}
+/>

@@ -1,0 +1,20 @@
+---
+// Council page: the whole of Barnsley (lib/hubs.ts), linking to its area pages. The shared questions are in lib/barnsley.ts.
+import CouncilPage from '../components/CouncilPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { bnFaqs, bnBorder, bnTail } from '../lib/barnsley';
+import { HUBS } from '../lib/hubs';
+const schools = loadArea(HUBS['Barnsley'].file);
+const faqs: [string, string][] = [
+  ...bnFaqs('Barnsley', openLatest(schools).length, schools.length),
+  bnBorder('Barnsley', 'From Wakefield or Sheffield, that’s Wakefield Council or Sheffield City Council'),
+  ...bnTail,
+];
+---
+<CouncilPage council="Barnsley"
+  title="Barnsley primary school admissions, distances and hardest to get into · Yorkshire School Checker"
+  description="Barnsley primary school admissions: how far places went at every school, the hardest to get into, Ofsted ratings and the January 2027 deadline, for Barnsley, Wombwell, Hoyland, Royston and Penistone."
+  h1="Barnsley primary schools and admissions"
+  lede="Every primary and infant school in Barnsley, from the town, Royston and Cudworth to Wombwell, Hoyland, the Dearne and Penistone: how far places went each year and how to apply for September 2027."
+  faqs={faqs}
+/>

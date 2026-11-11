@@ -47,6 +47,7 @@ const HIT_KEYS = {
   panel: /^\d{5,7}$/,
   ad_view: new RegExp(`^\\d{1,9}:(${SPOT_KEYS})$`),
   ad_click: new RegExp(`^\\d{1,9}:(${SPOT_KEYS})$`),
+  source: /^(direct|other|tag:[a-z0-9-]{1,30}|[a-z0-9.-]{1,60})$/,   // where a visit came from: a site's name or a ?from= tag
 };
 const BOT = /bot|crawl|spider|slurp|headless|lighthouse|pingdom|preview|curl|wget|python|httpclient|monitor/i;
 

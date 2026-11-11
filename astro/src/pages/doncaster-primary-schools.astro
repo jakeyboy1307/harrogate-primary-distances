@@ -1,0 +1,20 @@
+---
+// Council page: the whole of Doncaster (lib/hubs.ts), linking to its area pages. The shared questions are in lib/doncaster.ts.
+import CouncilPage from '../components/CouncilPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { dnFaqs, dnBorder, dnTail } from '../lib/doncaster';
+import { HUBS } from '../lib/hubs';
+const schools = loadArea(HUBS['Doncaster'].file);
+const faqs: [string, string][] = [
+  ...dnFaqs('Doncaster', openLatest(schools).length, schools.length),
+  dnBorder('Doncaster', 'From Rotherham or Barnsley, that’s Rotherham Council or Barnsley Council'),
+  ...dnTail,
+];
+---
+<CouncilPage council="Doncaster"
+  title="Doncaster primary school catchment areas, map and hardest to get into · Yorkshire School Checker"
+  description="Doncaster primary school catchment areas: find your catchment school by postcode, how popular every school is, the hardest to get into, Ofsted ratings and the January 2027 deadline."
+  h1="Doncaster primary schools and catchment areas"
+  lede="Every primary and infant school in Doncaster, from the town, Balby and Bessacarr to Bentley, Mexborough, Conisbrough, Thorne and Rossington: your catchment school, how popular each one is and how to apply for September 2027."
+  faqs={faqs}
+/>

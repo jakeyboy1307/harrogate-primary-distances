@@ -1,0 +1,38 @@
+---
+// Council page: the whole of North Yorkshire (lib/hubs.ts), linking to its seven district pages.
+import CouncilPage from '../components/CouncilPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { COUNCILS } from '../lib/engine';
+import { HUBS } from '../lib/hubs';
+import { COVERED } from '../lib/specs';
+import { url } from '../lib/url';
+const schools = loadArea(HUBS['North Yorkshire'].file);
+const ny = COUNCILS['North Yorkshire'];
+const open = openLatest(schools).length;
+const faqs: [string, string][] = [
+  ['What is my catchment school in North Yorkshire?',
+    `Put your postcode into the <a href="${url('')}">school catchment checker</a>. It uses North Yorkshire Council’s own catchment map, so it tells you which catchment you’re in, and your chances at every primary school nearby. Most schools have a catchment; a few, mostly academies and faith schools, set their own rules.`],
+  ['Is there a North Yorkshire school catchment area map?',
+    `Yes. North Yorkshire Council publishes a <a href="${ny.catchMap}" target="_blank" rel="noopener">school catchment area map</a> covering every school. The checker uses the same map, so your postcode gives you the answer. Near a boundary? Check your exact address on the council’s map.`],
+  ['How do school places work in North Yorkshire?',
+    `North Yorkshire Council fills each school’s places in order: children in care, then approved medical or social need, then children in the catchment, then children of staff, then everyone else. Brothers and sisters, then distance, decide who goes first inside each group. <a href="${url('how-places-work/')}">How school catchment areas work</a> explains the queue.`],
+  ['Where can I see how far places went?',
+    'The council publishes its admissions figures each year on <a href="https://hub.datanorthyorkshire.org/" target="_blank" rel="noopener">Data North Yorkshire</a>, including the distance of the last place offered at every full school. The checker turns the last four years into plain answers for every school.'],
+  ['When do I apply for a Reception place for September 2027?',
+    `Apply online to <a href="${ny.apply}" target="_blank" rel="noopener">North Yorkshire Council</a> by Friday 15 January 2027. You can name up to five primary schools, in the order you want them.`],
+  ['When are primary school places announced?', 'Offers go out on national offer day, Friday 16 April 2027, by email from the council.'],
+  ['Can my child get into a school outside our catchment?',
+    `Often. In the latest year, ${open} of the ${schools.length} North Yorkshire primary schools here took everyone who applied, and many full schools still had places left for children from outside their catchment. The checker compares how far the last place went with your distance.`],
+  ['Which are the best primary schools in North Yorkshire?',
+    'There’s no official ranking, so be wary of league tables. Ofsted is the fairest guide, alongside a visit. The checker shows each school’s latest Ofsted outcome, and the Outstanding schools are listed above.'],
+  ['Does this include York, Middlesbrough and Redcar?',
+    `Yes, as separate councils: <a href="${url('york-primary-schools/')}">York</a>, <a href="${url('middlesbrough-primary-schools/')}">Middlesbrough</a> and <a href="${url('redcar-primary-schools/')}">Redcar and Cleveland</a> each run their own admissions. Apply to the council you live in, even for a school in another council’s area. The checker covers ${COVERED} schools across them all.`],
+];
+---
+<CouncilPage council="North Yorkshire"
+  title="North Yorkshire primary school catchment areas, map and hardest to get into · Yorkshire School Checker"
+  description="North Yorkshire primary school catchment areas: Harrogate, Skipton, Northallerton, Richmond, Malton, Scarborough and Selby. Find your catchment school by postcode, how far places went, the hardest to get into and Ofsted ratings."
+  h1="North Yorkshire primary schools and catchment areas"
+  lede="Every primary and infant school run by North Yorkshire Council, from Harrogate, Ripon and Skipton to Northallerton, Richmond, Malton, Scarborough, Whitby and Selby: your catchment school, how far places went each year and how to apply for September 2027."
+  faqs={faqs}
+/>

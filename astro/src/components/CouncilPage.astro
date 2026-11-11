@@ -1,0 +1,129 @@
+---
+// A council page (lib/hubs.ts): the whole council at a glance, for parents who search by city or county. Its area
+// pages, the dates and rules, the hardest schools to get into across the council, and the shared questions. Facts
+// come from lib/areas.ts, so the page stays right whenever the data is refreshed.
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
+import { hardest, loadArea, openLatest, openToAll, outstanding } from '../lib/areas';
+import { COUNCILS, mapTipHtml, placesGo } from '../lib/engine';
+import { areasOf, HUBS } from '../lib/hubs';
+import { pageOf, shortOf } from '../lib/schoolpages';
+import { AREA_INFO, areaOf } from '../lib/specs';
+interface Props {
+  council: string;            // a key of COUNCILS and HUBS
+  title: string; description: string; h1: string; lede: string;
+  faqs: [string, string][];   // question, answer (HTML)
+}
+const { council, title, description, h1, lede, faqs } = Astro.props;
+const hub = HUBS[council], c = COUNCILS[council], name = hub.name;
+const schools = loadArea(hub.file);
+const areas = areasOf(council).map((a) => {
+  const list = schools.filter((s) => areaOf(s) === a);
+  return { key: a, info: AREA_INFO[a], count: list.length, open: openLatest(list).length };
+});
+const hard = hardest(schools, 12).map((h) => ({ ...h, area: AREA_INFO[areaOf(schools.find((s) => s.urn === h.urn)!)].short }));
+const firstsOnly = schools.every((s) => s.d.every((y) => y.s === 'firsts'));
+const took = firstsOnly ? 'Took everyone who put it first' : 'Took everyone who applied';
+const open = openToAll(schools), top = outstanding(schools);
+const href = (urn: number) => url(`schools/${pageOf(urn)!.slug}/`);
+const faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a.replace(/<[^>]+>/g, '') } })) };
+const crumbs = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+  { '@type': 'ListItem', position: 1, name: 'School checker', item: new URL(url(''), Astro.site).href },
+  { '@type': 'ListItem', position: 2, name: `${name} primary schools`, item: new URL(url(hub.page), Astro.site).href },
+] };
+// the council's catchment line: none, a map we check, or a map we can't
+const catchLine = c.noCatch ? `${c.noCatch}.`
+  : c.mapData === false ? `the checker can’t tell you which catchment you’re in, because ${c.name} ${c.mapNote}. ${mapTipHtml(c)}.`
+  : `the checker uses <a href="${c.catchMap}" target="_blank" rel="noopener">${c.name}’s own catchment map</a>, so your postcode tells you which catchment you’re in.`;
+---
+<Base title={title} description={description}>
+  <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify([faqSchema, crumbs])} />
+  <section class="how-hero wrap">
+    <div>
+      <h1>{h1}</h1>
+      <p class="lede">{lede}</p>
+      <p class="area-acts"><a class="btn btn-primary" href={url('')}>Check your postcode</a><a class="btn" href={url('how-places-work/')}>How catchment areas work</a></p>
+    </div>
+    <dl class="area-stats">
+      <div><dt>Primary schools</dt><dd>{schools.length}</dd></div>
+      <div><dt>{took}</dt><dd>{open.length}</dd></div>
+      <div><dt>Rated Outstanding</dt><dd>{top.length}</dd></div>
+    </dl>
+  </section>
+
+  <section class="how-sec sec-pale wrap">
+    <h2>Find your part of {name}</h2>
+    <p class="intro">Every primary and infant school in {name}, area by area: which are hardest to get into, which took everyone, and every school by town and village.</p>
+    <div class="hub-areas">
+      {areas.map((a) => (
+        <a class="hub-area" href={url(a.info.page)}>
+          <h3>{a.info.label}</h3>
+          <p>{a.info.name}</p>
+          <p class="hub-n"><b>{a.count}</b> schools · <b>{a.open}</b> took everyone{firstsOnly ? ' who put them first' : ''} last year</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="how-sec wrap split-2">
+    <div>
+      <h2>Applying for September 2027</h2>
+      <ul class="facts">
+        <li><b>Closing date:</b> Friday 15 January 2027. <a href={c.apply} target="_blank" rel="noopener">Apply to {c.name}</a>.</li>
+        <li><b>Offers:</b> national offer day, Friday 16 April 2027.</li>
+        <li><b>Choices:</b> up to {c.prefs} schools, in the order you want them. Each is considered equally; you’re offered the highest one that can take you.</li>
+        <li><b>Who gets in:</b> {placesGo(c).replace(/^Places go /, 'places go ')}.</li>
+        <li><b>Catchments:</b> <span set:html={catchLine} /></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Rated Outstanding by Ofsted</h2>
+      <p class="intro">There’s no official ranking of the best primary schools in {name}. Ofsted is the fairest guide, alongside a visit. These {top.length} were rated Outstanding at their latest graded inspection.</p>
+      <p class="name-list">{top.length ? top.map((s, i) => <>{i > 0 && ' · '}<a class="sch-link" href={href(s.urn)}>{shortOf(s.name)}</a></>) : 'None at their latest graded inspection.'}</p>
+    </div>
+  </section>
+
+  {hard.length > 0 && <section class="how-sec sec-pale wrap">
+    <h2>The hardest {name} primary schools to get into</h2>
+    <p class="intro">Based on the latest year each school’s figures were published: who got a place when there were more applicants than places. Use the checker to see whether you’d have got in from your address.</p>
+    <div class="tbl-wrap"><table class="tbl area-tbl">
+      <thead><tr><th>School</th><th>Area</th><th>Who got a place</th></tr></thead>
+      <tbody>{hard.map((h) => <tr><td><a class="sch-link" href={href(h.urn)}><b>{h.name.replace(/,.*$/, '')}</b></a> <span class="muted">{h.place}</span></td><td>{h.area}</td><td>{h.who} <span class="muted">({h.year}{h.applied && h.places ? `, ${h.applied} applied for ${h.places} places` : ''})</span></td></tr>)}</tbody>
+    </table></div>
+  </section>}
+
+  <section class="how-sec wrap">
+    <h2>Questions parents ask</h2>
+    <div class="faqs">{faqs.map(([q, a]) => <div class="faq"><h3>{q}</h3><p set:html={a} /></div>)}</div>
+    <p class="area-acts"><a class="btn btn-primary" href={url('')}>Check your postcode</a></p>
+  </section>
+</Base>
+
+<style>
+  .area-acts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .area-stats { display: grid; gap: 12px; margin: 0; flex-shrink: 0; width: 280px; }
+  .area-stats div { padding: 16px 20px; background: var(--pale); border-radius: 14px; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .area-stats dt { font-weight: 600; color: var(--muted); }
+  .area-stats dd { margin: 0; font: 700 32px/1 var(--display); color: var(--ink); }
+  .hub-areas { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 28px; }
+  .hub-area { display: block; padding: 20px 22px; background: #fff; border: 2px solid var(--ink); border-radius: 16px; color: var(--ink); text-decoration: none; }
+  .hub-area:hover { box-shadow: 4px 4px 0 var(--ink); transform: translate(-1px, -1px); }
+  .hub-area h3 { font: 700 19px/1.3 var(--body); margin-bottom: 6px; }
+  .hub-area p { color: var(--muted); line-height: 1.45; font-size: 15px; }
+  .hub-area .hub-n { margin-top: 10px; color: var(--ink); }
+  .facts { margin: 20px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; line-height: 1.55; }
+  .facts b { color: var(--ink); }
+  .tbl-wrap { margin-top: 28px; background: #fff; border: 2px solid var(--ink); border-radius: 16px; padding: 8px 20px; overflow-x: auto; }
+  .area-tbl td { font-size: 15px; }
+  .muted { color: var(--muted-2); }
+  .sch-link { color: inherit; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
+  .sch-link:hover { text-decoration-color: var(--ink); }
+  .split-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+  .split-2 h2 { font-size: 36px; }
+  .name-list { margin-top: 16px; font-weight: 600; line-height: 1.7; }
+  .faqs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 40px; margin-top: 32px; }
+  .faq h3 { font: 700 18px/1.35 var(--body); margin-bottom: 6px; }
+  .faq p { color: var(--muted); line-height: 1.55; }
+  @media (max-width: 960px) { .split-2, .faqs { grid-template-columns: 1fr; } .area-stats { width: 100%; } }
+  @media (max-width: 760px) { .split-2 h2 { font-size: 30px; } .area-stats dd { font-size: 26px; } }
+</style>

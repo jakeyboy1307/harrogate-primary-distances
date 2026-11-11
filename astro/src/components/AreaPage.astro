@@ -7,6 +7,8 @@ import { byPlace, hardest, openLatest, openToAll, outstanding, type AreaSchool }
 import type { Area } from '../lib/sponsors';
 import { pageOf, shortOf } from '../lib/schoolpages';
 import { firstsOk, MI } from '../lib/engine';
+import { hubOf } from '../lib/hubs';
+import { AREA_INFO } from '../lib/specs';
 interface Props {
   title: string; description: string; h1: string; lede: string; area: string; areaKey: Area;
   schools: AreaSchool[];
@@ -33,11 +35,14 @@ const href = (urn: number) => url(`schools/${pageOf(urn)!.slug}/`);
 // the questions, for search engines
 const faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a.replace(/<[^>]+>/g, '') } })) };
 const short = shortOf;   // "Marwood", as parents search for it (lib/schoolpages.ts)
+// the council's own page, where it has one (lib/hubs.ts): up from "Hallam" to "Sheffield"
+const hub = hubOf(AREA_INFO[areaKey].council);
 ---
 <Base title={title} description={description}>
   <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <section class="how-hero wrap">
     <div>
+      {hub && <nav class="crumbs" aria-label="Breadcrumb"><a href={url('')}>School checker</a><span aria-hidden="true">›</span><a href={url(hub.page)}>{hub.name} primary schools</a><span aria-hidden="true">›</span><span aria-current="page">{AREA_INFO[areaKey].short}</span></nav>}
       <h1>{h1}</h1>
       <p class="lede">{lede}</p>
       <p class="area-acts"><a class="btn btn-primary" href={url('')}>Check your postcode</a><a class="btn" href={url('how-places-work/')}>How catchment areas work</a></p>
@@ -126,6 +131,8 @@ const short = shortOf;   // "Marwood", as parents search for it (lib/schoolpages
 </script>
 
 <style>
+  .crumbs { display: flex; flex-wrap: wrap; gap: 6px 8px; font-size: 14px; color: var(--muted-2); margin-bottom: 16px; }
+  .crumbs a { color: var(--muted); }
   .area-acts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
   .area-stats { display: grid; gap: 12px; margin: 0; flex-shrink: 0; width: 280px; }
   .area-stats div { padding: 16px 20px; background: var(--pale); border-radius: 14px; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }

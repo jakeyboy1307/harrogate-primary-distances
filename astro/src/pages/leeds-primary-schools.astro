@@ -1,0 +1,20 @@
+---
+// Council page: the whole of Leeds (lib/hubs.ts), linking to its area pages. The shared questions are in lib/leeds.ts.
+import CouncilPage from '../components/CouncilPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { ldFaqs, ldBorder, ldTail } from '../lib/leeds';
+import { HUBS } from '../lib/hubs';
+const schools = loadArea(HUBS['Leeds'].file);
+const faqs: [string, string][] = [
+  ...ldFaqs('Leeds', openLatest(schools).length, schools.length),
+  ldBorder('Leeds', 'From Wakefield, Bradford or Harrogate, that’s Wakefield Council, Bradford Council or North Yorkshire Council'),
+  ...ldTail,
+];
+---
+<CouncilPage council="Leeds"
+  title="Leeds primary school catchment areas, map and hardest to get into · Yorkshire School Checker"
+  description="Leeds primary school catchment areas: find your catchment school by postcode, how far places went at every school, the hardest to get into, Ofsted ratings and the January 2027 deadline."
+  h1="Leeds primary schools and catchment areas"
+  lede="Every primary and infant school in Leeds, from Headingley, Roundhay and Horsforth to Morley, Pudsey, Wetherby and east Leeds: your chances at every school, how far places went each year and how to apply for September 2027."
+  faqs={faqs}
+/>

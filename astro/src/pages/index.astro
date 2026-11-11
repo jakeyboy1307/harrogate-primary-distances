@@ -118,8 +118,8 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
         <p class="status" id="resStatus" role="status" aria-live="polite"></p>
       </div>
       <div class="toggle" role="group" aria-label="View">
-        <button type="button" data-view="list" aria-pressed="true"><span set:html={'<svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 4.5h12M3 9h12M3 13.5h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'} />List</button>
-        <button type="button" data-view="map" aria-pressed="false"><span set:html={'<svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 4l4.5-2 5 2L16 2v12l-4.5 2-5-2L2 16z M6.5 2v12 M11.5 4v12" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg>'} />Map</button>
+        <button type="button" data-view="list" aria-pressed="false"><span set:html={'<svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 4.5h12M3 9h12M3 13.5h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'} />List</button>
+        <button type="button" data-view="map" aria-pressed="true"><span set:html={'<svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 4l4.5-2 5 2L16 2v12l-4.5 2-5-2L2 16z M6.5 2v12 M11.5 4v12" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg>'} />Map</button>
       </div>
     </div>
 
@@ -206,7 +206,7 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
 
   let place: Place | null = null, near: School[] = [], outside = '';
   let filter: V | null = null, showAll = false, seq = 0;
-  let view: 'list' | 'map' = 'list', tab: 'list' | 'all' = 'all';
+  let view: 'list' | 'map' = 'map', tab: 'list' | 'all' = 'all';   // desktop opens on the map; phones always show the list
   let map: SchoolMap | null = null;
 
   const radius = () => +$<HTMLInputElement>('input[name=radius]:checked').value;
@@ -272,6 +272,9 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
         : 'You’re not in the catchment of any school this checker covers.')
         + ` Near a boundary? <a href="${cn.catchMap}" target="_blank" rel="noopener">Check your exact address</a>.`;
     setStatus('#resStatus', outside || (near.some((s) => s.method === 'walking') ? 'Working out walking routes…' : ''), !!outside);
+    // show the view chosen (desktop opens on the map) before drawing it
+    $('#listView').hidden = !isPhone() && view === 'map';
+    $('#mapView').hidden = !mapShown();
     render();
     window.scrollTo({ top: 0 });
     const msg = await addWalking(p, scored());
@@ -332,7 +335,7 @@ const aboutSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', main
         <button type="button" class="row-name" data-open="${s.id}">${esc(s.name.replace(/,.*$/, ''))}</button>
         <p class="row-why">${esc(s.result?.label ?? '')}.</p>
       </div>
-      <div class="row-act">${act}<button type="button" class="textlink" data-open="${s.id}">See everything</button></div>
+      <div class="row-act">${act}<button type="button" class="textlink" data-open="${s.id}">See school details</button></div>
     </article>`;
   }
 

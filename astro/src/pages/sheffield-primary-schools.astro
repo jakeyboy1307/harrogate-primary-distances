@@ -1,0 +1,20 @@
+---
+// Council page: the whole of Sheffield (lib/hubs.ts), linking to its area pages. The shared questions are in lib/sheffield.ts.
+import CouncilPage from '../components/CouncilPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { shFaqs, shBorder, shTail } from '../lib/sheffield';
+import { HUBS } from '../lib/hubs';
+const schools = loadArea(HUBS['Sheffield'].file);
+const faqs: [string, string][] = [
+  ...shFaqs('Sheffield', openLatest(schools).length, schools.length),
+  shBorder('Sheffield', 'From Rotherham or Dronfield, that’s Rotherham Council or Derbyshire County Council'),
+  ...shTail,
+];
+---
+<CouncilPage council="Sheffield"
+  title="Sheffield primary school catchment areas, map and hardest to get into · Yorkshire School Checker"
+  description="Sheffield primary school catchment areas: find your catchment school by postcode, how far places went at every school, the hardest to get into, Ofsted ratings and the January 2027 deadline."
+  h1="Sheffield primary schools and catchment areas"
+  lede="Every primary and infant school in Sheffield, from Hillsborough and Stocksbridge to Mosborough, Heeley, Crookes and Dore: your catchment school, how far places went each year and how to apply for September 2027."
+  faqs={faqs}
+/>

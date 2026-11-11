@@ -1,0 +1,20 @@
+---
+// Council page: the whole of Kirklees (lib/hubs.ts), linking to its area pages. The shared questions are in lib/kirklees.ts.
+import CouncilPage from '../components/CouncilPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { kFaqs, kBorder, kTail } from '../lib/kirklees';
+import { HUBS } from '../lib/hubs';
+const schools = loadArea(HUBS['Kirklees'].file);
+const faqs: [string, string][] = [
+  ...kFaqs('Kirklees', openLatest(schools).length, schools.length),
+  kBorder('Kirklees', 'From Brighouse or Elland, that’s Calderdale Council'),
+  ...kTail,
+];
+---
+<CouncilPage council="Kirklees"
+  title="Kirklees primary school catchment areas: Huddersfield, Dewsbury and Batley · Yorkshire School Checker"
+  description="Kirklees primary school catchment areas: Huddersfield, Dewsbury, Batley, Holmfirth and the Colne Valley. Find your catchment school by postcode, how far places went, the hardest to get into and Ofsted ratings."
+  h1="Kirklees primary schools and catchment areas"
+  lede="Every primary and infant school in Kirklees, from Huddersfield, Dewsbury and Batley to the Spen Valley, Colne Valley, Holmfirth and Kirkburton: your catchment school, how far places went each year and how to apply for September 2027."
+  faqs={faqs}
+/>

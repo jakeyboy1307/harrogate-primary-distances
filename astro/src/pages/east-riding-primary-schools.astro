@@ -1,0 +1,19 @@
+---
+// Council page: the whole of East Riding (lib/hubs.ts), linking to its area pages. The shared questions are in lib/eastriding.ts.
+import CouncilPage from '../components/CouncilPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { erFaqs, erTail } from '../lib/eastriding';
+import { HUBS } from '../lib/hubs';
+const schools = loadArea(HUBS['East Riding of Yorkshire'].file);
+const faqs: [string, string][] = [
+  ...erFaqs('the East Riding', openLatest(schools).length, schools.length),
+  ...erTail,
+];
+---
+<CouncilPage council="East Riding of Yorkshire"
+  title="East Riding primary school catchment areas, map and hardest to get into · Yorkshire School Checker"
+  description="East Riding of Yorkshire primary school catchment areas: Beverley, Bridlington, Goole, Cottingham and the villages. Find your catchment school by postcode, how far places went, the hardest to get into and Ofsted ratings."
+  h1="East Riding primary schools and catchment areas"
+  lede="Every primary and infant school in the East Riding of Yorkshire, from Beverley, Cottingham and Hessle to Bridlington, Driffield, Goole and Howden: your catchment school, how far places went each year and how to apply for September 2027."
+  faqs={faqs}
+/>

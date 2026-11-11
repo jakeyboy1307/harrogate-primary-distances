@@ -1,0 +1,20 @@
+---
+// Council page: the whole of Calderdale (lib/hubs.ts), linking to its area pages. The shared questions are in lib/calderdale.ts.
+import CouncilPage from '../components/CouncilPage.astro';
+import { loadArea, openLatest } from '../lib/areas';
+import { cdFaqs, cdBorder, cdTail } from '../lib/calderdale';
+import { HUBS } from '../lib/hubs';
+const schools = loadArea(HUBS['Calderdale'].file);
+const faqs: [string, string][] = [
+  ...cdFaqs('Calderdale', openLatest(schools).length, schools.length),
+  cdBorder('Calderdale', 'From Bradford or Huddersfield, that’s Bradford Council or Kirklees Council'),
+  ...cdTail,
+];
+---
+<CouncilPage council="Calderdale"
+  title="Calderdale primary school admissions: Halifax, Brighouse and Hebden Bridge · Yorkshire School Checker"
+  description="Calderdale primary school admissions: Halifax, Brighouse, Elland, Sowerby Bridge, Todmorden and Hebden Bridge. How far places went at every school, the hardest to get into, Ofsted ratings and the January 2027 deadline."
+  h1="Calderdale primary schools and admissions"
+  lede="Every primary and infant school in Calderdale, from Halifax and Brighouse to Elland, Sowerby Bridge, Hebden Bridge and Todmorden: how far places went each year and how to apply for September 2027."
+  faqs={faqs}
+/>

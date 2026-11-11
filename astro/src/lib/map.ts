@@ -107,7 +107,7 @@ export class SchoolMap {
       <div class="pop-top"><span class="chip chip-sm v-${vOf(s)}">${esc(chipText(s.result, mode))}</span><span>${esc(distTxt(s))}</span></div>
       <h3>${esc(s.name.replace(/,.*$/, ''))}</h3>
       <p>${esc(why)}${s.cz?.length ? ' The blue outline is its catchment.' : ''}</p>
-      <div class="pop-acts"><button type="button" class="btn btn-sm btn-dark" data-see="${s.id}">See everything</button>
+      <div class="pop-acts"><button type="button" class="btn btn-sm btn-dark" data-see="${s.id}">See school details</button>
       ${rank ? `<span class="rank-pill">${ordinal(rank)} on your list</span>` : backupOf(s.urn) ? `<span class="rank-pill">Backup</span>` : `<button type="button" class="btn btn-sm" data-add="${s.id}">${addLabel()}</button>`}</div></div>`;
     const p = L.popup({ className: 'map-pop', maxWidth: 340, minWidth: 260, autoPanPadding: [40, 40], offset: [0, -10] }).setLatLng(s.ll).setContent(html);
     this.popup = p;

@@ -260,7 +260,7 @@ async function stats(env, url) {
   const end = today();
   const from = new Date(Date.parse(end + 'T12:00:00Z') - (days - 1) * 864e5).toISOString().slice(0, 10);
   const q = (sql, ...args) => env.DB.prepare(sql).bind(from, end, ...args).all().then((r) => r.results);
-  const [totals, series, pages, searches, schools, adRows, ads] = await Promise.all([
+  const [totals, series, pages, searches, schools, adRows, ads, sources] = await Promise.all([
     q('SELECT kind, sum(n) AS n FROM daily_counts WHERE day BETWEEN ? AND ? GROUP BY kind'),
     q(`SELECT day, sum(CASE WHEN kind = 'page' THEN n ELSE 0 END) AS pages, sum(CASE WHEN kind = 'search' THEN n ELSE 0 END) AS searches
        FROM daily_counts WHERE day BETWEEN ? AND ? AND kind IN ('page', 'search') GROUP BY day`),
@@ -269,6 +269,7 @@ async function stats(env, url) {
     q(`SELECT key, sum(n) AS n FROM daily_counts WHERE day BETWEEN ? AND ? AND kind = 'panel' GROUP BY key ORDER BY n DESC LIMIT 20`),
     q(`SELECT kind, key, sum(n) AS n FROM daily_counts WHERE day BETWEEN ? AND ? AND kind IN ('ad_view', 'ad_click') GROUP BY kind, key`),
     env.DB.prepare('SELECT ads.id, ads.name, ads.status, ads.advertiser_id, ads.demo, advertisers.name AS advertiser FROM ads LEFT JOIN advertisers ON advertisers.id = ads.advertiser_id').all().then((r) => r.results),
+    q(`SELECT key, sum(n) AS n FROM daily_counts WHERE day BETWEEN ? AND ? AND kind = 'source' GROUP BY key ORDER BY n DESC LIMIT 25`),
   ]);
   // every day in the range, including ones with nothing, so the chart has no gaps
   const byDay = new Map(series.map((r) => [r.day, r]));
@@ -291,7 +292,7 @@ async function stats(env, url) {
     return { ...a, name: info?.name ?? `Deleted ad ${a.id}`, advertiser: info?.advertiser ?? null, advertiserId: info?.advertiser_id ?? null, status: info?.status ?? 'deleted', demo: !!info?.demo };
   }).sort((x, y) => y.views - x.views);
   const total = Object.fromEntries(totals.map((r) => [r.kind, r.n]));
-  return { from, to: end, days, total, daily, pages, searches, schools, ads: adStats };
+  return { from, to: end, days, total, daily, pages, searches, schools, sources, ads: adStats };
 }
 
 export async function adminApi(request, env, pathname) {

@@ -2,7 +2,7 @@
 // They're sent to /api/hit (astro/worker/index.js) as daily totals. No cookies, no ID, nothing that identifies
 // anyone, and nothing is stored in the browser.
 
-type Kind = 'page' | 'search' | 'panel' | 'ad_view' | 'ad_click';
+type Kind = 'page' | 'search' | 'panel' | 'ad_view' | 'ad_click' | 'source';
 const queue = new Map<string, [Kind, string, number]>();
 let timer: number | undefined;
 
@@ -24,6 +24,28 @@ export function track(kind: Kind, key: string) {
   timer = window.setTimeout(flush, 4000);
 }
 
+// Where a visit came from, counted once when someone arrives from outside the site: a ?from= tag on links we hand
+// out (flyers, posts: "?from=nursery-flyer"), else the referring site's name ("google", "facebook", "thestar.co.uk").
+// Never the full address it came from, and nothing about the person.
+const NAMED: [RegExp, string][] = [
+  [/(^|\.)google\./, 'google'], [/(^|\.)bing\.com$/, 'bing'], [/(^|\.)duckduckgo\.com$/, 'duckduckgo'], [/(^|\.)yahoo\./, 'yahoo'],
+  [/(^|\.)ecosia\.org$/, 'ecosia'], [/(^|\.)(facebook\.com|fb\.com|fb\.me)$/, 'facebook'], [/(^|\.)instagram\.com$/, 'instagram'],
+  [/(^|\.)(t\.co|twitter\.com|x\.com)$/, 'x'], [/(^|\.)reddit\.com$/, 'reddit'], [/(^|\.)mumsnet\.com$/, 'mumsnet'],
+  [/(^|\.)nextdoor\./, 'nextdoor'], [/(^|\.)linkedin\.com$/, 'linkedin'], [/(^|\.)(chatgpt\.com|openai\.com)$/, 'chatgpt'],
+  [/(^|\.)perplexity\.ai$/, 'perplexity'], [/(^|\.)whatsapp\.(com|net)$/, 'whatsapp'],
+];
+function arrivedFrom(): string | null {
+  const tag = new URLSearchParams(location.search).get('from')?.toLowerCase();
+  if (tag && /^[a-z0-9-]{1,30}$/.test(tag)) return `tag:${tag}`;
+  if (document.referrer.startsWith('android-app:')) return 'direct';   // an Android app (Gmail's would look like "google")
+  let host = '';
+  try { host = document.referrer ? new URL(document.referrer).hostname.toLowerCase() : ''; } catch { /* not a web address */ }
+  if (host === location.hostname) return null;   // moving between our own pages
+  if (!host) return 'direct';                    // typed, bookmarked, or an app that sends no referrer (WhatsApp, email)
+  host = host.replace(/^(www|m|l|lm)\./, '');
+  return NAMED.find(([re]) => re.test(host))?.[1] ?? (/^[a-z0-9.-]{1,60}$/.test(host) ? host : 'other');
+}
+
 let started = false;
 // Watch for ads on the page: count a view once an ad is at least half on screen (once per ad per page view),
 // and a click on its button or link. Ads carry data-ad-id and data-ad-slot (src/lib/sponsors.ts).
@@ -31,6 +53,8 @@ export function startTracking(page: string) {
   if (started) return;
   started = true;
   track('page', page);
+  const from = arrivedFrom();
+  if (from) track('source', from);
   addEventListener('pagehide', flush);
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flush(); });
 

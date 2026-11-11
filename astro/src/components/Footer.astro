@@ -4,6 +4,7 @@ import Mammoth from './Mammoth.astro';
 import Feedback from './Feedback.astro';
 import { url } from '../lib/url';
 import { AREA_INFO } from '../lib/specs';
+import { HUBS } from '../lib/hubs';
 ---
 <footer class="site-foot">
   <div class="foot-brand"><Rose size={26} /><span>Yorkshire School Checker</span></div>
@@ -15,6 +16,10 @@ import { AREA_INFO } from '../lib/specs';
     <a href={url('privacy/')}>Privacy</a>
   </nav>
   <div class="foot-nav">
+    <nav class="foot-areas" aria-label="Councils we cover">
+      <span>Councils</span>
+      {Object.values(HUBS).map((h) => <a href={url(h.page)}>{h.name} primary schools</a>)}
+    </nav>
     <nav class="foot-areas" aria-label="Areas we cover">
       <span>Areas we cover</span>
       {Object.values(AREA_INFO).map((a) => <a href={url(a.page)}>{a.name} primary schools</a>)}
