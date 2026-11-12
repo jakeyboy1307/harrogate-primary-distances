@@ -9,6 +9,7 @@ import { COUNCILS, mapTipHtml, placesGo } from '../lib/engine';
 import { areasOf, HUBS } from '../lib/hubs';
 import { pageOf, shortOf } from '../lib/schoolpages';
 import { AREA_INFO, areaOf } from '../lib/specs';
+import { townPages } from '../lib/towns';
 interface Props {
   council: string;            // a key of COUNCILS and HUBS
   title: string; description: string; h1: string; lede: string;
@@ -17,6 +18,8 @@ interface Props {
 const { council, title, description, h1, lede, faqs } = Astro.props;
 const hub = HUBS[council], c = COUNCILS[council], name = hub.name;
 const schools = loadArea(hub.file);
+// the town pages in this council (lib/towns.ts), by name
+const towns = townPages().filter((t) => t.council === council).sort((a, b) => a.name.localeCompare(b.name));
 const areas = areasOf(council).map((a) => {
   const list = schools.filter((s) => areaOf(s) === a);
   return { key: a, info: AREA_INFO[a], count: list.length, open: openLatest(list).length };
@@ -92,7 +95,13 @@ const catchLine = c.noCatch ? `${c.noCatch}.`
     </table></div>
   </section>}
 
-  <section class="how-sec wrap">
+  {towns.length > 0 && <section class="how-sec wrap">
+    <h2>Primary schools by town</h2>
+    <p class="intro">A page for each town and suburb, with its own schools and the nearest around it.</p>
+    <p class="name-list">{towns.map((t, i) => <>{i > 0 && ' · '}<a class="sch-link" href={url(t.page)}>{t.name}</a></>)}</p>
+  </section>}
+
+  <section class="how-sec sec-pale wrap">
     <h2>Questions parents ask</h2>
     <div class="faqs">{faqs.map(([q, a]) => <div class="faq"><h3>{q}</h3><p set:html={a} /></div>)}</div>
     <p class="area-acts"><a class="btn btn-primary" href={url('')}>Check your postcode</a></p>

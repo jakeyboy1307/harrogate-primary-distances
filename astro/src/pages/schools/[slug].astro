@@ -8,6 +8,7 @@ import { url } from '../../lib/url';
 import { mon, noDist, whoGotIn, NUM, mapTipHtml, placesGo } from '../../lib/engine';
 import { comparison, miles, published, schoolPages, summary, wasFull, yearLine, type SchoolPage } from '../../lib/schoolpages';
 import { hubOf } from '../../lib/hubs';
+import { townOf } from '../../lib/towns';
 
 export function getStaticPaths() {
   return schoolPages().map((p) => ({ params: { slug: p.slug }, props: { p } }));
@@ -29,7 +30,9 @@ const shortArticle = /^[aeiou]/i.test(p.short) ? 'an' : 'a';   // "an Acklam Whi
 const hasCatchment = !!s.cz?.length;
 const unchecked = !!s.cu;   // a catchment the council doesn't publish as map data (Hull, Middlesbrough, Redcar)
 const mapTip = mapTipHtml(council);
-const hub = hubOf(s.council);   // the council's own page, where it has one (lib/hubs.ts)   // how to find out instead, with the link
+const hub = hubOf(s.council);
+// the town page it's in (lib/towns.ts), when that town sits in the school's own area: between the area and the school in the breadcrumb
+const townRaw = townOf(s.urn), townPg = townRaw && townRaw.area === p.area ? townRaw : undefined;   // the council's own page, where it has one (lib/hubs.ts)   // how to find out instead, with the link
 const years = published(s);
 const dists = s.d.filter((y) => y.s === 'distance' && !noDist(y) && y.m != null);
 const ratio = sm.perPlace ? (sm.perPlace >= 1.05 ? `${sm.perPlace.toFixed(1)} children for every place` : 'fewer children than places') : null;
@@ -103,6 +106,7 @@ const schema = [
       { '@type': 'ListItem', name: 'School checker', item: new URL(url(''), site).href },
       ...(hub ? [{ '@type': 'ListItem', name: `${hub.name} primary schools`, item: new URL(url(hub.page), site).href }] : []),
       { '@type': 'ListItem', name: `${p.areaName} primary schools`, item: new URL(url(p.areaPage), site).href },
+      ...(townPg ? [{ '@type': 'ListItem', name: `${townPg.name} primary schools`, item: new URL(url(townPg.page), site).href }] : []),
       { '@type': 'ListItem', name: p.name, item: pageUrl },
     ].map((x, i) => ({ ...x, position: i + 1 })),
   },
@@ -115,7 +119,7 @@ const schema = [
   <section class="sp-hero wrap">
     <div>
       <nav class="crumbs" aria-label="Breadcrumb">
-        <a href={url('')}>School checker</a><span aria-hidden="true">›</span>{hub && <><a href={url(hub.page)}>{hub.name}</a><span aria-hidden="true">›</span></>}<a href={url(p.areaPage)}>{p.areaName} primary schools</a><span aria-hidden="true">›</span><span aria-current="page">{p.short}</span>
+        <a href={url('')}>School checker</a><span aria-hidden="true">›</span>{hub && <><a href={url(hub.page)}>{hub.name}</a><span aria-hidden="true">›</span></>}<a href={url(p.areaPage)}>{p.areaName} primary schools</a><span aria-hidden="true">›</span>{townPg && <><a href={url(townPg.page)}>{townPg.name}</a><span aria-hidden="true">›</span></>}<span aria-current="page">{p.short}</span>
       </nav>
       <h1>{p.name}{joiner}catchment area and admissions</h1>
       <p class="lede">Thinking about {p.name}{where ? ` ${where}` : ''}? Here’s who got a place each year, {hasCatchment ? `how far the ${p.short} catchment area reaches` : unchecked ? 'how many families put it first' : 'how far away children got in'}, and its latest Ofsted rating. Put in your postcode to see your own chances.</p>
@@ -231,7 +235,7 @@ const schema = [
         </a>
       ))}
     </div>
-    <p class="intro"><a href={url(p.areaPage)}>See every {p.areaName} primary school</a></p>
+    <p class="intro">{townPg && <><a href={url(townPg.page)}>See every primary school in {townPg.name}</a> · </>}<a href={url(p.areaPage)}>See every {p.areaName} primary school</a></p>
   </section>
 
   <section class="how-sec wrap sp-sec">

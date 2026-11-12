@@ -5,6 +5,7 @@
 import { councilDate, dataDate } from './areas';
 import { schoolPages } from './schoolpages';
 import { AREA_INFO, type Area } from './specs';
+import { townsOf } from './towns';
 
 export interface Entry { path: string; lastmod?: string }
 
@@ -14,7 +15,7 @@ export { dataDate };
 const NOT_FOR_SEARCH = ['404', 'advertise'];
 const topLevel = Object.keys(import.meta.glob('../pages/*.astro'))
   .map((f) => f.slice('../pages/'.length, -'.astro'.length))
-  .filter((p) => !NOT_FOR_SEARCH.includes(p))
+  .filter((p) => !NOT_FOR_SEARCH.includes(p) && !p.startsWith('['))   // [town].astro: the town pages, in their area's sitemap
   .map((p) => (p === 'index' ? '' : `${p}/`));
 
 export const SITEMAPS = ['pages', ...(Object.keys(AREA_INFO) as Area[])];
@@ -28,6 +29,7 @@ export function sitemapEntries(name: string): Entry[] {
   const lastmod = councilDate(area.council) ?? dataDate();
   return [
     { path: area.page, lastmod },
+    ...townsOf(name as Area).map((t) => ({ path: t.page, lastmod })),
     ...schoolPages().filter((p) => p.area === name).map((p) => ({ path: `schools/${p.slug}/`, lastmod })).sort((a, b) => a.path.localeCompare(b.path)),
   ];
 }

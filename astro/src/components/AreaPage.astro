@@ -9,13 +9,17 @@ import { pageOf, shortOf } from '../lib/schoolpages';
 import { firstsOk, MI } from '../lib/engine';
 import { hubOf } from '../lib/hubs';
 import { AREA_INFO } from '../lib/specs';
+import { townsOf } from '../lib/towns';
 interface Props {
   title: string; description: string; h1: string; lede: string; area: string; areaKey: Area;
   schools: AreaSchool[];
   groups: { label: string; note: string; schools: AreaSchool[] }[];   // note is HTML
   faqs: [string, string][];   // question, answer (HTML)
+  here?: { name: string; page: string };   // a town page (lib/towns.ts): the town, below its area in the breadcrumb
 }
-const { title, description, h1, lede, area, areaKey, schools, groups, faqs } = Astro.props;
+const { title, description, h1, lede, area, areaKey, schools, groups, faqs, here } = Astro.props;
+// the town pages in this area, for the links between them (lib/towns.ts)
+const towns = townsOf(areaKey).filter((t) => t.page !== here?.page);
 
 const hard = hardest(schools);
 const open = openToAll(schools);
@@ -42,15 +46,16 @@ const crumbs = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', it
   { '@type': 'ListItem', name: 'School checker', item: new URL(url(''), Astro.site).href },
   ...(hub ? [{ '@type': 'ListItem', name: `${hub.name} primary schools`, item: new URL(url(hub.page), Astro.site).href }] : []),
   { '@type': 'ListItem', name: `${AREA_INFO[areaKey].short} primary schools`, item: new URL(url(AREA_INFO[areaKey].page), Astro.site).href },
+  ...(here ? [{ '@type': 'ListItem', name: `${here.name} primary schools`, item: new URL(url(here.page), Astro.site).href }] : []),
 ].map((x, i) => ({ ...x, position: i + 1 })) };
 ---
 <Base title={title} description={description}>
   <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify([faqSchema, crumbs])} />
   <section class="how-hero wrap">
     <div>
-      <nav class="crumbs" aria-label="Breadcrumb"><a href={url('')}>School checker</a><span aria-hidden="true">›</span>{hub && <><a href={url(hub.page)}>{hub.name} primary schools</a><span aria-hidden="true">›</span></>}<span aria-current="page">{AREA_INFO[areaKey].short}</span></nav>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href={url('')}>School checker</a><span aria-hidden="true">›</span>{hub && <><a href={url(hub.page)}>{hub.name} primary schools</a><span aria-hidden="true">›</span></>}{here ? <><a href={url(AREA_INFO[areaKey].page)}>{AREA_INFO[areaKey].short}</a><span aria-hidden="true">›</span><span aria-current="page">{here.name}</span></> : <span aria-current="page">{AREA_INFO[areaKey].short}</span>}</nav>
       <h1>{h1}</h1>
-      <p class="lede">{lede}</p>
+      <p class="lede" set:html={lede} />
       <p class="area-acts"><a class="btn btn-primary" href={url('')}>Check your postcode</a><a class="btn" href={url('how-places-work/')}>How catchment areas work</a></p>
       <!-- the page sponsor, filled in by the script below from /api/sponsors -->
       <p class="ad-strip" id="adStrip" hidden></p>
@@ -99,6 +104,12 @@ const crumbs = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', it
       </div>
     ))}
   </section>
+
+  {towns.length > 0 && <section class="how-sec wrap" style="border-top:1px solid var(--line)">
+    <h2>{here ? `Other towns in the ${AREA_INFO[areaKey].short} area` : `Primary schools by town`}</h2>
+    <p class="intro">{here ? 'Each with its own schools, the hardest to get into and the ones that took everyone.' : `A page for each town and village, with its own schools and the nearest around it.`}</p>
+    <p class="name-list">{towns.map((t, i) => <>{i > 0 && ' · '}<a class="sch-link" href={url(t.page)}>{t.name}</a></>)}</p>
+  </section>}
 
   <!-- local businesses, filled in by the script below from /api/sponsors -->
   <section class="how-sec wrap" style="border-top:1px solid var(--line)" aria-labelledby="localTitle" id="adLocal" hidden data-area={areaKey} data-area-name={area}>
