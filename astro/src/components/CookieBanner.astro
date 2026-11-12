@@ -1,11 +1,11 @@
 ---
-// Asks before Google Analytics loads (lib/consent.ts). Shown until the visitor chooses, and again from "Cookie
+// Asks before Google Analytics may store anything (lib/consent.ts). Shown until the visitor chooses, and again from "Cookie
 // settings" in the footer. Accept and Reject look the same, as the ICO expects: saying no is as easy as yes.
 import { url } from '../lib/url';
 ---
 <section class="cc" id="cc" aria-labelledby="ccTitle" hidden>
   <h2 class="cc-title" id="ccTitle">Can we use analytics cookies?</h2>
-  <p class="cc-text">We’d like to use Google Analytics to see which pages help parents most. It stays off unless you say yes, and your postcode is never shared. <a href={url('privacy/#cookies')}>More about cookies</a></p>
+  <p class="cc-text">We’d like to use Google Analytics cookies to see which pages help parents most. None are set unless you say yes, and your postcode is never shared. <a href={url('privacy/#cookies')}>More about cookies</a></p>
   <div class="cc-acts">
     <button type="button" class="btn cc-btn" id="ccReject">Reject</button>
     <button type="button" class="btn cc-btn" id="ccAccept">Accept</button>
@@ -13,17 +13,14 @@ import { url } from '../lib/url';
 </section>
 
 <script>
-  import { getChoice, isOwner, loadAnalytics, setChoice, stopAnalytics } from '../lib/consent';
+  import { getChoice, grantAnalytics, isOwner, setChoice, stopAnalytics } from '../lib/consent';
   const box = document.getElementById('cc')!;
   const show = () => { box.hidden = false; };
   const hide = () => { box.hidden = true; };
 
-  if (!isOwner()) {
-    const choice = getChoice();
-    if (choice === 'granted') loadAnalytics();
-    else if (choice === null) show();
-  }
-  document.getElementById('ccAccept')!.addEventListener('click', () => { setChoice('granted'); hide(); loadAnalytics(); });
+  // a visitor who accepted before is already granted by the tag in <head> (layouts/Base.astro)
+  if (!isOwner() && getChoice() === null) show();
+  document.getElementById('ccAccept')!.addEventListener('click', () => { setChoice('granted'); hide(); grantAnalytics(); });
   document.getElementById('ccReject')!.addEventListener('click', () => { setChoice('denied'); hide(); stopAnalytics(); });
   // "Cookie settings" in the footer, and the button on the privacy page
   document.addEventListener('click', (e) => {

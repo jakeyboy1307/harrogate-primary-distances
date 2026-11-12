@@ -21,6 +21,30 @@ const shareImage = new URL(url('share.png'), Astro.site).href;
 <html lang="en-GB">
   <head>
     <meta charset="utf-8" />
+    <!-- Google tag (Tag Manager GTM-T5VDVN69, GA4 G-NR6T0LHP0J), first in <head> as Google asks. Consent Mode keeps
+         it from storing anything until the visitor accepts on the cookie banner (lib/consent.ts, CookieBanner.astro):
+         no cookies before then, and no advertising features ever. A visitor who accepted before is granted straight
+         away. The address Google is given never has a postcode in it, and the site owner's own browser (marked by
+         opening /admin) is switched off with Google's own opt-out flag. -->
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      (function () {
+        var owner = false, granted = false;
+        try {
+          owner = localStorage.getItem('ysc-owner') === '1';
+          var c = JSON.parse(localStorage.getItem('ysc-consent') || 'null');
+          granted = !!c && c.c === 'granted' && Date.now() - c.t < 31536000000;
+        } catch (e) {}
+        if (owner) window['ga-disable-G-NR6T0LHP0J'] = true;
+        gtag('consent', 'default', { analytics_storage: granted && !owner ? 'granted' : 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
+        var q = new URLSearchParams(location.search); q.delete('pc'); q.delete('school');
+        var qs = q.toString();
+        gtag('set', { page_location: location.origin + location.pathname + (qs ? '?' + qs : ''), allow_google_signals: false, allow_ad_personalization_signals: false });
+      })();
+      gtag('js', new Date());
+    </script>
+    <script is:inline async src="https://www.googletagmanager.com/gtm.js?id=GTM-T5VDVN69"></script>
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />

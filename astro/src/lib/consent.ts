@@ -1,12 +1,13 @@
-// Google Analytics, through the Google Tag Manager container below (it holds the GA4 tag, G-HQLZX5MSCC), and only
-// after a visitor clicks Accept on the cookie banner (components/CookieBanner.astro). Until then nothing from
-// Google loads. The choice is remembered in localStorage, not a cookie, for a year; "Cookie settings" in the footer
-// asks again. The site's own visit counter (lib/track.ts) uses no cookies and runs either way.
+// Google Analytics, through the Google Tag Manager container below (it holds the GA4 tag, G-NR6T0LHP0J). The tag is
+// on every page (layouts/Base.astro) with Google's Consent Mode set to denied, so it stores no cookies until the
+// visitor clicks Accept on the cookie banner (components/CookieBanner.astro). The choice is remembered in
+// localStorage, not a cookie, for a year; "Cookie settings" in the footer asks again. The site's own visit counter
+// (lib/track.ts) uses no cookies and runs either way.
 //
 // The site owner's browsers count nowhere: opening /admin marks the browser (layouts/Admin.astro), and both the
 // counter and Analytics skip a marked browser, so the admin dashboard and GA only show real visitors.
 
-export const GTM_ID = 'GTM-WWGVRHZC';
+export const GTM_ID = 'GTM-T5VDVN69';   // also written into layouts/Base.astro
 const KEY = 'ysc-consent';
 const OWNER = 'ysc-owner';
 const YEAR = 365 * 24 * 60 * 60 * 1000;
@@ -28,33 +29,13 @@ export function setChoice(c: Choice) {
 export const isOwner = () => { try { return localStorage.getItem(OWNER) === '1'; } catch { return false; } };
 export const markOwner = () => { try { localStorage.setItem(OWNER, '1'); } catch { /* storage blocked */ } };
 
-type W = Window & { dataLayer?: unknown[]; gtag?: (...a: unknown[]) => void };
-let loaded = false;
+type W = Window & { gtag?: (...a: unknown[]) => void };
 
-// Load Tag Manager, once. Only ever called after an Accept, now or on an earlier visit.
-export function loadAnalytics() {
-  if (loaded || isOwner()) return;
-  loaded = true;
-  const w = window as W;
-  w.dataLayer = w.dataLayer || [];
-  w.gtag = function gtag() { w.dataLayer!.push(arguments); };
-  // analytics only: Google's advertising features stay off whatever the container says
-  w.gtag('consent', 'default', { analytics_storage: 'granted', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
-  // Never a postcode. The checker keeps it after # (#pc=HG20NA), which Analytics doesn't read, and a form sent
-  // before the page's script loaded arrives as ?pc=…; both are left out of the address Google is given.
-  const q = new URLSearchParams(location.search);
-  q.delete('pc'); q.delete('school');
-  const qs = q.toString();
-  w.gtag('set', {
-    page_location: `${location.origin}${location.pathname}${qs ? `?${qs}` : ''}`,
-    allow_google_signals: false, allow_ad_personalization_signals: false,
-  });
-  w.gtag('js', new Date());
-  w.dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
-  const s = document.createElement('script');
-  s.async = true;
-  s.src = `https://www.googletagmanager.com/gtm.js?id=${GTM_ID}`;
-  document.head.appendChild(s);
+// After an Accept: let Analytics use its cookies from now on. The tag itself is already on every page (first in
+// <head>, layouts/Base.astro), waiting with analytics storage denied; a visitor who accepted before starts granted.
+export function grantAnalytics() {
+  if (isOwner()) return;
+  (window as W).gtag?.('consent', 'update', { analytics_storage: 'granted' });
 }
 
 // After a Reject that follows an Accept: tell Google to stop, and delete its cookies (_ga, _ga_<id>, _gid)
