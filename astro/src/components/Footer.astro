@@ -5,6 +5,9 @@ import Feedback from './Feedback.astro';
 import { url } from '../lib/url';
 import { AREA_INFO } from '../lib/specs';
 import { HUBS } from '../lib/hubs';
+import { townPages } from '../lib/towns';
+// every town page (lib/towns.ts), by name: "Ripon", "Roundhay, Leeds"
+const towns = [...townPages()].sort((a, b) => a.name.localeCompare(b.name));
 ---
 <footer class="site-foot">
   <div class="foot-nav">
@@ -15,6 +18,10 @@ import { HUBS } from '../lib/hubs';
     <nav class="foot-areas" aria-label="Areas we cover">
       <span>Areas we cover</span>
       {Object.values(AREA_INFO).map((a) => <a href={url(a.page)}>{a.name} primary schools</a>)}
+    </nav>
+    <nav class="foot-areas foot-towns" aria-label="Primary schools by town">
+      <span>Primary schools by town</span>
+      {towns.map((t) => <a href={url(t.page)}>{t.label}</a>)}
     </nav>
   </div>
   <div class="foot-bottom">

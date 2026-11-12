@@ -71,6 +71,8 @@ label.pill, select { cursor: pointer; }
 .foot-areas { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 24px; }
 .foot-areas span { font-weight: 700; color: var(--ink); }
 .foot-areas a { color: var(--ink); font-weight: 600; }
+.foot-towns { gap: 6px 18px; font-size: 15px; }
+.foot-towns a { font-weight: 500; }
 .foot-bottom { display: grid; grid-template-columns: minmax(0, 320px) minmax(0, 1fr); gap: 24px 48px; align-items: center; padding: 32px 36px; background: var(--pale); border-radius: 20px; }
 .foot-brand { display: inline-flex; align-items: center; gap: 10px; font: 700 19px/1.2 var(--display); color: var(--ink); text-decoration: none; }
 .foot-tag { margin-top: 10px; font-size: 14px; line-height: 1.5; max-width: 300px; text-wrap: pretty; }
