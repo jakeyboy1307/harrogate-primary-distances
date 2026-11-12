@@ -1,7 +1,10 @@
 // Google Analytics, through the Google Tag Manager container below (it holds the GA4 tag, G-NR6T0LHP0J). The tag is
-// on every page (layouts/Base.astro) with Google's Consent Mode set to denied, so it stores no cookies until the
-// visitor clicks Accept on the cookie banner (components/CookieBanner.astro). The choice is remembered in
-// localStorage, not a cookie, for a year; "Cookie settings" in the footer asks again. The site's own visit counter
+// first in <head> on every page (layouts/Base.astro) and runs for visit statistics without asking first: PECR's
+// statistical-purposes exception (Data (Use and Access) Act 2025, in force 5 February 2026) allows that when
+// visitors are told clearly and can object simply, the data is only used to improve the site, and Google acts only
+// as our processor (Analytics' data-sharing settings off, Google signals off, no advertising features). The cookie
+// notice (components/CookieBanner.astro) tells visitors, and its "Turn off" objects: then Analytics sends nothing
+// and its cookies are deleted. The choice is remembered in localStorage, not a cookie. The site's own visit counter
 // (lib/track.ts) uses no cookies and runs either way.
 //
 // The site owner's browsers count nowhere: opening /admin marks the browser (layouts/Admin.astro), and both the
@@ -14,7 +17,8 @@ const YEAR = 365 * 24 * 60 * 60 * 1000;
 
 export type Choice = 'granted' | 'denied';
 
-// the visitor's choice, or null if they haven't made one (or made it over a year ago)
+// 'granted': saw the notice and left Analytics on. 'denied': turned it off. null: hasn't answered the notice (or did
+// over a year ago, so it's shown again; Analytics stays off for someone who turned it off, layouts/Base.astro)
 export function getChoice(): Choice | null {
   try {
     const v = JSON.parse(localStorage.getItem(KEY) ?? 'null');
@@ -31,16 +35,18 @@ export const markOwner = () => { try { localStorage.setItem(OWNER, '1'); } catch
 
 type W = Window & { gtag?: (...a: unknown[]) => void };
 
-// After an Accept: let Analytics use its cookies from now on. The tag itself is already on every page (first in
-// <head>, layouts/Base.astro), waiting with analytics storage denied; a visitor who accepted before starts granted.
+const GA = 'ga-disable-G-NR6T0LHP0J';
+// After OK, or switching back on from Cookie settings: Analytics may use its cookies and send visits again
 export function grantAnalytics() {
   if (isOwner()) return;
+  (window as unknown as Record<string, boolean>)[GA] = false;
   (window as W).gtag?.('consent', 'update', { analytics_storage: 'granted' });
 }
 
-// After a Reject that follows an Accept: tell Google to stop, and delete its cookies (_ga, _ga_<id>, _gid)
+// After Turn off: Analytics sends nothing more (Google's own opt-out flag), and its cookies (_ga, _ga_<id>) are deleted
 export function stopAnalytics() {
   const w = window as W;
+  (window as unknown as Record<string, boolean>)[GA] = true;
   w.gtag?.('consent', 'update', { analytics_storage: 'denied' });
   const host = location.hostname, parts = host.split('.');
   const domains = ['', host, `.${host}`, ...parts.slice(1).map((_, i) => `.${parts.slice(i + 1).join('.')}`)];

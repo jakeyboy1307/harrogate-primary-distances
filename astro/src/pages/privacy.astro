@@ -2,11 +2,11 @@
 // What happens to a parent's postcode and list. Keep in step with the code: storage keys in lib/store.ts, outside services in lib/engine.ts and lib/map.ts.
 import Base from '../layouts/Base.astro';
 ---
-<Base title="Privacy · Yorkshire School Checker" description="What the Yorkshire School Checker does with your postcode, your list of schools and any message you send us. No account, anonymous daily counts, and analytics cookies only if you say yes.">
+<Base title="Privacy · Yorkshire School Checker" description="What the Yorkshire School Checker does with your postcode, your list of schools and any message you send us. No account, anonymous visit counts, and analytics cookies you can turn off.">
   <section class="how-hero wrap">
     <div>
       <h1>Your privacy</h1>
-      <p class="lede">There’s no account, and analytics cookies only run if you say yes. We only ask for your name and email if you send us a message, and our own counts are anonymous daily totals. Here’s exactly where your postcode goes and what stays on your phone.</p>
+      <p class="lede">There’s no account, and you can turn our analytics cookies off at any time. We only ask for your name and email if you send us a message, and our own counts are anonymous daily totals. Here’s exactly where your postcode goes and what stays on your phone.</p>
     </div>
   </section>
 
@@ -27,12 +27,11 @@ import Base from '../layouts/Base.astro';
   </section>
 
   <section class="how-sec sec-pale wrap" id="cookies">
-    <h2>Analytics cookies, only if you say yes</h2>
-    <p class="intro">We use Google Analytics to see which pages are visited, roughly where visitors are (town or region, not your address), what device and browser they use, and how they found the site. When you first visit, we ask whether it can use cookies.</p>
-    <p class="intro">If you click <b>Accept</b>, it sets cookies called <code>_ga</code> and <code>_ga_NR6T0LHP0J</code> so it can tell a returning visitor from a new one. They last up to two years unless you clear them or change your choice.</p>
-    <p class="intro">If you click <b>Reject</b>, or haven’t chosen yet, Google Analytics stores nothing on your device: no cookies, and nothing that recognises you next time. Your browser still tells Google that a page was viewed, with the page’s address, the time, and your browser and device type, so it can estimate how many people visit. Google sees your IP address when that happens, as any website does, but Google Analytics doesn’t store it, and it can’t link that visit to you or to any other.</p>
-    <p class="intro">Whatever you choose, we never send your postcode, your list of schools or your name to Google, and Google’s advertising features are switched off. Google keeps the detailed records for two months before deleting them, and uses them only to give us reports. You can read <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google’s privacy policy</a>.</p>
-    <p class="intro">Your choice is remembered in your browser for a year. You can change it at any time: <button type="button" class="cc-inline" data-cookie-settings>change your cookie choice</button>, or use Cookie settings at the bottom of any page. Changing to Reject deletes the Google Analytics cookies.</p>
+    <h2>Analytics cookies, and how to turn them off</h2>
+    <p class="intro">We use Google Analytics to count visits: which pages are viewed, roughly where visitors are (town or region, not your address), what device and browser they use, and how they found the site. We only use it to see what helps parents and to improve the site.</p>
+    <p class="intro">It sets two cookies, <code>_ga</code> and <code>_ga_NR6T0LHP0J</code>, so it can tell a returning visitor from a new one. They last up to two years unless you clear them or turn them off. UK law allows cookies like these, used only for statistics to improve a website, without asking first, as long as we tell you and you can turn them off easily.</p>
+    <p class="intro">Google handles the data on our behalf and only to give us reports. We’ve switched off Google’s advertising features and its use of the data for its own products, and Google keeps the detailed records for two months before deleting them. We never send your postcode, your list of schools or your name. You can read <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google’s privacy policy</a>.</p>
+    <p class="intro"><b>To turn them off</b>, <button type="button" class="cc-inline" data-cookie-settings>open your cookie settings</button> and choose “Turn off”, or use Cookie settings at the bottom of any page. Google Analytics then sends nothing more from your browser and its cookies are deleted. Your choice is remembered in your browser.</p>
   </section>
 
   <section class="how-sec wrap" style="border-top:1px solid var(--line)">
