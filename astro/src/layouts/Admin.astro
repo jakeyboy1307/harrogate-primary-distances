@@ -25,6 +25,8 @@ const menu = [
     <meta name="robots" content="noindex, nofollow" />
     <title>{title} · Admin · Yorkshire School Checker</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- the site owner's browser: from now on its visits aren't counted, by the admin counts or Google Analytics (lib/consent.ts) -->
+    <script is:inline>try { localStorage.setItem('ysc-owner', '1'); } catch (e) {}</script>
   </head>
   <body class="adm">
     <aside class="adm-side">

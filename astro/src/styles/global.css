@@ -75,8 +75,8 @@ label.pill, select { cursor: pointer; }
 .foot-brand { display: inline-flex; align-items: center; gap: 10px; font: 700 19px/1.2 var(--display); color: var(--ink); text-decoration: none; }
 .foot-tag { margin-top: 10px; font-size: 14px; line-height: 1.5; max-width: 300px; text-wrap: pretty; }
 .foot-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 12px 28px; }
-.foot-links a, .foot-links .feedback-btn { color: var(--ink); font-weight: 600; font-size: 15px; text-decoration: none; text-underline-offset: 4px; text-decoration-thickness: 1.5px; }
-.foot-links a:hover, .foot-links .feedback-btn:hover { text-decoration: underline; }
+.foot-links a, .foot-links .feedback-btn, .foot-links .cc-open { color: var(--ink); font-weight: 600; font-size: 15px; text-decoration: none; text-underline-offset: 4px; text-decoration-thickness: 1.5px; }
+.foot-links a:hover, .foot-links .feedback-btn:hover, .foot-links .cc-open:hover { text-decoration: underline; }
 .foot-base { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px 24px; padding-top: 24px; font-size: 14px; }
 .foot-base p { margin: 0; }
 .foot-biz a { color: var(--ink); font-weight: 600; }
@@ -572,7 +572,8 @@ body.panel-open { overflow: hidden; }
 
 /* ---------- feedback ---------- */
 /* "Contact us" in the footer: opens the message form, so it's a button, but it reads as one of the links */
-.feedback-btn { padding: 0; border: 0; background: none; font: inherit; cursor: pointer; text-align: left; }
+.cc-inline { padding: 0; border: 0; background: none; font: inherit; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.feedback-btn, .cc-open { padding: 0; border: 0; background: none; font: inherit; cursor: pointer; text-align: left; }
 .fb { width: min(460px, calc(100% - 32px)); padding: 0; border: 2.5px solid var(--ink); border-radius: 20px; box-shadow: 6px 6px 0 var(--cobalt); color: var(--ink); }
 .fb::backdrop { background: rgba(20, 24, 43, .42); }
 .fb-form, .fb-done { padding: 24px; display: grid; gap: 14px; }

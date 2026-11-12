@@ -1,6 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import CookieBanner from '../components/CookieBanner.astro';
 import { url } from '../lib/url';
 import { COVERED } from '../lib/specs';
 import frauncesFont from '../assets/fonts/fraunces-latin.woff2?url';
@@ -49,8 +50,10 @@ const shareImage = new URL(url('share.png'), Astro.site).href;
     <main id="main"><slot /></main>
     <Footer />
     <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+    <CookieBanner />
     <script>
-      // daily visitor counts for the admin dashboard (no cookies, nothing that identifies anyone)
+      // daily visitor counts for the admin dashboard (no cookies, nothing that identifies anyone, and never the
+      // site owner's own browsing: lib/consent.ts). Google Analytics is separate, and only runs after an Accept.
       import { startTracking } from '../lib/track';
       startTracking(document.body.dataset.page || location.pathname.toLowerCase().replace(/\/?$/, '/'));
     </script>

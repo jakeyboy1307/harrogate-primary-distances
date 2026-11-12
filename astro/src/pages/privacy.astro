@@ -2,11 +2,11 @@
 // What happens to a parent's postcode and list. Keep in step with the code: storage keys in lib/store.ts, outside services in lib/engine.ts and lib/map.ts.
 import Base from '../layouts/Base.astro';
 ---
-<Base title="Privacy · Yorkshire School Checker" description="What the Yorkshire School Checker does with your postcode, your list of schools and any message you send us. No account, no cookies, and only anonymous daily counts.">
+<Base title="Privacy · Yorkshire School Checker" description="What the Yorkshire School Checker does with your postcode, your list of schools and any message you send us. No account, anonymous daily counts, and analytics cookies only if you say yes.">
   <section class="how-hero wrap">
     <div>
       <h1>Your privacy</h1>
-      <p class="lede">There’s no account and there are no cookies. We only ask for your name and email if you send us a message, and we only keep anonymous daily counts. Here’s exactly where your postcode goes and what stays on your phone.</p>
+      <p class="lede">There’s no account, and analytics cookies only run if you say yes. We only ask for your name and email if you send us a message, and our own counts are anonymous daily totals. Here’s exactly where your postcode goes and what stays on your phone.</p>
     </div>
   </section>
 
@@ -26,14 +26,21 @@ import Base from '../layouts/Base.astro';
     </div>
   </section>
 
+  <section class="how-sec sec-pale wrap" id="cookies">
+    <h2>Analytics cookies, only if you say yes</h2>
+    <p class="intro">When you first visit, we ask whether we can use Google Analytics. If you click <b>Accept</b>, it shows us which pages are visited, roughly where visitors are (town or region, not your address), what device and browser they use, and how they found the site. It sets cookies called <code>_ga</code> and <code>_ga_HQLZX5MSCC</code> so it can tell a returning visitor from a new one. They last up to two years unless you clear them or change your choice.</p>
+    <p class="intro">We never send your postcode, your list of schools or your name to Google. Google’s advertising features are switched off, Google keeps the detailed records for two months before deleting them, and it uses them only to give us reports. You can read <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google’s privacy policy</a>.</p>
+    <p class="intro">If you click <b>Reject</b>, or don’t choose, Google Analytics never loads. Your choice is remembered in your browser for a year. You can change it at any time: <button type="button" class="cc-inline" data-cookie-settings>change your cookie choice</button>, or use Cookie settings at the bottom of any page. Changing to Reject deletes the Google Analytics cookies.</p>
+  </section>
+
   <section class="how-sec wrap" style="border-top:1px solid var(--line)">
     <h2>Hosting and who runs this</h2>
-    <p class="intro">The site is delivered by Cloudflare, which handles visitors’ IP addresses to serve pages and block attacks, as every web host does. We don’t use cookies or third-party analytics.</p>
-    <p class="intro">To see how the site is used, we count page views, searches by area (never the postcode), how often each school’s details are opened, how often sponsored listings are seen and clicked, and which site a visit came from (just its name, such as “google”, never the page you were on). Only daily totals are kept, like “120 views of the plan page today”. Nothing is linked to you or your device, and your IP address isn’t stored.</p>
+    <p class="intro">The site is delivered by Cloudflare, which handles visitors’ IP addresses to serve pages and block attacks, as every web host does.</p>
+    <p class="intro">Separately from Google Analytics, and whatever you choose, we count page views, searches by area (never the postcode), how often each school’s details are opened, how often sponsored listings are seen and clicked, and which site a visit came from (just its name, such as “google”, never the page you were on). Only daily totals are kept, like “120 views of the plan page today”. These counts use no cookies, nothing is linked to you or your device, and your IP address isn’t stored.</p>
     <p class="intro">Some pages show listings from local businesses, marked “Sponsored”. They’re plain links: no ad networks, no cookies, and sponsors never learn who you are. Each link carries a tag naming this site, so the business can count visits from us.</p>
     <p class="intro">If you send us a message with the “Contact us” form, your name, email and message are emailed to us so we can reply. We don’t keep them on the site, and we don’t add you to a mailing list.</p>
     <p class="intro">If you send an advertising enquiry from our advertise page, your name, business and contact details are emailed to us so we can reply. We don’t add you to a mailing list.</p>
     <p class="intro">The Yorkshire School Checker is an independent tool made by <a href="https://www.mammothwebsites.co.uk" target="_blank" rel="noopener">Mammoth Websites</a>. For questions about this page, get in touch through their website.</p>
-    <p class="caveat">Last updated 11 November 2026.</p>
+    <p class="caveat">Last updated 12 November 2026.</p>
   </section>
 </Base>

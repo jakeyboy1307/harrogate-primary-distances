@@ -1,6 +1,7 @@
 // Counts for the admin dashboard: page views, searches by area, school panels opened, and ad views and clicks.
 // They're sent to /api/hit (astro/worker/index.js) as daily totals. No cookies, no ID, nothing that identifies
-// anyone, and nothing is stored in the browser.
+// anyone, and nothing is stored in the browser. A browser that has opened /admin (the site owner's) isn't counted.
+import { isOwner } from './consent';
 
 type Kind = 'page' | 'search' | 'panel' | 'ad_view' | 'ad_click' | 'source';
 const queue = new Map<string, [Kind, string, number]>();
@@ -16,7 +17,9 @@ function flush() {
   if (!sent) fetch('/api/hit', { method: 'POST', body, keepalive: true }).catch(() => {});
 }
 
+const owner = isOwner();   // searches and school panels are counted straight from their pages, so check here too
 export function track(kind: Kind, key: string) {
+  if (owner) return;
   const id = `${kind}|${key}`;
   const e = queue.get(id);
   if (e) e[2] = Math.min(20, e[2] + 1); else queue.set(id, [kind, key, 1]);
@@ -50,7 +53,7 @@ let started = false;
 // Watch for ads on the page: count a view once an ad is at least half on screen (once per ad per page view),
 // and a click on its button or link. Ads carry data-ad-id and data-ad-slot (src/lib/sponsors.ts).
 export function startTracking(page: string) {
-  if (started) return;
+  if (started || isOwner()) return;
   started = true;
   track('page', page);
   const from = arrivedFrom();
