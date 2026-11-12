@@ -67,12 +67,14 @@ label.pill, select { cursor: pointer; }
 /* ---------- footer ---------- */
 /* the council and area lists, then the site's own name and pages, then advertising and the credit */
 .site-foot { padding: 40px var(--gr) 32px var(--gl); border-top: 1px solid var(--line); color: var(--muted); font-size: 15px; }
-.foot-nav { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 40px; padding-bottom: 32px; }
-.foot-areas { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 24px; }
-.foot-areas span { font-weight: 700; color: var(--ink); }
-.foot-areas a { color: var(--ink); font-weight: 600; }
-.foot-towns { gap: 6px 18px; font-size: 15px; }
-.foot-towns a { font-weight: 500; }
+.foot-nav { display: grid; grid-template-columns: minmax(0, 380px) minmax(0, 1fr); gap: 32px 64px; padding-bottom: 32px; align-items: start; }
+.foot-find { display: grid; gap: 10px; }
+.foot-find label, .foot-councils > span { font-weight: 700; color: var(--ink); }
+.foot-find-row { display: flex; gap: 8px; }
+.foot-find input { flex: 1; min-width: 0; height: 46px; padding: 0 14px; border: 2px solid var(--ink); border-radius: 12px; font: 500 16px var(--body); color: var(--ink); background: #fff; }
+.foot-all { color: var(--ink); font-weight: 600; justify-self: start; }
+.foot-councils ul { margin: 10px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px 24px; }
+.foot-councils a { color: var(--ink); font-weight: 600; }
 .foot-bottom { display: grid; grid-template-columns: minmax(0, 320px) minmax(0, 1fr); gap: 24px 48px; align-items: center; padding: 32px 36px; background: var(--pale); border-radius: 20px; }
 .foot-brand { display: inline-flex; align-items: center; gap: 10px; font: 700 19px/1.2 var(--display); color: var(--ink); text-decoration: none; }
 .foot-tag { margin-top: 10px; font-size: 14px; line-height: 1.5; max-width: 300px; text-wrap: pretty; }
@@ -88,8 +90,8 @@ label.pill, select { cursor: pointer; }
 .mammoth { flex-shrink: 0; }
 @media (max-width: 760px) {
   .site-foot { padding: 28px var(--gr) 36px var(--gl); }
-  .foot-nav { flex-direction: column; gap: 16px; padding-bottom: 28px; }
-  .foot-areas { gap: 8px 20px; }
+  .foot-nav { grid-template-columns: minmax(0, 1fr); gap: 28px; padding-bottom: 28px; }
+  .foot-councils ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .foot-bottom { grid-template-columns: 1fr; gap: 20px; padding: 24px 20px; border-radius: 16px; align-items: start; }
   .foot-links { justify-content: flex-start; gap: 14px 22px; }
   .foot-base { flex-direction: column; align-items: flex-start; }

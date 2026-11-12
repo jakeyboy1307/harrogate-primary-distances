@@ -3,25 +3,27 @@ import Rose from './Rose.astro';
 import Mammoth from './Mammoth.astro';
 import Feedback from './Feedback.astro';
 import { url } from '../lib/url';
-import { AREA_INFO } from '../lib/specs';
+import { AREA_INFO, councilLabel } from '../lib/specs';
 import { HUBS } from '../lib/hubs';
-import { townPages } from '../lib/towns';
-// every town page (lib/towns.ts), by name: "Ripon", "Roundhay, Leeds"
-const towns = [...townPages()].sort((a, b) => a.name.localeCompare(b.name));
+import { byCouncil } from '../lib/places';
+// One link per council: its council page, or its only (or first) area page where it has none (York, Wakefield).
+// The 57 areas and 140 towns are on /areas/ and in the "Find your town" box, not listed here.
+const councils = byCouncil().map(([c, areas]) => ({ name: councilLabel(c), page: HUBS[c]?.page ?? AREA_INFO[areas[0]].page }));
 ---
 <footer class="site-foot">
   <div class="foot-nav">
-    <nav class="foot-areas" aria-label="Councils we cover">
-      <span>Councils</span>
-      {Object.values(HUBS).map((h) => <a href={url(h.page)}>{h.name} primary schools</a>)}
-    </nav>
-    <nav class="foot-areas" aria-label="Areas we cover">
-      <span>Areas we cover</span>
-      {Object.values(AREA_INFO).map((a) => <a href={url(a.page)}>{a.name} primary schools</a>)}
-    </nav>
-    <nav class="foot-areas foot-towns" aria-label="Primary schools by town">
-      <span>Primary schools by town</span>
-      {towns.map((t) => <a href={url(t.page)}>{t.label}</a>)}
+    <form class="foot-find" action={url('areas/')} method="get" role="search" data-places={url('places.json')}>
+      <label for="footQ">Find your town</label>
+      <div class="foot-find-row">
+        <input id="footQ" name="q" type="search" list="footPlaces" placeholder="Ripon, Roundhay, Hebden Bridge…" autocomplete="off" />
+        <button class="btn btn-sm" type="submit">Go</button>
+      </div>
+      <datalist id="footPlaces"></datalist>
+      <a class="foot-all" href={url('areas/')}>See every area and town</a>
+    </form>
+    <nav class="foot-councils" aria-label="Primary schools by council">
+      <span>Primary schools by council</span>
+      <ul>{councils.map((c) => <li><a href={url(c.page)}>{c.name}</a></li>)}</ul>
     </nav>
   </div>
   <div class="foot-bottom">
@@ -48,3 +50,35 @@ const towns = [...townPages()].sort((a, b) => a.name.localeCompare(b.name));
     </p>
   </div>
 </footer>
+
+<script>
+  // "Find your town": suggestions load the first time someone uses the box (pages/places.json.ts). Picking one, or
+  // typing a name and pressing Go, opens its page; anything else goes to /areas/ with the list narrowed to it.
+  const form = document.querySelector<HTMLFormElement>('.foot-find')!;
+  const input = form.querySelector('input')!, list = form.querySelector('datalist')!;
+  let places: [string, string][] | null = null, loading: Promise<void> | null = null;
+  const load = () => (loading ??= fetch(form.dataset.places!).then((r) => r.json()).then((p: [string, string][]) => {
+    places = p;
+    list.innerHTML = p.map(([n]) => `<option value="${n.replace(/"/g, '&quot;')}"></option>`).join('');
+  }).catch(() => {}));
+  const find = (v: string) => {
+    const q = v.trim().toLowerCase();
+    if (!q || !places) return undefined;
+    return places.find(([n]) => n.toLowerCase() === q) ?? places.find(([n]) => n.toLowerCase().startsWith(q));
+  };
+  input.addEventListener('focus', load, { once: true });
+  input.addEventListener('input', load, { once: true });
+  // a suggestion picked from the list fills the box in one go (no typing): go straight there
+  input.addEventListener('input', (e) => {
+    const t = (e as InputEvent).inputType;
+    if (t && t !== 'insertReplacementText') return;
+    const hit = places?.find(([n]) => n.toLowerCase() === input.value.trim().toLowerCase());
+    if (hit) location.href = hit[1];
+  });
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    await load();
+    const hit = find(input.value);
+    location.href = hit ? hit[1] : `${form.action}?q=${encodeURIComponent(input.value.trim())}`;
+  });
+</script>
