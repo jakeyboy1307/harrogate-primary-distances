@@ -1,8 +1,9 @@
 // The questions every East Riding area page shares (its catchment map, rules, dates and term dates), so the four
 // pages (bridlington, beverley, goole, cottingham-primary-schools) only add what's local to them.
 import { COUNCILS } from './engine';
-import { ER_TERM_DATES } from './specs';
+
 import { url } from './url';
+import { termAnswer } from './holidays';
 
 const er = COUNCILS['East Riding of Yorkshire'];
 export const ER_RULES = `East Riding of Yorkshire Council fills each school’s places in order: children in care, then children in the catchment, then brothers and sisters of pupils, then everyone else by distance, measured in a straight line from home to school. Church and academy schools can set their own rules. <a href="${url('how-places-work/')}">How school catchment areas work</a> explains the queue.`;
@@ -22,7 +23,7 @@ export const erFaqs = (town: string, open: number, total: number): [string, stri
 ];
 export const erTail: [string, string][] = [
   ['When are the school term dates and holidays?',
-    `Community and voluntary controlled schools follow <a href="${ER_TERM_DATES}" target="_blank" rel="noopener">East Riding of Yorkshire Council’s term dates</a>. Academies and church schools can set their own, so check with the school.`],
+    termAnswer('East Riding of Yorkshire', 'East Riding', url)],
   ['How do I find open days?',
     'Ask the school. Open the school in the checker for its phone number, email and website.'],
 ];

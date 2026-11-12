@@ -3,9 +3,10 @@
 import { COUNCILS, mapTipHtml, placesGo } from './engine';
 import { COVERED } from './specs';
 import { url } from './url';
+import { day, holidayPage, holidaysFor, short, summerFrom } from './holidays';
 
 export function teesFaqs(key: 'Middlesbrough' | 'Redcar and Cleveland', town: string, open: number, total: number, figures: string): [string, string][] {
-  const c = COUNCILS[key];
+  const c = COUNCILS[key], hol = holidaysFor(key)!;
   return [
     [`What is my catchment school in ${town}?`,
       `Schools here call it an admission zone. ${c.name} ${c.mapNote}, so the checker can’t tell you which zone you’re in. ${mapTipHtml(c)}. Then put your postcode into the <a href="${url('')}">school checker</a> to see how far every school near you is and how hard each has been to get into.`],
@@ -23,8 +24,8 @@ export function teesFaqs(key: 'Middlesbrough' | 'Redcar and Cleveland', town: st
       'There’s no official ranking, so be wary of league tables. Ofsted is the fairest guide, alongside a visit. The checker shows each school’s latest Ofsted outcome, and each school’s own page explains it.'],
     ['We live just over the council border. Which council do I apply to?',
       `The council for where you live, even when you want a school in another council’s area. You can name ${town} schools on that form. The checker covers ${COVERED} schools, so you can compare schools on both sides of the border. Stockton-on-Tees schools aren’t in it yet.`],
-    ['When are the school term dates and holidays?',
-      'Most schools here are academies, which set their own term dates, so check with the school. Its website is on its page in the checker.'],
+    [`When are the ${town} school holidays?`,
+      `Most schools here are academies, which set their own term dates, so check with the school: its website is on its page in the checker. Schools the council runs follow <a href="${url(holidayPage(hol))}">${hol.name} school holidays and term dates</a>: in ${hol.years[0].label} the half terms are ${short(hol.years[0].oct)}, ${short(hol.years[0].feb)} and ${short(hol.years[0].may)}, and the summer holidays start on ${day(summerFrom(hol.years[0]))}.`],
     ['How do I find open days?', 'Ask the school. Open the school in the checker for its phone number, email and website.'],
   ];
 }

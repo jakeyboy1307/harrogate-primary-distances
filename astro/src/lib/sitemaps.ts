@@ -6,6 +6,7 @@ import { councilDate, dataDate } from './areas';
 import { schoolPages } from './schoolpages';
 import { AREA_INFO, type Area } from './specs';
 import { townsOf } from './towns';
+import { HOLIDAYS, holidayPage } from './holidays';
 
 export interface Entry { path: string; lastmod?: string }
 
@@ -23,7 +24,8 @@ export const SITEMAPS = ['pages', ...(Object.keys(AREA_INFO) as Area[])];
 export function sitemapEntries(name: string): Entry[] {
   if (name === 'pages') {
     const areaPages = new Set(Object.values(AREA_INFO).map((a) => a.page));
-    return topLevel.filter((p) => !areaPages.has(p)).sort().map((path) => ({ path }));
+    // plus the school holiday pages ([council]-school-holidays.astro), one per council
+    return [...topLevel.filter((p) => !areaPages.has(p)), ...HOLIDAYS.map(holidayPage)].sort().map((path) => ({ path }));
   }
   const area = AREA_INFO[name as Area];
   const lastmod = councilDate(area.council) ?? dataDate();

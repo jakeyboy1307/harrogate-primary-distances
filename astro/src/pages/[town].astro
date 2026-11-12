@@ -8,7 +8,8 @@ import { townPages, type TownPage } from '../lib/towns';
 import { hardest, openToAll, outstanding } from '../lib/areas';
 import { COUNCILS } from '../lib/engine';
 import { pageOf, shortOf } from '../lib/schoolpages';
-import { AREA_INFO, listOf, NY_TERM_DATES, ER_TERM_DATES, HULL_TERM_DATES, CALD_TERM_DATES, KIRK_TERM_DATES, LEEDS_TERM_DATES, BRAD_TERM_DATES, WAKE_TERM_DATES, SHEF_TERM_DATES, BARN_TERM_DATES, DON_TERM_DATES, ROT_TERM_DATES } from '../lib/specs';
+import { AREA_INFO, listOf } from '../lib/specs';
+import { termAnswer } from '../lib/holidays';
 import { url } from '../lib/url';
 
 export function getStaticPaths() {
@@ -18,11 +19,6 @@ const { t } = Astro.props as { t: TownPage };
 const schools = [...t.core, ...t.near];
 const c = COUNCILS[t.council];
 const area = AREA_INFO[t.area];
-const TERMS: Record<string, string> = {
-  'North Yorkshire': NY_TERM_DATES, 'East Riding of Yorkshire': ER_TERM_DATES, 'Kingston upon Hull, City of': HULL_TERM_DATES,
-  Calderdale: CALD_TERM_DATES, Kirklees: KIRK_TERM_DATES, Leeds: LEEDS_TERM_DATES, Bradford: BRAD_TERM_DATES,
-  Wakefield: WAKE_TERM_DATES, Sheffield: SHEF_TERM_DATES, Barnsley: BARN_TERM_DATES, Doncaster: DON_TERM_DATES, Rotherham: ROT_TERM_DATES,
-};
 const link = (urn: number, text?: string) => { const p = pageOf(urn)!; return `<a href="${url(`schools/${p.slug}/`)}">${text ?? shortOf(p.s.name)}</a>`; };
 const ext = (href: string, text: string) => `<a href="${href}" target="_blank" rel="noopener">${text}</a>`;
 const names = (xs: { urn: number }[]) => listOf(xs.map((s) => link(s.urn)));
@@ -58,10 +54,8 @@ const faqs: [string, string][] = [
     `Apply online to your own council by Friday 15 January 2027, even for a school over the border. For ${t.name} that’s ${ext(c.apply, c.name)}, whose form takes up to ${c.prefs} schools, in the order you want them. Children born between 1 September 2022 and 31 August 2023 start Reception in September 2027.`],
   [`When will I know which school we’ve got?`,
     'Offers go out on national offer day, Friday 16 April 2027, by email from the council. If you miss out, you can join waiting lists and appeal.'],
-  [`When are the ${t.name} school holidays?`,
-    TERMS[t.council]
-      ? `Community and voluntary controlled schools follow ${ext(TERMS[t.council], `${c.name}’s term and holiday dates`)}. Academies, free schools and voluntary aided schools can set their own, so check with the school: open it here for its phone number and website.`
-      : `Each school publishes its own term dates. Open the school here for its phone number and website.`],
+  // the council's dates, from its school holidays page (lib/holidays.ts)
+  [`When are the ${t.name} school holidays?`, `${termAnswer(t.council, t.name, url)} Open it here for its phone number and website.`],
   [`Does this cover secondary schools in ${t.name}?`,
     `Not yet. The Yorkshire School Checker covers primary, infant and first schools and Reception places only.`],
 ];

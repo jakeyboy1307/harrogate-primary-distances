@@ -1,0 +1,173 @@
+---
+// A council's school holidays and term dates (lib/holidays.ts): /north-yorkshire-school-holidays/ and the like.
+// Written for what parents type all year round (Google's suggestions, November 2026): "<town> school holidays
+// 2026 27", "school term dates <council> 2027", "<council> half term". Every date is the council's own, copied
+// from its page and checked by hand; the page names the source and the day it was checked.
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
+import { AREA_INFO, listOf } from '../lib/specs';
+import { areasOf } from '../lib/hubs';
+import { townPages } from '../lib/towns';
+import { CHECKED, HOLIDAYS, christmas, day, easter, range, rows, schoolsPageOf, short, summerFrom, summerTo, type Holidays } from '../lib/holidays';
+
+export function getStaticPaths() {
+  return HOLIDAYS.map((h) => ({ params: { council: h.slug.replace(/-school-holidays$/, '') }, props: { h } }));
+}
+const { h } = Astro.props as { h: Holidays };
+const [now, later] = h.years;
+const first = now.label.replace(' to ', '-').replace(/-20(\d\d)$/, '-$1');      // "2026-27"
+const second = later?.label.replace(' to ', '-').replace(/-20(\d\d)$/, '-$1');  // "2027-28"
+const up = schoolsPageOf(h.council);
+// the areas and towns in this council, for the links and for the places named in the lede
+const areas = areasOf(h.council).map((a) => AREA_INFO[a]);
+const towns = townPages().filter((t) => t.council === h.council).sort((a, b) => a.name.localeCompare(b.name));
+const places = [...new Set([...areas.map((a) => a.short), ...towns.filter((t) => t.kind === 'town').map((t) => t.name)])].filter((p) => p !== h.name);
+const someplaces = places.slice(0, 8);
+
+const h1 = `${h.name} school holidays and term dates ${first}${second ? ` and ${second}` : ''}`;
+const title = `${h.name} school holidays ${first}${second ? ` and ${second}` : ''}: term dates and half terms · Yorkshire School Checker`;
+const description = `${h.name} school term dates and holidays for ${now.label}${later ? ` and ${later.label}` : ''}: half terms, Christmas, Easter and summer, copied from the council’s own dates${someplaces.length ? ` for schools in ${listOf(someplaces.slice(0, 5))} and across ${h.name}` : ''}.`;
+const lede = `Every half term and holiday for council schools in ${h.name}${someplaces.length ? `, including ${listOf(someplaces)}` : ''}, copied from the council’s own dates and checked on ${CHECKED}. Academies, free schools and voluntary aided schools can set their own, so check with your school.`;
+
+// the holidays as data for the "next holiday" line, which the browser works out from today's date
+const breaks = h.years.flatMap((yr, i) => [
+  ['October half term', yr.oct, range(yr.oct)], ['Christmas holidays', christmas(yr), range(christmas(yr))], ['February half term', yr.feb, range(yr.feb)],
+  ['Easter holidays', easter(yr), range(easter(yr))], ['May half term', yr.may, range(yr.may)],
+  ['Summer holidays', [summerFrom(yr), summerTo(h, i)], `from ${day(summerFrom(yr))}${h.years[i + 1] ? `, back ${day(h.years[i + 1].autumn[0])}` : ''}`],
+] as [string, [string, string], string][]).map(([what, [a, b], text]) => ({ what, a, b, text }));
+
+const faqs: [string, string][] = [
+  [`When are the ${h.name} half terms in ${now.label}?`,
+    `October half term is ${short(now.oct)}, February half term ${short(now.feb)} and May half term ${short(now.may)}${later ? `. In ${later.label}: ${short(later.oct)}, ${short(later.feb)} and ${short(later.may)}` : ''}.`],
+  [`When do ${h.name} schools break up for summer ${now.label.slice(-4)}?`,
+    `The summer term ends on ${day(now.summer[1])}, so the holidays start on ${day(summerFrom(now))}${later ? `. Schools go back on ${day(later.autumn[0])}, and in ${later.label.slice(-4)} the summer holidays start on ${day(summerFrom(later))}` : ''}.`],
+  [`When are the ${h.name} Easter holidays ${now.label.slice(-4)}?`,
+    `${range(easter(now))}${later ? `. In ${later.label.slice(-4)}: ${range(easter(later))}` : ''}.`],
+  [`When are the ${h.name} Christmas holidays?`,
+    `${range(christmas(now))}${later ? `, and then ${range(christmas(later))}` : ''}.`],
+  [`Do all ${h.name} schools follow these term dates?`,
+    `No. ${h.who} Each school’s website has its own dates. Open any school in the <a href="${url('')}">checker</a> for its phone number and website.`],
+  ['What are INSET days?',
+    `Training days, when teachers are in school but pupils aren’t. Every school has five a year. ${now.training ? `${h.name} Council sets three for its own schools, which are in the table above; each school picks the other two and will tell you the dates.` : 'Each school picks its own, so they aren’t in the table: your school will tell you the dates.'}`],
+];
+const faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a.replace(/<[^>]+>/g, '') } })) };
+const crumbs = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+  { '@type': 'ListItem', position: 1, name: 'School checker', item: new URL(url(''), Astro.site).href },
+  { '@type': 'ListItem', position: 2, name: up.name, item: new URL(url(up.page), Astro.site).href },
+  { '@type': 'ListItem', position: 3, name: `${h.name} school holidays`, item: new URL(url(`${h.slug}/`), Astro.site).href },
+] };
+---
+<Base title={title} description={description}>
+  <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify([faqSchema, crumbs])} />
+  <section class="how-hero wrap">
+    <div>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href={url('')}>School checker</a><span aria-hidden="true">›</span><a href={url(up.page)}>{up.name}</a><span aria-hidden="true">›</span><span aria-current="page">School holidays</span></nav>
+      <h1>{h1}</h1>
+      <p class="lede">{lede}</p>
+      <p class="next-up" id="nextUp" hidden></p>
+      <p class="area-acts"><a class="btn btn-primary" href={`#y${now.label.slice(0, 4)}`}>{now.label} dates</a>{later && <a class="btn" href={`#y${later.label.slice(0, 4)}`}>{later.label} dates</a>}</p>
+    </div>
+  </section>
+
+  {h.years.map((yr, i) => (
+    <section class:list={['how-sec', 'wrap', i === 0 && 'sec-pale']} id={`y${yr.label.slice(0, 4)}`}>
+      <h2>{h.name} term dates {yr.label}</h2>
+      <div class="tbl-wrap"><table class="tbl hol-tbl">
+        <thead><tr><th>Term or holiday</th><th>Dates</th></tr></thead>
+        <tbody>{rows(h, i).map((r) => <tr class={`hol-${r.kind}`}><td>{r.kind === 'term' ? <b>{r.what}</b> : r.what}</td><td>{r.dates}</td></tr>)}</tbody>
+      </table></div>
+      {yr.notes?.map((n) => <p class="hol-note" set:html={n} />)}
+      <p class="hol-src">Source: {yr.sources.map((s, j) => <>{j > 0 && ', and '}<a href={s.url} target="_blank" rel="noopener">{s.text}</a></>)}. Checked against it on {CHECKED}.</p>
+    </section>
+  ))}
+
+  <section class="how-sec wrap split-2">
+    <div>
+      <h2>Which schools follow these dates</h2>
+      <p class="intro">{h.who}</p>
+      <p class="intro">Academies, free schools and voluntary aided (church) schools can set their own term dates and training days, so their holidays may not match the table. Always check your own school’s website before you book a holiday.</p>
+    </div>
+    <div>
+      <h2>Training (INSET) days</h2>
+      <p class="intro">On top of the holidays, every school closes to pupils for five training days a year. {now.training ? `North Yorkshire Council sets three of them for its schools (they’re in the table) and each school picks the other two.` : `Each school picks its own, so they aren’t in the table. Your school will tell you the dates.`}</p>
+    </div>
+  </section>
+
+  {(areas.length > 0 || towns.length > 0) && <section class="how-sec wrap" style="border-top:1px solid var(--line)">
+    <h2>{h.name} primary schools</h2>
+    <p class="intro">Every primary school in {h.name}: who got a place each year, Ofsted ratings and catchment areas.</p>
+    <p class="name-list">{areas.map((a, i) => <>{i > 0 && ' · '}<a class="sch-link" href={url(a.page)}>{a.short}</a></>)}</p>
+    {towns.length > 0 && <>
+      <h3 class="sub">By town</h3>
+      <p class="name-list">{towns.map((t, i) => <>{i > 0 && ' · '}<a class="sch-link" href={url(t.page)}>{t.name}</a></>)}</p>
+    </>}
+  </section>}
+
+  <!-- local businesses, filled in by the script below from /api/sponsors: holiday clubs suit this page best -->
+  <section class="how-sec wrap" style="border-top:1px solid var(--line)" aria-labelledby="localTitle" id="adLocal" hidden data-areas={areasOf(h.council).join(',')}>
+    <div class="ready-head">
+      <div><h2 id="localTitle">Local help for {h.name} families</h2>
+        <p class="intro">Holiday clubs, wraparound care, uniform and more, from businesses near you.</p></div>
+      <span class="ready-note">These are paid listings. They don’t change anything on this page. <a href={url('advertise/')}>Advertise here</a></span>
+    </div>
+    <div class="ready-grid" id="adLocalGrid"></div>
+  </section>
+
+  <section class="how-sec sec-pale wrap">
+    <h2>Questions parents ask</h2>
+    <div class="faqs">{faqs.map(([q, a]) => <div class="faq"><h3>{q}</h3><p set:html={a} /></div>)}</div>
+    <p class="area-acts"><a class="btn btn-primary" href={url('')}>Check your postcode</a><a class="btn" href={url(up.page)}>{up.name}</a></p>
+  </section>
+
+  <script type="application/json" id="breaks" set:html={JSON.stringify(breaks)} />
+</Base>
+
+<script>
+  import { esc } from '../lib/engine';
+  import { adCard, loadSponsors, sponsorsFor, today, type Area } from '../lib/sponsors';
+  // The next holiday, or the one under way, from today's date in the UK
+  const breaks = JSON.parse(document.getElementById('breaks')!.textContent || '[]') as { what: string; a: string; b: string; text: string }[];
+  const d = today();
+  const on = breaks.find((x) => x.a <= d && d <= x.b), next = breaks.find((x) => x.a > d);
+  const el = document.getElementById('nextUp')!;
+  if (on || next) {
+    el.innerHTML = on ? `<b>Now:</b> ${esc(on.what)}, ${esc(on.text)}` : `<b>Next holiday:</b> ${esc(next!.what)}, ${esc(next!.text)}`;
+    el.hidden = false;
+  }
+  // local businesses for the council's areas
+  const sec = document.getElementById('adLocal')!;
+  const areas = (sec.dataset.areas ?? '').split(',').filter(Boolean) as Area[];
+  loadSponsors().then(() => {
+    const local = sponsorsFor('area', areas);
+    document.getElementById('adLocalGrid')!.innerHTML = local.map((s) => adCard(s, 'area', 'Sponsored')).join('');
+    sec.hidden = !local.length;
+  });
+</script>
+
+<style>
+  .crumbs { display: flex; flex-wrap: wrap; gap: 6px 8px; font-size: 14px; color: var(--muted-2); margin-bottom: 16px; }
+  .crumbs a { color: var(--muted); }
+  .area-acts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .next-up { margin-top: 20px; padding: 14px 18px; background: var(--pale); border-radius: 14px; font-size: 17px; line-height: 1.5; max-width: 44em; }
+  .tbl-wrap { margin-top: 28px; background: #fff; border: 2px solid var(--ink); border-radius: 16px; padding: 8px 20px; overflow-x: auto; }
+  .hol-tbl td { font-size: 16px; }
+  .hol-tbl td:first-child { width: 34%; }
+  .hol-half td, .hol-holiday td { background: var(--pale); }
+  .hol-holiday td:first-child, .hol-half td:first-child { font-weight: 600; }
+  .hol-bank td, .hol-training td { color: var(--muted); font-size: 15px; }
+  .hol-note { margin-top: 16px; color: var(--muted); line-height: 1.55; max-width: 48em; }
+  .hol-src { margin-top: 16px; font-size: 15px; color: var(--muted-2); line-height: 1.5; }
+  .hol-src a { color: var(--muted); }
+  .sch-link { color: inherit; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
+  .sch-link:hover { text-decoration-color: var(--ink); }
+  .split-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+  .split-2 h2 { font-size: 36px; }
+  .split-2 .intro + .intro { margin-top: 12px; }
+  .name-list { margin-top: 16px; font-weight: 600; line-height: 1.7; }
+  .sub { margin-top: 28px; font-size: 22px; }
+  .faqs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 40px; margin-top: 32px; }
+  .faq h3 { font: 700 18px/1.35 var(--body); margin-bottom: 6px; }
+  .faq p { color: var(--muted); line-height: 1.55; }
+  @media (max-width: 960px) { .split-2, .faqs { grid-template-columns: 1fr; } }
+  @media (max-width: 760px) { .split-2 h2 { font-size: 30px; } .hol-tbl td { font-size: 15px; } .hol-tbl td:first-child { width: 40%; } .tbl-wrap { padding: 4px 12px; } }
+</style>

@@ -2,8 +2,9 @@
 // dates and term dates), so the five pages only add what's local to them.
 import type { AreaSchool } from './areas';
 import { COUNCILS } from './engine';
-import { BRAD_TERM_DATES, COVERED, listOf } from './specs';
+import { COVERED, listOf } from './specs';
 import { url } from './url';
+import { termAnswer } from './holidays';
 
 const bd = COUNCILS.Bradford;
 const GUIDE = 'https://www.bradford.gov.uk/media/dy1lr1hm/applying-for-a-primary-school-detailed-guide-for-september-2027.pdf';
@@ -39,6 +40,6 @@ export const bdBorder = (town: string, near: string): [string, string] => [
 ];
 export const bdTail: [string, string][] = [
   ['When are the school term dates and holidays?',
-    `Community and voluntary controlled schools follow <a href="${BRAD_TERM_DATES}" target="_blank" rel="noopener">Bradford Council’s term dates</a>. Academies and church schools can set their own, so check with the school.`],
+    termAnswer('Bradford', 'Bradford', url)],
   ['How do I find open days?', 'Ask the school. Open the school in the checker for its phone number, email and website.'],
 ];

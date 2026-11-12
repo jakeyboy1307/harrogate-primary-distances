@@ -5,13 +5,15 @@ import AreaPage from '../components/AreaPage.astro';
 import { loadArea } from '../lib/areas';
 import { COUNCILS } from '../lib/engine';
 import { pageOf } from '../lib/schoolpages';
-import { COVERED, NY_TERM_DATES } from '../lib/specs';
+import { COVERED } from '../lib/specs';
 import { url } from '../lib/url';
+import { termAnswer } from '../lib/holidays';
 const ny = COUNCILS['North Yorkshire'];
 const all = loadArea('north-yorkshire.json');
 const schools = all.filter((s) => s.district === 'Selby');
 // the other Sherburn's school, near Malton
 const otherSherburn = all.find((s) => s.district === 'Ryedale' && /^Sherburn\b/.test(s.name));
+const otherHref = otherSherburn && url('schools/' + pageOf(otherSherburn.urn)!.slug + '/');
 const faqs: [string, string][] = [
   ['What is my catchment school in Selby?',
     `Put your postcode into the <a href="${url('')}">school catchment checker</a>. It tells you which Selby primary school catchment area you’re in, and your chances at every primary school nearby, from Tadcaster and Sherburn in Elmet to Barlby, Riccall and Eggborough.`],
@@ -30,9 +32,9 @@ const faqs: [string, string][] = [
   ['We live near Leeds, Wakefield or Doncaster. Which council do we apply to?',
     `Apply to the council for where you live, and you can name schools run by other councils among your five. If you live in the Selby district, that’s North Yorkshire Council, even if your nearest school is over the border. The checker only covers ${COVERED} schools.`],
   ['Is this Sherburn in Elmet or Sherburn near Malton?',
-    `Sherburn in Elmet. Athelstan Community Primary and Sherburn Hungate Primary are both in this list. Sherburn near Malton has ${otherSherburn ? `<a href="${url(`schools/${pageOf(otherSherburn.urn)!.slug}/`)}">its own primary school</a>, listed with the other <a href="${url('malton-primary-schools/')}">Malton and Ryedale primary schools</a>` : 'its own primary school'}.`],
-  ['When are Selby school term dates and holidays?',
-    `Community and voluntary controlled schools follow <a href="${NY_TERM_DATES}" target="_blank" rel="noopener">North Yorkshire Council’s term and holiday dates</a>. Academies and voluntary aided schools can set their own, so check with the school.`],
+    `Sherburn in Elmet. Athelstan Community Primary and Sherburn Hungate Primary are both in this list. Sherburn near Malton has ${otherHref ? `<a href="${otherHref}">its own primary school</a>, listed with the other <a href="${url('malton-primary-schools/')}">Malton and Ryedale primary schools</a>` : 'its own primary school'}.`],
+  [`When are the Selby school holidays?`,
+    termAnswer('North Yorkshire', 'Selby', url)],
   ['Where can I see North Yorkshire school admissions data?',
     'The council publishes its admissions figures each year on <a href="https://hub.datanorthyorkshire.org/" target="_blank" rel="noopener">Data North Yorkshire</a>. The checker turns the last four years into plain answers for every Selby, Tadcaster and Sherburn primary school.'],
   ['How do I find open days?',

@@ -1,8 +1,9 @@
 // The questions every Doncaster area page shares (its catchments, rules, dates and term dates), so the four pages
 // (doncaster-central, doncaster-north, thorne and conisbrough-primary-schools) only add what's local to them.
 import { COUNCILS } from './engine';
-import { COVERED, DON_TERM_DATES } from './specs';
+import { COVERED } from './specs';
 import { url } from './url';
+import { termAnswer } from './holidays';
 
 const dn = COUNCILS.Doncaster;
 const DFE = 'https://explore-education-statistics.service.gov.uk/find-statistics/primary-and-secondary-school-applications-and-offers';
@@ -31,6 +32,6 @@ export const dnBorder = (town: string, near: string): [string, string] => [
 ];
 export const dnTail: [string, string][] = [
   ['When are the school term dates and holidays?',
-    `Community schools follow <a href="${DON_TERM_DATES}" target="_blank" rel="noopener">the City of Doncaster Council’s term dates</a>. Academies and church schools can set their own, so check with the school.`],
+    termAnswer('Doncaster', 'Doncaster', url)],
   ['How do I find open days?', 'Ask the school. Open the school in the checker for its phone number, email and website.'],
 ];

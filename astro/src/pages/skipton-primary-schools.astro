@@ -6,8 +6,9 @@
 import AreaPage from '../components/AreaPage.astro';
 import { loadArea, openLatest } from '../lib/areas';
 import { COUNCILS } from '../lib/engine';
-import { COVERED, NY_TERM_DATES } from '../lib/specs';
+import { COVERED } from '../lib/specs';
 import { url } from '../lib/url';
+import { termAnswer } from '../lib/holidays';
 const ny = COUNCILS['North Yorkshire'];
 const schools = loadArea('north-yorkshire.json').filter((s) => s.district === 'Craven');
 // Skipton and the Aire valley villages, apart from Settle, Grassington and the Dales to the north and west
@@ -35,8 +36,8 @@ const faqs: [string, string][] = [
     'Those are different schools. This page covers Skipton and Ingleton in North Yorkshire. Skipton’s primary schools are Water Street, Greatwood, Skipton Parish, Christ Church and St Stephen’s.'],
   ['We live in Barnoldswick, Earby, Silsden or Sedbergh. Which council do I apply to?',
     `The council for where you live, even when you want a school in another council’s area. Barnoldswick and Earby are in Lancashire, so you apply to Lancashire County Council. Silsden, Steeton and Keighley are Bradford Council. Sedbergh is Westmorland and Furness Council. You can still name North Yorkshire schools on that form. The checker covers ${COVERED} schools only.`],
-  ['When are the school term dates and holidays?',
-    `Community and voluntary controlled schools follow <a href="${NY_TERM_DATES}" target="_blank" rel="noopener">North Yorkshire Council’s term and holiday dates</a>. Academies and voluntary aided schools can set their own, so check with the school.`],
+  [`When are the Skipton school holidays?`,
+    termAnswer('North Yorkshire', 'Skipton', url)],
   ['How do I find open days?',
     'Ask the school. Open the school in the checker for its phone number, email and website.'],
 ];

@@ -2,8 +2,9 @@
 // catchment, but the council draws them only on its web map, and publishes no cut-off distances, so these pages say how
 // popular each school is and how its last places went instead.
 import { COUNCILS } from './engine';
-import { COVERED, ROT_TERM_DATES } from './specs';
+import { COVERED } from './specs';
 import { url } from './url';
+import { termAnswer } from './holidays';
 
 const rt = COUNCILS.Rotherham;
 const BOOKLET = 'https://www.rotherham.gov.uk/downloads/download/728/primary-application-booklet';
@@ -34,6 +35,6 @@ export const rtBorder = (town: string, near: string): [string, string] => [
 ];
 export const rtTail: [string, string][] = [
   ['When are the school term dates and holidays?',
-    `Community schools follow <a href="${ROT_TERM_DATES}" target="_blank" rel="noopener">Rotherham Council’s term dates</a>. Academies and church schools can set their own, so check with the school.`],
+    termAnswer('Rotherham', 'Rotherham', url)],
   ['How do I find open days?', 'Ask the school. Open the school in the checker for its phone number, email and website.'],
 ];

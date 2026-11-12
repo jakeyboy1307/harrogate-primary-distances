@@ -1,8 +1,9 @@
 // The questions every Kirklees area page shares (its priority admission areas, rules, dates and term dates), so the
 // five pages (huddersfield, dewsbury, spen-valley, colne-valley, denby-dale-primary-schools) only add what's local.
 import { COUNCILS } from './engine';
-import { COVERED, KIRK_TERM_DATES } from './specs';
+import { COVERED } from './specs';
 import { url } from './url';
+import { termAnswer } from './holidays';
 
 const k = COUNCILS.Kirklees;
 const FIGURES = 'https://www.kirklees.gov.uk/beta/admissions/pdf/reception-by-preference-and-criteria-26.pdf';
@@ -31,6 +32,6 @@ export const kBorder = (town: string, near: string): [string, string] => [
 ];
 export const kTail: [string, string][] = [
   ['When are the school term dates and holidays?',
-    `Community and voluntary controlled schools follow Kirklees Council’s school calendar, in its <a href="${KIRK_TERM_DATES}" target="_blank" rel="noopener">admissions publications</a>. Academies and church schools can set their own, so check with the school.`],
+    termAnswer('Kirklees', 'Kirklees', url)],
   ['How do I find open days?', 'Ask the school. Open the school in the checker for its phone number, email and website.'],
 ];

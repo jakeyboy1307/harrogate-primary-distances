@@ -1,8 +1,9 @@
 // The questions every Barnsley area page shares (no catchments, the council's rules, dates and term dates), so the
 // three pages (barnsley-north, barnsley-south and penistone-primary-schools) only add what's local to them.
 import { COUNCILS } from './engine';
-import { BARN_TERM_DATES, COVERED } from './specs';
+import { COVERED } from './specs';
 import { url } from './url';
+import { termAnswer } from './holidays';
 
 const bn = COUNCILS.Barnsley;
 const GUIDE = 'https://www.barnsley.gov.uk/media/sydlk4be/pimary-school-admission-booklet-2027.pdf';
@@ -29,6 +30,6 @@ export const bnBorder = (town: string, near: string): [string, string] => [
 ];
 export const bnTail: [string, string][] = [
   ['When are the school term dates and holidays?',
-    `Community and voluntary controlled schools follow <a href="${BARN_TERM_DATES}" target="_blank" rel="noopener">Barnsley Council’s term dates</a>. Academies and church schools can set their own, so check with the school.`],
+    termAnswer('Barnsley', 'Barnsley', url)],
   ['How do I find open days?', 'Ask the school. Open the school in the checker for its phone number, email and website.'],
 ];

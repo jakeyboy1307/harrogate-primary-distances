@@ -5,8 +5,8 @@
 import AreaPage from '../components/AreaPage.astro';
 import { loadArea, openLatest } from '../lib/areas';
 import { COUNCILS } from '../lib/engine';
-import { NY_TERM_DATES } from '../lib/specs';
 import { url } from '../lib/url';
+import { termAnswer } from '../lib/holidays';
 const ny = COUNCILS['North Yorkshire'];
 const schools = loadArea('north-yorkshire.json').filter((s) => s.district === 'Ryedale');
 const faqs: [string, string][] = [
@@ -30,8 +30,8 @@ const faqs: [string, string][] = [
     'No. Malton School and Ryedale School, at Nawton, are secondary schools, and the checker covers primary schools and Reception places only. Nawton Community Primary School is in the list above.'],
   ['Looking for Pickering Primary School in Hull?',
     'That’s a different school, in Hull. This page covers Pickering in North Yorkshire, where the infant school, Pickering Community Infant and Nursery School, takes Reception children.'],
-  ['When are the school term dates and holidays?',
-    `Community and voluntary controlled schools follow <a href="${NY_TERM_DATES}" target="_blank" rel="noopener">North Yorkshire Council’s term and holiday dates</a>. Academies can set their own, so check with the school.`],
+  [`When are the Malton school holidays?`,
+    termAnswer('North Yorkshire', 'Malton', url)],
   ['How do I find open days?',
     'Ask the school. Open the school in the checker for its phone number, email and website.'],
 ];

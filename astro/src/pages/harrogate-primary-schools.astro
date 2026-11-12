@@ -4,6 +4,7 @@ import AreaPage from '../components/AreaPage.astro';
 import { loadArea } from '../lib/areas';
 import { COUNCILS } from '../lib/engine';
 import { url } from '../lib/url';
+import { termAnswer } from '../lib/holidays';
 const schools = loadArea('north-yorkshire.json').filter((s) => s.district === 'Harrogate');
 const ny = COUNCILS['North Yorkshire'];
 const faqs: [string, string][] = [
@@ -23,7 +24,9 @@ const faqs: [string, string][] = [
     'There’s no official ranking, so be wary of league tables. Ofsted is the fairest guide, alongside a visit. The checker shows each school’s latest Ofsted outcome, and the Outstanding schools are listed above.'],
   ['Where can I see North Yorkshire school admissions data?',
     'The council publishes its admissions figures each year on <a href="https://hub.datanorthyorkshire.org/" target="_blank" rel="noopener">Data North Yorkshire</a>. The checker turns the last four years into plain answers for every Harrogate, Knaresborough and Ripon primary school.'],
-  ['How do I find open days and term dates?',
+  [`When are the Harrogate school holidays?`,
+    termAnswer('North Yorkshire', 'Harrogate', url)],
+  ['How do I find open days?',
     'Ask the school. Open the school in the checker for its phone number, email and website.'],
   ['Does this cover Harrogate Grammar and other secondary schools?',
     `Not yet. The Yorkshire School Checker covers primary schools and Reception places only.`],

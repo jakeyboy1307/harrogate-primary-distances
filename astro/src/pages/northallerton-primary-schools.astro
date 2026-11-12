@@ -6,8 +6,9 @@ import AreaPage from '../components/AreaPage.astro';
 import { loadArea, openLatest } from '../lib/areas';
 import { COUNCILS } from '../lib/engine';
 import { pageOf } from '../lib/schoolpages';
-import { COVERED, NY_TERM_DATES } from '../lib/specs';
+import { COVERED } from '../lib/specs';
 import { url } from '../lib/url';
+import { termAnswer } from '../lib/holidays';
 const ny = COUNCILS['North Yorkshire'];
 const all = loadArea('north-yorkshire.json');
 const schools = all.filter((s) => s.district === 'Hambleton');
@@ -32,8 +33,8 @@ const faqs: [string, string][] = [
     `Yes. Under the national School Admissions Code, you can apply before you move, using your unit or quartering address, if you have an official letter confirming the posting. Send it with your application to <a href="${ny.apply}" target="_blank" rel="noopener">North Yorkshire Council</a>. Leeming RAF Community Primary and Alanbrooke Academy at Topcliffe both serve service families.`],
   ['We live in Stokesley or Hutton Rudby. Can we apply for a Middlesbrough or Stockton school?',
     `Yes. Apply to North Yorkshire Council, as the council where you live, and you can name schools run by other councils among your five. The checker only covers ${COVERED} schools, so check those councils’ own figures.`],
-  ['When are the school term dates and holidays?',
-    `Community and voluntary controlled schools follow <a href="${NY_TERM_DATES}" target="_blank" rel="noopener">North Yorkshire Council’s term and holiday dates</a>. Academies, free schools and voluntary aided schools can set their own, so check with the school.`],
+  [`When are the Northallerton school holidays?`,
+    termAnswer('North Yorkshire', 'Northallerton', url)],
   ...(village ? [[`Looking for Hambleton Primary School?`,
     `Hambleton Church of England Primary School is in the village of Hambleton, near Selby. See <a href="${url(`schools/${pageOf(village.urn)!.slug}/`)}">its catchment area and admissions</a>, or every <a href="${url('selby-primary-schools/')}">Selby primary school</a>.`] as [string, string]] : []),
   ['How do I find open days?',

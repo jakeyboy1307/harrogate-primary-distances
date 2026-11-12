@@ -1,8 +1,9 @@
 // The questions every Sheffield area page shares (its catchments, rules, dates and term dates), so the six pages
 // (central-sheffield, hillsborough, heeley, mosborough, hallam and stocksbridge-primary-schools) only add what's local.
 import { COUNCILS } from './engine';
-import { COVERED, SHEF_TERM_DATES } from './specs';
+import { COVERED } from './specs';
 import { url } from './url';
+import { termAnswer } from './holidays';
 
 const sh = COUNCILS.Sheffield;
 const FIGURES = 'https://www.sheffield.gov.uk/sites/default/files/2026-04/oversubscribed_infant_and_primary_schools_2026.pdf';
@@ -31,6 +32,6 @@ export const shBorder = (town: string, near: string): [string, string] => [
 ];
 export const shTail: [string, string][] = [
   ['When are the school term dates and holidays?',
-    `Community and voluntary controlled schools follow <a href="${SHEF_TERM_DATES}" target="_blank" rel="noopener">Sheffield City Council’s term dates</a>. Academies and church schools can set their own, so check with the school.`],
+    termAnswer('Sheffield', 'Sheffield', url)],
   ['How do I find open days?', 'Ask the school. Open the school in the checker for its phone number, email and website.'],
 ];

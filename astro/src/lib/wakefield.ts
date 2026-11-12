@@ -2,8 +2,9 @@
 // school has a catchment, but the council publishes them only as an address search, and no cut-off distances, so these
 // pages say how popular each school is and how its places were shared out instead.
 import { COUNCILS } from './engine';
-import { COVERED, WAKE_TERM_DATES } from './specs';
+import { COVERED } from './specs';
 import { url } from './url';
+import { termAnswer } from './holidays';
 
 const wk = COUNCILS.Wakefield;
 const GUIDE = 'https://www.wakefield.gov.uk/media/43xpw5x4/primaryguide-27-28.docx';
@@ -34,6 +35,6 @@ export const wkBorder = (town: string, near: string): [string, string] => [
 ];
 export const wkTail: [string, string][] = [
   ['When are the school term dates and holidays?',
-    `Community and voluntary controlled schools follow <a href="${WAKE_TERM_DATES}" target="_blank" rel="noopener">Wakefield Council’s term dates</a>. Academies and church schools can set their own, so check with the school.`],
+    termAnswer('Wakefield', 'Wakefield', url)],
   ['How do I find open days?', 'Ask the school. Open the school in the checker for its phone number, email and website.'],
 ];

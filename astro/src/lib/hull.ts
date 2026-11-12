@@ -1,8 +1,9 @@
 // The questions every Hull area page shares (east, north and west-hull-primary-schools). Hull publishes no cut-off
 // distances and its catchments only as a scanned map, so these pages say how popular each school is instead.
 import { COUNCILS } from './engine';
-import { COVERED, HULL_TERM_DATES } from './specs';
+import { COVERED } from './specs';
 import { url } from './url';
+import { termAnswer } from './holidays';
 
 const hull = COUNCILS['Kingston upon Hull, City of'];
 const DFE = 'https://explore-education-statistics.service.gov.uk/find-statistics/primary-and-secondary-school-applications-and-offers';
@@ -27,7 +28,7 @@ export const hullFaqs = (part: string, open: number, total: number): [string, st
   ['We live in Cottingham, Hessle or Willerby. Which council do I apply to?',
     `East Riding of Yorkshire Council, as the council where you live, even when you want a Hull school. You can name Hull schools on that form. The checker covers ${COVERED} schools, so you can compare both sides of the boundary, and East Riding’s catchments can be checked.`],
   ['When are the school term dates and holidays?',
-    `Hull City Council publishes <a href="${HULL_TERM_DATES}" target="_blank" rel="noopener">school term and holiday dates</a>, which match East Riding’s. Academies can set their own, so check with the school.`],
+    termAnswer('Kingston upon Hull, City of', 'Hull', url)],
   ['How do I find open days?',
     'Ask the school. Open the school in the checker for its phone number, email and website.'],
 ];

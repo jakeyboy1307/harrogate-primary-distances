@@ -6,6 +6,7 @@ import { loadArea } from '../lib/areas';
 import { COUNCILS } from '../lib/engine';
 import { nearYork, NEAR_YORK_MILES } from '../lib/specs';
 import { url } from '../lib/url';
+import { termAnswer } from '../lib/holidays';
 const york = loadArea('york.json');
 // North Yorkshire schools near York (Easingwold, Escrick, Tadcaster...): each also has its own area page
 const near = loadArea('north-yorkshire.json').filter(nearYork);
@@ -30,7 +31,9 @@ const faqs: [string, string][] = [
     `Apply to the council for where you live, and name schools from either council. Haxby, Wigginton, Strensall, Copmanthorpe, Poppleton and the other villages inside the city boundary are <a href="${cyc.apply}" target="_blank" rel="noopener">City of York</a>. Easingwold, Escrick, Tadcaster, Sherburn and Selby are <a href="${ny.apply}" target="_blank" rel="noopener">North Yorkshire</a>.`],
   ['Where can I see York school admissions data?',
     'City of York Council publishes an anonymised list of every Reception applicant on <a href="https://data.yorkopendata.org/" target="_blank" rel="noopener">York Open Data</a>. The checker turns the last four complete years into plain answers for every York primary school.'],
-  ['How do I find open days and term dates?',
+  [`When are the York school holidays?`,
+    termAnswer('York', 'York', url)],
+  ['How do I find open days?',
     'Ask the school. Open the school in the checker for its phone number, email and website.'],
 ];
 ---

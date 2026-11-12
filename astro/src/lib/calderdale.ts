@@ -1,8 +1,9 @@
 // The questions both Calderdale area pages share (no catchments, the council's rules, dates and term dates), so the
 // two pages (halifax, calder-valley-primary-schools) only add what's local to them.
 import { COUNCILS } from './engine';
-import { CALD_TERM_DATES, COVERED } from './specs';
+import { COVERED } from './specs';
 import { url } from './url';
+import { termAnswer } from './holidays';
 
 const cd = COUNCILS.Calderdale;
 const DATA = 'https://dataworks.calderdale.gov.uk/dataset/vq9q6';
@@ -29,6 +30,6 @@ export const cdBorder = (town: string, near: string): [string, string] => [
 ];
 export const cdTail: [string, string][] = [
   ['When are the school term dates and holidays?',
-    `Community and voluntary controlled schools follow <a href="${CALD_TERM_DATES}" target="_blank" rel="noopener">Calderdale Council’s term dates</a>. Academies and church schools can set their own, so check with the school.`],
+    termAnswer('Calderdale', 'Calderdale', url)],
   ['How do I find open days?', 'Ask the school. Open the school in the checker for its phone number, email and website.'],
 ];

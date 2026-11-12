@@ -1,8 +1,9 @@
 // The questions every Leeds area page shares (its catchments, rules, dates and term dates), so the eight pages only
 // add what's local to them.
 import { COUNCILS } from './engine';
-import { COVERED, LEEDS_TERM_DATES } from './specs';
+import { COVERED } from './specs';
 import { url } from './url';
+import { termAnswer } from './holidays';
 
 const ld = COUNCILS.Leeds;
 const CUTOFFS = 'https://www.leeds.gov.uk/sites/default/files/2026-04/cut%20off%20distances%20and%20criteria%20for%20primary%20and%20junior%20schools%202026.pdf';
@@ -31,6 +32,6 @@ export const ldBorder = (town: string, near: string): [string, string] => [
 ];
 export const ldTail: [string, string][] = [
   ['When are the school term dates and holidays?',
-    `Community and voluntary controlled schools follow <a href="${LEEDS_TERM_DATES}" target="_blank" rel="noopener">Leeds City Council’s term dates</a>. Academies and church schools can set their own, so check with the school.`],
+    termAnswer('Leeds', 'Leeds', url)],
   ['How do I find open days?', 'Ask the school. Open the school in the checker for its phone number, email and website.'],
 ];
