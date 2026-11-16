@@ -1,6 +1,7 @@
 ---
 // Admin dashboard: what's running, then visits, searches, schools and ad performance over a chosen range.
-// Counts are daily totals from /api/hit (no cookies, nothing about a person), so there are no "unique visitors".
+// Counts are daily totals from /api/hit (no cookies, nothing about a person), so there are no "unique visitors":
+// a page view is every page load. The range is a preset (last 7/30/90 days) or dates picked by hand.
 import Admin from '../../layouts/Admin.astro';
 const now = [
   ['showing', 'Ads showing today'],
@@ -27,6 +28,10 @@ const tiles = [
     <span class="grow"></span>
     <div class="seg" role="group" aria-label="Date range">
       {[7, 30, 90].map((d) => <button type="button" data-days={d} aria-pressed={d === 30 ? 'true' : 'false'}>Last {d} days</button>)}
+    </div>
+    <div class="dash-dates" role="group" aria-label="Or pick dates">
+      <label>From <input type="date" id="dateFrom" /></label>
+      <label>to <input type="date" id="dateTo" /></label>
     </div>
   </div>
   <p class="adm-note" id="rangeNote"></p>
@@ -111,15 +116,25 @@ const tiles = [
     el.querySelector('.bars-plot')!.addEventListener('pointerleave', () => (tip.hidden = true));
   }
 
-  async function load(days: number) {
-    const s = await api<Stats>(`stats?days=${days}`);
+  const fromEl = document.getElementById('dateFrom') as HTMLInputElement, toEl = document.getElementById('dateTo') as HTMLInputElement;
+  // today in UK time, as YYYY-MM-DD, so the picker can't go past it
+  const ukToday = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/London' }).format(new Date());
+  fromEl.max = toEl.max = ukToday;
+  let loading = 0;
+
+  // range is "days=30" for a preset, or "from=…&to=…" for picked dates
+  async function load(range: string) {
+    const ticket = ++loading;
+    const s = await api<Stats>(`stats?${range}`);
+    if (ticket !== loading) return;   // a newer range was asked for while this one was loading
+    fromEl.value = s.from; toEl.value = s.to;
     const t = s.total;
     const vals: Record<string, string> = {
       page: num(t.page ?? 0), search: num(t.search ?? 0), panel: num(t.panel ?? 0),
       ad_view: num(t.ad_view ?? 0), ad_click: num(t.ad_click ?? 0), ctr: rate(t.ad_click ?? 0, t.ad_view ?? 0),
     };
     document.querySelectorAll<HTMLElement>('[data-total]').forEach((el) => (el.textContent = vals[el.dataset.total!]));
-    document.getElementById('rangeNote')!.textContent = `${day(s.from)} to ${day(s.to)}. Counting started when this version went live, so earlier days show nothing.`;
+    document.getElementById('rangeNote')!.textContent = `${day(s.from)} to ${day(s.to)} (${s.days} ${s.days === 1 ? 'day' : 'days'}). Page views count every page load, not separate people. Counting started when this version went live, so earlier days show nothing.`;
     bars(document.getElementById('chartPages')!, s.daily.map((d) => ({ day: d.day, v: d.pages })), 'page views');
     bars(document.getElementById('chartSearches')!, s.daily.map((d) => ({ day: d.day, v: d.searches })), 'searches');
 
@@ -147,17 +162,24 @@ const tiles = [
     document.getElementById('schoolRows')!.innerHTML = s.schools.length ? s.schools.map((r) => `<tr><td>${esc(names.get(r.key) ?? `URN ${r.key}`)}</td><td class="r">${num(r.n)}</td></tr>`).join('') : none(2);
   }
 
-  // range buttons
+  // range buttons, and the date pickers: picking a date clears the preset
+  const press = (b: Element | null) => document.querySelectorAll('[data-days]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
   document.querySelectorAll<HTMLButtonElement>('[data-days]').forEach((b) => b.addEventListener('click', () => {
-    document.querySelectorAll('[data-days]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-    load(+b.dataset.days!).catch((e) => toast(e.message, true));
+    press(b);
+    load(`days=${b.dataset.days}`).catch((e) => toast(e.message, true));
   }));
+  for (const el of [fromEl, toEl]) el.addEventListener('change', () => {
+    if (!fromEl.value || !toEl.value) return;
+    if (fromEl.value > toEl.value) (el === fromEl ? toEl : fromEl).value = el.value;   // keep from on or before to
+    press(null);
+    load(`from=${fromEl.value}&to=${toEl.value}`).catch((e) => toast(e.message, true));
+  });
 
   api<Record<string, number>>('summary').then((n) => {
     document.querySelectorAll<HTMLElement>('[data-now]').forEach((el) => (el.textContent = String(n[el.dataset.now!] ?? 0)));
   }).catch(() => {});
   loadData().then((d) => { names = new Map(d.schools.map((s) => [String(s.urn), s.name.replace(/,.*$/, '')])); }).catch(() => {})
-    .finally(() => load(30).catch((e) => toast(e.message, true)));
+    .finally(() => load('days=30').catch((e) => toast(e.message, true)));
 </script>
 
 <!-- global: the script draws the charts and tables after load, which page-scoped styles don't reach -->
@@ -168,6 +190,10 @@ const tiles = [
   .adm-stat span { font-size: 14px; font-weight: 600; color: var(--muted); }
   .adm-stat b { font: 700 32px/1 var(--display); color: var(--ink); }
   .dash-range { margin-top: 12px; }
+  .dash-dates { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .dash-dates label { display: inline-flex; align-items: center; gap: 6px; font: 600 13px var(--body); color: var(--muted); }
+  .dash-dates input { font: 500 14px var(--body); padding: 6px 10px; border: 1.5px solid var(--line-2); border-radius: 10px; background: #fff; color: var(--ink); }
+  .dash-dates input:hover { border-color: var(--faint); }
   .dash-h3 { font: 700 16px var(--body); letter-spacing: 0; margin-bottom: 12px; }
   .dash-two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .seg { display: inline-flex; border: 1.5px solid var(--line-2); border-radius: 10px; overflow: hidden; background: #fff; }

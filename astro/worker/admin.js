@@ -254,11 +254,23 @@ async function spots(env) {
   }));
 }
 
-// GET /api/admin/stats?days=30: totals, a day-by-day series, top pages and schools, and ad performance
+// GET /api/admin/stats?days=30, or ?from=YYYY-MM-DD&to=YYYY-MM-DD for chosen dates:
+// totals, a day-by-day series, top pages and schools, and ad performance
+const isDay = (d) => /^\d{4}-\d{2}-\d{2}$/.test(d ?? '') && !Number.isNaN(Date.parse(d + 'T12:00:00Z'));
+const addDays = (d, n) => new Date(Date.parse(d + 'T12:00:00Z') + n * 864e5).toISOString().slice(0, 10);
 async function stats(env, url) {
-  const days = Math.min(365, Math.max(1, Number(url.searchParams.get('days')) || 30));
-  const end = today();
-  const from = new Date(Date.parse(end + 'T12:00:00Z') - (days - 1) * 864e5).toISOString().slice(0, 10);
+  const p = url.searchParams, now = today();
+  let from, end;
+  if (isDay(p.get('from')) || isDay(p.get('to'))) {
+    end = isDay(p.get('to')) && p.get('to') < now ? p.get('to') : now;
+    from = isDay(p.get('from')) && p.get('from') <= end ? p.get('from') : end;
+    if (from < addDays(end, -365)) throw new Bad('Pick a range of a year or less.');
+  } else {
+    const n = Math.min(365, Math.max(1, Number(p.get('days')) || 30));
+    end = now;
+    from = addDays(end, -(n - 1));
+  }
+  const days = Math.round((Date.parse(end) - Date.parse(from)) / 864e5) + 1;
   const q = (sql, ...args) => env.DB.prepare(sql).bind(from, end, ...args).all().then((r) => r.results);
   const [totals, series, pages, searches, schools, adRows, ads, sources] = await Promise.all([
     q('SELECT kind, sum(n) AS n FROM daily_counts WHERE day BETWEEN ? AND ? GROUP BY kind'),
@@ -274,7 +286,7 @@ async function stats(env, url) {
   // every day in the range, including ones with nothing, so the chart has no gaps
   const byDay = new Map(series.map((r) => [r.day, r]));
   const daily = Array.from({ length: days }, (_, i) => {
-    const d = new Date(Date.parse(from + 'T12:00:00Z') + i * 864e5).toISOString().slice(0, 10);
+    const d = addDays(from, i);
     return { day: d, pages: byDay.get(d)?.pages ?? 0, searches: byDay.get(d)?.searches ?? 0 };
   });
   // ad views and clicks, per ad and per spot
