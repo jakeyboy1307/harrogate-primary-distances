@@ -3,10 +3,10 @@
 import { COUNCILS, mapTipHtml, placesGo } from './engine';
 import { COVERED } from './specs';
 import { url } from './url';
-import { day, holidayPage, holidaysFor, short, summerFrom } from './holidays';
+import { day, holidayPage, holidaysFor, live, short, summerFrom } from './holidays';
 
 export function teesFaqs(key: 'Middlesbrough' | 'Redcar and Cleveland', town: string, open: number, total: number, figures: string): [string, string][] {
-  const c = COUNCILS[key], hol = holidaysFor(key)!;
+  const c = COUNCILS[key], hol = live(holidaysFor(key)!);
   return [
     [`What is my catchment school in ${town}?`,
       `Schools here call it an admission zone. ${c.name} ${c.mapNote}, so the checker can’t tell you which zone you’re in. ${mapTipHtml(c)}. Then put your postcode into the <a href="${url('')}">school checker</a> to see how far every school near you is and how hard each has been to get into.`],

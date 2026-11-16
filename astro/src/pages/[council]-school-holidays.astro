@@ -8,12 +8,14 @@ import { url } from '../lib/url';
 import { AREA_INFO, listOf } from '../lib/specs';
 import { areasOf } from '../lib/hubs';
 import { townPages } from '../lib/towns';
-import { CHECKED, HOLIDAYS, christmas, day, easter, range, rows, schoolsPageOf, short, summerFrom, summerTo, type Holidays } from '../lib/holidays';
+import { HOLIDAYS, christmas, dateOnly, day, easter, live, range, rows, schoolsPageOf, short, summerFrom, summerTo, type Holidays } from '../lib/holidays';
 
 export function getStaticPaths() {
   return HOLIDAYS.map((h) => ({ params: { council: h.slug.replace(/-school-holidays$/, '') }, props: { h } }));
 }
-const { h } = Astro.props as { h: Holidays };
+// the years still to come (live(): a year drops off once its summer holidays are over)
+const h = live((Astro.props as { h: Holidays }).h);
+const checked = dateOnly(h.checked);
 const [now, later] = h.years;
 const first = now.label.replace(' to ', '-').replace(/-20(\d\d)$/, '-$1');      // "2026-27"
 const second = later?.label.replace(' to ', '-').replace(/-20(\d\d)$/, '-$1');  // "2027-28"
@@ -27,7 +29,7 @@ const someplaces = places.slice(0, 8);
 const h1 = `${h.name} school holidays and term dates ${first}${second ? ` and ${second}` : ''}`;
 const title = `${h.name} school holidays ${first}${second ? ` and ${second}` : ''}: term dates and half terms · Yorkshire School Checker`;
 const description = `${h.name} school term dates and holidays for ${now.label}${later ? ` and ${later.label}` : ''}: half terms, Christmas, Easter and summer, copied from the council’s own dates${someplaces.length ? ` for schools in ${listOf(someplaces.slice(0, 5))} and across ${h.name}` : ''}.`;
-const lede = `Every half term and holiday for council schools in ${h.name}${someplaces.length ? `, including ${listOf(someplaces)}` : ''}, copied from the council’s own dates and checked on ${CHECKED}. Academies, free schools and voluntary aided schools can set their own, so check with your school.`;
+const lede = `Every half term and holiday for council schools in ${h.name}${someplaces.length ? `, including ${listOf(someplaces)}` : ''}, copied from the council’s own dates and checked on ${checked}. Academies, free schools and voluntary aided schools can set their own, so check with your school.`;
 
 // the holidays as data for the "next holiday" line, which the browser works out from today's date
 const breaks = h.years.flatMap((yr, i) => [
@@ -77,7 +79,7 @@ const crumbs = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', it
         <tbody>{rows(h, i).map((r) => <tr class={`hol-${r.kind}`}><td>{r.kind === 'term' ? <b>{r.what}</b> : r.what}</td><td>{r.dates}</td></tr>)}</tbody>
       </table></div>
       {yr.notes?.map((n) => <p class="hol-note" set:html={n} />)}
-      <p class="hol-src">Source: {yr.sources.map((s, j) => <>{j > 0 && ', and '}<a href={s.url} target="_blank" rel="noopener">{s.text}</a></>)}. Checked against it on {CHECKED}.</p>
+      <p class="hol-src">Source: {yr.sources.map((s, j) => <>{j > 0 && ', and '}<a href={s.url} target="_blank" rel="noopener">{s.text}</a></>)}. Checked against it on {checked}.</p>
     </section>
   ))}
 

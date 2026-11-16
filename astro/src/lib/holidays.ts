@@ -1,17 +1,20 @@
 // The school holiday pages (/north-yorkshire-school-holidays/ and the like): each council's own term and holiday
 // dates for 2026 to 2027 and 2027 to 2028, for parents searching "harrogate school holidays 2026 27" or "school term
 // dates north yorkshire 2027". Every date below was copied from the council's own page (or the calendar it links
-// to) and checked by hand against it on CHECKED. Dates are ISO (yyyy-mm-dd); the weekdays are worked out from them,
-// so a slip on a council's page (Redcar's "Friday 25 March 2027", a Thursday) can't creep in.
+// to) and checked by hand against it on that council's `checked` date. Dates are ISO (yyyy-mm-dd); the weekdays are
+// worked out from them, so a slip on a council's page (Redcar's "Friday 25 March 2027", a Thursday) can't creep in.
 //
 // For each year: each term's first and last day as the council gives them, and each half term's Monday to Friday
 // (a half term after a bank holiday Monday starts on that Monday, since schools are shut). The Christmas, Easter and
-// summer holidays are the weekdays between terms, worked out here. When a council publishes 2028 to 2029, add it as
-// a third year and drop 2026 to 2027 once that summer is over.
+// summer holidays are the weekdays between terms, worked out here.
+//
+// Keeping it current (a monthly scheduled check does this; see SEO.md): re-read each council's page, fix any date that
+// changed and set its `checked` to the day you checked (the page and its sitemap lastmod show it). When a council
+// publishes 2028 to 2029, add it as a new year. A year drops off the pages by itself once its summer holidays are over
+// (live(), at build), so old years can be deleted at leisure.
 import { AREA_INFO } from './specs';
 import { areasOf, hubOf } from './hubs';
 
-export const CHECKED = '12 November 2026';
 
 type Span = [string, string];
 export interface Year {
@@ -28,6 +31,7 @@ export interface Holidays {
   name: string;             // what parents call it: "North Yorkshire", "Hull"
   slug: string;             // "north-yorkshire-school-holidays"
   who: string;              // which schools follow the dates, as the council says (HTML)
+  checked: string;          // the day the dates were last checked against the council's page (ISO)
   years: Year[];
 }
 
@@ -59,7 +63,7 @@ const y = (label: string, d: Record<'autumn' | 'oct' | 'spring' | 'feb' | 'summe
   ({ label, ...(Object.fromEntries(Object.entries(d).map(([k, v]) => [k, [...v]])) as Pick<Year, 'autumn'>), ...rest } as Year);
 
 export const HOLIDAYS: Holidays[] = [
-  { council: 'North Yorkshire', name: 'North Yorkshire', slug: 'north-yorkshire-school-holidays',
+  { council: 'North Yorkshire', name: 'North Yorkshire', slug: 'north-yorkshire-school-holidays', checked: '2026-11-12',
     who: 'North Yorkshire Council publishes these dates for community and voluntary controlled schools. Some schools have slightly different dates, and academies, voluntary aided and foundation schools set all of their own.',
     years: [
       y('2026 to 2027', { autumn: ['2026-09-07', '2026-12-18'], oct: ['2026-10-26', '2026-10-30'], spring: ['2027-01-04', '2027-03-19'], feb: ['2027-02-08', '2027-02-12'], summer: ['2027-04-05', '2027-07-26'], may: ['2027-05-31', '2027-06-04'] },
@@ -67,44 +71,44 @@ export const HOLIDAYS: Holidays[] = [
       y('2027 to 2028', { autumn: ['2027-09-06', '2027-12-17'], oct: ['2027-10-25', '2027-10-29'], spring: ['2028-01-04', '2028-04-07'], feb: ['2028-02-21', '2028-02-25'], summer: ['2028-04-24', '2028-07-25'], may: ['2028-05-29', '2028-06-02'] },
         { sources: page(NY, 'North Yorkshire Council’s school term and holiday dates'), training: ['2027-09-06', '2028-01-04', '2028-07-25'] }),
     ] },
-  { council: 'York', name: 'York', slug: 'york-school-holidays',
+  { council: 'York', name: 'York', slug: 'york-school-holidays', checked: '2026-11-12',
     who: 'These are City of York Council’s recommended term dates for schools in York. Schools and academies may choose different dates.',
     years: [
       y('2026 to 2027', YORKISH_2627, { sources: page('https://www.york.gov.uk/attendance-truancy/school-term-dates/2', 'City of York Council’s 2026 to 2027 school term dates') }),
       y('2027 to 2028', YORKISH_2728, { sources: page('https://www.york.gov.uk/attendance-truancy/school-term-dates/3', 'City of York Council’s 2027 to 2028 school term dates') }),
     ] },
-  { council: 'East Riding of Yorkshire', name: 'East Riding', slug: 'east-riding-school-holidays',
+  { council: 'East Riding of Yorkshire', name: 'East Riding', slug: 'east-riding-school-holidays', checked: '2026-11-12',
     who: 'These are East Riding of Yorkshire Council’s recommended term dates for schools in the East Riding. Academies and church schools can set their own.',
     years: [
       y('2026 to 2027', YORKISH_2627, { sources: page(ER, 'East Riding of Yorkshire Council’s school term dates') }),
       y('2027 to 2028', YORKISH_2728, { sources: page(ER, 'East Riding of Yorkshire Council’s school term dates') }),
     ] },
-  { council: 'Kingston upon Hull, City of', name: 'Hull', slug: 'hull-school-holidays',
+  { council: 'Kingston upon Hull, City of', name: 'Hull', slug: 'hull-school-holidays', checked: '2026-11-12',
     who: 'These are Hull City Council’s school holidays and term dates, the same as the East Riding’s and York’s. Academies can set their own.',
     years: [
       y('2026 to 2027', YORKISH_2627, { sources: page('https://www.hull.gov.uk/schools-2/school-holidays-term-dates/2', 'Hull City Council’s school holidays and term dates 2026 to 2027') }),
       y('2027 to 2028', YORKISH_2728, { sources: page('https://www.hull.gov.uk/schools-2/school-holidays-term-dates/3', 'Hull City Council’s school holidays and term dates 2027 to 2028') }),
     ] },
-  { council: 'Middlesbrough', name: 'Middlesbrough', slug: 'middlesbrough-school-holidays',
+  { council: 'Middlesbrough', name: 'Middlesbrough', slug: 'middlesbrough-school-holidays', checked: '2026-11-12',
     who: 'These dates are for maintained schools, the ones Middlesbrough Council runs. Most Middlesbrough primary schools are academies, which set their own, as do voluntary aided schools.',
     years: [
       y('2026 to 2027', SEPT1_2627, { sources: [{ url: MBRO, text: 'Middlesbrough Council’s school term dates' }, { url: 'https://www.middlesbrough.gov.uk/media/zhidys4r/school-term-dates-2026-2027.pdf', text: 'its 2026 to 2027 calendar' }] }),
       y('2027 to 2028', TEES_2728, { sources: page(MBRO, 'Middlesbrough Council’s school term dates') }),
     ] },
-  { council: 'Redcar and Cleveland', name: 'Redcar and Cleveland', slug: 'redcar-school-holidays',
+  { council: 'Redcar and Cleveland', name: 'Redcar and Cleveland', slug: 'redcar-school-holidays', checked: '2026-11-12',
     who: 'Redcar and Cleveland Council says most of its schools keep to these dates. Some schools and academies change them.',
     years: [
       y('2026 to 2027', SEPT1_2627, { sources: [{ url: REDCAR, text: 'Redcar and Cleveland Council’s school terms and holiday dates' }, { url: 'https://www.redcar-cleveland.gov.uk/sites/default/files/2025-06/School%20Term%20and%20Holiday%20Dates%202026-2027.pdf', text: 'its 2026 to 2027 calendar' }],
         notes: ['The council’s page gives two weekdays wrongly (“Friday 25 March” and “Monday 21 July” 2027). Its calendar shows Thursday 25 March and Wednesday 21 July, which is what’s here.'] }),
       y('2027 to 2028', TEES_2728, { sources: [{ url: 'https://www.redcar-cleveland.gov.uk/sites/default/files/2026-06/Redcar%20and%20Cleveland%20Term%20Dates%202027-2028.pdf', text: 'Redcar and Cleveland Council’s 2027 to 2028 calendar' }] }),
     ] },
-  { council: 'Calderdale', name: 'Calderdale', slug: 'calderdale-school-holidays',
+  { council: 'Calderdale', name: 'Calderdale', slug: 'calderdale-school-holidays', checked: '2026-11-12',
     who: 'Calderdale Council’s term dates apply to community, voluntary controlled and special schools. Academy, foundation and voluntary aided schools set their own.',
     years: [
       y('2026 to 2027', SEPT1_2627, { sources: page(CALD, 'Calderdale Council’s school term dates') }),
       y('2027 to 2028', { ...WY_2728, spring: ['2028-01-05', '2028-04-07'], summer: ['2028-04-24', '2028-07-26'] }, { sources: page(CALD, 'Calderdale Council’s school term dates') }),
     ] },
-  { council: 'Kirklees', name: 'Kirklees', slug: 'kirklees-school-holidays',
+  { council: 'Kirklees', name: 'Kirklees', slug: 'kirklees-school-holidays', checked: '2026-11-12',
     who: 'Kirklees Council’s term dates apply to community, voluntary controlled and special schools. Academies, free schools, foundation and voluntary aided schools can set their own.',
     years: [
       y('2026 to 2027', SEPT1_2627, { sources: page(KIRK, 'Kirklees Council’s school term dates'),
@@ -112,7 +116,7 @@ export const HOLIDAYS: Holidays[] = [
       y('2027 to 2028', WY_2728, { sources: page(KIRK, 'Kirklees Council’s school term dates'),
         notes: ['Election day is Thursday 4 May 2028. Schools used as polling stations can close for one of their training days.'] }),
     ] },
-  { council: 'Leeds', name: 'Leeds', slug: 'leeds-school-holidays',
+  { council: 'Leeds', name: 'Leeds', slug: 'leeds-school-holidays', checked: '2026-11-12',
     who: 'These are Leeds City Council’s term dates. Academies, free schools, foundation schools and voluntary aided faith schools can set their own.',
     years: [
       y('2026 to 2027', { ...SEPT1_2627, spring: ['2027-01-04', '2027-04-02'], summer: ['2027-04-19', '2027-07-22'] }, { sources: page(LEEDS, 'Leeds City Council’s school holidays and term dates'),
@@ -120,7 +124,7 @@ export const HOLIDAYS: Holidays[] = [
       y('2027 to 2028', { autumn: ['2027-09-06', '2027-12-17'], oct: ['2027-10-25', '2027-10-29'], spring: ['2028-01-04', '2028-03-31'], feb: ['2028-02-21', '2028-02-25'], summer: ['2028-04-18', '2028-07-26'], may: ['2028-05-29', '2028-06-02'] },
         { sources: page(LEEDS, 'Leeds City Council’s school holidays and term dates') }),
     ] },
-  { council: 'Bradford', name: 'Bradford', slug: 'bradford-school-holidays',
+  { council: 'Bradford', name: 'Bradford', slug: 'bradford-school-holidays', checked: '2026-11-12',
     who: 'This is Bradford Council’s school calendar. Academies and church schools can set their own dates.',
     years: [
       y('2026 to 2027', SEPT1_2627, { sources: page('https://bso.bradford.gov.uk/userfiles/file/IMT/Bradford%20Term%20Dates%202026-27.pdf', 'Bradford Council’s school calendar 2026/27'),
@@ -128,31 +132,31 @@ export const HOLIDAYS: Holidays[] = [
       y('2027 to 2028', WY_2728, { sources: page('https://bso.bradford.gov.uk/userfiles/file/IMT/SchoolHolidays/Bradford%20Term%20Dates%202027-28.pdf', 'Bradford Council’s school calendar 2027/28'),
         notes: ['The likely Eid dates are Saturday 26 February and Friday 5 May 2028. The council expects schools where many pupils celebrate Eid to bear this in mind when they set their training days.'] }),
     ] },
-  { council: 'Wakefield', name: 'Wakefield', slug: 'wakefield-school-holidays',
+  { council: 'Wakefield', name: 'Wakefield', slug: 'wakefield-school-holidays', checked: '2026-11-12',
     who: 'Most schools in the Wakefield district have these dates, set by Wakefield Council. Some voluntary aided schools and academies set their own.',
     years: [
       y('2026 to 2027', SEPT1_2627, { sources: page('https://www.wakefield.gov.uk/schools-and-education/schools/202627-school-calendar', 'Wakefield Council’s 2026/27 school calendar') }),
       y('2027 to 2028', WY_2728, { sources: page('https://www.wakefield.gov.uk/schools-and-education/schools/202728-school-calendar', 'Wakefield Council’s 2027/28 school calendar') }),
     ] },
-  { council: 'Sheffield', name: 'Sheffield', slug: 'sheffield-school-holidays',
+  { council: 'Sheffield', name: 'Sheffield', slug: 'sheffield-school-holidays', checked: '2026-11-12',
     who: 'Sheffield City Council sets these dates for community, voluntary controlled and special schools. Academies, foundation, trust and voluntary aided schools can set their own.',
     years: [
       y('2026 to 2027', SEPT1_2627, { sources: page(SHEF, 'Sheffield City Council’s school term dates') }),
       y('2027 to 2028', SY_2728, { sources: page(SHEF, 'Sheffield City Council’s school term dates') }),
     ] },
-  { council: 'Barnsley', name: 'Barnsley', slug: 'barnsley-school-holidays',
+  { council: 'Barnsley', name: 'Barnsley', slug: 'barnsley-school-holidays', checked: '2026-11-12',
     who: 'Barnsley Council sets these dates for community and voluntary controlled schools. Voluntary aided schools, trust schools and academies can set their own.',
     years: [
       y('2026 to 2027', SEPT1_2627, { sources: page(BARN, 'Barnsley Council’s school terms and holidays') }),
       y('2027 to 2028', SY_2728, { sources: page(BARN, 'Barnsley Council’s school terms and holidays') }),
     ] },
-  { council: 'Doncaster', name: 'Doncaster', slug: 'doncaster-school-holidays',
+  { council: 'Doncaster', name: 'Doncaster', slug: 'doncaster-school-holidays', checked: '2026-11-12',
     who: 'The City of Doncaster Council sets these dates for its community schools. Academies, free schools and church schools can set their own.',
     years: [
       y('2026 to 2027', SEPT1_2627, { sources: page(DON, 'the City of Doncaster Council’s school holidays and term dates') }),
       y('2027 to 2028', SY_2728, { sources: page(DON, 'the City of Doncaster Council’s school holidays and term dates') }),
     ] },
-  { council: 'Rotherham', name: 'Rotherham', slug: 'rotherham-school-holidays',
+  { council: 'Rotherham', name: 'Rotherham', slug: 'rotherham-school-holidays', checked: '2026-11-12',
     who: 'These are Rotherham Council’s term dates. Academies and church schools can set their own.',
     years: [
       y('2026 to 2027', SEPT1_2627, { sources: page('https://www.rotherham.gov.uk/schools-schooling/school-term-dates/2', 'Rotherham Council’s school term dates 2026 to 2027') }),
@@ -235,6 +239,18 @@ for (const h of HOLIDAYS) for (const yr of h.years) {
 }
 
 // ---- for the pages and links ----
+// "12 November 2026"
+export const dateOnly = (s: string) => day(s).replace(/^\w+ /, '');
+// today in the UK, when the site is built (HOLIDAYS_TODAY=2027-09-10 npx astro build shows the pages as on that day)
+const TODAY = process.env.HOLIDAYS_TODAY ?? new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/London' }).format(new Date());
+// The years still worth showing: a year goes once its summer holidays are over. If none is left (nobody added the
+// next year in time), the last one stays, and the build says so.
+const warned = new Set<string>();
+export function live(h: Holidays): Holidays {
+  const years = h.years.filter((_, i) => summerTo(h, i) >= TODAY);
+  if (years.length < 2 && !warned.has(h.name) && warned.add(h.name)) console.log(`  school holidays: ${h.name} has ${years.length ? 'only one year' : 'no year'} still to come; add the next one (lib/holidays.ts)`);
+  return { ...h, years: years.length ? years : h.years.slice(-1) };
+}
 export const holidaysFor = (council: string) => HOLIDAYS.find((h) => h.council === council);
 export const holidayPage = (h: Holidays) => `${h.slug}/`;
 // the council's own primary schools page, for the breadcrumb: its council page, or its one area page (York...)
@@ -248,8 +264,8 @@ export function schoolsPageOf(council: string) {
 // The answer to "When are the school holidays?" on the area and town pages: this year's half terms and summer, and a
 // link to the full page. `place` is the area or town ("Harrogate"); `link` makes the href (the page's url()).
 export function termAnswer(council: string, place: string, link: (p: string) => string) {
-  const h = holidaysFor(council);
-  if (!h) return `Each school publishes its own term dates. Open the school here for its phone number and website.`;
-  const yr = h.years[0];
+  const all = holidaysFor(council);
+  if (!all) return `Each school publishes its own term dates. Open the school here for its phone number and website.`;
+  const h = live(all), yr = h.years[0];
   return `${place === h.name ? `Council schools across ${h.name} follow the council’s own dates.` : `Council schools in ${place} follow ${h.name}’s dates.`} In ${yr.label} the half terms are ${short(yr.oct)}, ${short(yr.feb)} and ${short(yr.may)}, and the summer holidays start on ${day(summerFrom(yr))}. See <a href="${link(holidayPage(h))}">${h.name} school holidays and term dates</a> for every date up to summer ${h.years[h.years.length - 1].label.slice(-4)}, copied from the council’s own page. Academies, free schools and voluntary aided schools can set their own, so check with the school.`;
 }

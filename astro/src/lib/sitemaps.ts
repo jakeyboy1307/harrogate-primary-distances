@@ -24,8 +24,10 @@ export const SITEMAPS = ['pages', ...(Object.keys(AREA_INFO) as Area[])];
 export function sitemapEntries(name: string): Entry[] {
   if (name === 'pages') {
     const areaPages = new Set(Object.values(AREA_INFO).map((a) => a.page));
-    // plus the school holiday pages ([council]-school-holidays.astro), one per council
-    return [...topLevel.filter((p) => !areaPages.has(p)), ...HOLIDAYS.map(holidayPage)].sort().map((path) => ({ path }));
+    // plus the school holiday pages ([council]-school-holidays.astro), one per council, dated the day their dates
+    // were last checked against the council's own page
+    return [...topLevel.filter((p) => !areaPages.has(p)).map((path): Entry => ({ path })), ...HOLIDAYS.map((h) => ({ path: holidayPage(h), lastmod: h.checked }))]
+      .sort((a, b) => a.path.localeCompare(b.path));
   }
   const area = AREA_INFO[name as Area];
   const lastmod = councilDate(area.council) ?? dataDate();
