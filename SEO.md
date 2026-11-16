@@ -171,3 +171,17 @@ GROWTH.md's targets stand (300 search clicks a week by 15 January). New, from th
 | Nurseries that agreed to share | 40 (10 in the Harrogate district) |
 | Visits tagged `from=nursery` | 500 |
 | Links from Harrogate-district sites | 20 |
+
+## 8. School holiday pages: keeping them right
+
+The 15 pages at `/<council>-school-holidays/` (data in `astro/src/lib/holidays.ts`) went live on 12 November 2026.
+On 16 November the pages sitemap was resubmitted in Search Console and indexing was requested for all 15.
+
+- **Each month (1st, 9am):** a scheduled task in the Claude app ("Re-check school holiday dates") re-reads every
+  council's page, fixes any date that has changed, adds 2028 to 2029 once a council publishes it, updates each
+  council's "checked" date and test-builds the site. It doesn't publish anything: it reports back and asks before
+  committing. It runs while the Claude app is open, or the next time it's opened.
+- **By itself:** a school year disappears from the pages, and from the town and area answers, once its summer
+  holidays are over. Each page's sitemap date is its "checked" date, so Google re-reads a page after a re-check.
+- **Watch for:** "school holidays: … add the next one" in the build log means a council is down to one year.
+  Councils usually publish the next year between January and the summer.
